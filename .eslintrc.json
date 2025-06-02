@@ -1,0 +1,39 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks"
+  ],
+  "ignorePatterns": [
+    "**/*.mdx",
+    "**/*.stories.(ts,tsx)",
+    "stories/**",
+    "src/**/*.stories.(js,ts,jsx,tsx)"
+  ],
+  "rules": {
+    "@next/next/no-before-interactive-script-outside-document": "off",
+    "no-unused-vars": [
+      1,
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "./tsconfig.json"
+      }
+    }
+  }
+}

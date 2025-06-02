@@ -1,0 +1,7 @@
+{
+  "importOrder": ["^react", "^@?\\w", "^@app", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "singleQuote": true,
+  "printWidth": 120
+}

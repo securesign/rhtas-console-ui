@@ -1,0 +1,73 @@
+{
+  "name": "rhtas-console-ui",
+  "version": "1.0.0-dev",
+  "description": "",
+  "dependencies": {
+    "@patternfly/patternfly": "^6.2.0",
+    "@patternfly/react-charts": "^8.2.0",
+    "@patternfly/react-component-groups": "^6.2.0",
+    "@patternfly/react-core": "^6.2.0",
+    "@patternfly/react-table": "^6.2.0",
+    "dayjs": "^1.11.13",
+    "victory": "^37.3.6"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-onboarding": "^8.6.12",
+    "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
+    "@storybook/blocks": "^8.6.12",
+    "@storybook/react": "^8.6.12",
+    "@storybook/react-webpack5": "^8.6.12",
+    "@storybook/test": "^8.6.12",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "copy-webpack-plugin": "^12.0.2",
+    "dotenv-webpack": "^8.1.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "^4.3.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "prettier": "^3.4.2",
+    "raw-loader": "^4.0.2",
+    "react-axe": "^3.5.4",
+    "react-router-dom": "^7.0.2",
+    "storybook": "^8.6.12",
+    "ts-loader": "^9.5.1",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "webpack": "^5.97.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "scripts": {
+    "prebuild": "npm run type-check && npm run clean",
+    "build": "webpack --config webpack.config.ts",
+    "build:bundle-profile": "webpack --config webpack.config.ts --profile --json > stats.json",
+    "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
+    "build-storybook": "storybook build",
+    "ci-checks": "npm run type-check && npm run lint && npm run test:coverage",
+    "clean": "rimraf dist",
+    "eslint": "eslint --ext .tsx,.js,.ts ./src/",
+    "format": "prettier --config .prettierrc --check --write ./src/**/*.{tsx,ts}",
+    "lint": "npm run eslint",
+    "start": "webpack serve --color --progress --config webpack.config.ts",
+    "storybook": "storybook dev -p 6006",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/securesign/rhtas-console-ui.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/securesign/rhtas-console-ui/issues"
+  },
+  "homepage": "https://github.com/securesign/rhtas-console-ui#readme"
+}
