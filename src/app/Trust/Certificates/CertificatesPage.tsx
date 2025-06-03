@@ -18,14 +18,12 @@ import {
   ToolbarGroup,
   ToolbarItem,
   ToolbarToggleGroup,
-  Tooltip,
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { rows, columns, CertificatesDataRow } from './Certificates.data';
-import ShieldIcon from '@patternfly/react-icons/dist/esm/icons/shield-alt-icon';
+import { rows, columns, FulcioCertAuthority } from './Certificates.data';
 
 export interface ICertificatesPageProps {
   sampleProp?: string;
@@ -33,20 +31,15 @@ export interface ICertificatesPageProps {
 
 type Direction = 'asc' | 'desc' | undefined;
 
-const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+// const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const CertificatesPage = ({}: ICertificatesPageProps) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState('');
-  const [searchCvssValue, setSearchCvssValue] = useState('');
 
   const onSearchChange = (value: string) => {
     setSearchValue(value);
-  };
-
-  const onSearchCvssChange = (value: string) => {
-    setSearchCvssValue(value);
   };
 
   const handleSetPage = (_evt: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
@@ -80,7 +73,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
 
   // Table sorting
 
-  const sortRows = (rows: CertificatesDataRow[], sortIndex: number, sortDirection: Direction) => {
+  const sortRows = (rows: FulcioCertAuthority[], sortIndex: number, sortDirection: Direction) => {
     return [...rows].sort((a, b) => {
       let returnValue = 0;
 
@@ -119,14 +112,9 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
 
   const getFilteredAndSortedRows = useCallback(() => {
     let filtered = rows;
-    if (searchCvssValue) {
-      const input = new RegExp(searchCvssValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-      filtered = rows.filter((row) => input.test(row.identifier));
-    }
-
     if (searchValue) {
       const input = new RegExp(searchValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-      filtered = rows.filter((row) => input.test(row.title));
+      filtered = rows.filter((row) => input.test(row.subject));
     }
 
     return [...filtered].sort((a, b) => {
@@ -142,7 +130,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
 
       return activeSortDirection === 'desc' ? -result : result;
     });
-  }, [searchValue, searchCvssValue, activeSortIndex, activeSortDirection]);
+  }, [searchValue, activeSortIndex, activeSortDirection]);
 
   useEffect(() => {
     const filteredSorted = getFilteredAndSortedRows();
@@ -214,15 +202,14 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
     <Menu
       ref={attributeMenuRef}
       onSelect={(_ev, itemId) => {
-        setActiveAttributeMenu(itemId?.toString() as 'Filter text' | 'Revision');
+        setActiveAttributeMenu(itemId?.toString() as 'Filter text');
         setIsAttributeMenuOpen(!isAttributeMenuOpen);
       }}
     >
       <MenuContent>
         <MenuList>
           <MenuItem itemId="Filter text">Filter text</MenuItem>
-          <MenuItem itemId="CVSS">CVSS</MenuItem>
-          <MenuItem itemId="Created on">Created on</MenuItem>
+          {/* <MenuItem itemId="PEM">PEM</MenuItem> */}
         </MenuList>
       </MenuContent>
     </Menu>
@@ -251,15 +238,6 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
     />
   );
 
-  const searchCvssInput = (
-    <SearchInput
-      placeholder="CVSS"
-      value={searchCvssValue}
-      onChange={(_event, value) => onSearchCvssChange(value)}
-      onClear={() => onSearchCvssChange('')}
-    />
-  );
-
   // Set up date filter
   const publishedOnInput = <>Date range input here</>;
 
@@ -270,19 +248,10 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
         labels={searchValue !== '' ? [searchValue] : ([] as string[])}
         deleteLabel={() => setSearchValue('')}
         deleteLabelGroup={() => setSearchValue('')}
-        categoryName="Title"
+        categoryName="Subject"
         showToolbarItem={activeAttributeMenu === 'Filter text'}
       >
         {searchInput}
-      </ToolbarFilter>
-      <ToolbarFilter
-        labels={searchCvssValue !== '' ? [searchCvssValue] : ([] as string[])}
-        deleteLabel={() => setSearchCvssValue('')}
-        deleteLabelGroup={() => setSearchCvssValue('')}
-        categoryName="Identifier"
-        showToolbarItem={activeAttributeMenu === 'CVSS'}
-      >
-        {searchCvssInput}
       </ToolbarFilter>
       <ToolbarFilter categoryName={'Revision'} showToolbarItem={activeAttributeMenu === 'Revision'}>
         {publishedOnInput}
@@ -340,64 +309,12 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
             {sortedRows.map((row, rowIndex) => (
               <Tr key={rowIndex}>
                 <>
-                  <Td dataLabel={columns[0]} width={15}>
-                    <div>{row.identifier}</div>
-                  </Td>
-                  <Td dataLabel={columns[1]} width={15} modifier={'truncate'}>
+                  <Td dataLabel={columns[0]} width={15} modifier={'truncate'}>
                     <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-                      <FlexItem>{row.title}</FlexItem>
+                      <FlexItem>{row.subject}</FlexItem>
                     </Flex>
                   </Td>
-                  <Td dataLabel={columns[2]} width={10}>
-                    <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-                      <Flex
-                        spaceItems={{ default: 'spaceItemsSm' }}
-                        alignItems={{ default: 'alignItemsCenter' }}
-                        flexWrap={{ default: 'nowrap' }}
-                        style={{ whiteSpace: 'nowrap' }}
-                      >
-                        <FlexItem>
-                          <Flex>
-                            <FlexItem key={row?.severity} spacer={{ default: 'spacerXs' }}>
-                              <Flex
-                                spaceItems={{ default: 'spaceItemsXs' }}
-                                alignItems={{ default: 'alignItemsCenter' }}
-                                flexWrap={{ default: 'nowrap' }}
-                                style={{ whiteSpace: 'nowrap' }}
-                              >
-                                <FlexItem>
-                                  {/* Severity Shield and Text */}
-                                  <Flex
-                                    spaceItems={{ default: 'spaceItemsXs' }}
-                                    alignItems={{ default: 'alignItemsCenter' }}
-                                    flexWrap={{ default: 'nowrap' }}
-                                    style={{ whiteSpace: 'nowrap' }}
-                                  >
-                                    <FlexItem>
-                                      <Tooltip content={capitalizeFirstLetter(row.severity ?? '')}>
-                                        <ShieldIcon color={'grey'} />
-                                      </Tooltip>
-                                    </FlexItem>{' '}
-                                    {capitalizeFirstLetter(row.severity ?? '')}
-                                  </Flex>
-                                </FlexItem>
-                              </Flex>
-                            </FlexItem>
-                          </Flex>
-                        </FlexItem>
-                      </Flex>
-                    </Flex>
-                  </Td>
-                  <Td dataLabel={columns[4]} width={10}>
-                    <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-                      <FlexItem>{row.published}</FlexItem>
-                    </Flex>
-                  </Td>
-                  <Td dataLabel={columns[5]} width={10}>
-                    <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-                      <FlexItem>{row.sboms}</FlexItem>
-                    </Flex>
-                  </Td>
+                  <Td dataLabel={columns[1]}>{row.pem.split('\n')[1] || ''}</Td>
                 </>
               </Tr>
             ))}

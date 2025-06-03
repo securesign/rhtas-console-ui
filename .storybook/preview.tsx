@@ -1,4 +1,4 @@
-/** @type { import('@storybook/react').Preview } */
+/** @type { import('@storybook/react-webpack5').Preview } */
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/patternfly-addons.css';
 import { MemoryRouter } from 'react-router';

@@ -21,10 +21,11 @@ import { BarsIcon } from '@patternfly/react-icons';
 
 interface IAppLayout {
   children: React.ReactNode;
+  openSidebar?: boolean;
 }
 
-const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+const AppLayout: React.FunctionComponent<IAppLayout> = ({ children, openSidebar }) => {
+  const [sidebarOpen, setSidebarOpen] = React.useState(openSidebar ?? true);
   const masthead = (
     <Masthead>
       <MastheadMain>
