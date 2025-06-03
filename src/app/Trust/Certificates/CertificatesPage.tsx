@@ -145,28 +145,28 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
   const attributeMenuRef = useRef<HTMLDivElement>(null);
   const attributeContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleAttribueMenuKeys = (event: KeyboardEvent) => {
-    if (!isAttributeMenuOpen) {
-      return;
-    }
-    if (
-      attributeMenuRef.current?.contains(event.target as Node) ||
-      attributeToggleRef.current?.contains(event.target as Node)
-    ) {
-      if (event.key === 'Escape' || event.key === 'Tab') {
-        setIsAttributeMenuOpen(!isAttributeMenuOpen);
-        attributeToggleRef.current?.focus();
-      }
-    }
-  };
-
-  const handleAttributeClickOutside = (event: MouseEvent) => {
-    if (isAttributeMenuOpen && !attributeMenuRef.current?.contains(event.target as Node)) {
-      setIsAttributeMenuOpen(false);
-    }
-  };
-
   useEffect(() => {
+    const handleAttribueMenuKeys = (event: KeyboardEvent) => {
+      if (!isAttributeMenuOpen) {
+        return;
+      }
+      if (
+        attributeMenuRef.current?.contains(event.target as Node) ||
+        attributeToggleRef.current?.contains(event.target as Node)
+      ) {
+        if (event.key === 'Escape' || event.key === 'Tab') {
+          setIsAttributeMenuOpen(!isAttributeMenuOpen);
+          attributeToggleRef.current?.focus();
+        }
+      }
+    };
+
+    const handleAttributeClickOutside = (event: MouseEvent) => {
+      if (isAttributeMenuOpen && !attributeMenuRef.current?.contains(event.target as Node)) {
+        setIsAttributeMenuOpen(false);
+      }
+    };
+
     window.addEventListener('keydown', handleAttribueMenuKeys);
     window.addEventListener('click', handleAttributeClickOutside);
     return () => {
@@ -276,7 +276,6 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
           id="attribute-search-filter-toolbar"
           clearAllFilters={() => {
             setSearchValue('');
-            setSearchCvssValue('');
           }}
         >
           <ToolbarContent>{toolbarItems}</ToolbarContent>

@@ -58,9 +58,7 @@ const TrustOverview = () => {
     <Card isFullHeight isPlain key="card-1">
       <CardBody>
         <Content className="pf-v6-u-font-size-sm">
-          <div>
-            Below is a summary of status for your configured trust roots.
-          </div>
+          <div>Below is a summary of status for your configured trust roots.</div>
           <Chart
             ariaDesc="Average number of pets"
             ariaTitle="Bar chart example"
@@ -128,16 +126,12 @@ const TrustOverview = () => {
 
         <Content component={ContentVariants.p}>
           <Content component={ContentVariants.h6}>Expiring Soon</Content>
-          <Content>
-            July 27, 2025 | 00:00:00
-          </Content>
+          <Content>July 27, 2025 | 00:00:00</Content>
         </Content>
 
         <Content component={ContentVariants.p}>
           <Content component={ContentVariants.h6}>Recent Errors</Content>
-          <Content>
-            Unable to fetch metadata
-          </Content>
+          <Content>Unable to fetch metadata</Content>
         </Content>
       </CardBody>
       <CardFooter>
@@ -150,7 +144,7 @@ const TrustOverview = () => {
             }
             variant="link"
             isInline
-            component={"a"}
+            component={'a'}
             href="/trust/roots"
           >
             View Trust Roots
@@ -204,7 +198,7 @@ const TrustOverview = () => {
     }
 
     setSelectOptions(newSelectOptions);
-  }, [filterValue]);
+  }, [filterValue, isOpen]);
 
   const setActiveAndFocusedItem = (itemIndex: number) => {
     setFocusedItemIndex(itemIndex);
