@@ -37,7 +37,7 @@ const TrustRootsDataList = () => {
               minSize={'150px'}
             >
               <DrawerHead>
-                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as any}>
+                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as never}>
                   <Content component="small">Certificate Subject</Content>
                   <Content component="p">{selectedRow}</Content>
                 </div>
