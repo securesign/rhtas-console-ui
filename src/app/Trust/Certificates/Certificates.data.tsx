@@ -1,4 +1,4 @@
-export type CertificateType = 'TUF' | 'Fulcio' | 'Other';
+export type CertificateType = 'TUF' | 'Fulcio' | 'Signing';
 
 export interface ICertificateProps {
   // certificate authority subject
@@ -7,15 +7,18 @@ export interface ICertificateProps {
   // certificate in PEM format
   pem?: string;
 
-  // derived fields
+  // derived fields from certificate
   issuer?: string;
   validFrom?: string;
-  validTo?: string;
+  validTo?: string; // expiration
   fingerprint?: string;
 
-  // contextual
+  // UI / contextual
+  name?: string; // display label, fallback to 'subject'
+  status?: 'valid' | 'expired' | 'expiring' | 'unknown';
   type?: CertificateType;
-  role?: 'root' | 'targets' | 'snapshot' | 'timestamp'; // only for TUF
+  role?: 'root' | 'targets' | 'snapshot' | 'timestamp'; // TUF only
+  version?: number; // TUF only
 }
 
 export const columns = ['Subject', 'PEM'];

@@ -24,8 +24,8 @@ interface IAppLayout {
   openSidebar?: boolean;
 }
 
-const AppLayout: React.FunctionComponent<IAppLayout> = ({ children, openSidebar }) => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(openSidebar ?? true);
+const AppLayout: React.FunctionComponent<IAppLayout> = ({ children, openSidebar = true }) => {
+  const [sidebarOpen, setSidebarOpen] = React.useState(openSidebar);
   const masthead = (
     <Masthead>
       <MastheadMain>

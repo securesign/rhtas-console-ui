@@ -20,7 +20,7 @@ import {
   ToolbarToggleGroup,
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
+import { Table, Thead, Tr, Th, Tbody, Td, ActionsColumn } from '@patternfly/react-table';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ICertificateProps } from './Certificates.data';
@@ -318,6 +318,32 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
                   <Td dataLabel={columns[2]}>{row.type || ''}</Td>
                   <Td dataLabel={columns[3]}>{row.role || ''}</Td>
                   <Td dataLabel={columns[4]}>{row.validTo || ''}</Td>
+                  <Td dataLabel={columns[5]}>{row.status ? row.status : null}</Td>
+                  <Td dataLabel={columns[5]}>{row.version ? row.version : null}</Td>
+                  <Td dataLabel={columns[6]} isActionCell>
+                    <ActionsColumn
+                      items={[
+                        {
+                          title: 'View Details',
+                          onClick: () => {
+                            console.log('View Details button clicked');
+                          },
+                        },
+                        {
+                          title: 'Copy Fingerprint',
+                          onClick: () => {
+                            console.log('Copy Fingerprint button clicked');
+                          },
+                        },
+                        {
+                          title: 'Download',
+                          onClick: () => {
+                            console.log('Download button clicked');
+                          },
+                        },
+                      ]}
+                    />
+                  </Td>
                 </>
               </Tr>
             ))}

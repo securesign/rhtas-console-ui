@@ -23,17 +23,7 @@ const preview = {
     },
     options: {
       storySort: {
-        order: [
-          'Dashboard',
-          'Search',
-          'SBOMs',
-          'Vulnerabilities',
-          'Packages',
-          'Advisories',
-          'Importers',
-          'Upload',
-          'v2.1',
-        ],
+        order: ['Trust', 'Dashboard'],
       },
     },
   },
