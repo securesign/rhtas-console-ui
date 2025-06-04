@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment, useRef, useState } from 'react';
 
 import {
   Content,
@@ -20,9 +20,9 @@ import {
 import { rows } from '../TrustRoots.data';
 
 const TrustRootsDataList = () => {
-  const [selectedRow, setSelectedRow] = React.useState('');
-  const [isDrawerExpanded, setIsDrawerExpanded] = React.useState(false);
-  const drawerRef = React.useRef<HTMLDivElement>(undefined);
+  const [selectedRow, setSelectedRow] = useState('');
+  const [isDrawerExpanded, setIsDrawerExpanded] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(undefined);
 
   return (
     <Fragment>

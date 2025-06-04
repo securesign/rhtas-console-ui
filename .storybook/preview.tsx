@@ -2,13 +2,15 @@
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/patternfly-addons.css';
 import { MemoryRouter } from 'react-router';
-import React from 'react';
+import { AppLayout } from '../src/app/AppLayout/AppLayout';
 
 const preview = {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <Story />
+        <AppLayout openSidebar={false}>
+          <Story />
+        </AppLayout>
       </MemoryRouter>
     ),
   ],

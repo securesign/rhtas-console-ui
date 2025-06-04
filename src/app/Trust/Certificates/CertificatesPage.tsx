@@ -23,17 +23,18 @@ import { FilterIcon } from '@patternfly/react-icons';
 import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { rows, columns, FulcioCertAuthority } from './Certificates.data';
+import { ICertificateProps } from './Certificates.data';
 
 export interface ICertificatesPageProps {
-  sampleProp?: string;
+  certificates: ICertificateProps[];
+  columns: string[];
 }
 
 type Direction = 'asc' | 'desc' | undefined;
 
 // const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
-const CertificatesPage = ({}: ICertificatesPageProps) => {
+const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState('');
@@ -53,7 +54,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
   const renderPagination = (variant: 'top' | 'bottom' | PaginationVariant, isCompact: boolean) => (
     <Pagination
       isCompact={isCompact}
-      itemCount={rows.length}
+      itemCount={certificates.length}
       page={page}
       perPage={perPage}
       onSetPage={handleSetPage}
@@ -73,8 +74,8 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
 
   // Table sorting
 
-  const sortRows = (rows: FulcioCertAuthority[], sortIndex: number, sortDirection: Direction) => {
-    return [...rows].sort((a, b) => {
+  const sortRows = (certificates: ICertificateProps[], sortIndex: number, sortDirection: Direction) => {
+    return [...certificates].sort((a, b) => {
       let returnValue = 0;
 
       if (typeof Object.values(a)[sortIndex] === 'number') {
@@ -91,7 +92,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
     });
   };
 
-  const [sortedData, setSortedData] = useState([...sortRows(rows, 0, 'asc')]);
+  const [sortedData, setSortedData] = useState([...sortRows(certificates, 0, 'asc')]);
   const [sortedRows, setSortedRows] = useState([...sortedData]);
 
   // index of the currently active column
@@ -103,7 +104,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
     setActiveSortIndex(index);
     setActiveSortDirection(direction);
 
-    setSortedData(sortRows(rows, index, direction));
+    setSortedData(sortRows(certificates, index, direction));
   };
 
   useEffect(() => {
@@ -111,10 +112,10 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
   }, [sortedData, page, perPage]);
 
   const getFilteredAndSortedRows = useCallback(() => {
-    let filtered = rows;
+    let filtered = certificates;
     if (searchValue) {
       const input = new RegExp(searchValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-      filtered = rows.filter((row) => input.test(row.subject));
+      filtered = certificates.filter((cert) => input.test(cert.subject));
     }
 
     return [...filtered].sort((a, b) => {
@@ -130,7 +131,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
 
       return activeSortDirection === 'desc' ? -result : result;
     });
-  }, [searchValue, activeSortIndex, activeSortDirection]);
+  }, [certificates, searchValue, activeSortIndex, activeSortDirection]);
 
   useEffect(() => {
     const filteredSorted = getFilteredAndSortedRows();
@@ -139,7 +140,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
   }, [getFilteredAndSortedRows, page, perPage]);
 
   // Set up attribute selector
-  const [activeAttributeMenu, setActiveAttributeMenu] = useState<'Filter text' | 'CVSS' | 'Revision'>('Filter text');
+  const [activeAttributeMenu, setActiveAttributeMenu] = useState<'Filter text' | 'Type' | 'Valid To'>('Filter text');
   const [isAttributeMenuOpen, setIsAttributeMenuOpen] = useState(false);
   const attributeToggleRef = useRef<HTMLButtonElement>(null);
   const attributeMenuRef = useRef<HTMLDivElement>(null);
@@ -253,7 +254,7 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
       >
         {searchInput}
       </ToolbarFilter>
-      <ToolbarFilter categoryName={'Revision'} showToolbarItem={activeAttributeMenu === 'Revision'}>
+      <ToolbarFilter categoryName={'Valid To'} showToolbarItem={activeAttributeMenu === 'Valid To'}>
         {publishedOnInput}
       </ToolbarFilter>
       <ToolbarItem variant="pagination">{renderPagination('top', true)}</ToolbarItem>
@@ -313,7 +314,10 @@ const CertificatesPage = ({}: ICertificatesPageProps) => {
                       <FlexItem>{row.subject}</FlexItem>
                     </Flex>
                   </Td>
-                  <Td dataLabel={columns[1]}>{row.pem.split('\n')[1] || ''}</Td>
+                  <Td dataLabel={columns[1]}>{row.issuer || row.pem}</Td>
+                  <Td dataLabel={columns[2]}>{row.type || ''}</Td>
+                  <Td dataLabel={columns[3]}>{row.role || ''}</Td>
+                  <Td dataLabel={columns[4]}>{row.validTo || ''}</Td>
                 </>
               </Tr>
             ))}

@@ -1,11 +1,26 @@
-export interface FulcioCertAuthority {
+export type CertificateType = 'TUF' | 'Fulcio' | 'Other';
+
+export interface ICertificateProps {
+  // certificate authority subject
   subject: string;
-  pem: string;
+
+  // certificate in PEM format
+  pem?: string;
+
+  // derived fields
+  issuer?: string;
+  validFrom?: string;
+  validTo?: string;
+  fingerprint?: string;
+
+  // contextual
+  type?: CertificateType;
+  role?: 'root' | 'targets' | 'snapshot' | 'timestamp'; // only for TUF
 }
 
 export const columns = ['Subject', 'PEM'];
 
-export const rows: FulcioCertAuthority[] = [
+export const certificates: ICertificateProps[] = [
   {
     subject: 'CN=Fulcio Root CA,O=Sigstore',
     pem: `-----BEGIN CERTIFICATE-----

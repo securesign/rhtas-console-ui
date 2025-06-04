@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Card,
@@ -369,7 +369,7 @@ const TrustOverview = () => {
   );
 
   return (
-    <React.Fragment>
+    <Fragment>
       <PageSection>
         <Content>
           <h1>Trust Overview</h1>
@@ -654,7 +654,7 @@ const TrustOverview = () => {
           </GridItem>
         </Grid>
       </PageSection>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

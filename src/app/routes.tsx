@@ -8,6 +8,7 @@ import { TrustRootsPage } from './Trust/TrustRoots/TrustRootsPage';
 import { TrustOverview } from './Trust/Overview/TrustOverview';
 import { ArtifactsPage } from './Artifacts/ArtifactsPage';
 import { CertificatesPage } from './Trust/Certificates/CertificatesPage';
+import { certificates, columns } from './Trust/Certificates/Certificates.data';
 
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
@@ -37,23 +38,23 @@ const routes: AppRouteConfig[] = [
         label: 'Overview',
         // path: '/trust/overview',
         path: '/',
-        title: 'Overview'
+        title: 'Overview',
       },
       {
-        element: <CertificatesPage />,
+        element: <CertificatesPage certificates={certificates} columns={columns} />,
         exact: true,
         label: 'Certificates',
         path: '/trust/certificates',
-        title: 'Certificates'
+        title: 'Certificates',
       },
       {
         element: <TrustRootsPage />,
         exact: true,
         label: 'Trust Roots',
         path: '/trust/roots',
-        title: 'Trust Roots'
-      }
-    ]
+        title: 'Trust Roots',
+      },
+    ],
   },
   {
     element: <ArtifactsPage />,
