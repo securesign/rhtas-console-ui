@@ -30,6 +30,7 @@ MIIBszCCAVugAwIBAgIUWY1QrUe7GpU4... (truncated)
         validTo: '2033-01-01T00:00:00Z',
         fingerprint: '3A:1F:DE:AD:BE:EF:00:00:12:34:56:78:90:AB:CD:EF:01:23:45:67',
         type: 'Fulcio',
+        status: 'valid',
       },
       {
         subject: 'CN=TUF Root Signing Key,O=Trusted Foundations',
@@ -42,6 +43,25 @@ MIICkzCCAfugAwIBAgIUQw9X3lNwJzZL... (truncated)
         fingerprint: 'AB:CD:EF:12:34:56:78:90:00:00:11:22:33:44:55:66:77:88:99:AA',
         type: 'TUF',
         role: 'root',
+        status: 'valid',
+      },
+      {
+        subject: 'CN=Test Cert Expiring Soon,O=Example Org',
+        issuer: 'CN=Example CA',
+        validFrom: '2024-05-01T00:00:00Z',
+        validTo: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+        fingerprint: 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+        type: 'Fulcio',
+        status: 'expiring',
+      },
+      {
+        subject: 'CN=Expired Test Cert,O=Example Org',
+        issuer: 'CN=Example CA',
+        validFrom: '2022-01-01T00:00:00Z',
+        validTo: '2023-01-01T00:00:00Z',
+        fingerprint: '00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:11:22:33:44',
+        type: 'Fulcio',
+        status: 'expired',
       },
       {
         subject: 'CN=GitHub OIDC Signing CA,O=GitHub',
@@ -52,6 +72,7 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         validFrom: '2024-03-15T00:00:00Z',
         validTo: '2026-03-15T00:00:00Z',
         fingerprint: 'FE:ED:FA:CE:BE:EF:DE:AD:12:34:56:78:9A:BC:DE:F0:12:34:56:78',
+        status: 'valid',
         type: 'Fulcio',
       },
       {
@@ -78,6 +99,6 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         status: 'valid',
       },
     ],
-    columns: ['Subject', 'Issuer', 'Type', 'Role', 'Valid To', 'Status', 'Version'],
+    columns: ['Subject', 'Issuer', 'Type', 'Role', 'Status', 'Version'],
   },
 };
