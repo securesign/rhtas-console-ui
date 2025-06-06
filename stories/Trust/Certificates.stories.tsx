@@ -43,6 +43,7 @@ MIICkzCCAfugAwIBAgIUQw9X3lNwJzZL... (truncated)
         fingerprint: 'AB:CD:EF:12:34:56:78:90:00:00:11:22:33:44:55:66:77:88:99:AA',
         type: 'TUF',
         role: 'root',
+        version: 4,
         status: 'valid',
       },
       {
@@ -72,8 +73,8 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         validFrom: '2024-03-15T00:00:00Z',
         validTo: '2026-03-15T00:00:00Z',
         fingerprint: 'FE:ED:FA:CE:BE:EF:DE:AD:12:34:56:78:9A:BC:DE:F0:12:34:56:78',
-        status: 'valid',
         type: 'Fulcio',
+        status: 'valid',
       },
       {
         name: 'TUF Root v5',

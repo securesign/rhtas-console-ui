@@ -22,7 +22,6 @@ import {
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Table, Thead, Tr, Th, Tbody, Td, ActionsColumn } from '@patternfly/react-table';
-import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ICertificateProps } from './Certificates.data';
 import ShieldIcon from '@patternfly/react-icons/dist/esm/icons/shield-alt-icon';
