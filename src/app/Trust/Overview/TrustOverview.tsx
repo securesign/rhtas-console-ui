@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import {
   Button,
   Card,
@@ -18,31 +18,12 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   Spinner,
-  List,
-  ListItem,
-  ListComponent,
-  OrderType,
   SimpleListItem,
   SimpleList,
 } from '@patternfly/react-core';
 import { ChartDonut, ChartThemeColor } from '@patternfly/react-charts/victory';
 import { MultiContentCard } from '@patternfly/react-component-groups';
-import {
-  ArrowRightIcon,
-  BellIcon,
-  BookIcon,
-  BookOpenIcon,
-  CubeIcon,
-  DesktopIcon,
-  FlagIcon,
-  GlobeIcon,
-  KeyIcon,
-  LockIcon,
-  PencilAltIcon,
-  PlusCircleIcon,
-  RedoIcon,
-  TimesIcon,
-} from '@patternfly/react-icons';
+import { ArrowRightIcon, LockIcon, PencilAltIcon, RedoIcon } from '@patternfly/react-icons';
 import { formatDate } from '../Certificates/CertificatesPage';
 
 const exampleCerts = [
@@ -76,9 +57,6 @@ const exampleCerts = [
 ];
 
 const TrustOverview = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [filterValue, setFilterValue] = useState<string>('');
-
   const certListFormatted = [
     <SimpleListItem key="item1" component="a" href="#" isActive>
       {exampleCerts[0].issuer} | {formatDate(exampleCerts[0].validTo)}
@@ -111,12 +89,11 @@ const TrustOverview = () => {
           labels={({ datum }) => `${datum.x}: ${datum.y}%`}
           legendData={[{ name: 'Valid: 35' }, { name: 'Expiring: 55' }, { name: 'Expired: 10' }]}
           legendOrientation="vertical"
-          legendPosition="right"
-          name="chart3"
+          name="certificate-chart"
           padding={{
             bottom: 20,
-            left: 20,
-            right: 140, // adjusted to accommodate legend
+            left: 0,
+            right: 100,
             top: 20,
           }}
           subTitle="Certificates"
@@ -215,16 +192,6 @@ const TrustOverview = () => {
       </CardFooter>
     </Card>,
   ];
-
-  useEffect(() => {
-    // Filter menu items based on the text input value when one exists
-    if (filterValue) {
-      // Open the menu when the input value changes and the new value is not empty
-      if (!isOpen) {
-        setIsOpen(true);
-      }
-    }
-  }, [filterValue, isOpen]);
 
   return (
     <Fragment>

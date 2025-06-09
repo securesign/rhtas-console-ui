@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
+  Brand,
   Button,
   Masthead,
   MastheadBrand,
@@ -18,6 +19,7 @@ import {
 } from '@patternfly/react-core';
 import { IAppRoute, IAppRouteGroup, routes } from '@app/routes';
 import { BarsIcon } from '@patternfly/react-icons';
+import pfIcon from '../bgimages/Logo-Red_Hat-Trusted_Artifact_Signer-A-Standard-RGB.svg';
 
 interface IAppLayout {
   children: React.ReactNode;
@@ -39,7 +41,8 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children, openSidebar 
         </MastheadToggle>
         <MastheadBrand data-codemods>
           <MastheadLogo data-codemods>
-            <svg height="40px" viewBox="0 0 679 158">
+            <Brand src={pfIcon} alt="PatternFly" heights={{ default: '36px' }} />
+            {/* <svg height="40px" viewBox="0 0 679 158">
               <title>RHTAS Console</title>
               <defs>
                 <linearGradient x1="68%" y1="2.25860997e-13%" x2="32%" y2="100%" id="linearGradient-basic-masthead">
@@ -80,7 +83,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children, openSidebar 
                   ></path>
                 </g>
               </g>
-            </svg>
+            </svg> */}
           </MastheadLogo>
         </MastheadBrand>
       </MastheadMain>
