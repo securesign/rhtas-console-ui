@@ -10,7 +10,7 @@ const TrustRootsPage = () => {
       <PageSection variant="default">
         <Content>
           <h1>Trust Roots</h1>
-          <p>Review Fulcio certificate authorities configured in the trust root.</p>
+          <p>Review trust root data such as TUF targets and Fulcio certificate authorities.</p>
         </Content>
       </PageSection>
       <PageSection variant="default">
