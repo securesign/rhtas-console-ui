@@ -16,7 +16,7 @@ import {
   Tabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { Caption, Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import CheckCircleIcon from '@patternfly/react-icons/dist/esm/icons/check-circle-icon';
 import { exampleTrustRoot } from '../TrustRoots.data';
 import { capitalizeFirstLetter, formatDate } from '@app/utils/utils';
