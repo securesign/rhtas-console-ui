@@ -23,7 +23,7 @@ import {
 } from '@patternfly/react-core';
 import { ChartDonut, ChartThemeColor } from '@patternfly/react-charts/victory';
 import { MultiContentCard } from '@patternfly/react-component-groups';
-import { ArrowRightIcon, LockIcon, PencilAltIcon, RedoIcon } from '@patternfly/react-icons';
+import { ArrowRightIcon, LockIcon, RedoIcon } from '@patternfly/react-icons';
 import { formatDate } from '@app/utils/utils';
 
 const exampleCerts = [
