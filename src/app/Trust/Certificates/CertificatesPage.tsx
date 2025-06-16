@@ -316,14 +316,14 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
                   </Td>
                   <Td dataLabel={columns[1]}>{row.issuer || row.pem}</Td>
                   <Td dataLabel={columns[2]}>{row.type || ''}</Td>
-                  <Td dataLabel={columns[3]}>{row.role ? capitalizeFirstLetter(row.role) : ''}</Td>
+                  {/* <Td dataLabel={columns[3]}>{row.role ? capitalizeFirstLetter(row.role) : ''}</Td> */}
                   <Td dataLabel={columns[4]}>
                     <Tooltip content={`Expires ${formatDate(row.validTo)}`}>
                       <ShieldIcon color={row.validTo ? getCertificateStatusColor(row.validTo) : 'grey'} />
                     </Tooltip>{' '}
                     {row.status ? capitalizeFirstLetter(row.status) : ''}
                   </Td>
-                  <Td dataLabel={columns[5]}>{row.version ? row.version : null}</Td>
+                  {/* <Td dataLabel={columns[5]}>{row.version ? row.version : null}</Td> */}
                   <Td dataLabel={columns[6]} isActionCell>
                     <ActionsColumn
                       items={[

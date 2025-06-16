@@ -73,6 +73,7 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         status: 'valid',
       },
     ],
-    columns: ['Subject', 'Issuer', 'Type', 'Status', 'Version'],
+    // columns: ['Subject', 'Issuer', 'Type', 'Status', 'Version'],
+    columns: ['Subject', 'Issuer', 'Type', 'Status'],
   },
 };
