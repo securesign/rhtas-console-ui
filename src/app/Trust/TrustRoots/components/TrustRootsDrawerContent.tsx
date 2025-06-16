@@ -31,7 +31,6 @@ const TrustRootsDrawerContent = () => {
           <Table variant="compact">
             <Thead>
               <Tr>
-                <Th>Role</Th>
                 <Th>Version</Th>
                 <Th>Expires</Th>
                 <Th>Status</Th>
@@ -40,7 +39,6 @@ const TrustRootsDrawerContent = () => {
             <Tbody>
               {exampleTrustRoot.tufMetadata.map((metadata, idx) => (
                 <Tr key={idx}>
-                  <Td>{capitalizeFirstLetter(metadata.role)}</Td>
                   <Td>{metadata.version}</Td>
                   <Td>{formatDate(metadata.expires)}</Td>
                   <Td>
@@ -73,7 +71,6 @@ const TrustRootsDrawerContent = () => {
                 <Th>Subject</Th>
                 <Th>Issuer</Th>
                 <Th>Type</Th>
-                <Th>Role</Th>
                 <Th>Status</Th>
               </Tr>
             </Thead>
@@ -83,7 +80,6 @@ const TrustRootsDrawerContent = () => {
                   <Td>{cert.subject}</Td>
                   <Td>{cert.issuer}</Td>
                   <Td>{cert.type}</Td>
-                  <Td>{cert.role ? capitalizeFirstLetter(cert.role) : null}</Td>
                   <Td>
                     <Flex spaceItems={{ default: 'spaceItemsSm' }}>
                       <FlexItem>
@@ -126,14 +122,6 @@ const TrustRootsDrawerContent = () => {
                 <DescriptionListDescription>
                   <a href="#">{exampleTrustRoot.source}</a>
                 </DescriptionListDescription>
-              </DescriptionListGroup>
-              <DescriptionListGroup>
-                <DescriptionListTermHelpText>
-                  <Popover headerContent={<div>Policy URL</div>} bodyContent={<div>Additional info</div>}>
-                    <DescriptionListTermHelpTextButton> Policy URL </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>{exampleTrustRoot.policyUrl}</DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTermHelpText>

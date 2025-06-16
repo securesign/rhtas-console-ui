@@ -168,10 +168,6 @@ const TrustOverview = () => {
                 A new <a href="#">signing certificate</a> was detected or added.
               </DescriptionListDescription>
             </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm icon={<PencilAltIcon />}>Signature verification</DescriptionListTerm>
-              <DescriptionListDescription>Metadata or targets with invalid signatures</DescriptionListDescription>
-            </DescriptionListGroup>
           </DescriptionList>
         </Content>
       </CardBody>

@@ -328,12 +328,6 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
                     <ActionsColumn
                       items={[
                         {
-                          title: 'View Details',
-                          onClick: () => {
-                            console.log('View Details button clicked');
-                          },
-                        },
-                        {
                           title: 'Copy Fingerprint',
                           onClick: () => {
                             console.log('Copy Fingerprint button clicked');

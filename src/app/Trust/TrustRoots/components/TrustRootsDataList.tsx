@@ -21,28 +21,16 @@ import {
   Flex,
   FlexItem,
   Icon,
-  Label,
   MenuToggle,
   MenuToggleElement,
-  Progress,
-  ProgressSize,
 } from '@patternfly/react-core';
 // import { rows } from '../TrustRoots.data';
 
 import CheckCircleIcon from '@patternfly/react-icons/dist/esm/icons/check-circle-icon';
 import CodeBranchIcon from '@patternfly/react-icons/dist/esm/icons/code-branch-icon';
 import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
-import InProgressIcon from '@patternfly/react-icons/dist/esm/icons/in-progress-icon';
-import PendingIcon from '@patternfly/react-icons/dist/esm/icons/pending-icon';
 import TimesCircleIcon from '@patternfly/react-icons/dist/esm/icons/times-circle-icon';
-import {
-  MinusIcon,
-  CalendarAltIcon,
-  ClockIcon,
-  FileAltIcon,
-  RunningIcon,
-  EllipsisVIcon,
-} from '@patternfly/react-icons';
+import { MinusIcon, CalendarAltIcon, FileAltIcon, EllipsisVIcon } from '@patternfly/react-icons';
 import { TrustRootsDrawerContent } from './TrustRootsDrawerContent';
 import { exampleTrustRoot } from '../TrustRoots.data';
 
@@ -51,10 +39,9 @@ const TrustRootsDataList = () => {
   const [isDrawerExpanded, setIsDrawerExpanded] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(undefined);
 
-  const getRow = (id: string, lastStatus: 'success' | 'error' | null, isRunning: boolean, isDisabled: boolean) => {
+  const getRow = (id: string, lastStatus: 'success' | 'error' | null, isRunning: boolean) => {
     let mainIcon;
     let lastStatusComponent;
-    let currentStatus;
 
     if (lastStatus === 'success') {
       mainIcon = (
@@ -89,42 +76,12 @@ const TrustRootsDataList = () => {
           <FlexItem>
             <Flex spaceItems={{ default: 'spaceItemsSm' }}>
               <FlexItem>
-                <ClockIcon /> 5 minutes
-              </FlexItem>
-            </Flex>
-          </FlexItem>
-          <FlexItem>
-            <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-              <FlexItem>
                 <FileAltIcon /> {exampleTrustRoot.certificates.length} certificates
               </FlexItem>
             </Flex>
           </FlexItem>
         </Flex>
       );
-    }
-
-    if (isRunning) {
-      mainIcon = (
-        <Icon size="xl" status="info">
-          <InProgressIcon />
-        </Icon>
-      );
-    }
-    if (isRunning) {
-      currentStatus = <Progress title="Time remaining: 2 hours" value={33} size={ProgressSize.sm} />;
-    } else {
-      currentStatus = (
-        <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-          <FlexItem>
-            <PendingIcon /> Scheduled
-          </FlexItem>
-        </Flex>
-      );
-    }
-
-    if (isDisabled) {
-      currentStatus = <Label color="orange">Disabled</Label>;
     }
 
     return (
@@ -169,14 +126,6 @@ const TrustRootsDataList = () => {
               <DataListCell key="status" alignRight>
                 {lastStatusComponent}
               </DataListCell>,
-              <DataListCell key="progress" alignRight>
-                <Flex direction={{ default: 'column' }}>
-                  <FlexItem>
-                    <RunningIcon /> Every 5 hours
-                  </FlexItem>
-                  <FlexItem>{currentStatus}</FlexItem>
-                </Flex>
-              </DataListCell>,
             ]}
           />
           {action}
@@ -204,8 +153,7 @@ const TrustRootsDataList = () => {
         onOpenChange={() => {}}
       >
         <DropdownList>
-          <DropdownItem>Action1</DropdownItem>
-          <DropdownItem>Action2</DropdownItem>
+          <DropdownItem>Refresh</DropdownItem>
         </DropdownList>
       </Dropdown>
     </DataListAction>
@@ -255,11 +203,11 @@ const TrustRootsDataList = () => {
                 setIsDrawerExpanded(true);
               }}
             >
-              {getRow('row-1', null, false, false)}
-              {getRow('row-2', null, true, false)}
-              {getRow('row-3', 'success', false, false)}
-              {getRow('row-4', 'error', false, false)}
-              {getRow('row-5', null, false, true)}
+              {getRow('row-1', null, false)}
+              {getRow('row-2', null, true)}
+              {getRow('row-3', 'success', false)}
+              {getRow('row-4', 'error', false)}
+              {getRow('row-5', null, false)}
             </DataList>
           </DrawerContentBody>
         </DrawerContent>

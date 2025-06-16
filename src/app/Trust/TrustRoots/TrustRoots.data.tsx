@@ -36,7 +36,6 @@ export const exampleTrustRoot = {
   name: 'Sigstore Default Trust Root',
   source: 'https://tuf-repo.sigstore.dev/',
   lastUpdated: '2025-06-09T08:43:00Z',
-  policyUrl: 'https://tuf-repo.sigstore.dev/trust-policy.yaml',
   type: 'tuf', // could later support other types
 
   certificates: [
@@ -54,38 +53,38 @@ export const exampleTrustRoot = {
       status: 'valid',
       fingerprint: '11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44',
     },
-    {
-      subject: 'CN=TUF Root Signer',
-      issuer: 'Self-signed',
-      type: 'TUF',
-      role: 'root',
-      status: 'valid',
-      version: 5,
-      fingerprint: 'AA:AA:AA:AA:BB:BB:BB:BB:CC:CC:CC:CC:DD:DD:DD:DD:EE:EE:EE:EE',
-    },
+    // {
+    //   subject: 'CN=TUF Root Signer',
+    //   issuer: 'Self-signed',
+    //   type: 'TUF',
+    //   role: 'root',
+    //   status: 'valid',
+    //   version: 5,
+    //   fingerprint: 'AA:AA:AA:AA:BB:BB:BB:BB:CC:CC:CC:CC:DD:DD:DD:DD:EE:EE:EE:EE',
+    // },
   ],
 
   tufMetadata: [
     {
-      role: 'root',
+      // role: 'root',
       version: 5,
       expires: '2025-12-01T00:00:00Z',
       status: 'valid',
     },
     {
-      role: 'targets',
+      // role: 'targets',
       version: 3,
       expires: '2025-08-15T00:00:00Z',
       status: 'valid',
     },
     {
-      role: 'snapshot',
+      // role: 'snapshot',
       version: 3,
       expires: '2025-06-20T00:00:00Z',
       status: 'expiring',
     },
     {
-      role: 'timestamp',
+      // role: 'timestamp',
       version: 12,
       expires: '2025-06-10T08:00:00Z',
       status: 'expiring',

@@ -33,20 +33,6 @@ MIIBszCCAVugAwIBAgIUWY1QrUe7GpU4... (truncated)
         status: 'valid',
       },
       {
-        subject: 'CN=TUF Root Signing Key,O=Trusted Foundations',
-        pem: `-----BEGIN CERTIFICATE-----
-MIICkzCCAfugAwIBAgIUQw9X3lNwJzZL... (truncated)
------END CERTIFICATE-----`,
-        issuer: 'Self-signed',
-        validFrom: '2022-07-01T00:00:00Z',
-        validTo: '2032-07-01T00:00:00Z',
-        fingerprint: 'AB:CD:EF:12:34:56:78:90:00:00:11:22:33:44:55:66:77:88:99:AA',
-        type: 'TUF',
-        role: 'root',
-        version: 4,
-        status: 'valid',
-      },
-      {
         subject: 'CN=Test Cert Expiring Soon,O=Example Org',
         issuer: 'CN=Example CA',
         validFrom: '2024-05-01T00:00:00Z',
@@ -77,19 +63,6 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         status: 'valid',
       },
       {
-        name: 'TUF Root v5',
-        subject: 'CN=TUF Root Signing Key,O=RHTAS',
-        issuer: 'Self-signed',
-        validFrom: '2023-01-01T00:00:00Z',
-        validTo: '2026-01-01T00:00:00Z',
-        fingerprint: '12:34:56:78:9A:BC:DE:F0:12:34:56:78:9A:BC:DE:F0:12:34:56:78',
-        pem: '-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----',
-        type: 'TUF',
-        role: 'root',
-        version: 5,
-        status: 'valid',
-      },
-      {
         name: 'Fulcio Production CA',
         subject: 'CN=Fulcio Root CA,O=Sigstore',
         issuer: 'Sigstore Root CA',
@@ -100,6 +73,6 @@ MIIDeTCCAmGgAwIBAgIUEj0+4xFe7r... (truncated)
         status: 'valid',
       },
     ],
-    columns: ['Subject', 'Issuer', 'Type', 'Role', 'Status', 'Version'],
+    columns: ['Subject', 'Issuer', 'Type', 'Status', 'Version'],
   },
 };
