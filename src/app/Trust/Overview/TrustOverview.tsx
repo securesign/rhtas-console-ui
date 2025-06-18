@@ -20,11 +20,17 @@ import {
   Spinner,
   SimpleListItem,
   SimpleList,
+  Timestamp,
+  TimestampTooltipVariant,
+  Flex,
+  FlexItem,
+  TimestampFormat,
 } from '@patternfly/react-core';
 import { ChartDonut, ChartThemeColor } from '@patternfly/react-charts/victory';
 import { MultiContentCard } from '@patternfly/react-component-groups';
 import { ArrowRightIcon, LockIcon, RedoIcon } from '@patternfly/react-icons';
 import { formatDate } from '@app/utils/utils';
+import { useQuery } from '@tanstack/react-query';
 
 const exampleCerts = [
   {
@@ -57,6 +63,19 @@ const exampleCerts = [
 ];
 
 const TrustOverview = () => {
+  const { isPending, error, data } = useQuery({
+    queryKey: ['trustConfig'],
+    queryFn: () => fetch('http://localhost:8080/api/v1/trust/config').then((res) => res.json()),
+  });
+
+  if (isPending) return 'Loading...';
+
+  if (error) return 'An error has occurred: ' + error.message;
+
+  if (data) {
+    console.table(data);
+  }
+
   const certListFormatted = [
     <SimpleListItem key="item1" component="a" href="#" isActive>
       {exampleCerts[0].issuer} | {formatDate(exampleCerts[0].validTo)}
@@ -103,30 +122,47 @@ const TrustOverview = () => {
         />{' '}
       </CardBody>
       <CardFooter>
-        <a href="#">View certificates</a>
+        <Button
+          icon={
+            <Icon className="pf-v6-u-ml-sm" isInline>
+              <ArrowRightIcon />
+            </Icon>
+          }
+          variant="link"
+          isInline
+        >
+          View certificates
+        </Button>
         <br />
       </CardFooter>
     </Card>,
     <Card isFullHeight isPlain key="card-2">
       <CardBody>
-        <Content component={ContentVariants.p}>
-          <Content component={ContentVariants.h6}>Last Root Refresh</Content>
-          <Content>2 hours ago</Content>
-          {/* <br /> */}
-          <Label
-            className="pf-v6-u-mb-sm"
-            icon={<RedoIcon />}
-            color="orange"
-            variant="outline"
-            onClick={() => 'Refreshed'}
-          >
-            Refresh
-          </Label>
-        </Content>
-        <Content component={ContentVariants.p}>
-          <Content component={ContentVariants.h6}>Expiring Soon</Content>
-          <SimpleList aria-label="Simple List Links Example">{certListFormatted}</SimpleList>
-        </Content>
+        <Flex direction={{ default: 'column' }}>
+          <FlexItem className="pf-m-spacer-md">
+            <Content component={ContentVariants.h6}>Last Root Refresh</Content>
+          </FlexItem>
+          <FlexItem className="pf-m-spacer-md">
+            <Timestamp date={new Date(2022, 7, 9, 14, 57, 0)} tooltip={{ variant: TimestampTooltipVariant.default }}>
+              2 hours ago
+            </Timestamp>
+          </FlexItem>
+          <FlexItem className="pf-m-spacer-md">
+            <Label
+              className="pf-v6-u-mb-sm"
+              icon={<RedoIcon />}
+              color="orange"
+              variant="outline"
+              onClick={() => alert('Refreshed')}
+            >
+              Refresh
+            </Label>
+          </FlexItem>
+        </Flex>
+      </CardBody>
+      <CardBody>
+        <Content component={ContentVariants.h6}>Expiring Soon</Content>
+        <SimpleList aria-label="Simple List Links Example">{certListFormatted}</SimpleList>
       </CardBody>
       <CardFooter>
         <Content>
@@ -153,23 +189,46 @@ const TrustOverview = () => {
         </Title>
       </CardTitle>
       <CardBody>
-        <Content component={ContentVariants.p}>
-          {/* <Content component={ContentVariants.h6}>Critical Events</Content> */}
-          <DescriptionList isCompact>
-            <DescriptionListGroup>
-              <DescriptionListTerm icon={<Spinner isInline aria-label="Metadata fetch" />}>
-                Metadata fetch
-              </DescriptionListTerm>
-              <DescriptionListDescription>Root metadata couldn't be fetched from remote</DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm icon={<LockIcon />}>New certificate added</DescriptionListTerm>
-              <DescriptionListDescription>
-                A new <a href="#">signing certificate</a> was detected or added.
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
-        </Content>
+        <DescriptionList isCompact>
+          <DescriptionListGroup>
+            <DescriptionListTerm icon={<Spinner isInline aria-label="Metadata fetch" />}>
+              Metadata fetch
+            </DescriptionListTerm>
+            <DescriptionListDescription>Root metadata couldn't be fetched from remote</DescriptionListDescription>
+            <DescriptionListDescription>
+              <Timestamp
+                customFormat={{
+                  month: 'short',
+                  weekday: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric',
+                }}
+              />
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+          <DescriptionListGroup>
+            <DescriptionListTerm icon={<LockIcon />}>New certificate added</DescriptionListTerm>
+            <DescriptionListDescription>
+              A new <a href="#">signing certificate</a> was detected or added.
+            </DescriptionListDescription>
+            <DescriptionListDescription>
+              <Timestamp
+                customFormat={{
+                  month: 'short',
+                  weekday: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric',
+                }}
+              />
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+        </DescriptionList>
       </CardBody>
       <CardFooter>
         <Content>
