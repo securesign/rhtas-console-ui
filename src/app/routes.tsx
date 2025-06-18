@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Dashboard } from '@app/Dashboard/Dashboard';
-import { GeneralSettings } from '@app/Settings/General/GeneralSettings';
-import { ProfileSettings } from '@app/Settings/Profile/ProfileSettings';
+// import { Dashboard } from '@app/Dashboard/Dashboard';
+// import { GeneralSettings } from '@app/Settings/General/GeneralSettings';
+// import { ProfileSettings } from '@app/Settings/Profile/ProfileSettings';
 import { NotFound } from '@app/NotFound/NotFound';
 import { TrustRootsPage } from './Trust/TrustRoots/TrustRootsPage';
 import { TrustOverview } from './Trust/Overview/TrustOverview';
-import { ArtifactsPage } from './Artifacts/ArtifactsPage';
+// import { ArtifactsPage } from './Artifacts/ArtifactsPage';
 import { CertificatesPage } from './Trust/Certificates/CertificatesPage';
 import { certificates, columns } from './Trust/Certificates/Certificates.data';
 
@@ -56,39 +56,39 @@ const routes: AppRouteConfig[] = [
       },
     ],
   },
-  {
-    element: <ArtifactsPage />,
-    exact: true,
-    label: 'Artifacts',
-    path: '/artifacts',
-    title: 'Artifacts',
-  },
-  {
-    label: 'Settings',
-    routes: [
-      {
-        element: <GeneralSettings />,
-        exact: true,
-        label: 'General',
-        path: '/settings/general',
-        title: 'General Settings',
-      },
-      {
-        element: <ProfileSettings />,
-        exact: true,
-        label: 'Profile',
-        path: '/settings/profile',
-        title: 'Profile Settings',
-      },
-    ],
-  },
-  {
-    element: <Dashboard />,
-    exact: true,
-    label: 'Dashboard',
-    path: '/dashboard',
-    title: 'RHTAS Console UI',
-  },
+  // {
+  //   element: <ArtifactsPage />,
+  //   exact: true,
+  //   label: 'Artifacts',
+  //   path: '/artifacts',
+  //   title: 'Artifacts',
+  // },
+  // {
+  //   label: 'Settings',
+  //   routes: [
+  //     {
+  //       element: <GeneralSettings />,
+  //       exact: true,
+  //       label: 'General',
+  //       path: '/settings/general',
+  //       title: 'General Settings',
+  //     },
+  //     {
+  //       element: <ProfileSettings />,
+  //       exact: true,
+  //       label: 'Profile',
+  //       path: '/settings/profile',
+  //       title: 'Profile Settings',
+  //     },
+  //   ],
+  // },
+  // {
+  //   element: <Dashboard />,
+  //   exact: true,
+  //   label: 'Dashboard',
+  //   path: '/dashboard',
+  //   title: 'RHTAS Console UI',
+  // },
 ];
 
 const flattenedRoutes: IAppRoute[] = routes.reduce(
