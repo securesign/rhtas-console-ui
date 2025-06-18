@@ -24,7 +24,6 @@ import {
   TimestampTooltipVariant,
   Flex,
   FlexItem,
-  TimestampFormat,
 } from '@patternfly/react-core';
 import { ChartDonut, ChartThemeColor } from '@patternfly/react-charts/victory';
 import { MultiContentCard } from '@patternfly/react-component-groups';
