@@ -4,9 +4,13 @@ import '@patternfly/patternfly/patternfly-addons.css';
 import { MemoryRouter } from 'react-router';
 import { AppLayout } from '../src/app/AppLayout/AppLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+
+initialize();
 
 const preview = {
   decorators: [
+    mswDecorator,
     (Story) => {
       const queryClient = new QueryClient();
       return (
