@@ -31,7 +31,7 @@ import CodeBranchIcon from '@patternfly/react-icons/dist/esm/icons/code-branch-i
 import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
 import TimesCircleIcon from '@patternfly/react-icons/dist/esm/icons/times-circle-icon';
 import { MinusIcon, CalendarAltIcon, FileAltIcon, EllipsisVIcon } from '@patternfly/react-icons';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 
 import { TrustRootsDrawerContent } from './TrustRootsDrawerContent';
 import { exampleTrustRoot } from '../TrustRoots.data';
@@ -41,18 +41,18 @@ const TrustRootsDataList = () => {
   const [isDrawerExpanded, setIsDrawerExpanded] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(undefined);
 
-  const { isPending, error, data } = useQuery({
-    queryKey: ['trustConfig'],
-    queryFn: () => fetch('http://localhost:8080/api/v1/trust/config').then((res) => res.json()),
-  });
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ['trustConfig'],
+  //   queryFn: () => fetch('http://localhost:8080/api/v1/trust/config').then((res) => res.json()),
+  // });
 
-  if (isPending) return 'Loading...';
+  // if (isPending) return 'Loading...';
 
-  if (error) return 'An error has occurred: ' + error.message;
+  // if (error) return 'An error has occurred: ' + error.message;
 
-  if (data) {
-    console.table(data);
-  }
+  // if (data) {
+  //   console.table(data);
+  // }
 
   const getRow = (id: string, lastStatus: 'success' | 'error' | null, isRunning: boolean) => {
     let mainIcon;
