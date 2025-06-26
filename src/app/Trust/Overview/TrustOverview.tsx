@@ -29,7 +29,7 @@ import { ChartDonut, ChartThemeColor } from '@patternfly/react-charts/victory';
 import { MultiContentCard } from '@patternfly/react-component-groups';
 import { ArrowRightIcon, LockIcon, RedoIcon } from '@patternfly/react-icons';
 import { formatDate } from '@app/utils/utils';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 
 const exampleCerts = [
   {
@@ -62,18 +62,18 @@ const exampleCerts = [
 ];
 
 const TrustOverview = () => {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['trustConfig'],
-    queryFn: () => fetch('http://localhost:8080/api/v1/trust/config').then((res) => res.json()),
-  });
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ['trustConfig'],
+  //   queryFn: () => fetch('http://localhost:8080/api/v1/trust/config').then((res) => res.json()),
+  // });
 
-  if (isPending) return 'Loading...';
+  // if (isPending) return 'Loading...';
 
-  if (error) return 'An error has occurred: ' + error.message;
+  // if (error) return 'An error has occurred: ' + error.message;
 
-  if (data) {
-    console.table(data);
-  }
+  // if (data) {
+  //   console.table(data);
+  // }
 
   const certListFormatted = [
     <SimpleListItem key="item1" component="a" href="#" isActive>
