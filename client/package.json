@@ -14,7 +14,6 @@
     "format:fix": "prettier --write './**/*.{ts,tsx,js,json}'",
     "start:dev": "npm run generate && vite --port 3000",
     "start": "vite preview",
-    "test": "NODE_ENV=test jest --rootDir=. --config=./config/jest.config.ts",
     "generate": "openapi-ts -f ./config/openapi-ts.config.ts",
     "preview": "vite preview"
   },
@@ -49,7 +48,6 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.77.0",
-    "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@types/file-saver": "^2.0.2",
     "@types/react": "^18.2.0",
