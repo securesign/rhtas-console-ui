@@ -21,7 +21,7 @@ jobs:
           node-version: 22
           cache: npm
       - name: Install dependencies
-        run: npm clean-install --ignore-scripts      
+        run: npm ci --ignore-scripts
       - name: Build
         run: npm run build
       - name: Lint sources
