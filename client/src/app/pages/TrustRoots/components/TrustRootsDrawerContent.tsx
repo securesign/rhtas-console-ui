@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { exampleTrustRoots } from '../data/TrustRoots.data';
-import TrustRootMetadataTab from './DraweContents/TrustRootMetadataTab';
-import TrustRootCertificateTab from './DraweContents/TrustRootCertificateTab';
-import TrustRootInfoTab from './DraweContents/TrustRootInfoTab';
+import TrustRootMetadataTab from './DrawerContents/TrustRootMetadataTab';
+import TrustRootCertificateTab from './DrawerContents/TrustRootCertificateTab';
+import TrustRootInfoTab from './DrawerContents/TrustRootInfoTab';
 
 type TrustRootDrawerContentProps = {
   trustRootId: string;

@@ -92,8 +92,7 @@ const TrustRootsDataList = () => {
               <DrawerHead>
                 {/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */}
                 <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as any}>
-                  <Content component="small">Name</Content>
-                  <Content component="p">
+                  <Content component="h3">
                     {exampleTrustRoots.find((tr) => tr.id === selectedRow)?.name ?? selectedRow}
                   </Content>
                 </div>
