@@ -15,4 +15,4 @@ export const encodeEnv = (env: object, exclude?: string[]): string => {
  * Return an objects from a base64 encoded JSON string.
  */
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-export const decodeEnv = (env: string): object => (!env ? {} : JSON.parse(atob(env)));
+export const decodeEnv = (env: string): object => (env ? JSON.parse(atob(env)) : {});

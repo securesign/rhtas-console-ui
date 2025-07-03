@@ -30,7 +30,7 @@ export const ErrorFallback = ({
               resetErrorBoundary(false);
             }}
           >
-            Refresh
+            Go to home
           </Button>
         </EmptyStateBody>
       </EmptyState>
