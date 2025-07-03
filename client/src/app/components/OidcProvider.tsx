@@ -72,5 +72,5 @@ const AuthEnabledOidcProvider: React.FC<IOidcProviderProps> = ({ children }) => 
       </Bullseye>
     );
   }
-  return <p>Login in...</p>;
+  return <p>Logging in...</p>;
 };
