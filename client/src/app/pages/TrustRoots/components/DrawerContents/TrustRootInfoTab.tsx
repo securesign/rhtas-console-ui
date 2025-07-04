@@ -7,16 +7,16 @@ import {
   DescriptionListTermHelpTextButton,
   PageSection,
   Popover,
-} from '@patternfly/react-core';
+} from "@patternfly/react-core";
 
-import PlusCircleIcon from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
-import { TrustRootKind } from '../../data/TrustRoots.data';
-import { formatDate } from '@app/utils/utils';
-import TrustRootNotFound from '../TrustRootNotFound';
+import PlusCircleIcon from "@patternfly/react-icons/dist/esm/icons/plus-circle-icon";
+import { formatDate } from "@app/utils/utils";
+import TrustRootNotFound from "../TrustRootNotFound";
+import type { TrustRootKind } from "../../data/TrustRoots.data";
 
-type TrustRootInfoTabProps = {
+interface TrustRootInfoTabProps {
   trustRoot?: TrustRootKind;
-};
+}
 
 const TrustRootInfoTab: React.FC<TrustRootInfoTabProps> = ({ trustRoot }) => {
   return trustRoot ? (

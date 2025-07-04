@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState, type LegacyRef } from "react";
 
 import {
   Content,
@@ -10,14 +10,14 @@ import {
   DrawerContentBody,
   DrawerHead,
   DrawerPanelContent,
-} from '@patternfly/react-core';
+} from "@patternfly/react-core";
 // import { rows } from '../TrustRoots.data';
 
 // import { useQuery } from '@tanstack/react-query';
 
-import { TrustRootsDrawerContent } from './TrustRootsDrawerContent';
-import { exampleTrustRoots } from '../data/TrustRoots.data';
-import TrustRootRow, { LastStatus, TrustRootRowProps } from './TrustRootRow';
+import { TrustRootsDrawerContent } from "./TrustRootsDrawerContent";
+import { exampleTrustRoots } from "../data/TrustRoots.data";
+import TrustRootRow, { type LastStatus, type TrustRootRowProps } from "./TrustRootRow";
 
 const TrustRootsDataList = () => {
   const [selectedRow, setSelectedRow] = useState("");
@@ -41,8 +41,8 @@ const TrustRootsDataList = () => {
     const dummyStatuses: { id: string; lastStatus: LastStatus }[] = [
       { id: exampleTrustRoots[0].id, lastStatus: null },
       { id: exampleTrustRoots[1].id, lastStatus: null },
-      { id: exampleTrustRoots[2].id, lastStatus: 'success' },
-      { id: exampleTrustRoots[3].id, lastStatus: 'error' },
+      { id: exampleTrustRoots[2].id, lastStatus: "success" },
+      { id: exampleTrustRoots[3].id, lastStatus: "error" },
       { id: exampleTrustRoots[4].id, lastStatus: null },
     ];
     // to be updated
@@ -90,8 +90,7 @@ const TrustRootsDataList = () => {
               minSize={"150px"}
             >
               <DrawerHead>
-                {/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */}
-                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as any}>
+                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as LegacyRef<HTMLDivElement>}>
                   <Content component="h3">
                     {exampleTrustRoots.find((tr) => tr.id === selectedRow)?.name ?? selectedRow}
                   </Content>

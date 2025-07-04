@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Flex, FlexItem, Icon, Pagination } from '@patternfly/react-core';
-import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
-import CheckCircleIcon from '@patternfly/react-icons/dist/esm/icons/check-circle-icon';
-import { capitalizeFirstLetter } from '@app/utils/utils';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import { TrustRootKind } from '../../data/TrustRoots.data';
-import TrustRootNotFound from '../TrustRootNotFound';
+import * as React from "react";
+import { Flex, FlexItem, Icon, Pagination } from "@patternfly/react-core";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
+import CheckCircleIcon from "@patternfly/react-icons/dist/esm/icons/check-circle-icon";
+import { capitalizeFirstLetter } from "@app/utils/utils";
+import { ExclamationTriangleIcon } from "@patternfly/react-icons";
+import { type TrustRootKind } from "../../data/TrustRoots.data";
+import TrustRootNotFound from "../TrustRootNotFound";
 
-export type TrustRootCertificateTabProps = {
+export interface TrustRootCertificateTabProps {
   trustRoot?: TrustRootKind;
-};
+}
 
 const TrustRootCertificateTab: React.FC<TrustRootCertificateTabProps> = ({ trustRoot }) => {
   return trustRoot ? (
@@ -31,9 +31,9 @@ const TrustRootCertificateTab: React.FC<TrustRootCertificateTabProps> = ({ trust
               <Td>{cert.issuer}</Td>
               <Td>{cert.type}</Td>
               <Td>
-                <Flex spaceItems={{ default: 'spaceItemsSm' }}>
+                <Flex spaceItems={{ default: "spaceItemsSm" }}>
                   <FlexItem>
-                    {cert.status === 'valid' ? (
+                    {cert.status === "valid" ? (
                       <Icon status="success">
                         <CheckCircleIcon />
                       </Icon>
@@ -41,7 +41,7 @@ const TrustRootCertificateTab: React.FC<TrustRootCertificateTabProps> = ({ trust
                       <Icon status="warning">
                         <ExclamationTriangleIcon />
                       </Icon>
-                    )}{' '}
+                    )}{" "}
                     {capitalizeFirstLetter(cert.status)}
                   </FlexItem>
                 </Flex>

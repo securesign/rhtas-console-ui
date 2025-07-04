@@ -25,31 +25,28 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: [
-          "./common/tsconfig.json",
-          "./client/tsconfig.node.json",
-          "./client/tsconfig.app.json",
-        ],
+        project: ["./common/tsconfig.json", "./client/tsconfig.node.json", "./client/tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
-      react
+      react,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
-      "@typescript-eslint/no-unused-vars": ["warn", {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-        caughtErrorsIgnorePattern: "^_",
-      }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "@typescript-eslint/no-empty-function": ["off"],
+      "react/prop-types": "off",
       "prettier/prettier": [
         "warn",
         {
@@ -58,10 +55,6 @@ export default tseslint.config([
       ],
     },
     settings: { react: { version: "18.3" } },
-    ignores: [
-      "client/config/**",
-      "client/src/app/client/**",
-      "client/types/**",
-    ],
+    ignores: ["client/config/**", "client/src/app/client/**", "client/types/**"],
   },
-])
+]);

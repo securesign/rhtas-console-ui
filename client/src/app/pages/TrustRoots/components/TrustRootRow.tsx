@@ -11,39 +11,39 @@ import {
   Flex,
   FlexItem,
   MenuToggle,
-  MenuToggleElement,
-} from '@patternfly/react-core';
-import * as React from 'react';
-import StatusIcon from './StatusIcon';
-import CodeBranchIcon from '@patternfly/react-icons/dist/esm/icons/code-branch-icon';
-import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
-import { CalendarAltIcon, FileAltIcon, EllipsisVIcon } from '@patternfly/react-icons';
-import { TrustRootKind } from '../data/TrustRoots.data';
+  type MenuToggleElement,
+} from "@patternfly/react-core";
+import * as React from "react";
+import StatusIcon from "./StatusIcon";
+import CodeBranchIcon from "@patternfly/react-icons/dist/esm/icons/code-branch-icon";
+import CubeIcon from "@patternfly/react-icons/dist/esm/icons/cube-icon";
+import { CalendarAltIcon, FileAltIcon, EllipsisVIcon } from "@patternfly/react-icons";
+import { type TrustRootKind } from "../data/TrustRoots.data";
 
-export type LastStatus = 'success' | 'error' | null;
+export type LastStatus = "success" | "error" | null;
 
-export type TrustRootRowProps = {
+export interface TrustRootRowProps {
   id: string;
   lastStatus: LastStatus;
   isRunning: boolean;
   trustRoot: TrustRootKind;
-};
+}
 
 const TrustRootRow: React.FC<TrustRootRowProps> = ({ id, lastStatus, isRunning, trustRoot }) => {
   let lastStatusComponent;
 
-  if (lastStatus === 'success' || lastStatus === 'error' || isRunning) {
+  if (lastStatus === "success" || lastStatus === "error" || isRunning) {
     lastStatusComponent = (
-      <Flex direction={{ default: 'column' }}>
+      <Flex direction={{ default: "column" }}>
         <FlexItem>
-          <Flex spaceItems={{ default: 'spaceItemsSm' }}>
+          <Flex spaceItems={{ default: "spaceItemsSm" }}>
             <FlexItem>
               <CalendarAltIcon /> 7 hours ago
             </FlexItem>
           </Flex>
         </FlexItem>
         <FlexItem>
-          <Flex spaceItems={{ default: 'spaceItemsSm' }}>
+          <Flex spaceItems={{ default: "spaceItemsSm" }}>
             <FlexItem>
               <FileAltIcon /> {trustRoot.certificates.length} certificates
             </FlexItem>
@@ -62,13 +62,13 @@ const TrustRootRow: React.FC<TrustRootRowProps> = ({ id, lastStatus, isRunning, 
               <StatusIcon status={lastStatus as string} />
             </DataListCell>,
             <DataListCell key="info" isFilled={false}>
-              <Flex direction={{ default: 'column' }}>
+              <Flex direction={{ default: "column" }}>
                 <FlexItem>
                   <Content component="p">{trustRoot.name}</Content>
                 </FlexItem>
                 <FlexItem>
                   <Content component="dd">
-                    <Flex spaceItems={{ default: 'spaceItemsSm' }}>
+                    <Flex spaceItems={{ default: "spaceItemsSm" }}>
                       <FlexItem>
                         {/* <CodeBranchIcon /> https://github.com/organization/repository.git */}
                         <CodeBranchIcon /> {trustRoot.source}
@@ -77,7 +77,7 @@ const TrustRootRow: React.FC<TrustRootRowProps> = ({ id, lastStatus, isRunning, 
                   </Content>
                 </FlexItem>
                 <FlexItem>
-                  <Flex spaceItems={{ default: 'spaceItemsSm' }}>
+                  <Flex spaceItems={{ default: "spaceItemsSm" }}>
                     <FlexItem>
                       <CubeIcon /> Type: {trustRoot.type}
                     </FlexItem>
@@ -86,7 +86,7 @@ const TrustRootRow: React.FC<TrustRootRowProps> = ({ id, lastStatus, isRunning, 
               </Flex>
             </DataListCell>,
             <DataListCell key="description">
-              <Flex direction={{ default: 'column' }}>
+              <Flex direction={{ default: "column" }}>
                 <FlexItem>
                   <Content component="p">This is the description of the Root</Content>
                 </FlexItem>
@@ -106,7 +106,7 @@ const TrustRootRow: React.FC<TrustRootRowProps> = ({ id, lastStatus, isRunning, 
 const action = (
   <DataListAction id="actions" aria-label="Actions" aria-labelledby="actions">
     <Dropdown
-      popperProps={{ position: 'right' }}
+      popperProps={{ position: "right" }}
       onSelect={() => {}}
       toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
         <MenuToggle
