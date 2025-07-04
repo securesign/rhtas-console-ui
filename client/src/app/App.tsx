@@ -10,7 +10,7 @@ import "@patternfly/patternfly/patternfly-addons.css";
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <DefaultLayout>
         <AppRoutes />
       </DefaultLayout>

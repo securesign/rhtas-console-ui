@@ -23,7 +23,7 @@ const stringModule = ejs.render(
   export default strings;
 `,
   {
-    brandingRoot: "branding",
+    brandingRoot: process.env.BASE_URL ? `${process.env.BASE_URL}/branding` : "branding",
   }
 );
 
