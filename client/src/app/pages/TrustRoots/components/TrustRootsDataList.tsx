@@ -1,13 +1,8 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState, type LegacyRef } from "react";
 
 import {
   Content,
   DataList,
-  DataListAction,
-  DataListCell,
-  DataListItem,
-  DataListItemCells,
-  DataListItemRow,
   Drawer,
   DrawerActions,
   DrawerCloseButton,
@@ -15,26 +10,14 @@ import {
   DrawerContentBody,
   DrawerHead,
   DrawerPanelContent,
-  Dropdown,
-  DropdownItem,
-  DropdownList,
-  Flex,
-  FlexItem,
-  Icon,
-  MenuToggle,
-  type MenuToggleElement,
 } from "@patternfly/react-core";
 // import { rows } from '../TrustRoots.data';
 
-import CheckCircleIcon from "@patternfly/react-icons/dist/esm/icons/check-circle-icon";
-import CodeBranchIcon from "@patternfly/react-icons/dist/esm/icons/code-branch-icon";
-import CubeIcon from "@patternfly/react-icons/dist/esm/icons/cube-icon";
-import TimesCircleIcon from "@patternfly/react-icons/dist/esm/icons/times-circle-icon";
-import { MinusIcon, CalendarAltIcon, FileAltIcon, EllipsisVIcon } from "@patternfly/react-icons";
 // import { useQuery } from '@tanstack/react-query';
 
 import { TrustRootsDrawerContent } from "./TrustRootsDrawerContent";
-import { exampleTrustRoot } from "../TrustRoots.data";
+import { exampleTrustRoots } from "../data/TrustRoots.data";
+import TrustRootRow, { type LastStatus, type TrustRootRowProps } from "./TrustRootRow";
 
 const TrustRootsDataList = () => {
   const [selectedRow, setSelectedRow] = useState("");
@@ -54,125 +37,45 @@ const TrustRootsDataList = () => {
   //   console.table(data);
   // }
 
-  const getRow = (id: string, lastStatus: "success" | "error" | null, isRunning: boolean) => {
-    let mainIcon;
-    let lastStatusComponent;
-
-    if (lastStatus === "success") {
-      mainIcon = (
-        <Icon size="xl" status="success">
-          <CheckCircleIcon />
-        </Icon>
-      );
-    } else if (lastStatus === "error") {
-      mainIcon = (
-        <Icon size="xl" status="danger">
-          <TimesCircleIcon />
-        </Icon>
-      );
-    } else {
-      mainIcon = (
-        <Icon size="xl">
-          <MinusIcon />
-        </Icon>
-      );
-    }
-
-    if (lastStatus === "success" || lastStatus === "error" || isRunning) {
-      lastStatusComponent = (
-        <Flex direction={{ default: "column" }}>
-          <FlexItem>
-            <Flex spaceItems={{ default: "spaceItemsSm" }}>
-              <FlexItem>
-                <CalendarAltIcon /> 7 hours ago
-              </FlexItem>
-            </Flex>
-          </FlexItem>
-          <FlexItem>
-            <Flex spaceItems={{ default: "spaceItemsSm" }}>
-              <FlexItem>
-                <FileAltIcon /> {exampleTrustRoot.certificates.length} certificates
-              </FlexItem>
-            </Flex>
-          </FlexItem>
-        </Flex>
-      );
-    }
-
-    return (
-      <DataListItem id={id} aria-labelledby="Demo-item1">
-        <DataListItemRow>
-          <DataListItemCells
-            dataListCells={[
-              <DataListCell key="icon" isFilled={false}>
-                {mainIcon}
-              </DataListCell>,
-              <DataListCell key="info" isFilled={false}>
-                <Flex direction={{ default: "column" }}>
-                  <FlexItem>
-                    <Content component="p">{exampleTrustRoot.name}</Content>
-                  </FlexItem>
-                  <FlexItem>
-                    <Content component="dd">
-                      <Flex spaceItems={{ default: "spaceItemsSm" }}>
-                        <FlexItem>
-                          {/* <CodeBranchIcon /> https://github.com/organization/repository.git */}
-                          <CodeBranchIcon /> {exampleTrustRoot.source}
-                        </FlexItem>
-                      </Flex>
-                    </Content>
-                  </FlexItem>
-                  <FlexItem>
-                    <Flex spaceItems={{ default: "spaceItemsSm" }}>
-                      <FlexItem>
-                        <CubeIcon /> Type: {exampleTrustRoot.type}
-                      </FlexItem>
-                    </Flex>
-                  </FlexItem>
-                </Flex>
-              </DataListCell>,
-              <DataListCell key="description">
-                <Flex direction={{ default: "column" }}>
-                  <FlexItem>
-                    <Content component="p">This is the description of the Root</Content>
-                  </FlexItem>
-                </Flex>
-              </DataListCell>,
-              <DataListCell key="status" alignRight>
-                {lastStatusComponent}
-              </DataListCell>,
-            ]}
-          />
-          {action}
-        </DataListItemRow>
-      </DataListItem>
-    );
+  const getStatus = (id: string): LastStatus => {
+    const dummyStatuses: { id: string; lastStatus: LastStatus }[] = [
+      { id: exampleTrustRoots[0].id, lastStatus: null },
+      { id: exampleTrustRoots[1].id, lastStatus: null },
+      { id: exampleTrustRoots[2].id, lastStatus: "success" },
+      { id: exampleTrustRoots[3].id, lastStatus: "error" },
+      { id: exampleTrustRoots[4].id, lastStatus: null },
+    ];
+    // to be updated
+    return dummyStatuses.find((status) => status.id === id)?.lastStatus ?? null;
   };
 
-  const action = (
-    <DataListAction id="actions" aria-label="Actions" aria-labelledby="actions">
-      <Dropdown
-        popperProps={{ position: "right" }}
-        onSelect={() => {}}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-          <MenuToggle
-            ref={toggleRef}
-            isExpanded={false}
-            onClick={() => {}}
-            variant="plain"
-            aria-label="Data list with checkboxes, actions and additional cells example kebab toggle 2"
-            icon={<EllipsisVIcon />}
-          />
-        )}
-        isOpen={false}
-        onOpenChange={() => {}}
-      >
-        <DropdownList>
-          <DropdownItem>Refresh</DropdownItem>
-        </DropdownList>
-      </Dropdown>
-    </DataListAction>
-  );
+  const getIsRunning = (id: string): boolean => {
+    const dummyRuns = [
+      { id: exampleTrustRoots[0].id, running: false },
+      { id: exampleTrustRoots[1].id, running: true },
+      { id: exampleTrustRoots[2].id, running: false },
+      { id: exampleTrustRoots[3].id, running: true },
+      { id: exampleTrustRoots[4].id, running: false },
+    ];
+    return dummyRuns.find((run) => run.id === id)?.running ?? false;
+  };
+
+  const rowData: TrustRootRowProps[] = exampleTrustRoots.map((trustRoot) => {
+    return {
+      id: trustRoot.id,
+      lastStatus: getStatus(trustRoot.id),
+      isRunning: getIsRunning(trustRoot.id),
+      trustRoot,
+    };
+  });
+
+  // const rowData: TrustRootRowProps[] = [
+  //   { id: 'row-1', lastStatus: null, isRunning: false },
+  //   { id: 'row-2', lastStatus: null, isRunning: true },
+  //   { id: 'row-3', lastStatus: 'success', isRunning: false },
+  //   { id: 'row-4', lastStatus: 'error', isRunning: false },
+  //   { id: 'row-5', lastStatus: null, isRunning: false },
+  // ];
 
   return (
     <Fragment>
@@ -187,10 +90,10 @@ const TrustRootsDataList = () => {
               minSize={"150px"}
             >
               <DrawerHead>
-                {/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */}
-                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as any}>
-                  <Content component="small">Name</Content>
-                  <Content component="p">{exampleTrustRoot.name}</Content>
+                <div tabIndex={isDrawerExpanded ? 0 : -1} ref={drawerRef as LegacyRef<HTMLDivElement>}>
+                  <Content component="h3">
+                    {exampleTrustRoots.find((tr) => tr.id === selectedRow)?.name ?? selectedRow}
+                  </Content>
                 </div>
                 <DrawerActions>
                   <DrawerCloseButton
@@ -201,7 +104,7 @@ const TrustRootsDataList = () => {
                   />
                 </DrawerActions>
               </DrawerHead>
-              <TrustRootsDrawerContent />
+              <TrustRootsDrawerContent trustRootId={selectedRow} />
             </DrawerPanelContent>
           }
         >
@@ -218,11 +121,9 @@ const TrustRootsDataList = () => {
                 setIsDrawerExpanded(true);
               }}
             >
-              {getRow("row-1", null, false)}
-              {getRow("row-2", null, true)}
-              {getRow("row-3", "success", false)}
-              {getRow("row-4", "error", false)}
-              {getRow("row-5", null, false)}
+              {rowData.map((row) => (
+                <TrustRootRow key={row.id} {...row} />
+              ))}
             </DataList>
           </DrawerContentBody>
         </DrawerContent>
