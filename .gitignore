@@ -141,3 +141,5 @@ storybook-static/
 
 .idea/
 .vscode/
+
+client/src/app/client/

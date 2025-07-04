@@ -1,0 +1,22 @@
+{
+  "application": {
+    "title": "RHTAS Console",
+    "name": "RHTAS Console UI",
+    "description": "RHTAS Console UI"
+  },
+  "about": {
+    "displayName": "RHTAS Console",
+    "imageSrc": "<%= brandingRoot %>/images/masthead-logo.svg",
+    "documentationUrl": "https://pages.rhtas.com/"
+  },
+  "masthead": {
+    "leftBrand": {
+      "src": "<%= brandingRoot %>/images/masthead-logo.svg",
+      "alt": "brand",
+      "height": "40px"
+    },
+    "leftTitle": null,
+    "rightBrand": null,
+    "supportUrl": "https://github.com/securesign/rhtas-console/issues"
+  }
+}
