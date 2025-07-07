@@ -19,6 +19,7 @@ const faviconPath = path.resolve(brandingPath, "favicon.ico");
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.BASE_URL,
   plugins: [
     react(),
     {
