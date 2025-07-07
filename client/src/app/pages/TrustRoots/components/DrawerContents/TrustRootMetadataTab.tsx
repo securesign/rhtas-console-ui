@@ -11,7 +11,7 @@ export interface TrustRootMetadataTabProps {
 }
 
 const TrustRootMetadataTab: React.FC<TrustRootMetadataTabProps> = ({ trustRoot }) => {
-  if (!trustRoot) {
+  if (!trustRoot?.tufMetadata || !Array.isArray(trustRoot.tufMetadata) || trustRoot.tufMetadata.length === 0) {
     return <TrustRootNotFound />;
   }
   const latestTUF = trustRoot?.tufMetadata[0];
@@ -93,43 +93,3 @@ const TrustRootMetadataTab: React.FC<TrustRootMetadataTabProps> = ({ trustRoot }
 };
 
 export default TrustRootMetadataTab;
-
-// const table =  <>
-//       <Pagination itemCount={trustRoot.tufMetadata.length} perPage={10} page={1} variant="top" />
-//       <Table variant="compact">
-//         <Thead>
-//           <Tr>
-//             <Th>Version</Th>
-//             <Th>Expires</Th>
-//             <Th>Role</Th>
-//             <Th>Status</Th>
-//           </Tr>
-//         </Thead>
-//         <Tbody>
-//           {trustRoot.tufMetadata.map((metadata, idx) => (
-//             <Tr key={idx}>
-//               <Td>{metadata.version}</Td>
-//               <Td>{formatDate(metadata.expires)}</Td>
-//               <Td>{metadata.role}</Td>
-//               <Td>
-//                 <Flex spaceItems={{ default: 'spaceItemsSm' }}>
-//                   <FlexItem>
-//                     {metadata.status === 'valid' ? (
-//                       <Icon status="success">
-//                         <CheckCircleIcon />
-//                       </Icon>
-//                     ) : (
-//                       <Icon status="warning">
-//                         <ExclamationTriangleIcon />
-//                       </Icon>
-//                     )}{' '}
-//                     {capitalizeFirstLetter(metadata.status)}
-//                   </FlexItem>
-//                 </Flex>
-//               </Td>
-//             </Tr>
-//           ))}
-//         </Tbody>
-//       </Table>
-//       <Pagination itemCount={trustRoot.tufMetadata.length} perPage={10} page={1} variant="bottom" />
-//     </>
