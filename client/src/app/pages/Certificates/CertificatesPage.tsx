@@ -11,7 +11,6 @@ import {
   Pagination,
   PaginationVariant,
   Popper,
-  SearchInput,
   Toolbar,
   ToolbarContent,
   ToolbarFilter,
@@ -26,6 +25,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ICertificateProps } from "./Certificates.data";
 import ShieldIcon from "@patternfly/react-icons/dist/esm/icons/shield-alt-icon";
 import { capitalizeFirstLetter, formatDate, getCertificateStatusColor } from "@app/utils/utils";
+import { PublishedOnInput, SearchInputField } from "@app/components/SearchInputField";
 
 export interface ICertificatesPageProps {
   certificates: ICertificateProps[];
@@ -232,19 +232,6 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
     </div>
   );
 
-  // Set up identifier search input
-  const searchInput = (
-    <SearchInput
-      placeholder="Filter by text"
-      value={searchValue}
-      onChange={(_event, value) => onSearchChange(value)}
-      onClear={() => onSearchChange("")}
-    />
-  );
-
-  // Set up date filter
-  const publishedOnInput = <>Date range input here</>;
-
   const toggleGroupItems = (
     <ToolbarGroup variant="filter-group">
       <ToolbarItem>{attributeDropdown}</ToolbarItem>
@@ -255,10 +242,10 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
         categoryName="Subject"
         showToolbarItem={activeAttributeMenu === "Filter text"}
       >
-        {searchInput}
+        <SearchInputField searchValue={searchValue} onSearchChange={onSearchChange} />
       </ToolbarFilter>
       <ToolbarFilter categoryName={"Valid To"} showToolbarItem={activeAttributeMenu === "Valid To"}>
-        {publishedOnInput}
+        <PublishedOnInput />
       </ToolbarFilter>
       <ToolbarItem variant="pagination">{renderPagination("top", true)}</ToolbarItem>
     </ToolbarGroup>
