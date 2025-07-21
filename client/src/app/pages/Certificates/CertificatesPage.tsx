@@ -25,7 +25,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ICertificateProps } from "./Certificates.data";
 import ShieldIcon from "@patternfly/react-icons/dist/esm/icons/shield-alt-icon";
 import { capitalizeFirstLetter, formatDate, getCertificateStatusColor } from "@app/utils/utils";
-import { PublishedOnInput, SearchInputField } from "@app/shared-components/SearchInputField";
+import { PublishedOnInput, SearchInputField } from "@app/components/SearchInputField";
 
 export interface ICertificatesPageProps {
   certificates: ICertificateProps[];
