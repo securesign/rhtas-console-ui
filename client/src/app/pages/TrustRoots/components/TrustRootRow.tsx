@@ -14,7 +14,7 @@ import {
   type MenuToggleElement,
 } from "@patternfly/react-core";
 import * as React from "react";
-import StatusIcon from "./StatusIcon";
+import StatusIcon from "../../../shared-components/StatusIcon";
 import CodeBranchIcon from "@patternfly/react-icons/dist/esm/icons/code-branch-icon";
 import CubeIcon from "@patternfly/react-icons/dist/esm/icons/cube-icon";
 import { CalendarAltIcon, FileAltIcon, EllipsisVIcon } from "@patternfly/react-icons";
