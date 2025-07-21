@@ -232,8 +232,6 @@ const CertificatesPage = ({ certificates, columns }: ICertificatesPageProps) => 
     </div>
   );
 
-
-
   const toggleGroupItems = (
     <ToolbarGroup variant="filter-group">
       <ToolbarItem>{attributeDropdown}</ToolbarItem>
