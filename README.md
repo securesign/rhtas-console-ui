@@ -52,6 +52,16 @@ npm run format
 npm run start
 ```
 
+## Environment variables
+
+| ENV VAR         | Description                   | Default value                          |
+| --------------- | ----------------------------- | -------------------------------------- |
+| MOCK            | Enables or disables mock data | `off`                                  |
+| AUTH_REQUIRED   | Enable/Disable authentication | false                                  |
+| OIDC_CLIENT_ID  | Set Oidc Client               | frontend                               |
+| OIDC_SERVER_URL | Set Oidc Server URL           | `http://localhost:8090/realms/console` |
+| OIDC_SCOPE      | Set Oidc Scope                | openid                                 |
+
 ## Code quality tools
 
 - To keep our code formatting in check, we use [prettier](https://github.com/prettier/prettier)
