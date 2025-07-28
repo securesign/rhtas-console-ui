@@ -88,6 +88,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /api/v1/artifacts/image:
+    get:
+      summary: Retrieve metadata and digest from an OCI-compliant registry
+      tags:
+        - Image
+      parameters:
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            description: URI of the container image (e.g., docker.io/library/nginx:latest)
+            example: docker.io/library/nginx:latest
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Container image metadata and digest retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageMetadataResponse'
+        '400':
+          description: Invalid input (e.g., malformed container image URI)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Container image not found in the registry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /api/v1/rekor/entries/{uuid}:
     get:
       summary: Retrieve Rekor log entry by UUID
@@ -169,9 +216,20 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/v1/trust/config:
     get:
-      summary: Get TUF targets and Fulcio certificate authorities
+      summary: Get Fulcio and Rekor metadata from TUF targets
+      description: |
+        Parses the TUF targets metadata from the specified repository and returns information about
+        Fulcio certificate authorities and Rekor transparency logs.
       tags:
         - Trust
+      parameters:
+        - name: tufRepositoryUrl
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL of the TUF repository
+            example: https://tuf-repo-cdn.sigstore.dev/
       responses:
         '200':
           description: Trust root data
@@ -179,6 +237,156 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TrustConfig'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/trust/root-metadata-info:
+    get:
+      summary: Get TUF Root Metadata
+      description: |
+        Retrieves metadata information about the TUF root versions from the trust repository.
+        This includes metadata versioning, expiration timestamps, and current status (e.g., valid or expired).
+      tags:
+        - Trust
+      parameters:
+        - name: tufRepositoryUrl
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL of the TUF repository
+            example: https://tuf-repo-cdn.sigstore.dev/
+      responses:
+        '200':
+          description: List of TUF root metadata entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootMetadataInfoList'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/trust/targets:
+    get:
+      summary: Get TUF Targets List
+      description: |
+        Fetches and returns the list of TUF target files from the specified repository.
+      tags:
+        - Trust
+      parameters:
+        - name: tufRepositoryUrl
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL of the TUF repository
+            example: https://tuf-repo-cdn.sigstore.dev/
+      responses:
+        '200':
+          description: List of TUF target names
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetsList'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/trust/target:
+    get:
+      summary: Get TUF Target File Content
+      description: |
+        Fetches and returns the raw content of a specific TUF target file from the specified repository.
+      tags:
+        - Trust
+      parameters:
+        - name: tufRepositoryUrl
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL of the TUF repository
+            example: https://tuf-repo-cdn.sigstore.dev/
+        - name: target
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Target filename
+            example: rekor.pub
+      responses:
+        '200':
+          description: Content of the requested TUF target file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetContent'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/trust/targets/certificates:
+    get:
+      summary: Get Certificates Information
+      description: |
+        Fetches and returns the list information of all targets of type certificate.
+      tags:
+        - Trust
+      parameters:
+        - name: tufRepositoryUrl
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL of the TUF repository
+            example: https://tuf-repo-cdn.sigstore.dev/
+      responses:
+        '200':
+          description: List of TUF target names
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateInfoList'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal server error
           content:
@@ -186,6 +394,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
     SignArtifactRequest:
       type: object
@@ -437,19 +649,6 @@ components:
     TrustConfig:
       type: object
       properties:
-        tufRoot:
-          type: object
-          properties:
-            version:
-              type: integer
-              description: TUF root version
-            expires:
-              type: string
-              format: date-time
-              description: Expiration timestamp
-          required:
-            - version
-            - expires
         fulcioCertAuthorities:
           type: array
           items:
@@ -466,8 +665,134 @@ components:
               - subject
               - pem
       required:
-        - tufRoot
         - fulcioCertAuthorities
+    Metadata:
+      type: object
+      description: Metadata for a container image
+      properties:
+        mediaType:
+          type: string
+          description: Media type of the container image (e.g., OCI manifest type)
+          example: application/vnd.oci.image.manifest.v1+json
+        size:
+          type: integer
+          format: int64
+          description: Size of the container image in bytes
+          example: 1234
+        created:
+          type: string
+          format: date-time
+          description: Creation timestamp of the container image (if available)
+          nullable: true
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value labels or annotations associated with the container image
+          nullable: true
+          example:
+            org.opencontainers.image.version: 1.0.0
+      required:
+        - mediaType
+        - size
+    ImageMetadataResponse:
+      type: object
+      properties:
+        image:
+          type: string
+          description: The container image URI
+          example: docker.io/library/nginx:latest
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        digest:
+          type: string
+          description: The container image's digest (e.g., SHA256 hash)
+          example: sha256:abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+      required:
+        - artifact
+        - metadata
+        - digest
+    RootMetadataInfo:
+      type: object
+      properties:
+        version:
+          type: string
+          description: Version of the TUF root metadata
+        expires:
+          type: string
+          description: Expiry date of the TUF root metadata
+        status:
+          type: string
+          description: Status of the TUF root metadata
+      required:
+        - version
+        - expires
+        - status
+    RootMetadataInfoList:
+      type: object
+      properties:
+        repo-url:
+          type: string
+          description: URL of the TUF repository
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RootMetadataInfo'
+      required:
+        - data
+    TargetsList:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            type: string
+      required:
+        - targets
+    TargetContent:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+    CertificateInfo:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Certificate subject
+        issuer:
+          type: string
+          description: Certificate issuer
+        type:
+          type: string
+          description: Target type
+        status:
+          type: string
+          description: Status of the target to which the certificate is associated.
+        target:
+          type: string
+          description:  The TUF target to which the certificate is associated.
+        expiration:
+          type: string
+          description: Expiration date and time of the certificate (notAfter).
+      required:
+        - subject
+        - issuer
+        - type
+        - status
+        - target
+        - expiration
+    CertificateInfoList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CertificateInfo'
+      required:
+        - data
     Error:
       type: object
       properties:
