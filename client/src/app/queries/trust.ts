@@ -53,7 +53,7 @@ export const useFetchTrustRootMetadataInfo = () => {
   );
 
   return {
-    config: data,
+    rootMetadataList: data,
     isFetching: isLoading,
     fetchError: error,
     refetch,
@@ -75,7 +75,7 @@ export const useFetchTrustTargetCertificates = () => {
   );
 
   return {
-    config: data,
+    certificates: data,
     isFetching: isLoading,
     fetchError: error,
     refetch,
