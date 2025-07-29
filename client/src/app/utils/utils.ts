@@ -1,13 +1,10 @@
+import { RENDER_DATE_FORMAT } from "@app/Constants";
+import dayjs from "dayjs";
+
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
-export const formatDate = (dateString?: string): string => {
-  if (!dateString) return "Unknown";
-  const date = new Date(dateString);
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+export const formatDate = (value?: string | null) => {
+  return value ? dayjs(value).format(RENDER_DATE_FORMAT) : null;
 };
 
 export const getCertificateStatusColor = (validTo: string) => {
@@ -21,4 +18,31 @@ export const getCertificateStatusColor = (validTo: string) => {
   if (diffDays < 0) return "red"; // expired
   if (diffDays < 30) return "orange"; // expiring soon
   return "green"; // valid
+};
+
+/**
+ * Uses native string localCompare method with numeric option enabled.
+ *
+ * @param locale to be used by string compareFn
+ */
+export const localeNumericCompare = (a: string, b: string, locale: string): number =>
+  a.localeCompare(b, locale ?? "en", { numeric: true });
+
+/**
+ * Compares all types by converting them to string.
+ * Nullish entities are converted to empty string.
+ * @see localeNumericCompare
+ * @param locale to be used by string compareFn
+ */
+export const universalComparator = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  a: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  b: any,
+  locale: string
+) => {
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b;
+  }
+  return localeNumericCompare(String(a ?? ""), String(b ?? ""), locale);
 };
