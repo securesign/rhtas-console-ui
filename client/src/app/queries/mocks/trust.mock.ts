@@ -43,7 +43,7 @@ export const trustTargetCertificatesMock: CertificateInfoList = {
     {
       expiration: "2031-10-05 13:56:58 +0000 UTC",
       issuer: "CN=sigstore,O=sigstore.dev",
-      status: "Active",
+      status: "Expiring",
       subject: "CN=sigstore-intermediate,O=sigstore.dev",
       target: "fulcio_intermediate_v1.crt.pem",
       type: "Fulcio",
