@@ -4,7 +4,7 @@ import type { AxiosError } from "axios";
 
 import { Bullseye, Spinner } from "@patternfly/react-core";
 
-import { StateError } from "./StateError";
+import { ErrorEmptyState } from "./ErrorEmptyState";
 
 export const LoadingWrapper = (props: {
   isFetching: boolean;
@@ -23,7 +23,7 @@ export const LoadingWrapper = (props: {
     );
   }
   if (props.fetchError) {
-    return props.fetchErrorState ? props.fetchErrorState(props.fetchError) : <StateError />;
+    return props.fetchErrorState ? props.fetchErrorState(props.fetchError) : <ErrorEmptyState />;
   }
   return props.children;
 };

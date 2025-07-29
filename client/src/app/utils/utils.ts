@@ -46,3 +46,14 @@ export const universalComparator = (
   }
   return localeNumericCompare(String(a ?? ""), String(b ?? ""), locale);
 };
+
+/**
+ *
+ * @returns false for any falsy value (regardless of the filter value), true if (coerced to string) lowercased value contains lowercased filter value.
+ */
+export const stringMatcher = (filterValue: string, value: string) => {
+  if (!value) return false;
+  const lowerCaseItemValue = value.toLowerCase();
+  const lowerCaseFilterValue = filterValue.toLowerCase();
+  return lowerCaseItemValue.includes(lowerCaseFilterValue);
+};

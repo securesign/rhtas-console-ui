@@ -6,8 +6,8 @@ import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { useFetchTrustRootMetadataInfo } from "@app/queries/trust";
 
-import { Certificates } from "./components/Certificates";
 import { RootDetails } from "./components/RootDetails";
+import { Certificates } from "./components/Certificates";
 
 export const TrustRoots: React.FC = () => {
   const { rootMetadataList, isFetching, fetchError } = useFetchTrustRootMetadataInfo();
