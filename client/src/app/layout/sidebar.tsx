@@ -35,16 +35,6 @@ export const SidebarApp: React.FC = () => {
           </li>
           <li className={nav.navItem}>
             <NavLink
-              to="/trust-roots"
-              className={({ isActive }) => {
-                return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
-              }}
-            >
-              Trust Roots
-            </NavLink>
-          </li>
-          <li className={nav.navItem}>
-            <NavLink
               to="/trust-root"
               className={({ isActive }) => {
                 return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
