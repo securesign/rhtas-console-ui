@@ -34,16 +34,16 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
     items: certificates,
     toolbar: {
       categoryTitles: {
-        search: "Search",
+        subject: "Subject",
         status: "Status",
       },
     },
     filtering: {
       filterCategories: [
         {
-          categoryKey: "search",
+          categoryKey: "subject",
           matcher: (filterValue, item) => {
-            return stringMatcher(filterValue, item.issuer);
+            return stringMatcher(filterValue, item.subject);
           },
         },
         {
@@ -82,29 +82,33 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
     <>
       <Toolbar {...toolbarProps} aria-label="certificates toolbar">
         <ToolbarContent>
-          <FilterToolbar {...filterToolbarProps}>
-            <SearchFilterControl
-              {...getFilterControlProps({ categoryKey: "search" })}
-              placeholderText="Search by issuer..."
-            />
-            <MultiselectFilterControl
-              {...getFilterControlProps({ categoryKey: "status" })}
-              selectOptions={[
-                {
-                  value: "active",
-                  label: "Active",
-                },
-                {
-                  value: "expiring",
-                  label: "Expiring",
-                },
-                {
-                  value: "expired",
-                  label: "Expired",
-                },
-              ]}
-              placeholderText="Status"
-            />
+          <FilterToolbar {...filterToolbarProps} showFilterDropdown>
+            {filterToolbarProps.currentFilterCategoryKey === "subject" && (
+              <SearchFilterControl
+                {...getFilterControlProps({ categoryKey: "subject" })}
+                placeholderText="Search by subject"
+              />
+            )}
+            {filterToolbarProps.currentFilterCategoryKey === "status" && (
+              <MultiselectFilterControl
+                {...getFilterControlProps({ categoryKey: "status" })}
+                selectOptions={[
+                  {
+                    value: "active",
+                    label: "Active",
+                  },
+                  {
+                    value: "expiring",
+                    label: "Expiring",
+                  },
+                  {
+                    value: "expired",
+                    label: "Expired",
+                  },
+                ]}
+                placeholderText="Status"
+              />
+            )}
           </FilterToolbar>
           <ToolbarItem {...paginationToolbarItemProps}>
             <SimplePagination idPrefix="certificates-table" isTop paginationProps={paginationProps} />
@@ -115,8 +119,8 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
       <Table aria-label="certificates table">
         <Thead>
           <Tr>
-            <Th>Issuer</Th>
             <Th>Subject</Th>
+            <Th>Issuer</Th>
             <Th>Target</Th>
             <Th>Type</Th>
             <Th>Status</Th>
@@ -133,8 +137,8 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
             return (
               <Tbody key={rowIndex}>
                 <Tr key={rowIndex}>
-                  <Td>{certificate.issuer}</Td>
                   <Td>{certificate.subject}</Td>
+                  <Td>{certificate.issuer}</Td>
                   <Td>{certificate.target}</Td>
                   <Td>{certificate.type}</Td>
                   <Td>
