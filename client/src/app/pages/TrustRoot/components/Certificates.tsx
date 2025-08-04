@@ -3,8 +3,19 @@ import React from "react";
 import type { AxiosError } from "axios";
 import dayjs from "dayjs";
 
-import { Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
+import {
+  CodeBlock,
+  CodeBlockCode,
+  DescriptionList,
+  DescriptionListDescription,
+  DescriptionListGroup,
+  DescriptionListTerm,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
+} from "@patternfly/react-core";
+import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
+import { ActionsColumn, ExpandableRowContent, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
 import type { _Error, CertificateInfo } from "@app/client";
 import { CertificateStatusIcon } from "@app/components/CertificateStatusIcon";
@@ -13,6 +24,7 @@ import { MultiselectFilterControl } from "@app/components/FilterToolbar/Multisel
 import { SearchFilterControl } from "@app/components/FilterToolbar/SearchFilterControl";
 import { SimplePagination } from "@app/components/SimplePagination";
 import { ConditionalTableBody } from "@app/components/TableControls/ConditionalTableBody";
+import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { useFetchTrustTargetCertificates } from "@app/queries/trust";
 import { formatDate, stringMatcher } from "@app/utils/utils";
@@ -30,8 +42,12 @@ interface ICerticatesTableProps {
 }
 
 export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates, isFetching, fetchError }) => {
+  const items = useWithUiId(certificates, (item) => `${item.type}-${item.issuer}-${item.subject}-${item.target}`);
+
   const tableState = usePFToolbarTable({
-    items: certificates,
+    items,
+    idProperty: "_ui_unique_id",
+    columns: ["expiration"],
     toolbar: {
       categoryTitles: {
         subject: "Subject",
@@ -75,8 +91,31 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
       toolbarProps,
       filterToolbarProps,
       getFilterControlProps,
+      getSingleExpandButtonTdProps,
     },
+    expansionDerivedState: { isCellExpanded },
   } = tableState;
+
+  const handleCopy = async (value: string) => {
+    await navigator.clipboard.writeText(value);
+  };
+
+  const handleDownload = (value: string) => {
+    const filename = "pem.txt";
+
+    const blob = new Blob([value], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    // Revoke the object URL after a short delay to ensure the download has started
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  };
 
   return (
     <>
@@ -116,15 +155,18 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
         </ToolbarContent>
       </Toolbar>
 
-      <Table aria-label="certificates table">
+      <Table aria-label="certificates table" isExpandable>
         <Thead>
           <Tr>
+            <Th screenReaderText="Row expansion" />
+            <Th>Issuer</Th>
             <Th>Subject</Th>
             <Th>Issuer</Th>
             <Th>Target</Th>
             <Th>Type</Th>
             <Th>Status</Th>
             <Th {...getSortThProps({ columnKey: "expiration" })}>Expiration</Th>
+            <Th screenReaderText="Actions" />
           </Tr>
         </Thead>
         <ConditionalTableBody
@@ -135,17 +177,61 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
         >
           {currentPageItems.map((certificate, rowIndex) => {
             return (
-              <Tbody key={rowIndex}>
+              <Tbody key={rowIndex} isExpanded={isCellExpanded(certificate)}>
                 <Tr key={rowIndex}>
-                  <Td>{certificate.subject}</Td>
-                  <Td>{certificate.issuer}</Td>
-                  <Td>{certificate.target}</Td>
-                  <Td>{certificate.type}</Td>
-                  <Td>
+                  <Td {...getSingleExpandButtonTdProps({ item: certificate, rowIndex })} />
+                  <Td modifier="breakWord">{certificate.issuer}</Td>
+                  <Td modifier="breakWord">{certificate.subject}</Td>
+                  <Td modifier="breakWord">{certificate.target}</Td>
+                  <Td width={10} modifier="truncate">
+                    {certificate.type}
+                  </Td>
+                  <Td width={10} modifier="truncate">
                     <CertificateStatusIcon status={certificate.status} /> {certificate.status}
                   </Td>
-                  <Td>{formatDate(certificate.expiration)}</Td>
+                  <Td width={10} modifier="truncate">
+                    {formatDate(certificate.expiration)}
+                  </Td>
+                  <Td isActionCell>
+                    <ActionsColumn
+                      items={[
+                        {
+                          title: "Copy PEM",
+                          onClick: () => {
+                            handleCopy(certificate.pem).catch((err) => console.error(err));
+                          },
+                        },
+                        {
+                          title: "Download PEM",
+                          onClick: () => {
+                            handleDownload(certificate.pem);
+                          },
+                        },
+                      ]}
+                    />
+                  </Td>
                 </Tr>
+                {isCellExpanded(certificate) ? (
+                  <Tr isExpanded>
+                    <Td />
+                    <Td colSpan={7} noPadding>
+                      <div className={spacing.mMd}>
+                        <ExpandableRowContent>
+                          <DescriptionList aria-label="Basic example">
+                            <DescriptionListGroup>
+                              <DescriptionListTerm>PEM</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                <CodeBlock>
+                                  <CodeBlockCode>{certificate.pem}</CodeBlockCode>
+                                </CodeBlock>
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                          </DescriptionList>
+                        </ExpandableRowContent>
+                      </div>
+                    </Td>
+                  </Tr>
+                ) : null}
               </Tbody>
             );
           })}
