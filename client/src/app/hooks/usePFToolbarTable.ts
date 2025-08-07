@@ -1,16 +1,25 @@
 import React from "react";
 
 import { useFilterPropHelpers } from "./TableControls/filtering/useFilterPropHelpers";
-import { usePFTable } from "./TableControls/usePFTable";
+import { usePFTable, type IPFTableArgs } from "./TableControls/usePFTable";
 import { type ITableArgs } from "./TableControls/useTable";
 import { useFilterControlPropHelpers } from "./ToolbarControls/useFilterControlPropHelpers";
 
-export const usePFToolbarTable = <TItem, TSortableColumnKey extends string, TFilterCategoryKey extends string>(
-  args: ITableArgs<TItem, TSortableColumnKey, TFilterCategoryKey> & {
-    toolbar: {
-      categoryTitles: Record<TFilterCategoryKey, string>;
-    };
-  }
+export interface IPFToolbarTableArgs<TFilterCategoryKey extends string> {
+  toolbar: {
+    categoryTitles: Record<TFilterCategoryKey, string>;
+  };
+}
+
+export const usePFToolbarTable = <
+  TItem,
+  TColumnKey extends string,
+  TSortableColumnKey extends TColumnKey,
+  TFilterCategoryKey extends string,
+>(
+  args: ITableArgs<TItem, TSortableColumnKey, TFilterCategoryKey> &
+    IPFTableArgs<TItem, TColumnKey> &
+    IPFToolbarTableArgs<TFilterCategoryKey>
 ) => {
   const [currentFilterCategoryKey, setCurrentFilterCategoryKey] = React.useState(
     args.filtering?.filterCategories?.[0].categoryKey
