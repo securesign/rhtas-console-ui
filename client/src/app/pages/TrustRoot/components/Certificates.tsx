@@ -26,22 +26,15 @@ import { SimplePagination } from "@app/components/SimplePagination";
 import { ConditionalTableBody } from "@app/components/TableControls/ConditionalTableBody";
 import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
-import { useFetchTrustTargetCertificates } from "@app/queries/trust";
 import { formatDate, stringMatcher } from "@app/utils/utils";
 
-export const Certificates: React.FC = () => {
-  const { certificates, isFetching, fetchError } = useFetchTrustTargetCertificates();
-
-  return <CerticatesTable certificates={certificates?.data ?? []} isFetching={isFetching} fetchError={fetchError} />;
-};
-
-interface ICerticatesTableProps {
+interface ICertificatesTableProps {
   certificates: CertificateInfo[];
   isFetching: boolean;
   fetchError: AxiosError<_Error> | null;
 }
 
-export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates, isFetching, fetchError }) => {
+export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certificates, isFetching, fetchError }) => {
   const items = useWithUiId(certificates, (item) => `${item.type}-${item.issuer}-${item.subject}-${item.target}`);
 
   const tableState = usePFToolbarTable({
@@ -161,7 +154,6 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
             <Th screenReaderText="Row expansion" />
             <Th>Issuer</Th>
             <Th>Subject</Th>
-            <Th>Issuer</Th>
             <Th>Target</Th>
             <Th>Type</Th>
             <Th>Status</Th>
@@ -171,7 +163,7 @@ export const CerticatesTable: React.FC<ICerticatesTableProps> = ({ certificates,
         </Thead>
         <ConditionalTableBody
           isNoData={currentPageItems.length === 0}
-          numRenderedColumns={6}
+          numRenderedColumns={8}
           isLoading={isFetching}
           isError={!!fetchError}
         >

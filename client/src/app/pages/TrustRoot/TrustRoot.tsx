@@ -4,15 +4,27 @@ import { Content, PageSection, Tab, TabContent, Tabs, TabTitleText } from "@patt
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
-import { useFetchTrustRootMetadataInfo } from "@app/queries/trust";
+import { useFetchTrustRootMetadataInfo, useFetchTrustTargetCertificates } from "@app/queries/trust";
 
+import { CertificatesTable } from "./components/Certificates";
+import { Overview } from "./components/Overview";
 import { RootDetails } from "./components/RootDetails";
-import { Certificates } from "./components/Certificates";
 
 export const TrustRoots: React.FC = () => {
-  const { rootMetadataList, isFetching, fetchError } = useFetchTrustRootMetadataInfo();
+  const {
+    rootMetadataList,
+    isFetching: isFetchingRootMetadata,
+    fetchError: fetchErrorRootMetadata,
+  } = useFetchTrustRootMetadataInfo();
+
+  const {
+    certificates,
+    isFetching: isFetchingCertificates,
+    fetchError: fetchErrorCertificates,
+  } = useFetchTrustTargetCertificates();
 
   // Tab refs
+  const overviewTabRef = React.createRef<HTMLElement>();
   const certificatesTabRef = React.createRef<HTMLElement>();
   const rootDetailsTabRef = React.createRef<HTMLElement>();
 
@@ -45,12 +57,18 @@ export const TrustRoots: React.FC = () => {
         >
           <Tab
             eventKey={0}
+            title={<TabTitleText>Overview</TabTitleText>}
+            tabContentId="overviewTabSection"
+            tabContentRef={overviewTabRef}
+          />
+          <Tab
+            eventKey={1}
             title={<TabTitleText>Certificates</TabTitleText>}
             tabContentId="certificatesTabSection"
             tabContentRef={certificatesTabRef}
           />
           <Tab
-            eventKey={1}
+            eventKey={2}
             title={<TabTitleText>Root details</TabTitleText>}
             tabContentId="rootDetailsTabSection"
             tabContentRef={rootDetailsTabRef}
@@ -58,11 +76,22 @@ export const TrustRoots: React.FC = () => {
         </Tabs>
       </PageSection>
       <PageSection>
-        <TabContent eventKey={0} id="certificatesTabSection" ref={certificatesTabRef} aria-label="Certificates">
-          <Certificates />
+        <TabContent eventKey={0} id="overviewTabSection" ref={overviewTabRef} aria-label="Overview">
+          <Overview
+            certificates={certificates?.data ?? []}
+            isFetching={isFetchingCertificates}
+            fetchError={fetchErrorCertificates}
+          />
         </TabContent>
-        <TabContent eventKey={1} id="rootDetailsTabSection" ref={rootDetailsTabRef} aria-label="Root details" hidden>
-          <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>
+        <TabContent eventKey={1} id="certificatesTabSection" ref={certificatesTabRef} aria-label="Certificates" hidden>
+          <CertificatesTable
+            certificates={certificates?.data ?? []}
+            isFetching={isFetchingCertificates}
+            fetchError={fetchErrorCertificates}
+          />
+        </TabContent>
+        <TabContent eventKey={2} id="rootDetailsTabSection" ref={rootDetailsTabRef} aria-label="Root details" hidden>
+          <LoadingWrapper isFetching={isFetchingRootMetadata} fetchError={fetchErrorRootMetadata}>
             {rootMetadataList && <RootDetails rootMetadataList={rootMetadataList} />}
           </LoadingWrapper>
         </TabContent>
