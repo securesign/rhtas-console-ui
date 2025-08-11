@@ -20,6 +20,7 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
       masthead={<HeaderApp />}
       sidebar={<SidebarApp />}
       isManagedSidebar
+      defaultManagedSidebarIsOpen={false}
       skipToContent={PageSkipToContent}
       mainContainerId={pageId}
     >
