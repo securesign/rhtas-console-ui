@@ -29,25 +29,25 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.7",
     "file-saver": "^2.0.5",
-    "oidc-client-ts": "^2.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.13",
-    "react-oidc-context": "^2.3.1",
-    "react-router-dom": "^6.21.1",
+    "oidc-client-ts": "^3.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-error-boundary": "^6.0.0",
+    "react-oidc-context": "^3.0.0",
+    "react-router-dom": "^7.0.0",
     "victory": "^37.3.4"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.77.0",
     "@testing-library/react": "^16.0.0",
     "@types/file-saver": "^2.0.2",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.5.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.0",
     "vite-plugin-ejs": "^1.7.0",
-    "vite-plugin-static-copy": "^2.2.0"
+    "vite-plugin-static-copy": "^3.0.0"
   },
   "browserslist": {
     "production": [
