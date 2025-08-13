@@ -32,7 +32,7 @@ spec:
     - name: hermetic
       value: "true"
     - name: prefetch-input
-      value: [ { "path": ".", "type": "npm" } ]
+      value: [ { "path": ".", "type": "npm" }, { "path": ".", "type": "rmp" } ]
   pipelineRef:
     resolver: git
     params:
