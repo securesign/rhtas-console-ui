@@ -70,3 +70,26 @@ npm run start
 ## Multi environment configuration
 
 Environment Variables can be injected in the UI though [environment.ts](./common/src/environment.ts)
+
+## Konflux
+
+### Hermetic builds
+
+RPM packages require explicit enablement. See [konflux-rpm ](https://konflux-ci.dev/docs/building/prefetching-dependencies/#rpm)
+
+Requirements:
+
+- [rpm-lockfile-prototype](https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#installation)
+
+Steps to setup RPM packages:
+
+```
+BASE_IMAGE=registry.access.redhat.com/ubi9/nodejs-22-minimal:latest
+podman run -it $BASE_IMAGE cat /etc/yum.repos.d/ubi.repo > ubi.repo
+```
+
+Make sure the `ubi.repo` file has all repositories enabled `enabled = 1` and then:
+
+```
+rpm-lockfile-prototype --image $BASE_IMAGE rpms.in.yaml
+```

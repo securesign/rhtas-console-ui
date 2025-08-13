@@ -1,0 +1,38 @@
+---
+lockfileVersion: 1
+lockfileVendor: redhat
+arches:
+- arch: aarch64
+  packages:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/aarch64/baseos/os/Packages/p/procps-ng-3.3.17-14.el9.aarch64.rpm
+    repoid: ubi-9-baseos-rpms
+    size: 363344
+    checksum: sha256:a8c7514beb4c3cafa6341f43bbe285319d863b2893a34d91159dc8e90f615dd2
+    name: procps-ng
+    evr: 3.3.17-14.el9
+    sourcerpm: procps-ng-3.3.17-14.el9.src.rpm
+  source:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/aarch64/baseos/source/SRPMS/Packages/p/procps-ng-3.3.17-14.el9.src.rpm
+    repoid: ubi-9-baseos-source-rpms
+    size: 1054334
+    checksum: sha256:acfd5c270ba5724a0f5f2a84cc47ee222d6a03095421fddbf6932375ec7d67f0
+    name: procps-ng
+    evr: 3.3.17-14.el9
+  module_metadata: []
+- arch: x86_64
+  packages:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/x86_64/baseos/os/Packages/p/procps-ng-3.3.17-14.el9.x86_64.rpm
+    repoid: ubi-9-baseos-rpms
+    size: 361526
+    checksum: sha256:506ad778f63821e8d9647ca8e0a3ff21b8af9c1666060d5200f9b26ee718333c
+    name: procps-ng
+    evr: 3.3.17-14.el9
+    sourcerpm: procps-ng-3.3.17-14.el9.src.rpm
+  source:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/x86_64/baseos/source/SRPMS/Packages/p/procps-ng-3.3.17-14.el9.src.rpm
+    repoid: ubi-9-baseos-source-rpms
+    size: 1054334
+    checksum: sha256:acfd5c270ba5724a0f5f2a84cc47ee222d6a03095421fddbf6932375ec7d67f0
+    name: procps-ng
+    evr: 3.3.17-14.el9
+  module_metadata: []
