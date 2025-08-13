@@ -3,13 +3,13 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import cookieParser from "cookie-parser";
 import ejs from "ejs";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { createHttpTerminator } from "http-terminator";
 
-import { SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings, encodeEnv, proxyMap } from "@console-ui/common";
+import { SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings, encodeEnv } from "@console-ui/common";
+import proxies from "./proxies";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const pathToClientDist = path.join(__dirname, "../../client/dist");
@@ -18,12 +18,9 @@ const port = CONSOLE_ENV.PORT ? Number.parseInt(CONSOLE_ENV.PORT, 10) : 8080;
 
 const app = express();
 app.set("x-powered-by", false);
-app.use(cookieParser());
 
 // Setup proxy handling
-for (const proxyPath in proxyMap) {
-  app.use(proxyPath, createProxyMiddleware(proxyMap[proxyPath]));
-}
+app.use(createProxyMiddleware(proxies.api));
 
 app.engine("ejs", ejs.renderFile);
 app.use(express.json());

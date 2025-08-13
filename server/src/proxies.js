@@ -1,9 +1,8 @@
 import { CONSOLE_ENV } from "@console-ui/common";
 import * as cookie from "cookie";
-import type { Options } from "http-proxy-middleware";
 
-export const proxyMap: Record<string, Options> = {
-  "/api": {
+export default {
+  api: {
     target: CONSOLE_ENV.CONSOLE_API_URL ?? "http://localhost:8080",
     logger: process.env.DEBUG ? "debug" : "info",
     changeOrigin: true,
