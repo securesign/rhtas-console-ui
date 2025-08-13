@@ -46,27 +46,27 @@ export default defineConfig({
     }),
     ...(process.env.NODE_ENV === "development"
       ? [
-        ViteEjsPlugin({
-          _env: encodeEnv(CONSOLE_ENV, SERVER_ENV_KEYS),
-          branding: brandingStrings,
-        }),
-      ]
+          ViteEjsPlugin({
+            _env: encodeEnv(CONSOLE_ENV, SERVER_ENV_KEYS),
+            branding: brandingStrings,
+          }),
+        ]
       : []),
     ...(process.env.NODE_ENV === "production"
       ? [
-        {
-          name: "copy-index",
-          closeBundle: () => {
-            const distDir = path.resolve(__dirname, "dist");
-            const src = path.join(distDir, "index.html");
-            const dest = path.join(distDir, "index.html.ejs");
+          {
+            name: "copy-index",
+            closeBundle: () => {
+              const distDir = path.resolve(__dirname, "dist");
+              const src = path.join(distDir, "index.html");
+              const dest = path.join(distDir, "index.html.ejs");
 
-            if (fs.existsSync(src)) {
-              fs.renameSync(src, dest);
-            }
+              if (fs.existsSync(src)) {
+                fs.renameSync(src, dest);
+              }
+            },
           },
-        },
-      ]
+        ]
       : []),
   ],
   resolve: {

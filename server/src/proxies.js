@@ -24,7 +24,7 @@ export default {
           res.writeHead(302, { Location: "/" }).end();
           proxyRes?.destroy();
         }
-      }
-    }
+      },
+    },
   },
 };
