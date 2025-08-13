@@ -38,7 +38,7 @@
     "victory": "^37.3.4"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.77.0",
+    "@hey-api/openapi-ts": "^0.80.0",
     "@testing-library/react": "^16.0.0",
     "@types/file-saver": "^2.0.2",
     "@types/react": "^18.2.0",
