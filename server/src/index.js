@@ -3,27 +3,27 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import cookieParser from "cookie-parser";
 import ejs from "ejs";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { createHttpTerminator } from "http-terminator";
 
-import { SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings, encodeEnv, proxyMap } from "@console-ui/common";
+import { SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings, encodeEnv } from "@console-ui/common";
+import proxies from "./proxies";
+
+const debugMode = process.env.DEBUG === "1";
+debugMode && console.log("CONSOLE_ENV", CONSOLE_ENV);
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const pathToClientDist = path.join(__dirname, "../../client/dist");
 
-const port = CONSOLE_ENV.PORT ? Number.parseInt(CONSOLE_ENV.PORT, 10) : 8080;
+const port = parseInt(CONSOLE_ENV.PORT, 10) || 8080;
 
 const app = express();
 app.set("x-powered-by", false);
-app.use(cookieParser());
 
 // Setup proxy handling
-for (const proxyPath in proxyMap) {
-  app.use(proxyPath, createProxyMiddleware(proxyMap[proxyPath]));
-}
+app.use(createProxyMiddleware(proxies.api));
 
 app.engine("ejs", ejs.renderFile);
 app.use(express.json());
@@ -31,7 +31,7 @@ app.set("views", pathToClientDist);
 app.use(express.static(pathToClientDist));
 
 // Handle any request that hasn't already been handled by express.static or proxy
-app.get("*", (_, res) => {
+app.get("*splat", (_, res) => {
   if (CONSOLE_ENV.NODE_ENV === "development") {
     res.send(`
       <style>pre { margin-left: 20px; }</style>
@@ -48,7 +48,10 @@ app.get("*", (_, res) => {
 });
 
 // Start the server
-const server = app.listen(port, () => {
+const server = app.listen(port, (error) => {
+  if (error) {
+    throw error; // e.g. EADDRINUSE
+  }
   console.log(`Server listening on port::${port}`);
 });
 

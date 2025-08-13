@@ -1,13 +1,13 @@
 import fs from "fs";
-import path from "path";
 import { createRequire } from "module";
+import path from "path";
 
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ViteEjsPlugin } from "vite-plugin-ejs";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import react from "@vitejs/plugin-react";
 
-import { encodeEnv, proxyMap, SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings } from "@console-ui/common";
+import { brandingStrings, CONSOLE_ENV, encodeEnv, SERVER_ENV_KEYS } from "@console-ui/common";
 
 const require = createRequire(import.meta.url);
 export const brandingAssetPath = () =>
@@ -84,6 +84,11 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: proxyMap,
+    proxy: {
+      "/api": {
+        target: CONSOLE_ENV.CONSOLE_API_URL ?? "http://localhost:8080",
+        changeOrigin: true,
+      },
+    },
   },
 });
