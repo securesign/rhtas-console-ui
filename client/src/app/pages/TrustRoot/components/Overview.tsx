@@ -21,6 +21,7 @@ import { InfoAltIcon } from "@patternfly/react-icons";
 
 import type { _Error, CertificateInfo } from "@app/client";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
+import { formatDate } from "@app/utils/utils";
 
 interface IOverviewProps {
   certificates: CertificateInfo[];
@@ -46,13 +47,9 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
   }, [chartDonutData]);
 
   const expiringSoonCertificates = React.useMemo(() => {
-    return certificates.reduce((prev, current) => {
-      const daysBeforeExpiration = dayjs().diff(dayjs(current.expiration), "days");
-      if (daysBeforeExpiration >= 0 && daysBeforeExpiration <= 7) {
-        prev.push(current);
-      }
-      return prev;
-    }, [] as CertificateInfo[]);
+    return certificates
+      .filter((item) => item.status.toLowerCase() === "expiring")
+      .sort((a, b) => dayjs(a.expiration).valueOf() - dayjs(b.expiration).valueOf());
   }, [certificates]);
 
   return (
@@ -96,7 +93,16 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
                 <List>
                   {expiringSoonCertificates.map((item) => (
                     <ListItem key={`${item.type}-${item.issuer}-${item.subject}-${item.target}`}>
-                      {item.issuer}
+                      <Flex
+                        spaceItems={{ default: "spaceItemsSm" }}
+                        alignItems={{ default: "alignItemsCenter" }}
+                        flexWrap={{ default: "nowrap" }}
+                        style={{ whiteSpace: "nowrap" }}
+                      >
+                        <FlexItem>{item.issuer}</FlexItem>
+                        <Divider orientation={{ default: "vertical" }} />
+                        <FlexItem>{formatDate(item.expiration)}</FlexItem>
+                      </Flex>
                     </ListItem>
                   ))}
                 </List>
