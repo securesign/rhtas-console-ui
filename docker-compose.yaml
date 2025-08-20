@@ -16,7 +16,7 @@ services:
       interval: 10s     # how often to check
       timeout: 5s       # max time to wait for one check
       retries: 5        # how many failures before unhealthy
-      start_period: 30s # time to wait before starting checks
+      start_period: 15s # time to wait before starting checks
 
   console:
     image: ${CONSOLE_IMAGE}  
