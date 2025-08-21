@@ -2,12 +2,34 @@ networks:
   console:
 
 services:
+  console-db:
+    image: ${CONSOLE_DB_IMAGE}
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tuf_trust
+      MYSQL_USER: rootuser
+      MYSQL_PASSWORD: root
+    networks:
+      - console
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s     # how often to check
+      timeout: 5s       # max time to wait for one check
+      retries: 5        # how many failures before unhealthy
+      start_period: 15s # time to wait before starting checks
+
   console:
     image: ${CONSOLE_IMAGE}  
     ports:
       - "8087:8080"
+    environment:
+      DB_DSN: rootuser:root@tcp(console-db:3306)/tuf_trust
+      TUF_REPO_URL: https://tuf-repo-cdn.sigstore.dev
     networks:
       - console
+    depends_on:
+      console-db:
+        condition: service_healthy
   
   console-ui:
     image: ${CONSOLE_UI_IMAGE}
