@@ -35,7 +35,10 @@ interface ICertificatesTableProps {
 }
 
 export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certificates, isFetching, fetchError }) => {
-  const items = useWithUiId(certificates, (item) => `${item.type}-${item.issuer}-${item.subject}-${item.target}`);
+  const items = useWithUiId(
+    certificates,
+    (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`
+  );
 
   const tableState = usePFToolbarTable({
     items,

@@ -16,16 +16,16 @@ export const useWithUiId = <T>(
   /** Source data to modify. */
   data: T[] | undefined,
   /** Generate the unique id for a specific `T`. */
-  generator: (item: T) => string
+  generator: (item: T, index: number) => string
 ): WithUiId<T>[] => {
   const result = useMemo(() => {
     if (!data || data.length === 0) {
       return [];
     }
 
-    const dataWithUiId: WithUiId<T>[] = data.map((item) => ({
+    const dataWithUiId: WithUiId<T>[] = data.map((item, index) => ({
       ...item,
-      [UI_UNIQUE_ID]: generator(item),
+      [UI_UNIQUE_ID]: generator(item, index),
     }));
 
     return dataWithUiId;
