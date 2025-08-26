@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console-backend
+  labels:
+    app.kubernetes.io/component: console-backend
+    app.kubernetes.io/name: console-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: console-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: console-backend
+    spec:
+      serviceAccountName: console-backend
+      initContainers:
+      - name: wait-for-console-db
+        image: registry.redhat.io/rhel9/mariadb-105@sha256:050dd5a7a32395b73b8680570e967e55050b152727412fdd73a25d8816e62d53
+        command:
+        - /bin/sh
+        - -c
+        - |
+          until mysqladmin ping -hconsole-db -u$MYSQL_USER -p$MYSQL_PASSWORD --silent; do
+            echo 'Waiting for the console database to be ready...'
+            sleep 5
+          done
+      containers:
+      - name: console-backend
+        image: quay.io/securesign/rhtas-console@sha256:75966d60ed709af33efd48c53b96ea7b2fcd4608f90ccc56885bf224e34b55f5
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TUF_REPO_URL
+          value: https://tuf-repo-cdn.sigstore.dev
+        - name: DB_DSN
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: dsn
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: mysql-password
+        - name: SSL_CERT_DIR
+          value: /var/run/configs/tas/ca-trust:/var/run/secrets/kubernetes.io/serviceaccount
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1

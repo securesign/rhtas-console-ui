@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: console-ui
+  labels:
+    app.kubernetes.io/component: console-ui
+    app.kubernetes.io/name: console-ui
+spec:
+  to:
+    kind: Service
+    name: console-ui
+  port:
+    targetPort: http
+  tls:
+    termination: edge
