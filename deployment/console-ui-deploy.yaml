@@ -23,8 +23,15 @@ spec:
         - /bin/sh
         - -c
         - |
+          max_retries=24
+          count=0
           until curl -sf http://console-backend:8080/healthz; do
-            echo "Waiting for console-backend..."
+            if [ $count -ge $max_retries ]; then
+              echo "console-backend not ready after $((max_retries * 5)) seconds, failing initContainer."
+              exit 1
+            fi
+            echo "Waiting for console-backend... ($count/$max_retries)"
+            count=$((count + 1))
             sleep 5
           done
       containers:
