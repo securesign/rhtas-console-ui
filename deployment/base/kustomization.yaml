@@ -8,7 +8,7 @@ resources:
   # Database
   - console-db-secret.yaml
   - console-db-pvc.yaml
-  - console-db-deploy.yaml
+  - console-db-statefulset.yaml
   - console-db-service.yaml
   # Backend
   - console-backend-deploy.yaml

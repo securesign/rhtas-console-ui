@@ -125,7 +125,7 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    Before deploying, update the `TUF_REPO_URL` environment variable in `deployment/base/console-backend-deploy.yaml`. The default value is `https://tuf-repo-cdn.sigstore.dev`, but it must be replaced with the actual TUF route URL from your running RHTAS instance. To retrieve the correct URL, run:
 
    ```bash
-   oc get route tuf -o jsonpath='https://{.spec.host}{"\n"}'
+   oc get tuf -o jsonpath='{.items[0].status.url}'
    ```
    Edit `deployment/base/console-backend-deploy.yaml` and replace the TUF_REPO_URL value with the output from the above command.
 
