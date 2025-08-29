@@ -3,22 +3,30 @@ kind: Deployment
 metadata:
   name: console-ui
   labels:
+    app.kubernetes.io/name: securesign-sample
+    app.kubernetes.io/instance: securesign-sample
+    app.kubernetes.io/part-of: trusted-artifact-signer
     app.kubernetes.io/component: console-ui
-    app.kubernetes.io/name: console-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: console-ui
+      app.kubernetes.io/name: securesign-sample
+      app.kubernetes.io/instance: securesign-sample
+      app.kubernetes.io/part-of: trusted-artifact-signer
+      app.kubernetes.io/component: console-ui
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: console-ui
+        app.kubernetes.io/name: securesign-sample
+        app.kubernetes.io/instance: securesign-sample
+        app.kubernetes.io/part-of: trusted-artifact-signer
+        app.kubernetes.io/component: console-ui
     spec:
       serviceAccountName: console-ui
       initContainers:
       - name: wait-for-backend
-        image: quay.io/securesign/rhtas-console-ui@sha256:c0b0b2d76548c05efadb2425baf93609cf6c40180f170cb531fbb7689a91db31
+        image: ${CONSOLE_UI_IMAGE}
         command:
         - /bin/sh
         - -c
@@ -36,7 +44,7 @@ spec:
           done
       containers:
       - name: console-ui
-        image: quay.io/securesign/rhtas-console-ui@sha256:c0b0b2d76548c05efadb2425baf93609cf6c40180f170cb531fbb7689a91db31
+        image: ${CONSOLE_UI_IMAGE}
         imagePullPolicy: IfNotPresent
         env:
         - name: CONSOLE_API_URL

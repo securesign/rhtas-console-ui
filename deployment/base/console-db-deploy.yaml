@@ -3,24 +3,32 @@ kind: Deployment
 metadata:
   name: console-db
   labels:
+    app.kubernetes.io/name: securesign-sample
+    app.kubernetes.io/instance: securesign-sample
+    app.kubernetes.io/part-of: trusted-artifact-signer
     app.kubernetes.io/component: console-db
-    app.kubernetes.io/name: console-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: console-db
+      app.kubernetes.io/name: securesign-sample
+      app.kubernetes.io/instance: securesign-sample
+      app.kubernetes.io/part-of: trusted-artifact-signer
+      app.kubernetes.io/component: console-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: console-db
+        app.kubernetes.io/name: securesign-sample
+        app.kubernetes.io/instance: securesign-sample
+        app.kubernetes.io/part-of: trusted-artifact-signer
+        app.kubernetes.io/component: console-db
     spec:
       serviceAccountName: console-db
       containers:
       - name: console-db
-        image: registry.redhat.io/rhel9/mariadb-105@sha256:050dd5a7a32395b73b8680570e967e55050b152727412fdd73a25d8816e62d53
+        image: ${CONSOLE_DB_IMAGE}
         imagePullPolicy: IfNotPresent
         command: ["run-mysqld"]
         env:

@@ -93,3 +93,76 @@ Make sure the `ubi.repo` file has all repositories enabled `enabled = 1` and the
 ```
 rpm-lockfile-prototype --image $BASE_IMAGE rpms.in.yaml
 ```
+
+## Deployment
+
+The `deployment/` directory contains Kubernetes manifests organized into a `base/` directory and an `overlays/dev/` directory for deploying the RHTAS Console (UI, backend, and database) using [Kustomize](https://kustomize.io/). The `base/` directory includes:
+
+- `console-backend-deploy.yaml`: Deployment configuration for the console backend.
+- `console-backend-service.yaml`: Service definition for the backend.
+- `console-db-deploy.yaml`: Deployment configuration for the console database.
+- `console-db-pvc.yaml`: Persistent Volume Claim for the database.
+- `console-db-secret.yaml`: Secrets for database credentials.
+- `console-db-service.yaml`: Service definition for the database.
+- `console-serviceaccounts.yaml`: Service accounts for the console components.
+- `console-ui-deploy.yaml`: Deployment configuration for the console UI.
+- `console-ui-route.yaml`: Route configuration for the UI.
+- `console-ui-service.yaml`: Service definition for the UI.
+- `kustomization.yaml`: Kustomize configuration to orchestrate the deployment.
+
+The `overlays/dev/` directory contains a `kustomization.yaml` for environment-specific customizations.
+
+### Prerequisites
+
+- A running OpenShift cluster.
+- `oc` CLI installed.
+- A running RHTAS instance to retrieve the TUF route URL.
+
+### Deployment Steps
+
+1. **Update the TUF Repository URL**:
+
+   Before deploying, update the `TUF_REPO_URL` environment variable in `deployment/base/console-backend-deploy.yaml`. The default value is `https://tuf-repo-cdn.sigstore.dev`, but it must be replaced with the actual TUF route URL from your running RHTAS instance. To retrieve the correct URL, run:
+
+   ```bash
+   oc get route tuf -o jsonpath='https://{.spec.host}{"\n"}'
+   ```
+   Edit `deployment/base/console-backend-deploy.yaml` and replace the TUF_REPO_URL value with the output from the above command.
+
+2. **Set Environment Variables**:
+   The `.env` file contains the required image variables (`CONSOLE_IMAGE, CONSOLE_UI_IMAGE, CONSOLE_DB_IMAGE`). Load the environment variables:
+
+   ```bash
+   export $(grep -v '^#' .env | xargs)
+   ```
+
+3. **Apply the Deployment**:
+
+   Ensure that an RHTAS instance is properly deployed and running in the `trusted-artifact-signer` namespace.
+
+   Deploy the console using Kustomize with environment variable substitution:
+
+   ```bash
+   oc kustomize deployment/overlays/dev | envsubst '${CONSOLE_IMAGE} ${CONSOLE_UI_IMAGE} ${CONSOLE_DB_IMAGE}' | oc apply -f -
+   ```
+
+4. **Verify the Deployment**:
+
+   Check the status of the deployed resources:
+
+   ```bash
+   oc get pods,services,routes -n trusted-artifact-signer
+   ```
+
+   You can access the console via a browser using the UI route:
+   ```bash
+   oc get route console-ui -o jsonpath='https://{.spec.host}{"\n"}'
+   ```
+
+5. **Deletion**:
+
+   To delete the deployed resources:
+
+   ```bash
+   oc kustomize deployment/overlays/dev | envsubst '${CONSOLE_IMAGE} ${CONSOLE_UI_IMAGE} ${CONSOLE_DB_IMAGE}' | oc delete -f -
+   ```

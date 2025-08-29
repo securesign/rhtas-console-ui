@@ -3,24 +3,32 @@ kind: Deployment
 metadata:
   name: console-backend
   labels:
+    app.kubernetes.io/name: securesign-sample
+    app.kubernetes.io/instance: securesign-sample
+    app.kubernetes.io/part-of: trusted-artifact-signer
     app.kubernetes.io/component: console-backend
-    app.kubernetes.io/name: console-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: console-backend
+      app.kubernetes.io/name: securesign-sample
+      app.kubernetes.io/instance: securesign-sample
+      app.kubernetes.io/part-of: trusted-artifact-signer
+      app.kubernetes.io/component: console-backend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: console-backend
+        app.kubernetes.io/name: securesign-sample
+        app.kubernetes.io/instance: securesign-sample
+        app.kubernetes.io/part-of: trusted-artifact-signer
+        app.kubernetes.io/component: console-backend
     spec:
       serviceAccountName: console-backend
       initContainers:
       - name: wait-for-console-db
-        image: registry.redhat.io/rhel9/mariadb-105@sha256:050dd5a7a32395b73b8680570e967e55050b152727412fdd73a25d8816e62d53
+        image: ${CONSOLE_DB_IMAGE}
         command:
         - /bin/sh
         - -c
@@ -31,7 +39,7 @@ spec:
           done
       containers:
       - name: console-backend
-        image: quay.io/securesign/rhtas-console@sha256:75966d60ed709af33efd48c53b96ea7b2fcd4608f90ccc56885bf224e34b55f5
+        image: ${CONSOLE_IMAGE}
         imagePullPolicy: IfNotPresent
         env:
         - name: TUF_REPO_URL
