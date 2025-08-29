@@ -7,7 +7,6 @@ resources:
   - console-serviceaccounts.yaml
   # Database
   - console-db-secret.yaml
-  - console-db-pvc.yaml
   - console-db-statefulset.yaml
   - console-db-service.yaml
   # Backend
