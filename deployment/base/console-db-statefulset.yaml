@@ -28,7 +28,7 @@ spec:
       serviceAccountName: console-db
       containers:
       - name: console-db
-        image: ${CONSOLE_DB_IMAGE}
+        image: default/console-db-image
         imagePullPolicy: IfNotPresent
         command: ["run-mysqld"]
         env:

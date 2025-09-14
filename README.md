@@ -100,8 +100,7 @@ The `deployment/` directory contains Kubernetes manifests organized into a `base
 
 - `console-backend-deploy.yaml`: Deployment configuration for the console backend.
 - `console-backend-service.yaml`: Service definition for the backend.
-- `console-db-deploy.yaml`: Deployment configuration for the console database.
-- `console-db-pvc.yaml`: Persistent Volume Claim for the database.
+- `console-db-statefulset.yaml`: StatefulSet configuration for the console database.
 - `console-db-secret.yaml`: Secrets for database credentials.
 - `console-db-service.yaml`: Service definition for the database.
 - `console-serviceaccounts.yaml`: Service accounts for the console components.
@@ -120,30 +119,30 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
 
 ### Deployment Steps
 
-1. **Update the TUF Repository URL**:
+1. **Set TUF_REPO_URL using a ConfigMap**:
 
-   Before deploying, update the `TUF_REPO_URL` environment variable in `deployment/base/console-backend-deploy.yaml`. The default value is `https://tuf-repo-cdn.sigstore.dev`, but it must be replaced with the actual TUF route URL from your running RHTAS instance. To retrieve the correct URL, run:
-
+   Before deploying, you need to retrieve the TUF repository URL from your running RHTAS instance. This value should be stored in a ConfigMap that the console backend can consume.
+  
+   * Retrieve the TUF route URL from your running RHTAS instance:
    ```bash
    oc get tuf -o jsonpath='{.items[0].status.url}'
    ```
-   Edit `deployment/base/console-backend-deploy.yaml` and replace the TUF_REPO_URL value with the output from the above command.
-
-2. **Set Environment Variables**:
-   The `.env` file contains the required image variables (`CONSOLE_IMAGE, CONSOLE_UI_IMAGE, CONSOLE_DB_IMAGE`). Load the environment variables:
-
+   
+   * Create a ConfigMap with the retrieved URL:
    ```bash
-   export $(grep -v '^#' .env | xargs)
+   oc create configmap tuf-repo-config \
+   --from-literal=TUF_REPO_URL=<output-from-above-command> \
+   -n trusted-artifact-signer
    ```
 
-3. **Apply the Deployment**:
+2. **Apply the Deployment**:
 
    Ensure that an RHTAS instance is properly deployed and running in the `trusted-artifact-signer` namespace.
 
-   Deploy the console using Kustomize with environment variable substitution:
+   Deploy the console using Kustomize:
 
    ```bash
-   oc kustomize deployment/overlays/dev | envsubst '${CONSOLE_IMAGE} ${CONSOLE_UI_IMAGE} ${CONSOLE_DB_IMAGE}' | oc apply -f -
+   oc apply -k deployment/overlays/dev/
    ```
 
 4. **Verify the Deployment**:
@@ -164,5 +163,5 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    To delete the deployed resources:
 
    ```bash
-   oc kustomize deployment/overlays/dev | envsubst '${CONSOLE_IMAGE} ${CONSOLE_UI_IMAGE} ${CONSOLE_DB_IMAGE}' | oc delete -f -
+   oc delete -k deployment/overlays/dev/
    ```

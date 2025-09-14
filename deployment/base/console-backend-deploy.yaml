@@ -28,7 +28,7 @@ spec:
       serviceAccountName: console-backend
       initContainers:
       - name: wait-for-console-db
-        image: ${CONSOLE_DB_IMAGE}
+        image: default/console-db-image
         command:
         - /bin/sh
         - -c
@@ -39,11 +39,14 @@ spec:
           done
       containers:
       - name: console-backend
-        image: ${CONSOLE_IMAGE}
+        image: default/console-image
         imagePullPolicy: IfNotPresent
         env:
         - name: TUF_REPO_URL
-          value: https://tuf-repo-cdn.sigstore.dev
+          valueFrom:
+            configMapKeyRef:
+              name: tuf-repo-config
+              key: TUF_REPO_URL
         - name: DB_DSN
           valueFrom:
             secretKeyRef:
