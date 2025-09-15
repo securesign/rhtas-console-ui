@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console-backend
+  labels:
+    app.kubernetes.io/name: securesign-sample
+    app.kubernetes.io/instance: securesign-sample
+    app.kubernetes.io/part-of: trusted-artifact-signer
+    app.kubernetes.io/component: console-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: securesign-sample
+      app.kubernetes.io/instance: securesign-sample
+      app.kubernetes.io/part-of: trusted-artifact-signer
+      app.kubernetes.io/component: console-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: securesign-sample
+        app.kubernetes.io/instance: securesign-sample
+        app.kubernetes.io/part-of: trusted-artifact-signer
+        app.kubernetes.io/component: console-backend
+    spec:
+      serviceAccountName: console-backend
+      initContainers:
+      - name: wait-for-console-db
+        image: default/console-db-image
+        command:
+        - /bin/sh
+        - -c
+        - |
+          until mysqladmin ping -hconsole-db --silent; do
+            echo 'Waiting for the console database to be ready...'
+            sleep 5
+          done
+      containers:
+      - name: console-backend
+        image: default/console-image
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TUF_REPO_URL
+          valueFrom:
+            configMapKeyRef:
+              name: tuf-repo-config
+              key: TUF_REPO_URL
+        - name: DB_DSN
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: dsn
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: console-db-connection
+              key: mysql-password
+        - name: SSL_CERT_DIR
+          value: /var/run/configs/tas/ca-trust:/var/run/secrets/kubernetes.io/serviceaccount
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5

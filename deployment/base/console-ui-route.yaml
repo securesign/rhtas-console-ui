@@ -1,0 +1,17 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: console-ui
+  labels:
+    app.kubernetes.io/name: securesign-sample
+    app.kubernetes.io/instance: securesign-sample
+    app.kubernetes.io/part-of: trusted-artifact-signer
+    app.kubernetes.io/component: console-ui
+spec:
+  to:
+    kind: Service
+    name: console-ui
+  port:
+    targetPort: http
+  tls:
+    termination: edge
