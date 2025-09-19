@@ -51,6 +51,8 @@ spec:
           value: http://console-backend:8080
         - name: AUTH_REQUIRED
           value: "false"
+        - name: VERSION
+          value: "v0.1.0"
         ports:
         - containerPort: 8080
           name: http
