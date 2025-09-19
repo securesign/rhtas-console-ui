@@ -142,7 +142,7 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    Deploy the console using Kustomize:
 
    ```bash
-   oc apply -k deployment/overlays/dev/
+   oc apply -k https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0
    ```
 
 4. **Verify the Deployment**:
@@ -163,5 +163,5 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    To delete the deployed resources:
 
    ```bash
-   oc delete -k deployment/overlays/dev/
+   oc delete -k https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0
    ```
