@@ -23,6 +23,16 @@ export const SidebarApp: React.FC = () => {
               Trust root
             </NavLink>
           </li>
+          <li className={nav.navItem}>
+            <NavLink
+              to="/rekor-search"
+              className={({ isActive }) => {
+                return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
+              }}
+            >
+              Rekor Search
+            </NavLink>
+          </li>
         </NavList>
       </Nav>
     );
