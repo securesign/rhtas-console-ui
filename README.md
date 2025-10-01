@@ -90,6 +90,12 @@ podman run -it $BASE_IMAGE cat /etc/yum.repos.d/ubi.repo > ubi.repo
 
 Make sure the `ubi.repo` file has all repositories enabled `enabled = 1` and then:
 
+Also make sure the `ubi.repo` contains only repositories from https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/known_rpm_repositories.yml . Change the repository names manually if needed. E.g. 
+
+- `ubi-9-for-baseos-rpms` change it to `ubi-9-for-x86_64-baseos-rpms` as only the latter is an accepted repository in Konflux.
+
+Finally execute the command below to generage th lock file:
+
 ```
 rpm-lockfile-prototype --image $BASE_IMAGE rpms.in.yaml
 ```
