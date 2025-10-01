@@ -25,7 +25,6 @@ LABEL name="securesign/rhtas-console-ui" \
       description="RHTAS Console - User Interface" \
       help="For more information visit https://github.com/securesign/" \
       license="Apache License 2.0" \
-      maintainer="123@gmail.com" \
       summary="RHTAS Console - User Interface" \
       url="https://github.com/securesign/rhtas-console-ui" \
       usage="podman run -p 80 -v securesign/rhtas-console-ui:latest" \
@@ -34,7 +33,8 @@ LABEL name="securesign/rhtas-console-ui" \
       io.openshift.expose-services="80:http" \
       io.openshift.tags="operator,securesign,rhtas,ui,nodejs22" \
       io.openshift.min-cpu="100m" \
-      io.openshift.min-memory="350Mi"
+      io.openshift.min-memory="350Mi" \
+      com.redhat.component="rhtas-console"
 
 COPY --from=builder /opt/app-root/src/dist /opt/app-root/dist/
 
