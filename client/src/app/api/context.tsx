@@ -1,3 +1,4 @@
+import ENV from "@app/env";
 import {
   createContext,
   type FunctionComponent,
@@ -15,6 +16,7 @@ export interface RekorClientContext {
   setBaseUrl: (_base: string | undefined) => void;
 }
 
+/* eslint-disable react-refresh/only-export-components */
 export const RekorClientContext = createContext<RekorClientContext | undefined>(undefined);
 
 interface RekorClientProviderProps {
@@ -29,8 +31,8 @@ export const RekorClientProvider: FunctionComponent<PropsWithChildren<RekorClien
 
   useEffect(() => {
     if (baseUrl === undefined) {
-      if (process.env.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN) {
-        setBaseUrl(process.env.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN);
+      if (ENV.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN) {
+        setBaseUrl(ENV.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN);
       } else {
         setBaseUrl("https://rekor.sigstore.dev");
       }
