@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - "main"
+      - "rekor-migration"
   workflow_dispatch:
   workflow_call:
 
