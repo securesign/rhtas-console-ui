@@ -44,6 +44,9 @@ export interface ConsoleEnvType {
   /** Target URL for the UI server's `/api` proxy */
   CONSOLE_API_URL?: string;
 
+  /** Rekor Search */
+  NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN?: string;
+
   /** Location of branding files (relative paths computed from the project source root) */
   BRANDING?: string;
 }
@@ -72,6 +75,7 @@ export const buildConsoleEnv = ({
 
   UI_INGRESS_PROXY_BODY_SIZE = "500m",
   CONSOLE_API_URL,
+  NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN,
   BRANDING,
 }: Partial<ConsoleEnvType> = {}): ConsoleEnvType => ({
   NODE_ENV,
@@ -88,6 +92,7 @@ export const buildConsoleEnv = ({
 
   UI_INGRESS_PROXY_BODY_SIZE,
   CONSOLE_API_URL,
+  NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN,
   BRANDING,
 });
 
