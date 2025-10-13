@@ -22,14 +22,19 @@ import { InfoAltIcon } from "@patternfly/react-icons";
 import type { _Error, CertificateInfo } from "@app/client";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { formatDate } from "@app/utils/utils";
+import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
 
 interface IOverviewProps {
   certificates: CertificateInfo[];
   isFetching: boolean;
   fetchError: AxiosError<_Error> | null;
+  rootLink?: string;
 }
 
-export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError }) => {
+export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError,rootLink }) => {
+  if (!certificates || fetchError) {
+    return <RepositoryNotInitiated rootLink={rootLink} />;
+  }
   const chartDonutData = React.useMemo(() => {
     return certificates.reduce(
       (prev, current) => {
