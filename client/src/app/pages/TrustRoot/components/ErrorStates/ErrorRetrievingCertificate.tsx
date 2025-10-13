@@ -11,7 +11,7 @@ export const ErrorRetrievingCertificate: React.FC = () => (
     >
       <EmptyStateBody className="pf-v6-u-font-size--xs">
         Due to issues with extracting certificate information, we could not find any valid certificates. The system will
-        automatically retry again in 30 seconds."
+        automatically retry again in 30 seconds.
       </EmptyStateBody>
     </EmptyState>
   </Bullseye>

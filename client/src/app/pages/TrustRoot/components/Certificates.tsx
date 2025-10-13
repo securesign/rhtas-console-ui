@@ -37,14 +37,6 @@ interface ICertificatesTableProps {
 }
 
 export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certificates, isFetching, fetchError }) => {
-  if (fetchError) {
-    return <ErrorRetrievingCertificate />;
-  }
-
-  if (certificates.length === 0) {
-    return <CertificateDoesNotExist />;
-  }
-
   const items = useWithUiId(
     certificates,
     (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`
@@ -87,6 +79,14 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
       }),
     },
   });
+
+  if (fetchError) {
+    return <ErrorRetrievingCertificate />;
+  }
+
+  if (certificates.length === 0) {
+    return <CertificateDoesNotExist />;
+  }
 
   const {
     tableState: { currentPageItems },

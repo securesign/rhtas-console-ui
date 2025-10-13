@@ -31,10 +31,7 @@ interface IOverviewProps {
   rootLink?: string;
 }
 
-export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError,rootLink }) => {
-  if (!certificates || fetchError) {
-    return <RepositoryNotInitiated rootLink={rootLink} />;
-  }
+export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError, rootLink }) => {
   const chartDonutData = React.useMemo(() => {
     return certificates.reduce(
       (prev, current) => {
@@ -56,6 +53,8 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
       .filter((item) => item.status.toLowerCase() === "expiring")
       .sort((a, b) => dayjs(a.expiration).valueOf() - dayjs(b.expiration).valueOf());
   }, [certificates]);
+
+  if (Array.isArray(certificates) && certificates.length === 0) return <RepositoryNotInitiated rootLink={rootLink} />;
 
   return (
     <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>

@@ -5,7 +5,7 @@ export const CertificateDoesNotExist: React.FC = () => {
   return (
     <Bullseye>
       <EmptyState titleText="Certificate does not exist" headingLevel="h6" status={EmptyStateStatus.info}>
-        <EmptyStateBody>Currently this trust root does not any have certificates to display</EmptyStateBody>
+        <EmptyStateBody>Currently this trust root does not have any have certificates to display</EmptyStateBody>
       </EmptyState>
     </Bullseye>
   );
