@@ -1,5 +1,4 @@
 import { dump, load } from "js-yaml";
-import Link from "next/link";
 import { Convert } from "pvtsutils";
 import { Fragment, type ReactNode, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -30,6 +29,8 @@ import { IntotoViewer001 } from "../Template/Intoto001";
 import { IntotoViewer002 } from "../Template/Intoto002";
 import { DSSEViewer } from "./DSSEViewer";
 import { HashedRekordViewer } from "./HashedRekord";
+import { Link } from "react-router-dom";
+import { Paths } from "@app/Routes";
 
 const DUMP_OPTIONS: jsyaml.DumpOptions = {
   replacer: (_key, value: string) => {
@@ -154,10 +155,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
             textOverflow: "ellipsis",
           }}
         >
-          Entry UUID:{" "}
-          <Link href={`/?uuid=${uuid}`} passHref>
-            {uuid}
-          </Link>
+          Entry UUID: <Link to={{ pathname: Paths.rekorSearch, search: `?uuid=${uuid}` }}>{uuid}</Link>
         </h2>
         <Divider />
         <Grid hasGutter={true}>
@@ -168,9 +166,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
             <EntryCard
               title="Log Index"
               content={
-                <Link href={`/?logIndex=${obj.logIndex}`} passHref>
-                  {obj.logIndex}
-                </Link>
+                <Link to={{ pathname: Paths.rekorSearch, search: `?logIndex=${obj.logIndex}` }}>{obj.logIndex}</Link>
               }
             />
           </GridItem>
