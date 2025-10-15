@@ -1,10 +1,11 @@
 import { dump } from "js-yaml";
-import NextLink from "next/link";
+import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type IntotoV001Schema } from "rekor";
 import { decodex509 } from "./x509/decode";
 import { Panel } from "@patternfly/react-core";
+import { Paths } from "@app/Routes";
 
 export function IntotoViewer001({ intoto }: { intoto: IntotoV001Schema }) {
   const certContent = window.atob(intoto.publicKey || "");
@@ -24,12 +25,14 @@ export function IntotoViewer001({ intoto }: { intoto: IntotoV001Schema }) {
   return (
     <Panel>
       <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>
-        <NextLink
-          href={`/?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`}
-          passHref
+        <Link
+          to={{
+            pathname: Paths.rekorSearch,
+            search: `?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`,
+          }}
         >
           Hash
-        </NextLink>
+        </Link>
       </h5>
 
       <SyntaxHighlighter language="text" style={atomDark}>

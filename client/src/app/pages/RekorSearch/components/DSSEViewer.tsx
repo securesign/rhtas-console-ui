@@ -1,10 +1,11 @@
 import { dump } from "js-yaml";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type DSSEV001Schema } from "rekor";
 import { Panel } from "@patternfly/react-core";
 import { decodex509 } from "../Template/x509/decode";
+import { Paths } from "@app/Routes";
 
 export function DSSEViewer({ dsse }: { dsse: DSSEV001Schema }) {
   const sig = dsse.signatures?.[0];
@@ -25,7 +26,12 @@ export function DSSEViewer({ dsse }: { dsse: DSSEV001Schema }) {
   return (
     <Panel>
       <h5 style={{ paddingTop: "1em" }}>
-        <Link href={`/?hash=${dsse.payloadHash?.algorithm}:${dsse.payloadHash?.value}`} passHref>
+        <Link
+          to={{
+            pathname: Paths.rekorSearch,
+            search: `?hash=${dsse.payloadHash?.algorithm}:${dsse.payloadHash?.value}`,
+          }}
+        >
           Hash
         </Link>
       </h5>

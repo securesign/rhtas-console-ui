@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import { type RekorEntries, type SearchQuery, useRekorSearch } from "../../../api/rekor-api";
+import { isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../../../api/rekor-api";
 import { type FormInputs, SearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner, Pagination } from "@patternfly/react-core";
 import { Entry } from "./Entry";
@@ -94,7 +95,9 @@ function LoadingIndicator() {
 }
 
 export function Explorer() {
-  const [formInputs, _setFormInputs] = useState<FormInputs>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [formInputs, setFormInputs] = useState<FormInputs>();
   const [query, setQuery] = useState<SearchQuery>();
   const search = useRekorSearch();
 
@@ -121,35 +124,28 @@ export function Explorer() {
     fetch();
   }, [query, page, search]);
 
-  //   const setQueryParams = useCallback(
-  //     (formInputs: FormInputs) => {
-  //       setPage(1);
+  const setQueryParams = useCallback(
+    (formInputs: FormInputs) => {
+      setPage(1);
 
-  //       router.push(
-  //         {
-  //           pathname: router.pathname,
-  //           query: {
-  //             [formInputs.attribute]: formInputs.value,
-  //           },
-  //         },
-  //         `/?${formInputs.attribute}=${formInputs.value}`,
-  //         { shallow: true }
-  //       );
-  //     },
-  //     [router]
-  //   );
+      navigate({
+        pathname: location.pathname,
+        search: `?${formInputs.attribute}=${formInputs.value}`,
+      });
+    },
+    [navigate, location.pathname]
+  );
 
-  //   useEffect(() => {
-  //     const attribute = Object.keys(router.query).find((key) => isAttribute(key)) as Attribute | undefined;
-  //     const value = attribute && router.query[attribute];
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const attribute = Array.from(searchParams.keys()).find((key) => isAttribute(key));
+    const value = attribute && searchParams.get(attribute);
 
-  //     if (!value || Array.isArray(value)) {
-  //       return;
-  //     }
-  //     setFormInputs({ attribute, value });
-  //   }, [router.query]);
-
-  const setQueryParams = () => {};
+    if (!value || Array.isArray(value)) {
+      return;
+    }
+    setFormInputs({ attribute, value });
+  }, [location.search]);
 
   useEffect(() => {
     if (formInputs) {
