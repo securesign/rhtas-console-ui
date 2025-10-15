@@ -1,10 +1,11 @@
 import { dump } from "js-yaml";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type RekorSchema } from "rekor";
 import { decodex509 } from "../Template/x509/decode";
 import { Panel } from "@patternfly/react-core";
+import { Paths } from "@app/Routes";
 
 export function HashedRekordViewer({ hashedRekord }: { hashedRekord: RekorSchema }) {
   const certContent = window.atob(hashedRekord.signature.publicKey?.content ?? "");
@@ -24,7 +25,12 @@ export function HashedRekordViewer({ hashedRekord }: { hashedRekord: RekorSchema
   return (
     <Panel style={{ marginTop: "1.25em" }}>
       <h5 style={{ margin: "1em auto" }}>
-        <Link href={`/?hash=${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`} passHref>
+        <Link
+          to={{
+            pathname: Paths.rekorSearch,
+            search: `?hash=${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`,
+          }}
+        >
           Hash
         </Link>
       </h5>

@@ -8,11 +8,16 @@ import { ErrorFallback } from "./components/ErrorFallback";
 const TrustRoot = lazy(() => import("./pages/TrustRoot"));
 const RekorSearch = lazy(() => import("./pages/RekorSearch"));
 
+export const Paths = {
+  trustRoot: "/trust-root",
+  rekorSearch: "/rekor-search",
+} as const;
+
 export const AppRoutes = () => {
   const allRoutes = useRoutes([
-    { path: "/", element: <Navigate to="/trust-root" /> },
-    { path: "/trust-root", element: <TrustRoot /> },
-    { path: "/rekor-search", element: <RekorSearch /> },
+    { path: "/", element: <Navigate to={Paths.trustRoot} /> },
+    { path: Paths.trustRoot, element: <TrustRoot /> },
+    { path: Paths.rekorSearch, element: <RekorSearch /> },
   ]);
 
   return (

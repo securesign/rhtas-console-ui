@@ -1,10 +1,11 @@
 import { dump } from "js-yaml";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type IntotoV002Schema } from "rekor";
 import { decodex509 } from "./x509/decode";
 import { Panel } from "@patternfly/react-core";
+import { Paths } from "@app/Routes";
 
 export function IntotoViewer002({ intoto }: { intoto: IntotoV002Schema }) {
   const signature = intoto.content.envelope?.signatures[0];
@@ -25,7 +26,14 @@ export function IntotoViewer002({ intoto }: { intoto: IntotoV002Schema }) {
   return (
     <Panel>
       <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>
-        <Link href={`/?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`}>Hash</Link>
+        <Link
+          to={{
+            pathname: Paths.rekorSearch,
+            search: `?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`,
+          }}
+        >
+          Hash
+        </Link>
       </h5>
 
       <SyntaxHighlighter language="text" style={atomDark}>
