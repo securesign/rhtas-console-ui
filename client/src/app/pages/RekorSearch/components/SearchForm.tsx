@@ -4,6 +4,7 @@ import {
   FlexItem,
   Form,
   FormGroup,
+  FormGroupLabelHelp,
   FormHelperText,
   FormSelect,
   FormSelectOption,
@@ -15,8 +16,7 @@ import {
 import { type ReactNode, useEffect } from "react";
 import { Controller, type RegisterOptions, useForm } from "react-hook-form";
 import { type Attribute, ATTRIBUTES } from "../../../api/rekor-api";
-import { ExclamationCircleIcon, HelpIcon } from "@patternfly/react-icons";
-import styles from "@patternfly/react-styles/css/components/Form/form";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 export interface FormProps {
   defaultValues?: FormInputs;
@@ -170,17 +170,9 @@ export function SearchForm({ defaultValues, onSubmit, isLoading }: FormProps) {
                 <FormGroup
                   label={"Attribute"}
                   fieldId={"rekor-search-attribute"}
-                  labelInfo={
+                  labelHelp={
                     <Popover bodyContent={inputConfigByAttribute[watchAttribute].tooltipText} position={"right"}>
-                      <button
-                        type="button"
-                        aria-label="More info for attribute field"
-                        onClick={(e) => e.preventDefault()}
-                        aria-describedby="attribute-info"
-                        className={styles.formGroupLabelHelp}
-                      >
-                        <HelpIcon />
-                      </button>
+                      <FormGroupLabelHelp aria-label="More info for attribute field" />
                     </Popover>
                   }
                 >
