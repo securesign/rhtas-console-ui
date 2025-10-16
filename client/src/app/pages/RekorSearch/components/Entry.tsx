@@ -146,7 +146,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
   }
 
   return (
-    <Card style={{ margin: "1.5em auto 2em" }}>
+    <Card style={{ margin: "1.5em auto 2em", overflowY: "hidden" }}>
       <CardBody>
         <h2
           style={{
