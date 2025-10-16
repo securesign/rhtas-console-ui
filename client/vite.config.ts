@@ -97,5 +97,12 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./test-setup.ts",
+    server: {
+      deps: {
+        inline: [
+          "@patternfly/react-styles", // Ensures its CSS imports are ignored
+        ],
+      },
+    },
   },
 });
