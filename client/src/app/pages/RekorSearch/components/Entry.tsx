@@ -101,11 +101,13 @@ export function EntryCard({
 
 export function Entry({ entry }: { entry: LogEntry }) {
   const [uuid, obj] = Object.entries(entry)[0];
-  const [expanded, setExpanded] = useState([""]);
 
-  const toggle = (id: string) => {
+  type PanelId = "body-content" | "attestation-content" | "verification-content";
+  const [expanded, setExpanded] = useState<PanelId[]>([]);
+
+  const toggle = (id: PanelId) => {
     const index = expanded.indexOf(id);
-    const newExpanded: string[] =
+    const newExpanded: PanelId[] =
       index >= 0 ? [...expanded.slice(0, index), ...expanded.slice(index + 1, expanded.length)] : [...expanded, id];
     setExpanded(newExpanded);
   };
@@ -184,7 +186,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
           <Fragment>
             <Accordion>
               <>
-                <AccordionItem>
+                <AccordionItem isExpanded={expanded.includes("body-content")}>
                   <AccordionToggle
                     id={"body-header"}
                     aria-controls="body-content"
@@ -194,14 +196,14 @@ export function Entry({ entry }: { entry: LogEntry }) {
                   >
                     <b>Raw Body</b>
                   </AccordionToggle>
-                  <AccordionContent hidden={!expanded.includes("body-content")}>
+                  <AccordionContent>
                     <SyntaxHighlighter language="yaml" style={atomDark}>
                       {dump(body, DUMP_OPTIONS)}
                     </SyntaxHighlighter>
                   </AccordionContent>
                 </AccordionItem>
                 {attestation && (
-                  <AccordionItem>
+                  <AccordionItem isExpanded={expanded.includes("attestation-content")}>
                     <AccordionToggle
                       aria-controls="attestation-content"
                       id="attestation-header"
@@ -211,7 +213,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                     >
                       <b>Attestation</b>
                     </AccordionToggle>
-                    <AccordionContent hidden={!expanded.includes("attestation-content")}>
+                    <AccordionContent>
                       <SyntaxHighlighter language="yaml" style={atomDark}>
                         {dump(attestation)}
                       </SyntaxHighlighter>
@@ -219,7 +221,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                   </AccordionItem>
                 )}
                 {obj.verification && (
-                  <AccordionItem>
+                  <AccordionItem isExpanded={expanded.includes("verification-content")}>
                     <AccordionToggle
                       aria-controls="verification-content"
                       id={"verification-header"}
@@ -229,7 +231,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                     >
                       <h3>Verification</h3>
                     </AccordionToggle>
-                    <AccordionContent hidden={!expanded.includes("verification-content")}>
+                    <AccordionContent>
                       <SyntaxHighlighter language="yaml" style={atomDark}>
                         {dump(obj.verification)}
                       </SyntaxHighlighter>
