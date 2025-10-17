@@ -101,11 +101,13 @@ export function EntryCard({
 
 export function Entry({ entry }: { entry: LogEntry }) {
   const [uuid, obj] = Object.entries(entry)[0];
-  const [expanded, setExpanded] = useState([""]);
 
-  const toggle = (id: string) => {
+  type PanelId = "body-content" | "attestation-content" | "verification-content";
+  const [expanded, setExpanded] = useState<PanelId[]>([]);
+
+  const toggle = (id: PanelId) => {
     const index = expanded.indexOf(id);
-    const newExpanded: string[] =
+    const newExpanded: PanelId[] =
       index >= 0 ? [...expanded.slice(0, index), ...expanded.slice(index + 1, expanded.length)] : [...expanded, id];
     setExpanded(newExpanded);
   };
