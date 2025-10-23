@@ -1,6 +1,6 @@
 import { SearchForm } from "./SearchForm";
 import { render, screen, waitFor } from "@testing-library/react";
-import { RekorClientProvider } from "../../../api/context";
+import { RekorClientProvider } from "../api/context";
 import userEvent from "@testing-library/user-event";
 
 describe("SearchForm", () => {

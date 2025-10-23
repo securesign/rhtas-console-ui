@@ -13,7 +13,7 @@ const pemCertificate = `-----BEGIN CERTIFICATE-----\n${Buffer.from("Mocked Publi
   "base64"
 )}\n-----END CERTIFICATE-----`;
 
-vi.mock("../Template/x509/decode", () => ({
+vi.mock("../x509/decode", () => ({
   decodex509: decodex509Mock,
 }));
 

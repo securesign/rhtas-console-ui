@@ -1,5 +1,5 @@
 import { X509Certificate } from "@peculiar/x509";
-import { toRelativeDateString } from "../../utils/date";
+import { toRelativeDateString } from "../utils/date";
 import { EXTENSIONS_CONFIG } from "./extensions";
 
 function bufferToHex(buffer: ArrayBuffer): string {
