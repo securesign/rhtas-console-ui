@@ -27,6 +27,8 @@ import { ConditionalTableBody } from "@app/components/TableControls/ConditionalT
 import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { formatDate, stringMatcher } from "@app/utils/utils";
+import { CertificateDoesNotExist } from "./ErrorStates/CertificateDoesNotExist";
+import { ErrorRetrievingCertificate } from "./ErrorStates/ErrorRetrievingCertificate";
 
 interface ICertificatesTableProps {
   certificates: CertificateInfo[];
@@ -77,6 +79,14 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
       }),
     },
   });
+
+  if (fetchError) {
+    return <ErrorRetrievingCertificate />;
+  }
+
+  if (certificates.length === 0) {
+    return <CertificateDoesNotExist />;
+  }
 
   const {
     tableState: { currentPageItems },

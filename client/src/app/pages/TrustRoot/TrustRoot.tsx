@@ -9,6 +9,7 @@ import { useFetchTrustRootMetadataInfo, useFetchTrustTargetCertificates } from "
 import { CertificatesTable } from "./components/Certificates";
 import { Overview } from "./components/Overview";
 import { RootDetails } from "./components/RootDetails";
+import { MetadataNotAvailable } from "./components/ErrorStates/MetadataNotAvailable";
 
 export const TrustRoots: React.FC = () => {
   const {
@@ -81,6 +82,7 @@ export const TrustRoots: React.FC = () => {
             certificates={certificates?.data ?? []}
             isFetching={isFetchingCertificates}
             fetchError={fetchErrorCertificates}
+            rootLink={rootMetadataList?.["repo-url"]}
           />
         </TabContent>
         <TabContent eventKey={1} id="certificatesTabSection" ref={certificatesTabRef} aria-label="Certificates" hidden>
@@ -92,7 +94,11 @@ export const TrustRoots: React.FC = () => {
         </TabContent>
         <TabContent eventKey={2} id="rootDetailsTabSection" ref={rootDetailsTabRef} aria-label="Root details" hidden>
           <LoadingWrapper isFetching={isFetchingRootMetadata} fetchError={fetchErrorRootMetadata}>
-            {rootMetadataList && <RootDetails rootMetadataList={rootMetadataList} />}
+            {rootMetadataList ? (
+              <RootDetails rootMetadataList={rootMetadataList} />
+            ) : (
+              <MetadataNotAvailable errorInfo="No metadata list found" />
+            )}
           </LoadingWrapper>
         </TabContent>
       </PageSection>

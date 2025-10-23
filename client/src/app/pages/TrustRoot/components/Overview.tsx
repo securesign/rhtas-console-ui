@@ -22,14 +22,16 @@ import { InfoAltIcon } from "@patternfly/react-icons";
 import type { _Error, CertificateInfo } from "@app/client";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { formatDate } from "@app/utils/utils";
+import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
 
 interface IOverviewProps {
   certificates: CertificateInfo[];
   isFetching: boolean;
   fetchError: AxiosError<_Error> | null;
+  rootLink?: string;
 }
 
-export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError }) => {
+export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, fetchError, rootLink }) => {
   const chartDonutData = React.useMemo(() => {
     return certificates.reduce(
       (prev, current) => {
@@ -51,6 +53,8 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
       .filter((item) => item.status.toLowerCase() === "expiring")
       .sort((a, b) => dayjs(a.expiration).valueOf() - dayjs(b.expiration).valueOf());
   }, [certificates]);
+
+  if (Array.isArray(certificates) && certificates.length === 0) return <RepositoryNotInitiated rootLink={rootLink} />;
 
   return (
     <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>
