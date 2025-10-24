@@ -15,7 +15,7 @@ import {
 } from "@patternfly/react-core";
 import { type ReactNode, useEffect } from "react";
 import { Controller, type RegisterOptions, useForm } from "react-hook-form";
-import { type Attribute, ATTRIBUTES } from "../../../api/rekor-api";
+import { type Attribute, ATTRIBUTES } from "../api/rekor-api";
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 export interface FormProps {

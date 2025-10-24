@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { RekorClientProvider } from "@app/api/context";
+import { RekorClientProvider } from "@app/pages/RekorSearch/api/context";
 import { Button, Content, PageSection, Split, SplitItem } from "@patternfly/react-core";
 import { CogIcon } from "@patternfly/react-icons";
 

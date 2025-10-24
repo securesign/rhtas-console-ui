@@ -25,9 +25,9 @@ import {
   GridItem,
   Panel,
 } from "@patternfly/react-core";
-import { IntotoViewer001 } from "../Template/Intoto001";
-import { IntotoViewer002 } from "../Template/Intoto002";
-import { DSSEViewer } from "./DSSEViewer";
+import { IntotoViewer001 } from "./Intoto001";
+import { IntotoViewer002 } from "./Intoto002";
+import { DSSEViewer } from "./DSSE";
 import { HashedRekordViewer } from "./HashedRekord";
 import { Link } from "react-router-dom";
 import { Paths } from "@app/Routes";

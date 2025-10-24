@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type RekorSchema } from "rekor";
-import { decodex509 } from "../Template/x509/decode";
+import { decodex509 } from "../x509/decode";
 import { Panel } from "@patternfly/react-core";
 import { Paths } from "@app/Routes";
 

@@ -5,7 +5,7 @@ vi.mock("react-syntax-highlighter/dist/cjs/styles/prism");
 
 import decodex509Mock from "../__mocks__/decodex509Mock";
 
-vi.mock("../Template/x509/decode", () => ({
+vi.mock("../x509/decode", () => ({
   decodex509: decodex509Mock,
 }));
 

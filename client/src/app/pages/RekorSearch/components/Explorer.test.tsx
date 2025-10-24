@@ -19,7 +19,7 @@ beforeEach(() => {
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { Mock } from "vitest";
-import { RekorClientProvider } from "../../../api/context";
+import { RekorClientProvider } from "../api/context";
 import { Explorer } from "./Explorer";
 
 describe("Explorer", () => {

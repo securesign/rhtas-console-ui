@@ -2,14 +2,14 @@ import { vi, type Mock } from "vitest";
 
 import { decodex509 } from "./decode";
 import { X509Certificate } from "@peculiar/x509";
-import { toRelativeDateString } from "../../utils/date";
+import { toRelativeDateString } from "../utils/date";
 import { EXTENSIONS_CONFIG } from "./extensions";
 
 vi.mock("@peculiar/x509", () => ({
   X509Certificate: vi.fn(),
 }));
 
-vi.mock("../../utils/date", () => ({
+vi.mock("../utils/date", () => ({
   toRelativeDateString: vi.fn(),
 }));
 
