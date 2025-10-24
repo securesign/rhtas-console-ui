@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import { isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../../../api/rekor-api";
+import { isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../api/rekor-api";
 import { type FormInputs, SearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner, Pagination } from "@patternfly/react-core";
 import { Entry } from "./Entry";

@@ -1,4 +1,4 @@
-import { useRekorBaseUrl } from "@app/api/context";
+import { useRekorBaseUrl } from "@app/pages/RekorSearch/api/context";
 import {
   Button,
   Form,

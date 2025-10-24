@@ -4,7 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type DSSEV001Schema } from "rekor";
 import { Panel } from "@patternfly/react-core";
-import { decodex509 } from "../Template/x509/decode";
+import { decodex509 } from "../x509/decode";
 import { Paths } from "@app/Routes";
 
 export function DSSEViewer({ dsse }: { dsse: DSSEV001Schema }) {
