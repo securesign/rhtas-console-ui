@@ -19,5 +19,5 @@ export const useFetchArtifactsImageData = () => {
     artifactsImageDataMock
   );
 
-  return { config: data, isFetching: isLoading, fetchError: error, refetch };
+  return { artifact: data, isFetching: isLoading, fetchError: error, refetch };
 };
