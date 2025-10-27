@@ -7,14 +7,18 @@ import { artifactsImageDataMock } from "./mocks/artifacts.mock";
 
 export const ArtifactsKey = "Artifacts";
 
-export const useFetchArtifactsImageData = () => {
+export const useFetchArtifactsImageData = ({ uri }: { uri: string }) => {
   const { data, isLoading, error, refetch } = useMockableQuery<ImageMetadataResponse | null, AxiosError<_Error>>(
     {
-      queryKey: [ArtifactsKey, "image"],
+      queryKey: [ArtifactsKey, "image", uri],
       queryFn: async () => {
-        const response = await getApiV1ArtifactsImage({ client, query: { uri: "" } });
+        const response = await getApiV1ArtifactsImage({ client, query: { uri } });
         return response.data ?? null;
       },
+      // only run when we have a string
+      enabled: !!uri,
+      refetchOnWindowFocus: false,
+      gcTime: 0,
     },
     artifactsImageDataMock
   );
