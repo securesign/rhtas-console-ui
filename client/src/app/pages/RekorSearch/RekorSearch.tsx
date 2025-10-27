@@ -25,7 +25,7 @@ export const RekorSearch: React.FC = () => {
           </SplitItem>
         </Split>
       </PageSection>
-      <PageSection variant="secondary" isFilled>
+      <PageSection>
         <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
         <Explorer />
       </PageSection>
