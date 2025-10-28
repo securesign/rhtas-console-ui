@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, type FormEvent } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
   Button,
   Content,
@@ -7,19 +7,28 @@ import {
   Form,
   FormGroup,
   FormGroupLabelHelp,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
   PageSection,
   Popover,
-  SearchInput,
+  TextInput,
 } from "@patternfly/react-core";
 import { useFetchArtifactsImageData } from "@app/queries/artifacts";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
+import { ArtifactResults } from "./components/ArtifactResults";
+import { Controller, useForm } from "react-hook-form";
 
-const DEFAULT_URI = "docker.io/library/nginx:latest";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
+
+const PLACEHOLDER_URI = "docker.io/library/nginx:latest";
+
+interface FormInputs {
+  searchInput: string;
+}
 
 export const Artifacts = () => {
-  // show default by default, but always prefer user input once they submit
-  const [artifactUri, setArtifactUri] = useState<string>(DEFAULT_URI);
-  const [searchInput, setSearchInput] = useState<string>(DEFAULT_URI);
+  const [artifactUri, setArtifactUri] = useState("");
   const labelHelpRef = useRef(null);
 
   const {
@@ -28,15 +37,27 @@ export const Artifacts = () => {
     fetchError: fetchErrorArtifactMetadata,
   } = useFetchArtifactsImageData({ uri: artifactUri });
 
-  const handleSubmit = (e?: FormEvent) => {
-    e?.preventDefault();
-    console.log("Submitted");
-    setArtifactUri(searchInput.trim());
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormInputs>({
+    mode: "all",
+    reValidateMode: "onChange",
+    defaultValues: {
+      searchInput: "",
+    },
+  });
+
+  const onSubmit = (data: FormInputs) => {
+    const uri = data.searchInput?.trim();
+    if (!uri) return;
+    setArtifactUri(uri);
   };
 
-  const handleUriChange = (_event: FormEvent, uri: string) => {
-    setSearchInput(uri);
-  };
+  const query = watch("searchInput");
+  const isEmpty = query.trim().length === 0;
 
   return (
     <Fragment>
@@ -47,34 +68,52 @@ export const Artifacts = () => {
         </Content>
       </PageSection>
       <PageSection>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
           <Flex>
             <Flex direction={{ default: "column" }} flex={{ default: "flex_3" }}>
               <FlexItem>
-                <FormGroup
-                  label="URI"
-                  labelHelp={
-                    <Popover
-                      triggerRef={labelHelpRef}
-                      headerContent={<div>URI of the container image</div>}
-                      bodyContent={<div>e.g., {DEFAULT_URI}</div>}
+                <Controller
+                  name="searchInput"
+                  control={control}
+                  rules={{ required: { value: true, message: "A value is required" } }}
+                  render={({ field, fieldState }) => (
+                    <FormGroup
+                      label="URI"
+                      labelHelp={
+                        <Popover
+                          triggerRef={labelHelpRef}
+                          headerContent={<div>URI of the container image</div>}
+                          bodyContent={<div>e.g., {PLACEHOLDER_URI}</div>}
+                        >
+                          <FormGroupLabelHelp ref={labelHelpRef} aria-label="More info for URI field" />
+                        </Popover>
+                      }
+                      isRequired
+                      fieldId="uri"
                     >
-                      <FormGroupLabelHelp ref={labelHelpRef} aria-label="More info for URI field" />
-                    </Popover>
-                  }
-                  isRequired
-                  fieldId="uri"
-                >
-                  <SearchInput
-                    type="text"
-                    id="uri"
-                    name="uri"
-                    aria-describedby="uri-helper"
-                    value={searchInput}
-                    onChange={handleUriChange}
-                    placeholder={DEFAULT_URI}
-                  />
-                </FormGroup>
+                      <TextInput
+                        aria-label={`uri input field`}
+                        {...field}
+                        type="text"
+                        name="searchInput"
+                        id="uri"
+                        aria-describedby="uri-helper"
+                        aria-invalid={errors.searchInput ? "true" : "false"}
+                        placeholder={PLACEHOLDER_URI}
+                        validated={fieldState.invalid ? "error" : "default"}
+                      />
+                      {fieldState.invalid && (
+                        <FormHelperText>
+                          <HelperText>
+                            <HelperTextItem icon={<ExclamationCircleIcon />} variant={"error"}>
+                              {fieldState.invalid ? fieldState.error?.message : <span>A value is required</span>}
+                            </HelperTextItem>
+                          </HelperText>
+                        </FormHelperText>
+                      )}
+                    </FormGroup>
+                  )}
+                ></Controller>
               </FlexItem>
             </Flex>
             <Flex
@@ -87,6 +126,7 @@ export const Artifacts = () => {
                   variant="primary"
                   id="search-form-button"
                   isBlock={true}
+                  isDisabled={isEmpty}
                   type="submit"
                   spinnerAriaLabel="Loading"
                   spinnerAriaLabelledBy="search-form-button"
@@ -99,11 +139,8 @@ export const Artifacts = () => {
         </Form>
       </PageSection>
       <PageSection>
-        <div style={{ marginBottom: 8 }}>
-          <b>Current query:</b> <code>{artifactUri}</code>
-        </div>
         <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata}>
-          {artifact && <div>Artifact Digest: {artifact.digest}</div>}
+          {artifact && <ArtifactResults artifact={artifact} />}
         </LoadingWrapper>
       </PageSection>
     </Fragment>
