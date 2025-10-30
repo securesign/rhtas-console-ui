@@ -23,6 +23,14 @@ export const SidebarApp: React.FC = () => {
             >
               Trust root
             </NavLink>
+            <NavLink
+              to={Paths.artifacts}
+              className={({ isActive }) => {
+                return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
+              }}
+            >
+              Artifacts
+            </NavLink>
           </li>
           <li className={nav.navItem}>
             <NavLink

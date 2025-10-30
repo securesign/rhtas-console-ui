@@ -1,7 +1,8 @@
+import type { PrismTheme } from "types/prism-theme";
 import { dump } from "js-yaml";
 import { Link } from "react-router-dom";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism";
+import { atomDark as darkTheme } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type RekorSchema } from "rekor";
 import { decodex509 } from "../x509/decode";
 import { Panel } from "@patternfly/react-core";
@@ -34,17 +35,17 @@ export function HashedRekordViewer({ hashedRekord }: { hashedRekord: RekorSchema
           Hash
         </Link>
       </h5>
-      <SyntaxHighlighter language="text" style={atomDark}>
+      <SyntaxHighlighter language="text" style={darkTheme as unknown as PrismTheme}>
         {`${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`}
       </SyntaxHighlighter>
 
       <h5 style={{ margin: "1em auto" }}>Signature</h5>
-      <SyntaxHighlighter language="text" style={atomDark}>
+      <SyntaxHighlighter language="text" style={darkTheme as unknown as PrismTheme}>
         {hashedRekord.signature.content ?? ""}
       </SyntaxHighlighter>
 
       <h5 style={{ margin: "1em auto" }}>{publicKey.title}</h5>
-      <SyntaxHighlighter language="yaml" style={atomDark}>
+      <SyntaxHighlighter language="yaml" style={darkTheme as unknown as PrismTheme}>
         {publicKey.content}
       </SyntaxHighlighter>
     </Panel>
