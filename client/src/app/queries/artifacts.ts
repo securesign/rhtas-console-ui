@@ -20,7 +20,6 @@ export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undef
       // only run when we have a string
       enabled: !!uri,
       refetchOnWindowFocus: false,
-      gcTime: 0,
     },
     artifactsImageDataMock
   );
