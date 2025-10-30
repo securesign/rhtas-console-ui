@@ -7,7 +7,7 @@ import { artifactsImageDataMock } from "./mocks/artifacts.mock";
 
 export const ArtifactsKey = "Artifacts";
 
-export const useFetchArtifactsImageData = ({ uri }: { uri: string }) => {
+export const useFetchArtifactsImageData = ({ uri }: { uri: string | null }) => {
   const { data, isLoading, error, refetch } = useMockableQuery<ImageMetadataResponse | null, AxiosError<_Error>>(
     {
       queryKey: [ArtifactsKey, "image", uri],
