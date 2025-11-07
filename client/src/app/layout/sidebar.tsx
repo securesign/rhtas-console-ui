@@ -21,7 +21,7 @@ export const SidebarApp: React.FC = () => {
                 return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
               }}
             >
-              Trust root
+              Trust Root
             </NavLink>
             <NavLink
               to={Paths.artifacts}
