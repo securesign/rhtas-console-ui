@@ -14,7 +14,7 @@ import {
   Popover,
   TextInput,
 } from "@patternfly/react-core";
-import { useFetchArtifactsImageData } from "@app/queries/artifacts";
+import { useFetchArtifactsImageData, useVerifyArtifact } from "@app/queries/artifacts";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { ArtifactResults } from "./components/ArtifactResults";
 import { Controller, useForm } from "react-hook-form";
@@ -28,7 +28,7 @@ interface FormInputs {
 }
 
 export const Artifacts = () => {
-  const [artifactUri, setArtifactUri] = useState<string | null>(null);
+  const [artifactUri, setArtifactUri] = useState<string | null>();
   const labelHelpRef = useRef(null);
 
   const {
@@ -36,6 +36,14 @@ export const Artifacts = () => {
     isFetching: isFetchingArtifactMetadata,
     fetchError: fetchErrorArtifactMetadata,
   } = useFetchArtifactsImageData({ uri: artifactUri });
+
+  const {
+    mutate: verifyArtifact,
+    isPending: isVerifying,
+    error: verifyError,
+    data: verifyResult,
+    reset: resetVerify,
+  } = useVerifyArtifact();
 
   const {
     control,
@@ -54,6 +62,8 @@ export const Artifacts = () => {
     const uri = data.searchInput?.trim();
     if (!uri) return;
     setArtifactUri(uri);
+    // kick off verification (transitional: SAN not required yet in our draft type)
+    verifyArtifact({ uri });
   };
 
   const query = watch("searchInput");
