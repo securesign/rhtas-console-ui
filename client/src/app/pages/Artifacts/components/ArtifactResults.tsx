@@ -5,9 +5,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  CardTitle,
   ClipboardCopy,
   ClipboardCopyButton,
   CodeBlock,
@@ -28,7 +26,6 @@ import {
   DescriptionListGroup,
   DescriptionListTermHelpText,
   DescriptionListTermHelpTextButton,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownList,
@@ -38,7 +35,6 @@ import {
   MenuToggle,
   Panel,
   Popover,
-  Tooltip,
   TreeView,
   type MenuToggleElement,
   type TreeViewDataItem,
@@ -52,31 +48,30 @@ export interface IArtifactResultsProps {
 
 export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
   const [activeItems, setActiveItems] = useState<TreeViewDataItem[]>();
-  const [isOpen1, setIsOpen1] = useState(false);
-  const [isOpen2, setIsOpen2] = useState(false);
+  const [sigDropdownOpen, setSigDropdownOpen] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState(["ex-toggle1", "ex-toggle3"]);
 
-  const onSelect = (_event: MouseEvent, treeViewItem: TreeViewDataItem) => {
-    // Ignore folders for selection
+  const onSelectCertChain = (_event: MouseEvent, treeViewItem: TreeViewDataItem) => {
+    // ignore folders for selection
     if (treeViewItem && !treeViewItem.children) {
       setActiveItems([treeViewItem]);
     }
   };
 
-  const onToggle1 = () => {
-    setIsOpen1(!isOpen1);
+  const setSigDropdownState = (id: string, isOpen: boolean) => {
+    setSigDropdownOpen((prev) => ({ ...prev, [id]: isOpen }));
   };
 
-  const onSelect1 = () => {
-    setIsOpen1(!isOpen1);
+  const handleOpenSigDropdown = (id: string) => (isOpen: boolean) => {
+    setSigDropdownState(id, isOpen);
   };
 
-  const onToggle2 = () => {
-    setIsOpen2(!isOpen2);
+  const handleToggleClick = (id: string) => () => {
+    setSigDropdownState(id, !(sigDropdownOpen[id] ?? false));
   };
 
-  const onSelect2 = () => {
-    setIsOpen2(!isOpen2);
+  const handleSelect = (id: string) => () => {
+    setSigDropdownState(id, false);
   };
 
   const toggle = (id: string) => {
@@ -370,19 +365,19 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
                   <DataListAction aria-labelledby="ex-item1 ex-action1" id="ex-action1" aria-label="Actions">
                     <Dropdown
                       popperProps={{ position: "right" }}
-                      onSelect={onSelect1}
+                      onSelect={handleSelect("sig-1")}
                       toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                         <MenuToggle
                           ref={toggleRef}
-                          isExpanded={isOpen1}
-                          onClick={onToggle1}
+                          isExpanded={sigDropdownOpen["sig-1"] ?? false}
+                          onClick={handleToggleClick("sig-1")}
                           variant="plain"
                           aria-label="Data list exapndable example kebaby toggle 1"
                           icon={<EllipsisVIcon />}
                         />
                       )}
-                      isOpen={isOpen1}
-                      onOpenChange={(isOpen: boolean) => setIsOpen1(isOpen)}
+                      isOpen={sigDropdownOpen["sig-1"] ?? false}
+                      onOpenChange={handleOpenSigDropdown("sig-1")}
                     >
                       <DropdownList>
                         <DropdownItem key="link" to="#" onClick={(event: MouseEvent) => event.preventDefault()}>
@@ -400,10 +395,6 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
                   id="ex-expand1"
                   isHidden={!expanded.includes("ex-toggle1")}
                 >
-                  {/* <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.
-                  </p> */}
                   <CodeBlock actions={codeBlockActions}>
                     <CodeBlockCode id="code-content">{code}</CodeBlockCode>
                   </CodeBlock>
@@ -417,7 +408,7 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
                       aria-label="Certificate chain"
                       data={options}
                       activeItems={activeItems}
-                      onSelect={onSelect}
+                      onSelect={onSelectCertChain}
                     />
                   </Panel>
                   <Panel>
@@ -456,24 +447,22 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
                   <DataListAction aria-labelledby="ex-item2 ex-action2" id="ex-action2" aria-label="Actions">
                     <Dropdown
                       popperProps={{ position: "right" }}
-                      onSelect={onSelect2}
+                      onSelect={handleSelect("sig-2")}
                       toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                         <MenuToggle
                           ref={toggleRef}
-                          isExpanded={isOpen2}
-                          onClick={onToggle2}
+                          isExpanded={sigDropdownOpen["sig-2"] ?? false}
+                          onClick={handleToggleClick("sig-2")}
                           variant="plain"
                           aria-label="Data list exapndable example kebaby toggle 2"
                           icon={<EllipsisVIcon />}
                         />
                       )}
-                      isOpen={isOpen2}
-                      onOpenChange={(isOpen: boolean) => setIsOpen2(isOpen)}
+                      isOpen={sigDropdownOpen["sig-2"] ?? false}
+                      onOpenChange={handleOpenSigDropdown("sig-2")}
                     >
                       <DropdownList>
                         <DropdownItem key="action2">Action</DropdownItem>
-                        {/* Prevent default onClick functionality for example
-                  purposes */}
                         <DropdownItem key="link2" to="#" onClick={(event: MouseEvent) => event.preventDefault()}>
                           Link
                         </DropdownItem>
