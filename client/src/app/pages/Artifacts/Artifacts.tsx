@@ -28,7 +28,7 @@ interface FormInputs {
 }
 
 export const Artifacts = () => {
-  const [artifactUri, setArtifactUri] = useState<string | null>("docker.io/library/nginx:latest");
+  const [artifactUri, setArtifactUri] = useState<string | null>(null);
   const labelHelpRef = useRef(null);
 
   const {
