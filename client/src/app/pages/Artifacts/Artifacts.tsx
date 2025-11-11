@@ -28,7 +28,7 @@ interface FormInputs {
 }
 
 export const Artifacts = () => {
-  const [artifactUri, setArtifactUri] = useState<string | null>(null);
+  const [artifactUri, setArtifactUri] = useState<string | null>();
   const labelHelpRef = useRef(null);
 
   const {
