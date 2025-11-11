@@ -19,7 +19,7 @@ export interface IArtifactResultsProps {
 
 export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
   // temporary workaround until API merged
-  const artifactSignatures: string[] = [];
+  const artifactSignatures: string[] = ["a", "b"];
 
   return (
     <div style={{ margin: "2em auto" }}>
