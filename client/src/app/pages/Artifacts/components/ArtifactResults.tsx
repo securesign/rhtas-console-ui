@@ -9,9 +9,13 @@ import {
   Flex,
   FlexItem,
   Panel,
+  Tab,
+  Tabs,
+  TabTitleText,
 } from "@patternfly/react-core";
 import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
 import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
+import { useState } from "react";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
@@ -19,7 +23,15 @@ export interface IArtifactResultsProps {
 
 export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
   // temporary workaround until API merged
-  const artifactSignatures: string[] = [];
+  const artifactSignatures: string[] = ["a", "b"];
+  const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
+
+  const handleTabClick = (
+    event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
+    tabIndex: string | number
+  ) => {
+    setActiveTabKey(tabIndex);
+  };
 
   return (
     <div style={{ margin: "2em auto" }}>
@@ -41,8 +53,20 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
             <ArtifactResultsSummary artifact={artifact} />
           </Panel>
           <Panel style={{ marginTop: "1.25em" }}>
-            {/** SIGNATURES */}
-            <ArtifactResultsSignatures signatures={artifactSignatures} />
+            <Tabs
+              activeKey={activeTabKey}
+              onSelect={handleTabClick}
+              aria-label="Tabs in the default example"
+              role="region"
+            >
+              <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Default content - users">
+                {/** SIGNATURES */}
+                <ArtifactResultsSignatures signatures={artifactSignatures} />
+              </Tab>
+              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
+                Attestations
+              </Tab>
+            </Tabs>
           </Panel>
         </CardBody>
       </Card>

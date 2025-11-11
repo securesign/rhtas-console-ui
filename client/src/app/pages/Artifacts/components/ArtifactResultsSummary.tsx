@@ -55,7 +55,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Date</div>} bodyContent={<div>Additional pod selector info</div>}>
+              <Popover headerContent={<div>Date</div>} bodyContent={<div>Date created</div>}>
                 <DescriptionListTermHelpTextButton> Created </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
@@ -88,7 +88,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Labels</div>} bodyContent={<div>Additional labels info</div>}>
+              <Popover headerContent={<div>Signatures</div>} bodyContent={<div>Additional labels info</div>}>
                 <DescriptionListTermHelpTextButton> Signatures </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
