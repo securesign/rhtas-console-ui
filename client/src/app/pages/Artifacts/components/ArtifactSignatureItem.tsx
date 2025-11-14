@@ -141,11 +141,6 @@ export const ArtifactSignatureItem = ({ signature }: { signature: string }) => {
         </Panel>
         <Panel>
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-            Attestations
-          </Content>
-        </Panel>
-        <Panel>
-          <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
             Rekor Entry
           </Content>
           <CodeBlock>
