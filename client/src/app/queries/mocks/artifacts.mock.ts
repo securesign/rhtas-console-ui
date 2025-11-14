@@ -1,23 +1,41 @@
-import type { ImageMetadataResponse, Metadata } from "@app/client";
+import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
-  image: "docker.io/library/nginx:latest",
+  image: "ttl.sh/rhtas/test-image:1h",
 
   // container image metadata
   metadata: {
-    created: "2025-10-07T21:06:46Z",
+    created: "2025-11-06T08:58:50.271117116Z",
 
     // media type of the container image (e.g., OCI manifest type)
-    mediaType: "application/vnd.oci.image.index.v1+json",
+    mediaType: "application/vnd.oci.image.manifest.v1+json",
 
     // size of container image
-    size: 10229,
+    size: 414,
 
     // key-value labels or annotations associated with image
     labels: {
-      maintainer: "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
+      "io.buildah.version": "1.41.5",
     },
   } as Metadata,
   // container image's digest
-  digest: "sha256:7e034cabf67d95246a996a3b92ad1c49c20d81526c9d7ba982aead057a0606e8",
+  digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
+  signatures: [
+    {
+      signature: "sha256:571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
+      certificateChain: [
+        "-----BEGIN CERTIFICATE-----\nMIICGjCCAaGgAwIBAgIUALnViVfnU0brJasmRkHrn/UnfaQwCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMjA0MTMyMDA2MTVaFw0zMTEwMDUxMzU2NThaMDcxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjEeMBwGA1UEAxMVc2lnc3RvcmUtaW50ZXJtZWRpYXRlMHYwEAYHKoZIzj0C\nAQYFK4EEACIDYgAE8RVS/ysH+NOvuDZyPIZtilgUF9NlarYpAd9HP1vBBH1U5CV7\n7LSS7s0ZiH4nE7Hv7ptS6LvvR/STk798LVgMzLlJ4HeIfF3tHSaexLcYpSASr1kS\n0N/RgBJz/9jWCiXno3sweTAOBgNVHQ8BAf8EBAMCAQYwEwYDVR0lBAwwCgYIKwYB\nBQUHAwMwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU39Ppz1YkEZb5qNjp\nKFWixi4YZD8wHwYDVR0jBBgwFoAUWMAeX5FFpWapesyQoZMi0CrFxfowCgYIKoZI\nzj0EAwMDZwAwZAIwPCsQK4DYiZYDPIaDi5HFKnfxXx6ASSVmERfsynYBiX2X6SJR\nnZU84/9DZdnFvvxmAjBOt6QpBlc4J/0DxvkTCqpclvziL6BCCPnjdlIB3Pu3BxsP\nmygUY7Ii2zbdCdliiow=\n-----END CERTIFICATE-----\n",
+        "-----BEGIN CERTIFICATE-----\nMIIB9zCCAXygAwIBAgIUALZNAPFdxHPwjeDloDwyYChAO/4wCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMTEwMDcxMzU2NTlaFw0zMTEwMDUxMzU2NThaMCoxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjERMA8GA1UEAxMIc2lnc3RvcmUwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAT7\nXeFT4rb3PQGwS4IajtLk3/OlnpgangaBclYpsYBr5i+4ynB07ceb3LP0OIOZdxex\nX69c5iVuyJRQ+Hz05yi+UF3uBWAlHpiS5sh0+H2GHE7SXrk1EC5m1Tr19L9gg92j\nYzBhMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRY\nwB5fkUWlZql6zJChkyLQKsXF+jAfBgNVHSMEGDAWgBRYwB5fkUWlZql6zJChkyLQ\nKsXF+jAKBggqhkjOPQQDAwNpADBmAjEAj1nHeXZp+13NWBNa+EDsDP8G1WWg1tCM\nWP/WHPqpaVo0jhsweNFZgSs0eE7wYI4qAjEA2WB9ot98sIkoF3vZYdd3/VtWB5b9\nTNMea7Ix/stJ5TfcLLeABLE4BNJOsQ4vnBHJ\n-----END CERTIFICATE-----\n",
+      ],
+    },
+  ],
+  attestations: [
+    "sha256:65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
+    "sha256:bf7b0412ae15288f6dbc44550ad6efd85f82fdfaf13309fa5c35da4b439efc08",
+  ],
+};
+
+export const artifactsVerificationMock: VerifyArtifactResponse = {
+  verified: true,
+  details: {},
 };
