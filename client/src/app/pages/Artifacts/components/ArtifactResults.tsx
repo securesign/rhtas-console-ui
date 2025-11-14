@@ -1,124 +1,72 @@
-import { Fragment } from "react";
-import type { PrismTheme } from "types/prism-theme";
 import type { ImageMetadataResponse } from "@app/client";
 import {
+  Button,
   Card,
   CardBody,
+  CardHeader,
   Content,
   ContentVariants,
-  Divider,
   Flex,
   FlexItem,
-  Grid,
-  GridItem,
   Panel,
+  Tab,
+  Tabs,
+  TabTitleText,
 } from "@patternfly/react-core";
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism";
-import { atomDark as darkTheme } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
+import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
+import { useState } from "react";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
 }
 
 export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
+  // temporary workaround until API merged
+  const artifactSignatures: string[] = ["a", "b"];
+  const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
+
+  const handleTabClick = (
+    event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
+    tabIndex: string | number
+  ) => {
+    setActiveTabKey(tabIndex);
+  };
+
   return (
     <div style={{ margin: "2em auto" }}>
       <p>Showing 1 of 1</p>
       <Card style={{ margin: "1.5em auto 2em", overflowY: "hidden" }}>
-        <CardBody>
-          <Content
-            component={ContentVariants.h4}
-            style={{ margin: "1.25em auto", overflow: "hidden", textOverflow: "ellipsis" }}
-          >
-            Artifact: {artifact.image}
+        <CardHeader>
+          <Content component={ContentVariants.h4} style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+            <Flex className="example-border">
+              <FlexItem>
+                Artifact: <Button variant="plain">{artifact.image}</Button>
+              </FlexItem>
+              <FlexItem align={{ default: "alignRight" }}>Verified ✓</FlexItem>
+            </Flex>
           </Content>
-          <Divider />
-          <Panel style={{ marginTop: "1.25em" }}>
-            <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-              Digest
-            </Content>
-            <SyntaxHighlighter language="text" style={darkTheme as unknown as PrismTheme}>
-              {artifact.digest}
-            </SyntaxHighlighter>
-          </Panel>
+        </CardHeader>
+        <CardBody>
           <Panel style={{ margin: "0.75em auto" }}>
-            <Fragment>
-              <Grid>
-                <GridItem span={4}>
-                  <Flex style={{ padding: "1em" }}>
-                    <FlexItem>
-                      <Content component={ContentVariants.h6}>Media Type</Content>
-                      <p
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "start",
-                        }}
-                      >
-                        {artifact.metadata.mediaType}
-                      </p>
-                    </FlexItem>
-                  </Flex>
-                </GridItem>
-                <GridItem span={2}>
-                  <Flex style={{ padding: "1em" }}>
-                    <FlexItem>
-                      <Content component={ContentVariants.h6}>Size</Content>
-                      <p
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "start",
-                        }}
-                      >
-                        {artifact.metadata.size}
-                      </p>
-                    </FlexItem>
-                  </Flex>
-                </GridItem>
-                <GridItem span={3}>
-                  <Flex style={{ padding: "1em" }}>
-                    <FlexItem>
-                      <Content component={ContentVariants.h6}>Created</Content>
-                      <p
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "start",
-                        }}
-                      >
-                        {artifact.metadata.created}
-                      </p>
-                    </FlexItem>
-                  </Flex>
-                </GridItem>
-                <GridItem span={3}>
-                  <Flex style={{ padding: "1em" }}>
-                    <Divider orientation={{ default: "vertical" }} style={{ margin: "auto 1em" }} />
-                    <FlexItem>
-                      <Content component={ContentVariants.h6}>Labels</Content>
-                      <p
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "start",
-                        }}
-                      >
-                        {artifact.metadata.labels?.maintainer}
-                      </p>
-                    </FlexItem>
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Fragment>
+            {/** ARTIFACT RESULTS SUMMARY */}
+            <ArtifactResultsSummary artifact={artifact} />
+          </Panel>
+          <Panel style={{ marginTop: "1.25em" }}>
+            <Tabs
+              activeKey={activeTabKey}
+              onSelect={handleTabClick}
+              aria-label="Tabs in the default example"
+              role="region"
+            >
+              <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Default content - users">
+                {/** SIGNATURES */}
+                <ArtifactResultsSignatures signatures={artifactSignatures} />
+              </Tab>
+              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
+                Attestations
+              </Tab>
+            </Tabs>
           </Panel>
         </CardBody>
       </Card>
