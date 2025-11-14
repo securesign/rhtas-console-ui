@@ -17,7 +17,7 @@ export const brandingAssetPath = () =>
 
 const brandingPath: string = brandingAssetPath();
 const manifestPath = path.resolve(brandingPath, "manifest.json");
-const faviconPath = path.resolve(brandingPath, "favicon.ico");
+const faviconPath = path.resolve(brandingPath, "favicon-rh.svg");
 
 // https://vite.dev/config/
 export default defineConfig({

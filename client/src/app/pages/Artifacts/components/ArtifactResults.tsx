@@ -16,18 +16,17 @@ import {
 import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
 import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
 import { useState } from "react";
+import { ArtifactResultsAttestations } from "./ArtifactResultsAttestations";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
 }
 
 export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
-  // temporary workaround until API merged
-  const artifactSignatures: string[] = ["a", "b"];
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
 
   const handleTabClick = (
-    event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
+    _event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
     tabIndex: string | number
   ) => {
     setActiveTabKey(tabIndex);
@@ -39,7 +38,7 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
       <Card style={{ margin: "1.5em auto 2em", overflowY: "hidden" }}>
         <CardHeader>
           <Content component={ContentVariants.h4} style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-            <Flex className="example-border">
+            <Flex className="border">
               <FlexItem>
                 Artifact: <Button variant="plain">{artifact.image}</Button>
               </FlexItem>
@@ -53,18 +52,18 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
             <ArtifactResultsSummary artifact={artifact} />
           </Panel>
           <Panel style={{ marginTop: "1.25em" }}>
-            <Tabs
-              activeKey={activeTabKey}
-              onSelect={handleTabClick}
-              aria-label="Tabs in the default example"
-              role="region"
-            >
-              <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Default content - users">
+            <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
+              <Tab
+                eventKey={0}
+                title={<TabTitleText>Signatures</TabTitleText>}
+                aria-label="Default content - signatures"
+              >
                 {/** SIGNATURES */}
-                <ArtifactResultsSignatures signatures={artifactSignatures} />
+                <ArtifactResultsSignatures signatures={artifact.signatures} />
               </Tab>
               <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
-                Attestations
+                {/** ATTESTATIONS */}
+                <ArtifactResultsAttestations attestations={artifact.attestations} />
               </Tab>
             </Tabs>
           </Panel>

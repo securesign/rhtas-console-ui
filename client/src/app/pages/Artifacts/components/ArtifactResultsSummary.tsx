@@ -13,15 +13,15 @@ import {
   Button,
   Label,
 } from "@patternfly/react-core";
-import { LockIcon, PlusCircleIcon } from "@patternfly/react-icons";
+import { PlusCircleIcon } from "@patternfly/react-icons";
 
 import type { IArtifactResultsProps } from "./ArtifactResults";
 
 export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
   const summaryCards = [
-    <Card key="card-1" isPlain>
+    <Card key="artifact-summary" isPlain>
       <CardBody>
-        <DescriptionList aria-label="Term help text" isCompact isHorizontal columnModifier={{ default: "2Col" }}>
+        <DescriptionList aria-label="Digest help text" isCompact isHorizontal columnModifier={{ default: "2Col" }}>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
               <Popover headerContent={<div>Digest</div>} bodyContent={<div>ref + resolved canonical digest</div>}>
@@ -43,14 +43,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
             <DescriptionListDescription>{artifact.metadata.mediaType}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover
-                headerContent={<div>Identities</div>}
-                bodyContent={<div>Deduped list of signature identities used</div>}
-              >
-                <DescriptionListTermHelpTextButton> Size </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>Size</DescriptionListTermHelpText>
             <DescriptionListDescription>{artifact.metadata.size}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -93,19 +86,27 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" icon={<LockIcon />} color="blue">
+              <Label className="pf-v6-u-mb-sm" color="blue">
                 2 Signatures
               </Label>
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Attestation</div>} bodyContent={<div>A signed document</div>}>
+              <Popover
+                headerContent={<div>Attestation</div>}
+                bodyContent={
+                  <div>
+                    An attestation is a signed document (usually in in-toto format) that describes an event, action, or
+                    property related to a software artifact.
+                  </div>
+                }
+              >
                 <DescriptionListTermHelpTextButton> Attestations </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" icon={<LockIcon />} color="green">
+              <Label className="pf-v6-u-mb-sm" color="green">
                 2 Attestations
               </Label>
             </DescriptionListDescription>
@@ -117,7 +118,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" icon={<LockIcon />} color="orange">
+              <Label className="pf-v6-u-mb-sm" color="orange">
                 4 Rekor Entries
               </Label>
             </DescriptionListDescription>
