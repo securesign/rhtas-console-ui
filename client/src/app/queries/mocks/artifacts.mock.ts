@@ -1,6 +1,109 @@
 import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
-export const artifactsImageDataMock: ImageMetadataResponse = {
+export interface IImageMetadataResponseDraft extends ImageMetadataResponse {}
+
+export interface IVerifyArtifactResponseDraft extends VerifyArtifactResponse {}
+// Download verification bundle: we can expose a “Download verification details” button by serialising VerifyArtifactResponse.details as JSON, if that contains the Sigstore bundle.
+
+// View-model types for the Artifacts designs. These sit on top of the raw API types
+// and represent exactly what the UI needs to render the artifact, signatures,
+// certificate chain, attestations, and Rekor entries.
+export interface ArtifactIdentity {
+  id: string;
+  type: "email" | "oidc-issuer" | "other";
+  value: string;
+  source: "san" | "issuer" | "other";
+  issuer?: string;
+}
+
+export interface TimeCoherenceSummary {
+  status: "ok" | "warning" | "error" | "unknown";
+  minIntegratedTime?: string; // ISO string
+  maxIntegratedTime?: string; // ISO string
+}
+
+export interface ArtifactSummaryView {
+  identities: ArtifactIdentity[];
+  signatureCount: number;
+  attestationCount: number;
+  rekorEntryCount: number;
+  timeCoherence: TimeCoherenceSummary;
+}
+
+export type CertificateRole = "leaf" | "intermediate" | "root";
+
+export interface ParsedCertificate {
+  role: CertificateRole;
+  subject: string;
+  issuer: string;
+  notBefore: string; // ISO string
+  notAfter: string; // ISO string
+  sans: string[];
+  serialNumber?: string;
+  isCa: boolean;
+  pem: string;
+}
+
+export type SignatureVerificationStatus = "verified" | "invalid" | "unverifiable" | "unknown";
+
+export interface SignatureStatus {
+  signature: SignatureVerificationStatus;
+  rekor: "present" | "missing" | "unknown";
+  chain: "valid" | "invalid" | "partial" | "unknown";
+}
+
+export interface HashSummary {
+  algorithm: string;
+  value: string;
+}
+
+export interface SignatureView {
+  id: string;
+  kind: "hashedrekord" | "other";
+  identity: {
+    san?: string;
+    issuer?: string;
+    issuerType?: string;
+  };
+  hash: HashSummary;
+  timestamp?: string; // ISO string for "x minutes ago" display
+  status: SignatureStatus;
+  certificateChain: ParsedCertificate[];
+  // A single Rekor entry associated with this signature, once the backend
+  // is updated to include it alongside the signature.
+  rekorEntry?: import("@app/client").RekorEntry;
+  rawBundleJson?: unknown; // or a typed SigstoreBundle
+}
+
+export interface AttestationStatus {
+  verified: boolean;
+  rekor: "present" | "missing" | "unknown";
+}
+
+export interface AttestationView {
+  id: string;
+  kind: "intoto" | "other";
+  predicateType?: string;
+  digest: HashSummary;
+  subject?: string;
+  issuer?: string;
+  timestamp?: string; // ISO string
+  status: AttestationStatus;
+  rekorEntry?: import("@app/client").RekorEntry;
+  rawStatementJson?: unknown;
+  rawBundleJson?: unknown;
+}
+
+// High-level view model returned by the verification endpoint once it
+// is extended to include structured signature/attestation/rekor data.
+export interface ArtifactVerificationViewModel {
+  artifact: IImageMetadataResponseDraft;
+  summary: ArtifactSummaryView;
+  signatures: SignatureView[];
+  attestations: AttestationView[];
+}
+
+export const artifactsImageDataMock: IImageMetadataResponseDraft = {
   image: "ttl.sh/rhtas/test-image:1h",
 
   // container image metadata
@@ -20,29 +123,328 @@ export const artifactsImageDataMock: ImageMetadataResponse = {
   } as Metadata,
   // container image's digest
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
+};
+
+// Draft view-model mock that matches the Artifacts designs. This is *not* what the
+// API returns today, but represents the desired shape for the UI.
+export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = {
+  artifact: artifactsImageDataMock,
+  summary: {
+    identities: [
+      {
+        id: "builder-email",
+        type: "email",
+        value: "builder@example.com",
+        source: "san",
+        issuer: "https://token.actions.githubusercontent.com",
+      },
+      {
+        id: "github-oidc",
+        type: "oidc-issuer",
+        value: "GitHub OIDC",
+        source: "issuer",
+        issuer: "https://token.actions.githubusercontent.com",
+      },
+      {
+        id: "release-email",
+        type: "email",
+        value: "release@example.com",
+        source: "san",
+        issuer: "https://token.actions.githubusercontent.com",
+      },
+    ],
+    signatureCount: 2,
+    attestationCount: 2,
+    rekorEntryCount: 4,
+    timeCoherence: {
+      status: "ok",
+      minIntegratedTime: "2025-11-06T08:59:07Z",
+      maxIntegratedTime: "2025-11-06T09:09:07Z",
+    },
+  },
   signatures: [
     {
-      signature: "sha256:571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
+      id: "sig-0",
+      kind: "hashedrekord",
+      identity: {
+        san: "ryordan@redhat.com",
+        issuer: "https://token.actions.githubusercontent.com",
+        issuerType: "github-oidc",
+      },
+      hash: {
+        algorithm: "sha256",
+        value: "571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
+      },
+      timestamp: "2025-11-06T08:59:07Z",
+      status: {
+        signature: "verified",
+        rekor: "present",
+        chain: "valid",
+      },
       certificateChain: [
-        "-----BEGIN CERTIFICATE-----\nMIICGjCCAaGgAwIBAgIUALnViVfnU0brJasmRkHrn/UnfaQwCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMjA0MTMyMDA2MTVaFw0zMTEwMDUxMzU2NThaMDcxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjEeMBwGA1UEAxMVc2lnc3RvcmUtaW50ZXJtZWRpYXRlMHYwEAYHKoZIzj0C\nAQYFK4EEACIDYgAE8RVS/ysH+NOvuDZyPIZtilgUF9NlarYpAd9HP1vBBH1U5CV7\n7LSS7s0ZiH4nE7Hv7ptS6LvvR/STk798LVgMzLlJ4HeIfF3tHSaexLcYpSASr1kS\n0N/RgBJz/9jWCiXno3sweTAOBgNVHQ8BAf8EBAMCAQYwEwYDVR0lBAwwCgYIKwYB\nBQUHAwMwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU39Ppz1YkEZb5qNjp\nKFWixi4YZD8wHwYDVR0jBBgwFoAUWMAeX5FFpWapesyQoZMi0CrFxfowCgYIKoZI\nzj0EAwMDZwAwZAIwPCsQK4DYiZYDPIaDi5HFKnfxXx6ASSVmERfsynYBiX2X6SJR\nnZU84/9DZdnFvvxmAjBOt6QpBlc4J/0DxvkTCqpclvziL6BCCPnjdlIB3Pu3BxsP\nmygUY7Ii2zbdCdliiow=\n-----END CERTIFICATE-----\n",
-        "-----BEGIN CERTIFICATE-----\nMIIB9zCCAXygAwIBAgIUALZNAPFdxHPwjeDloDwyYChAO/4wCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMTEwMDcxMzU2NTlaFw0zMTEwMDUxMzU2NThaMCoxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjERMA8GA1UEAxMIc2lnc3RvcmUwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAT7\nXeFT4rb3PQGwS4IajtLk3/OlnpgangaBclYpsYBr5i+4ynB07ceb3LP0OIOZdxex\nX69c5iVuyJRQ+Hz05yi+UF3uBWAlHpiS5sh0+H2GHE7SXrk1EC5m1Tr19L9gg92j\nYzBhMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRY\nwB5fkUWlZql6zJChkyLQKsXF+jAfBgNVHSMEGDAWgBRYwB5fkUWlZql6zJChkyLQ\nKsXF+jAKBggqhkjOPQQDAwNpADBmAjEAj1nHeXZp+13NWBNa+EDsDP8G1WWg1tCM\nWP/WHPqpaVo0jhsweNFZgSs0eE7wYI4qAjEA2WB9ot98sIkoF3vZYdd3/VtWB5b9\nTNMea7Ix/stJ5TfcLLeABLE4BNJOsQ4vnBHJ\n-----END CERTIFICATE-----\n",
+        {
+          role: "leaf",
+          subject: "CN=ryordan@redhat.com,O=sigstore.dev",
+          issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+          notBefore: "2025-11-06T08:59:07Z",
+          notAfter: "2025-11-06T09:09:07Z",
+          sans: ["ryordan@redhat.com"],
+          serialNumber: "59:72:f4:57:e5:53:bc:5f:bd:ef:34:9c:94:73:82:b5:8d:1b:60:75",
+          isCa: false,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig0-leaf...\n-----END CERTIFICATE-----\n",
+        },
+        {
+          role: "intermediate",
+          subject: "CN=sigstore-intermediate,O=sigstore.dev",
+          issuer: "CN=sigstore,O=sigstore.dev",
+          notBefore: "2025-11-06T08:59:07Z",
+          notAfter: "2025-11-06T09:09:07Z",
+          sans: [],
+          serialNumber: "59:72:f4:57:e5:53:bc:5f:bd:ef:34:9c:94:73:82:b5:8d:1b:60:75",
+          isCa: true,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICINTERMEDIATECERT...sig0-int...\n-----END CERTIFICATE-----\n",
+        },
+        {
+          role: "root",
+          subject: "CN=sigstore,O=sigstore.dev",
+          issuer: "CN=sigstore,O=sigstore.dev",
+          notBefore: "2025-11-06T08:59:07Z",
+          notAfter: "2025-11-06T09:09:07Z",
+          sans: [],
+          serialNumber: "59:72:f4:57:e5:53:bc:5f:bd:ef:34:9c:94:73:82:b5:8d:1b:60:75",
+          isCa: true,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICROOTCERT...sig0-root...\n-----END CERTIFICATE-----\n",
+        },
       ],
+      rekorEntry: {
+        uuid: "sig-0-uuid-1234",
+        body: "BASE64_BODY_SIG0",
+        integratedTime: 1730883547,
+        logID: "d4c1a7f2-0000-0000-0000-000000000000",
+        logIndex: 1234,
+        verification: {
+          inclusionProof: {
+            checkpoint: "rekor.sigstore.dev - 123456",
+            hashes: ["abc", "def"],
+            logIndex: 1234,
+            rootHash: "cafebabe",
+            treeSize: 987654,
+          },
+          signedEntryTimestamp: "BASE64_SET_SIG0",
+        },
+      },
     },
     {
-      signature: "sha256:571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c3",
+      id: "sig-1",
+      kind: "hashedrekord",
+      identity: {
+        san: "release@redhat.com",
+        issuer: "https://token.actions.githubusercontent.com",
+        issuerType: "github-oidc",
+      },
+      hash: {
+        algorithm: "sha256",
+        value: "aa7b9c0d17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
+      },
+      timestamp: "2025-11-06T09:05:00Z",
+      status: {
+        signature: "verified",
+        rekor: "present",
+        chain: "valid",
+      },
       certificateChain: [
-        "-----BEGIN CERTIFICATE-----\nMIICGjCCAaGgAwIBAgIUALnViVfnU0brJasmRkHrn/UnfaQwCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMjA0MTMyMDA2MTVaFw0zMTEwMDUxMzU2NThaMDcxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjEeMBwGA1UEAxMVc2lnc3RvcmUtaW50ZXJtZWRpYXRlMHYwEAYHKoZIzj0C\nAQYFK4EEACIDYgAE8RVS/ysH+NOvuDZyPIZtilgUF9NlarYpAd9HP1vBBH1U5CV7\n7LSS7s0ZiH4nE7Hv7ptS6LvvR/STk798LVgMzLlJ4HeIfF3tHSaexLcYpSASr1kS\n0N/RgBJz/9jWCiXno3sweTAOBgNVHQ8BAf8EBAMCAQYwEwYDVR0lBAwwCgYIKwYB\nBQUHAwMwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU39Ppz1YkEZb5qNjp\nKFWixi4YZD8wHwYDVR0jBBgwFoAUWMAeX5FFpWapesyQoZMi0CrFxfowCgYIKoZI\nzj0EAwMDZwAwZAIwPCsQK4DYiZYDPIaDi5HFKnfxXx6ASSVmERfsynYBiX2X6SJR\nnZU84/9DZdnFvvxmAjBOt6QpBlc4J/0DxvkTCqpclvziL6BCCPnjdlIB3Pu3BxsP\nmygUY7Ii2zbdCdliiow=\n-----END CERTIFICATE-----\n",
-        "-----BEGIN CERTIFICATE-----\nMIIB9zCCAXygAwIBAgIUALZNAPFdxHPwjeDloDwyYChAO/4wCgYIKoZIzj0EAwMw\nKjEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MREwDwYDVQQDEwhzaWdzdG9yZTAeFw0y\nMTEwMDcxMzU2NTlaFw0zMTEwMDUxMzU2NThaMCoxFTATBgNVBAoTDHNpZ3N0b3Jl\nLmRldjERMA8GA1UEAxMIc2lnc3RvcmUwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAT7\nXeFT4rb3PQGwS4IajtLk3/OlnpgangaBclYpsYBr5i+4ynB07ceb3LP0OIOZdxex\nX69c5iVuyJRQ+Hz05yi+UF3uBWAlHpiS5sh0+H2GHE7SXrk1EC5m1Tr19L9gg92j\nYzBhMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRY\nwB5fkUWlZql6zJChkyLQKsXF+jAfBgNVHSMEGDAWgBRYwB5fkUWlZql6zJChkyLQ\nKsXF+jAKBggqhkjOPQQDAwNpADBmAjEAj1nHeXZp+13NWBNa+EDsDP8G1WWg1tCM\nWP/WHPqpaVo0jhsweNFZgSs0eE7wYI4qAjEA2WB9ot98sIkoF3vZYdd3/VtWB5b9\nTNMea7Ix/stJ5TfcLLeABLE4BNJOsQ4vnBHJ\n-----END CERTIFICATE-----\n",
+        {
+          role: "leaf",
+          subject: "CN=release@redhat.com,O=sigstore.dev",
+          issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+          notBefore: "2025-11-06T09:00:00Z",
+          notAfter: "2025-11-06T09:10:00Z",
+          sans: ["release@redhat.com"],
+          serialNumber: "aa:bb:cc:dd:ee:ff",
+          isCa: false,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig1-leaf...\n-----END CERTIFICATE-----\n",
+        },
+        {
+          role: "intermediate",
+          subject: "CN=sigstore-intermediate,O=sigstore.dev",
+          issuer: "CN=sigstore,O=sigstore.dev",
+          notBefore: "2025-11-06T09:00:00Z",
+          notAfter: "2025-11-06T09:10:00Z",
+          sans: [],
+          serialNumber: "aa:bb:cc:dd:ee:ff",
+          isCa: true,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICINTERMEDIATECERT...sig1-int...\n-----END CERTIFICATE-----\n",
+        },
+        {
+          role: "root",
+          subject: "CN=sigstore,O=sigstore.dev",
+          issuer: "CN=sigstore,O=sigstore.dev",
+          notBefore: "2025-11-06T09:00:00Z",
+          notAfter: "2025-11-06T09:10:00Z",
+          sans: [],
+          serialNumber: "aa:bb:cc:dd:ee:ff",
+          isCa: true,
+          pem: "-----BEGIN CERTIFICATE-----\nMIICROOTCERT...sig1-root...\n-----END CERTIFICATE-----\n",
+        },
       ],
+      rekorEntry: {
+        uuid: "sig-1-uuid-5678",
+        body: "BASE64_BODY_SIG1",
+        integratedTime: 1730883600,
+        logID: "d4c1a7f2-0000-0000-0000-000000000000",
+        logIndex: 1235,
+        verification: {
+          inclusionProof: {
+            checkpoint: "rekor.sigstore.dev - 123457",
+            hashes: ["ghi", "jkl"],
+            logIndex: 1235,
+            rootHash: "deadbeef",
+            treeSize: 987655,
+          },
+          signedEntryTimestamp: "BASE64_SET_SIG1",
+        },
+      },
     },
   ],
   attestations: [
-    "sha256:65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
-    "sha256:bf7b0412ae15288f6dbc44550ad6efd85f82fdfaf13309fa5c35da4b439efc08",
+    {
+      id: "att-0",
+      kind: "intoto",
+      predicateType: "https://slsa.dev/provenance/v1",
+      digest: {
+        algorithm: "sha256",
+        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
+      },
+      subject: artifactsImageDataMock.image,
+      issuer: "https://token.actions.githubusercontent.com",
+      timestamp: "2025-11-06T09:00:00Z",
+      status: {
+        verified: true,
+        rekor: "present",
+      },
+      rekorEntry: {
+        uuid: "att-0-uuid-1111",
+        body: "BASE64_BODY_ATT0",
+        integratedTime: 1730883660,
+        logID: "d4c1a7f2-0000-0000-0000-000000000000",
+        logIndex: 2234,
+        verification: {
+          inclusionProof: {
+            checkpoint: "rekor.sigstore.dev - 223456",
+            hashes: ["att0a", "att0b"],
+            logIndex: 2234,
+            rootHash: "facefeed",
+            treeSize: 123456,
+          },
+          signedEntryTimestamp: "BASE64_SET_ATT0",
+        },
+      },
+    },
+    {
+      id: "att-1",
+      kind: "intoto",
+      predicateType: "https://slsa.dev/provenance/v1",
+      digest: {
+        algorithm: "sha256",
+        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
+      },
+      subject: artifactsImageDataMock.image,
+      issuer: "https://token.actions.githubusercontent.com",
+      timestamp: "2025-11-06T09:03:00Z",
+      status: {
+        verified: true,
+        rekor: "present",
+      },
+      rekorEntry: {
+        uuid: "att-1-uuid-2222",
+        body: "BASE64_BODY_ATT1",
+        integratedTime: 1730883720,
+        logID: "d4c1a7f2-0000-0000-0000-000000000000",
+        logIndex: 2235,
+        verification: {
+          inclusionProof: {
+            checkpoint: "rekor.sigstore.dev - 223457",
+            hashes: ["att1a", "att1b"],
+            logIndex: 2235,
+            rootHash: "beadfeed",
+            treeSize: 123457,
+          },
+          signedEntryTimestamp: "BASE64_SET_ATT1",
+        },
+      },
+    },
   ],
 };
 
-export const artifactsVerificationMock: VerifyArtifactResponse = {
-  verified: true,
-  details: {},
+export const artifactsVerificationInvalidMock: IVerifyArtifactResponseDraft = {
+  verified: false,
+  details: {
+    reason: "Signature verification failed",
+    errorCode: "SIGNATURE_INVALID",
+  },
+};
+
+export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewModel = {
+  artifact: artifactsImageDataMock,
+  summary: {
+    identities: [
+      {
+        id: "invalid-email",
+        type: "email",
+        value: "invalid@example.com",
+        source: "san",
+        issuer: "https://token.actions.githubusercontent.com",
+      },
+    ],
+    signatureCount: 1,
+    attestationCount: 1,
+    rekorEntryCount: 0,
+    timeCoherence: {
+      status: "error",
+      minIntegratedTime: undefined,
+      maxIntegratedTime: undefined,
+    },
+  },
+  signatures: [
+    {
+      id: "sig-invalid-0",
+      kind: "hashedrekord",
+      identity: {
+        san: "invalid@example.com",
+        issuer: "https://token.actions.githubusercontent.com",
+        issuerType: "github-oidc",
+      },
+      hash: {
+        algorithm: "sha256",
+        value: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      },
+      timestamp: "2025-11-06T10:00:00Z",
+      status: {
+        signature: "invalid",
+        rekor: "missing",
+        chain: "invalid",
+      },
+      certificateChain: [],
+      rekorEntry: undefined,
+    },
+  ],
+  attestations: [
+    {
+      id: "att-invalid-0",
+      kind: "intoto",
+      predicateType: "https://slsa.dev/provenance/v1",
+      digest: {
+        algorithm: "sha256",
+        value: "0000000000000000000000000000000000000000000000000000000000000000",
+      },
+      subject: artifactsImageDataMock.image,
+      issuer: "https://token.actions.githubusercontent.com",
+      timestamp: "2025-11-06T10:05:00Z",
+      status: {
+        verified: false,
+        rekor: "missing",
+      },
+      rekorEntry: undefined,
+    },
+  ],
 };

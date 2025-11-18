@@ -14,10 +14,13 @@ import {
   Label,
 } from "@patternfly/react-core";
 import { PlusCircleIcon } from "@patternfly/react-icons";
-
 import type { IArtifactResultsProps } from "./ArtifactResults";
 
-export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
+export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResultsProps) => {
+  const { summary } = verification;
+  const identities = summary.identities ?? [];
+  const timeCoherence = summary.timeCoherence;
+
   const summaryCards = [
     <Card key="artifact-summary" isPlain>
       <CardBody>
@@ -76,7 +79,12 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <a href="#">builder@...</a>, <a href="#">GitHub OIDC</a>, <a href="#">release@...</a>
+              {identities.map((identity, index) => (
+                <span key={identity.id}>
+                  <a href="#">{identity.value}</a>
+                  {index < identities.length - 1 && ", "}
+                </span>
+              ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -87,7 +95,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
               <Label className="pf-v6-u-mb-sm" color="blue">
-                2 Signatures
+                {summary.signatureCount} Signatures
               </Label>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -107,7 +115,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
               <Label className="pf-v6-u-mb-sm" color="green">
-                2 Attestations
+                {summary.attestationCount} Attestations
               </Label>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -119,7 +127,7 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
               <Label className="pf-v6-u-mb-sm" color="orange">
-                4 Rekor Entries
+                {summary.rekorEntryCount} Rekor Entries
               </Label>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -129,7 +137,11 @@ export const ArtifactResultsSummary = ({ artifact }: IArtifactResultsProps) => {
                 <DescriptionListTermHelpTextButton> Time Coherence </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>XYZ</DescriptionListDescription>
+            <DescriptionListDescription>
+              {timeCoherence.status === "ok"
+                ? `OK (${timeCoherence.minIntegratedTime} – ${timeCoherence.maxIntegratedTime})`
+                : timeCoherence.status}
+            </DescriptionListDescription>
           </DescriptionListGroup>
         </DescriptionList>
       </CardBody>

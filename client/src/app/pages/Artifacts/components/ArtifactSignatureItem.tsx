@@ -1,4 +1,3 @@
-import type { Signature } from "@app/client";
 import {
   Content,
   ContentVariants,
@@ -21,11 +20,14 @@ import {
   CodeBlockAction,
   ClipboardCopyButton,
   ExpandableSection,
+  type TreeViewDataItem,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState, type MouseEvent } from "react";
+import type { SignatureView } from "@app/queries/artifacts";
 
-export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) => {
+export const ArtifactSignatureItem = ({ signature, key }: { signature: SignatureView; key: string }) => {
+  const [activeItems, setActiveItems] = useState<TreeViewDataItem[]>();
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -65,14 +67,31 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
     </>
   );
 
+  const onSelectCertChain = (_event: MouseEvent, treeViewItem: TreeViewDataItem) => {
+    // ignore folders for selection
+    if (treeViewItem && !treeViewItem.children) {
+      setActiveItems([treeViewItem]);
+    }
+  };
+
+  const displayIdentity = signature.identity.san ?? "Unknown identity";
+  const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value.slice(0, 8)}`;
+  const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
+  const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
+  const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
+  const verificationStatusDisplay = `${signatureStatusBadge} / ${rekorStatusBadge} / ${chainStatusBadge}`;
+  const rekorEntryLabel = signature.rekorEntry
+    ? `Entry #${signature.rekorEntry.logIndex} (UUID ${signature.rekorEntry.uuid})`
+    : "No Rekor entry";
+
   return (
     <DataListItem aria-labelledby="signature-item-1" key="sig-1" isExpanded={isExpanded}>
       <DataListItemRow>
         <DataListToggle
           onClick={handleToggleSignatureItem}
           isExpanded={isExpanded}
-          id="ex-toggle1"
-          aria-controls="sig-expand1"
+          id={`signature-toggle-${key}`}
+          aria-controls={`sig-expand-${key}`}
         />
         <DataListItemCells
           dataListCells={[
@@ -90,8 +109,8 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
           ]}
         />
         <DataListAction
-          aria-labelledby="signature-item-1 signature-action-1"
-          id="signature-action-1"
+          aria-labelledby={`signature-item-${key} signature-action-${key}`}
+          id={`signature-action-${key}`}
           aria-label="Actions"
         >
           <Dropdown
@@ -122,8 +141,8 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
         </DataListAction>
       </DataListItemRow>
       <DataListContent aria-label="Signature expandable content details" id="sig-expand1" isHidden={!isExpanded}>
-        <CodeBlock actions={getSharedCodeBlockActions(signature.signature, "signature-code")}>
-          <CodeBlockCode id="code-content">{signature.signature}</CodeBlockCode>
+        <CodeBlock actions={getSharedCodeBlockActions(signature.hash.value, "signature-code")}>
+          <CodeBlockCode id="code-content">{signature.hash.value}</CodeBlockCode>
         </CodeBlock>
         <Panel>
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
@@ -146,7 +165,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
             Rekor Entry
           </Content>
           <CodeBlock>
-            <CodeBlockCode id="code-content">{String.raw`Entry #128904331 (UUID abcd...1234)`}</CodeBlockCode>
+            <CodeBlockCode id="code-content">{rekorEntryLabel}</CodeBlockCode>
           </CodeBlock>
         </Panel>
       </DataListContent>

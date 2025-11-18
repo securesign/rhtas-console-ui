@@ -1,14 +1,15 @@
 import type { AxiosError } from "axios";
-
 import { client } from "@app/axios-config/apiInit";
 import {
   getApiV1ArtifactsImage,
-  type PostApiV1ArtifactsVerifyResponse,
   type _Error,
   type ImageMetadataResponse,
+  postApiV1ArtifactsVerify,
+  type VerifyArtifactRequest,
 } from "@app/client";
 import { useMockableMutation, useMockableQuery } from "./helpers";
-import { artifactsImageDataMock, artifactsVerificationMock } from "./mocks/artifacts.mock";
+import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const ArtifactsKeys = {
@@ -36,34 +37,70 @@ export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undef
   return { artifact: data, isFetching: isLoading, fetchError: error, refetch };
 };
 
+// Variables accepted by the verify mutation. This represents the data we send to the
+// backend (request), which is separate from the view-model we use for rendering
+// (ArtifactVerificationViewModel).
+interface IVerifyArtifactVariables {
+  uri: string;
+  expectedSAN?: string | null;
+}
+
 export const useVerifyArtifact = () => {
   const queryClient = useQueryClient();
-  return useMockableMutation<PostApiV1ArtifactsVerifyResponse | null, AxiosError<_Error>, VerifyArtifactDraft>(
+
+  // NOTE:
+  // - TData: ArtifactVerificationViewModel   → what the UI consumes
+  // - TError: AxiosError<_Error>             → error shape from the SDK
+  // - TVariables: IVerifyArtifactVariables   → what the caller passes in (uri, expectedSAN, etc.)
+  return useMockableMutation<ArtifactVerificationViewModel, AxiosError<_Error>, IVerifyArtifactVariables>(
     {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      mutationFn: async (draft) => {
-        // if the backend/types aren't ready (e.g., missing SAN), return a mock/null
-        if (!draft.expectedSAN) {
-          return null;
+      mutationFn: async ({ uri, expectedSAN }: IVerifyArtifactVariables) => {
+        // For now, the backend still returns VerifyArtifactResponse, not the full
+        // ArtifactVerificationViewModel. We keep calling the SDK so wiring is in place,
+        // but we return the locally defined view-model mock until the API contract is
+        // updated and we can map the response into the view-model shape.
+        const body: VerifyArtifactRequest = {
+          expectedSAN: expectedSAN ?? null,
+          // TEMP: accept any issuer
+          expectedOIDIssuerRegex: ".*",
+          ociImage: uri,
+        };
+
+        try {
+          await postApiV1ArtifactsVerify({
+            client,
+            body,
+          });
+        } catch (e) {
+          // Let useMockableMutation / React Query surface the error
+          throw e;
         }
 
-        // map the draft payload into the SDK body shape. Include only fields we know.
-        // const res = await postApiV1ArtifactsVerify({
-        //   client,
-        //   body: {
-        //     // the SDK requires `expectedSAN` (string | null); ensure it exists when we reach here
-        //     expectedSAN: draft.expectedSAN ?? null,
-        //     // use `ociImage` for the artifact reference (since `uri` isn't in the SDK type)
-        //     ociImage: draft.uri,
-        //   } as VerifyArtifactRequest,
-        // });
-        // return res.data ?? null;
-        return null;
+        // Temporary: always return the mock view-model. When the backend is
+        // updated to return this shape (or something close to it), this is
+        // where we will adapt `res.data` into `ArtifactVerificationViewModel`.
+        return artifactVerificationViewModelMock;
       },
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: ArtifactsKeys.all });
       },
     },
-    artifactsVerificationMock
+    artifactVerificationViewModelMock
   );
 };
+
+// Re-export view-model types so consumers don't have to import from the mocks module.
+export type {
+  ArtifactVerificationViewModel,
+  ArtifactIdentity,
+  TimeCoherenceSummary,
+  ArtifactSummaryView,
+  ParsedCertificate,
+  CertificateRole,
+  SignatureVerificationStatus,
+  SignatureStatus,
+  HashSummary,
+  SignatureView,
+  AttestationStatus,
+  AttestationView,
+} from "./mocks/artifacts.mock";

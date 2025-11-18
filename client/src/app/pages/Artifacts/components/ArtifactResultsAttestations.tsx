@@ -1,3 +1,4 @@
+import type { AttestationView } from "@app/queries/artifacts";
 import {
   ClipboardCopy,
   Content,
@@ -13,51 +14,65 @@ import {
 } from "@patternfly/react-core";
 import { useState } from "react";
 
-export const ArtifactResultsAttestations = ({ attestations }: { attestations?: string[] }) => {
-  console.table(attestations);
+interface ArtifactResultsAttestationsProps {
+  attestations: AttestationView[];
+}
+
+export const ArtifactResultsAttestations = ({ attestations }: ArtifactResultsAttestationsProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  const handleToggleAttestationItem = (index: number) => {
-    setExpandedIndex((prev) => (prev === index ? null : index));
+  const onToggle = (index: number) => {
+    setExpandedIndex(index === expandedIndex ? null : index);
   };
 
   return (
-    <DataList aria-label="Attestations list" isCompact>
-      {attestations?.map((attestation, idx) => {
+    <DataList aria-label="Artifact attestations list">
+      {attestations.map((attestation, idx) => {
         const isExpanded = expandedIndex === idx;
         return (
-          <DataListItem aria-labelledby={`att-item-${idx}`} key={`att-${idx}`} isExpanded={isExpanded}>
+          <DataListItem key={idx} aria-labelledby={`attestation-item-${idx}`} isExpanded={isExpanded}>
             <DataListItemRow>
               <DataListToggle
-                onClick={() => handleToggleAttestationItem(idx)}
+                onClick={() => onToggle(idx)}
                 isExpanded={isExpanded}
-                id={`att-toggle-${idx}`}
-                aria-controls={`att-expand-${idx}`}
+                id={`attestation-toggle-${idx}`}
+                aria-controls={`attestation-expand-${idx}`}
               />
               <DataListItemCells
                 dataListCells={[
                   <DataListCell key="identity">
-                    <span id="compact-item1">ryordan@redhat.com</span>
+                    <span id={`att-identity-${idx}`}>{attestation.subject ?? "Unknown subject"}</span>
                   </DataListCell>,
                   <DataListCell key="digest">
                     <ClipboardCopy hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
-                      sha256:77db
+                      {`${attestation.digest.algorithm}:${attestation.digest.value.slice(0, 8)}`}
                     </ClipboardCopy>
                   </DataListCell>,
-                  <DataListCell key="signatureType">DSSE</DataListCell>,
-                  <DataListCell key="integratedTime">4 months ago </DataListCell>,
-                  <DataListCell key="verificationStatus">Signature ✓ / Rekor ✓ / Chain ✓</DataListCell>,
+                  <DataListCell key="attestationType">
+                    {attestation.predicateType ?? attestation.kind ?? "Unknown"}
+                  </DataListCell>,
+                  <DataListCell key="timestamp">{attestation.timestamp ?? "Unknown time"}</DataListCell>,
+                  <DataListCell key="verificationStatus">
+                    {`${attestation.status.verified ? "Attestation ✓" : "Attestation ✗"} / ${
+                      attestation.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗"
+                    }`}
+                  </DataListCell>,
                 ]}
               />
             </DataListItemRow>
-            <DataListContent
-              aria-label="Attestation expandable content details"
-              id={`att-expand-${idx}`}
-              isHidden={!isExpanded}
-            >
+            <DataListContent aria-label="Attestation details" id={`attestation-expand-${idx}`} isHidden={!isExpanded}>
               <Panel>
-                <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-                  Attestation
+                <Content component={ContentVariants.small}>
+                  <strong>Subject:</strong> {attestation.subject ?? "Unknown"}
+                  <br />
+                  <strong>Predicate type:</strong> {attestation.predicateType ?? "Unknown"}
+                  <br />
+                  <strong>Digest:</strong> {attestation.digest.algorithm}:{attestation.digest.value}
+                  <br />
+                  <strong>Rekor entry:</strong>{" "}
+                  {attestation.rekorEntry
+                    ? `Entry #${attestation.rekorEntry.logIndex} (UUID ${attestation.rekorEntry.uuid})`
+                    : "No Rekor entry"}
                 </Content>
               </Panel>
             </DataListContent>
