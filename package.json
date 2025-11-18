@@ -23,12 +23,16 @@
     "start:dev:client": "npm run start:dev -w client",
     "start:dev": "npm run build -w common && concurrently -n common,client -c 'white.bold.inverse,green.bold.inverse,blue.bold.inverse' 'npm:start:dev:common' 'npm:start:dev:client'",
     "start": "npm run build -w common -w client && npm run start -w server",
-    "test": "npm run build -w common && npm run test -w common -w client -w server --if-present --"
+    "test": "npm run build -w common && npm run test -w common -w client -w server --if-present --",
+    "e2e:test": "npm run test -w e2e --if-present --",
+    "e2e:test:trace": "npm run test:trace -w e2e --if-present --",
+    "e2e:test:host": "npm run test:ui:host -w e2e --if-present --"
   },
   "workspaces": [
     "common",
     "client",
-    "server"
+    "server",
+    "e2e"
   ],
   "dependencies": {
     "@types/express": "^5.0.3",
