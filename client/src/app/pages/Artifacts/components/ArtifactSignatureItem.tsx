@@ -1,4 +1,3 @@
-import type { Signature } from "@app/client";
 import {
   Content,
   ContentVariants,
@@ -20,15 +19,24 @@ import {
   Panel,
   CodeBlockAction,
   ClipboardCopyButton,
-  ExpandableSection,
+  Timestamp,
+  TimestampTooltipVariant,
+  TreeView,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
+import type { SignatureView } from "@app/queries/artifacts";
+import { signatureRelativeDateString } from "../utils/date";
+import { buildCertificateTree } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
-export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) => {
+export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
+
+  const key = signature.hash.value.toString();
 
   const handleToggleSignatureItem = () => {
     setIsExpanded(!isExpanded);
@@ -39,6 +47,12 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
   const handleActionSelect = () => {
     // TODO: probably some logic there
     setActionsOpened(false);
+  };
+
+  const openInRekorSearch = () => {
+    if (signature.rekorEntry) {
+      navigate(`/rekor-search?uuid=${signature.rekorEntry.uuid}`);
+    }
   };
 
   const handleCopyCode = (code: string, id: string) => {
@@ -52,18 +66,28 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
         <ClipboardCopyButton
           id="basic-copy-button"
           textId="code-content"
-          aria-label="Copy to clipboard"
+          aria-label="Copy PEM to clipboard"
           onClick={() => handleCopyCode(code, id)}
           exitDelay={codeCopiedIndex === id ? 1500 : 600}
           maxWidth="110px"
           variant="plain"
           onTooltipHidden={() => setCodeCopiedIndex(null)}
         >
-          {codeCopiedIndex === id ? "Successfully copied to clipboard!" : "Copy to clipboard"}
+          {codeCopiedIndex === id ? "Successfully copied PEM to clipboard!" : "Copy PEM to clipboard"}
         </ClipboardCopyButton>
       </CodeBlockAction>
     </>
   );
+
+  const displayIdentity = signature.identity.san ?? "Unknown identity";
+  const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value.slice(0, 8)}`;
+  const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
+  const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
+  const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
+  const verificationStatusDisplay = `${signatureStatusBadge} / ${rekorStatusBadge} / ${chainStatusBadge}`;
+  const rekorEntryLabel = signature.rekorEntry
+    ? `Entry #${signature.rekorEntry.logIndex} (UUID ${signature.rekorEntry.uuid})`
+    : "No Rekor entry";
 
   return (
     <DataListItem aria-labelledby="signature-item-1" key="sig-1" isExpanded={isExpanded}>
@@ -71,27 +95,35 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
         <DataListToggle
           onClick={handleToggleSignatureItem}
           isExpanded={isExpanded}
-          id="ex-toggle1"
-          aria-controls="sig-expand1"
+          id={`signature-toggle-${key}`}
+          aria-controls={`sig-expand-${key}`}
         />
         <DataListItemCells
           dataListCells={[
             <DataListCell key="identity">
-              <span id="compact-item1">ryordan@redhat.com</span>
+              <span id="compact-item1">{displayIdentity}</span>
             </DataListCell>,
             <DataListCell key="digest">
               <ClipboardCopy hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
-                sha256:77db
+                {digestDisplay}
               </ClipboardCopy>
             </DataListCell>,
-            <DataListCell key="signatureType">hashedrekord</DataListCell>,
-            <DataListCell key="integratedTime">4 months ago </DataListCell>,
-            <DataListCell key="verificationStatus">Signature ✓ / Rekor ✓ / Chain ✓</DataListCell>,
+            <DataListCell key="signatureType">{signature.kind}</DataListCell>,
+            <DataListCell key="integratedTime">
+              {signature.timestamp ? (
+                <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(signature.timestamp)}>
+                  {signatureRelativeDateString(new Date(signature.timestamp))}
+                </Timestamp>
+              ) : (
+                "N/A"
+              )}
+            </DataListCell>,
+            <DataListCell key="verificationStatus">{verificationStatusDisplay}</DataListCell>,
           ]}
         />
         <DataListAction
-          aria-labelledby="signature-item-1 signature-action-1"
-          id="signature-action-1"
+          aria-labelledby={`signature-item-${key} signature-action-${key}`}
+          id={`signature-action-${key}`}
           aria-label="Actions"
         >
           <Dropdown
@@ -111,7 +143,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
             onOpenChange={setActionsOpened}
           >
             <DropdownList>
-              <DropdownItem key="link" to="#" onClick={(event: MouseEvent) => event.preventDefault()}>
+              <DropdownItem key="link" to="#" onClick={openInRekorSearch}>
                 Open in Rekor Search
               </DropdownItem>
               <DropdownItem key="download bundle" isDisabled>
@@ -122,31 +154,26 @@ export const ArtifactSignatureItem = ({ signature }: { signature: Signature }) =
         </DataListAction>
       </DataListItemRow>
       <DataListContent aria-label="Signature expandable content details" id="sig-expand1" isHidden={!isExpanded}>
-        <CodeBlock actions={getSharedCodeBlockActions(signature.signature, "signature-code")}>
-          <CodeBlockCode id="code-content">{signature.signature}</CodeBlockCode>
+        <CodeBlock actions={getSharedCodeBlockActions(signature.hash.value, "signature-code")}>
+          <CodeBlockCode id="code-content">{signature.hash.value}</CodeBlockCode>
         </CodeBlock>
         <Panel>
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
             Certificate Chain
           </Content>
-          {signature.certificateChain.map((cert, index) => (
-            <ExpandableSection
-              key={`cert-${index}`}
-              toggleText={`Certificate ${index + 1}`}
-              style={{ marginBottom: "1em" }}
-            >
-              <CodeBlock actions={getSharedCodeBlockActions(cert, `cert-code-${index}`)}>
-                <CodeBlockCode id={`cert-code-${index}`}>{cert}</CodeBlockCode>
-              </CodeBlock>
-            </ExpandableSection>
-          ))}
+          <TreeView
+            hasAnimations
+            hasGuides
+            aria-label="Certificate chain"
+            data={buildCertificateTree(signature.certificateChain)}
+          />
         </Panel>
         <Panel>
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
             Rekor Entry
           </Content>
           <CodeBlock>
-            <CodeBlockCode id="code-content">{String.raw`Entry #128904331 (UUID abcd...1234)`}</CodeBlockCode>
+            <CodeBlockCode id="code-content">{rekorEntryLabel}</CodeBlockCode>
           </CodeBlock>
         </Panel>
       </DataListContent>

@@ -64,7 +64,7 @@ export const buildConsoleEnv = ({
   NODE_ENV = "production",
   PORT,
   VERSION = "99.0.0",
-  MOCK = "on",
+  MOCK = "off",
 
   OIDC_SERVER_URL,
   OIDC_SERVER_IS_EMBEDDED = "false",

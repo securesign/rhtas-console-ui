@@ -1,4 +1,5 @@
 import type { ImageMetadataResponse } from "@app/client";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import {
   Button,
   Card,
@@ -20,9 +21,10 @@ import { ArtifactResultsAttestations } from "./ArtifactResultsAttestations";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
+  verification: ArtifactVerificationViewModel;
 }
 
-export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
+export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProps) => {
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
 
   const handleTabClick = (
@@ -49,7 +51,7 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
         <CardBody>
           <Panel style={{ margin: "0.75em auto" }}>
             {/** ARTIFACT RESULTS SUMMARY */}
-            <ArtifactResultsSummary artifact={artifact} />
+            <ArtifactResultsSummary artifact={artifact} verification={verification} />
           </Panel>
           <Panel style={{ marginTop: "1.25em" }}>
             <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
@@ -59,11 +61,11 @@ export const ArtifactResults = ({ artifact }: IArtifactResultsProps) => {
                 aria-label="Default content - signatures"
               >
                 {/** SIGNATURES */}
-                <ArtifactResultsSignatures signatures={artifact.signatures} />
+                <ArtifactResultsSignatures signatures={verification.signatures} />
               </Tab>
               <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
                 {/** ATTESTATIONS */}
-                <ArtifactResultsAttestations attestations={artifact.attestations} />
+                <ArtifactResultsAttestations attestations={verification.attestations} />
               </Tab>
             </Tabs>
           </Panel>

@@ -14,7 +14,7 @@ import {
   Popover,
   TextInput,
 } from "@patternfly/react-core";
-import { useFetchArtifactsImageData } from "@app/queries/artifacts";
+import { useFetchArtifactsImageData, useVerifyArtifact } from "@app/queries/artifacts";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { ArtifactResults } from "./components/ArtifactResults";
 import { Controller, useForm } from "react-hook-form";
@@ -36,6 +36,8 @@ export const Artifacts = () => {
     fetchError: fetchErrorArtifactMetadata,
   } = useFetchArtifactsImageData({ uri: artifactUri });
 
+  const { mutate: verifyArtifact, data: verification, error: verifyError } = useVerifyArtifact();
+
   const {
     control,
     handleSubmit,
@@ -53,6 +55,8 @@ export const Artifacts = () => {
     const uri = data.searchInput?.trim();
     if (!uri) return;
     setArtifactUri(uri);
+    // kick off verification for this URI as well
+    verifyArtifact({ uri, expectedSAN: null });
   };
 
   const query = watch("searchInput");
@@ -138,8 +142,8 @@ export const Artifacts = () => {
         </Form>
       </PageSection>
       <PageSection>
-        <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata}>
-          {artifact && <ArtifactResults artifact={artifact} />}
+        <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata ?? verifyError}>
+          {artifact && verification && <ArtifactResults artifact={artifact} verification={verification} />}
         </LoadingWrapper>
       </PageSection>
     </Fragment>
