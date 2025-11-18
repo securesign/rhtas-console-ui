@@ -20,14 +20,12 @@ import {
   CodeBlockAction,
   ClipboardCopyButton,
   ExpandableSection,
-  type TreeViewDataItem,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState, type MouseEvent } from "react";
 import type { SignatureView } from "@app/queries/artifacts";
 
 export const ArtifactSignatureItem = ({ signature, key }: { signature: SignatureView; key: string }) => {
-  const [activeItems, setActiveItems] = useState<TreeViewDataItem[]>();
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -54,25 +52,18 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
         <ClipboardCopyButton
           id="basic-copy-button"
           textId="code-content"
-          aria-label="Copy to clipboard"
+          aria-label="Copy PEM to clipboard"
           onClick={() => handleCopyCode(code, id)}
           exitDelay={codeCopiedIndex === id ? 1500 : 600}
           maxWidth="110px"
           variant="plain"
           onTooltipHidden={() => setCodeCopiedIndex(null)}
         >
-          {codeCopiedIndex === id ? "Successfully copied to clipboard!" : "Copy to clipboard"}
+          {codeCopiedIndex === id ? "Successfully copied PEM to clipboard!" : "Copy PEM to clipboard"}
         </ClipboardCopyButton>
       </CodeBlockAction>
     </>
   );
-
-  const onSelectCertChain = (_event: MouseEvent, treeViewItem: TreeViewDataItem) => {
-    // ignore folders for selection
-    if (treeViewItem && !treeViewItem.children) {
-      setActiveItems([treeViewItem]);
-    }
-  };
 
   const displayIdentity = signature.identity.san ?? "Unknown identity";
   const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value.slice(0, 8)}`;
@@ -154,8 +145,8 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
               toggleText={`Certificate ${index + 1}`}
               style={{ marginBottom: "1em" }}
             >
-              <CodeBlock actions={getSharedCodeBlockActions(cert, `cert-code-${index}`)}>
-                <CodeBlockCode id={`cert-code-${index}`}>{cert}</CodeBlockCode>
+              <CodeBlock actions={getSharedCodeBlockActions(cert.pem, `cert-code-${index}`)}>
+                <CodeBlockCode id={`cert-code-${index}`}>{cert.pem}</CodeBlockCode>
               </CodeBlock>
             </ExpandableSection>
           ))}
