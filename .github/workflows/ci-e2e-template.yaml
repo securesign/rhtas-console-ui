@@ -54,6 +54,13 @@ jobs:
   check-images:
     runs-on: ubuntu-latest
     steps:
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+
       - name: Download artifact
         if: "${{ inputs.artifact != '' }}"
         uses: actions/download-artifact@v5
