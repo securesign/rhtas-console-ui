@@ -66,15 +66,10 @@ export const useVerifyArtifact = () => {
           ociImage: uri,
         };
 
-        try {
-          await postApiV1ArtifactsVerify({
-            client,
-            body,
-          });
-        } catch (e) {
-          // Let useMockableMutation / React Query surface the error
-          throw e;
-        }
+        await postApiV1ArtifactsVerify({
+          client,
+          body,
+        });
 
         // Temporary: always return the mock view-model. When the backend is
         // updated to return this shape (or something close to it), this is

@@ -1,8 +1,5 @@
 import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
-export interface IImageMetadataResponseDraft extends ImageMetadataResponse {}
-
-export interface IVerifyArtifactResponseDraft extends VerifyArtifactResponse {}
 // Download verification bundle: we can expose a “Download verification details” button by serialising VerifyArtifactResponse.details as JSON, if that contains the Sigstore bundle.
 
 // View-model types for the Artifacts designs. These sit on top of the raw API types
@@ -97,13 +94,13 @@ export interface AttestationView {
 // High-level view model returned by the verification endpoint once it
 // is extended to include structured signature/attestation/rekor data.
 export interface ArtifactVerificationViewModel {
-  artifact: IImageMetadataResponseDraft;
+  artifact: ImageMetadataResponse;
   summary: ArtifactSummaryView;
   signatures: SignatureView[];
   attestations: AttestationView[];
 }
 
-export const artifactsImageDataMock: IImageMetadataResponseDraft = {
+export const artifactsImageDataMock: ImageMetadataResponse = {
   image: "ttl.sh/rhtas/test-image:1h",
 
   // container image metadata
@@ -376,7 +373,7 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
   ],
 };
 
-export const artifactsVerificationInvalidMock: IVerifyArtifactResponseDraft = {
+export const artifactsVerificationInvalidMock: VerifyArtifactResponse = {
   verified: false,
   details: {
     reason: "Signature verification failed",
