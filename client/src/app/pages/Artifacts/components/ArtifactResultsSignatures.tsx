@@ -3,11 +3,10 @@ import { ArtifactSignatureItem } from "./ArtifactSignatureItem";
 import type { Signatures } from "@app/client";
 
 export const ArtifactResultsSignatures = ({ signatures }: { signatures?: Signatures }) => {
-  console.table(signatures);
   return (
     <DataList aria-label="Signatures list" isCompact>
-      {signatures?.map((signature, id) => (
-        <ArtifactSignatureItem signature={signature} key={id} />
+      {signatures?.map((signature) => (
+        <ArtifactSignatureItem signature={signature} key={signature.signature.toString()} />
       ))}
     </DataList>
   );
