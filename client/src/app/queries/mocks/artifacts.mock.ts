@@ -19,12 +19,15 @@ export interface TimeCoherenceSummary {
   maxIntegratedTime?: string; // ISO string
 }
 
+export type ArtifactOverallStatus = "verified" | "partially-verified" | "failed" | "unsigned" | "error" | "unknown";
+
 export interface ArtifactSummaryView {
   identities: ArtifactIdentity[];
   signatureCount: number;
   attestationCount: number;
   rekorEntryCount: number;
   timeCoherence: TimeCoherenceSummary;
+  overallStatus: ArtifactOverallStatus;
 }
 
 export type CertificateRole = "leaf" | "intermediate" | "root";
@@ -158,6 +161,7 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       minIntegratedTime: "2025-11-06T08:59:07Z",
       maxIntegratedTime: "2025-11-06T09:09:07Z",
     },
+    overallStatus: "unknown"
   },
   signatures: [
     {
@@ -401,6 +405,7 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
       minIntegratedTime: undefined,
       maxIntegratedTime: undefined,
     },
+    overallStatus: "verified"
   },
   signatures: [
     {

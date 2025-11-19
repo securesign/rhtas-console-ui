@@ -1,5 +1,5 @@
 import type { ImageMetadataResponse } from "@app/client";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
+import type { ArtifactOverallStatus, ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import {
   Button,
   Card,
@@ -9,10 +9,12 @@ import {
   ContentVariants,
   Flex,
   FlexItem,
+  Label,
   Panel,
   Tab,
   Tabs,
   TabTitleText,
+  type LabelProps,
 } from "@patternfly/react-core";
 import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
 import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
@@ -34,6 +36,30 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
     setActiveTabKey(tabIndex);
   };
 
+  const { overallStatus } = verification.summary;
+
+  function verificationStatusToLabelColor(status: ArtifactOverallStatus): {
+    label: string;
+    color: LabelProps["color"];
+  } {
+    switch (status) {
+      case "verified":
+        return { label: "Verified", color: "green" };
+      case "partially-verified":
+        return { label: "Partially verified", color: "orange" };
+      case "failed":
+        return { label: "Verification failed", color: "red" };
+      case "unsigned":
+        return { label: "Not signed", color: "grey" };
+      case "error":
+        return { label: "Verification error", color: "red" };
+      default:
+        return { label: "Unknown", color: "grey" };
+    }
+  }
+
+  const { label, color } = verificationStatusToLabelColor(overallStatus);
+
   return (
     <div style={{ margin: "2em auto" }}>
       <p>Showing 1 of 1</p>
@@ -44,7 +70,9 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
               <FlexItem>
                 Artifact: <Button variant="plain">{artifact.image}</Button>
               </FlexItem>
-              <FlexItem align={{ default: "alignRight" }}>Verified ✓</FlexItem>
+              <FlexItem align={{ default: "alignRight" }}>
+                <Label color={color}>{label}</Label>
+              </FlexItem>
             </Flex>
           </Content>
         </CardHeader>

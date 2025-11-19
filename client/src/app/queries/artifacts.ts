@@ -11,6 +11,7 @@ import { useMockableMutation, useMockableQuery } from "./helpers";
 import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
 import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import { useQueryClient } from "@tanstack/react-query";
+import { deriveOverallVerificationStatus } from "@app/utils/utils";
 
 export const ArtifactsKeys = {
   all: ["Artifacts" as const],
@@ -55,7 +56,7 @@ export const useVerifyArtifact = () => {
   return useMockableMutation<ArtifactVerificationViewModel, AxiosError<_Error>, IVerifyArtifactVariables>(
     {
       mutationFn: async ({ uri, expectedSAN }: IVerifyArtifactVariables) => {
-        // For now, the backend still returns VerifyArtifactResponse, not the full
+        // for now, the backend still returns VerifyArtifactResponse, not the full
         // ArtifactVerificationViewModel. We keep calling the SDK so wiring is in place,
         // but we return the locally defined view-model mock until the API contract is
         // updated and we can map the response into the view-model shape.
@@ -71,10 +72,17 @@ export const useVerifyArtifact = () => {
           body,
         });
 
-        // Temporary: always return the mock view-model. When the backend is
-        // updated to return this shape (or something close to it), this is
-        // where we will adapt `res.data` into `ArtifactVerificationViewModel`.
-        return artifactVerificationViewModelMock;
+        const baseVm = artifactVerificationViewModelMock;
+
+        const overallStatus = deriveOverallVerificationStatus(baseVm);
+
+        return {
+          ...baseVm,
+          summary: {
+            ...baseVm.summary,
+            overallStatus,
+          },
+        };
       },
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: ArtifactsKeys.all });
@@ -84,18 +92,19 @@ export const useVerifyArtifact = () => {
   );
 };
 
-// Re-export view-model types so consumers don't have to import from the mocks module.
+// re-export view-model types so consumers don't have to import from the mocks module.
 export type {
-  ArtifactVerificationViewModel,
   ArtifactIdentity,
-  TimeCoherenceSummary,
+  ArtifactOverallStatus,
   ArtifactSummaryView,
-  ParsedCertificate,
-  CertificateRole,
-  SignatureVerificationStatus,
-  SignatureStatus,
-  HashSummary,
-  SignatureView,
+  ArtifactVerificationViewModel,
   AttestationStatus,
   AttestationView,
+  CertificateRole,
+  HashSummary,
+  ParsedCertificate,
+  SignatureStatus,
+  SignatureVerificationStatus,
+  SignatureView,
+  TimeCoherenceSummary,
 } from "./mocks/artifacts.mock";
