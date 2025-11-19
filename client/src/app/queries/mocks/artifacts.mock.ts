@@ -1,107 +1,5 @@
 import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
-
-// Download verification bundle: we can expose a “Download verification details” button by serialising VerifyArtifactResponse.details as JSON, if that contains the Sigstore bundle.
-
-// View-model types for the Artifacts designs. These sit on top of the raw API types
-// and represent exactly what the UI needs to render the artifact, signatures,
-// certificate chain, attestations, and Rekor entries.
-export interface ArtifactIdentity {
-  id: string;
-  type: "email" | "oidc-issuer" | "other";
-  value: string;
-  source: "san" | "issuer" | "other";
-  issuer?: string;
-}
-
-export interface TimeCoherenceSummary {
-  status: "ok" | "warning" | "error" | "unknown";
-  minIntegratedTime?: string; // ISO string
-  maxIntegratedTime?: string; // ISO string
-}
-
-export type ArtifactOverallStatus = "verified" | "partially-verified" | "failed" | "unsigned" | "error" | "unknown";
-
-export interface ArtifactSummaryView {
-  identities: ArtifactIdentity[];
-  signatureCount: number;
-  attestationCount: number;
-  rekorEntryCount: number;
-  timeCoherence: TimeCoherenceSummary;
-  overallStatus: ArtifactOverallStatus;
-}
-
-export type CertificateRole = "leaf" | "intermediate" | "root";
-
-export interface ParsedCertificate {
-  role: CertificateRole;
-  subject: string;
-  issuer: string;
-  notBefore: string; // ISO string
-  notAfter: string; // ISO string
-  sans: string[];
-  serialNumber?: string;
-  isCa: boolean;
-  pem: string;
-}
-
-export type SignatureVerificationStatus = "verified" | "invalid" | "unverifiable" | "unknown";
-
-export interface SignatureStatus {
-  signature: SignatureVerificationStatus;
-  rekor: "present" | "missing" | "unknown";
-  chain: "valid" | "invalid" | "partial" | "unknown";
-}
-
-export interface HashSummary {
-  algorithm: string;
-  value: string;
-}
-
-export interface SignatureView {
-  id: string;
-  kind: "hashedrekord" | "other";
-  identity: {
-    san?: string;
-    issuer?: string;
-    issuerType?: string;
-  };
-  hash: HashSummary;
-  timestamp?: string; // ISO string for "x minutes ago" display
-  status: SignatureStatus;
-  certificateChain: ParsedCertificate[];
-  // A single Rekor entry associated with this signature, once the backend
-  // is updated to include it alongside the signature.
-  rekorEntry?: import("@app/client").RekorEntry;
-  rawBundleJson?: unknown; // or a typed SigstoreBundle
-}
-
-export interface AttestationStatus {
-  verified: boolean;
-  rekor: "present" | "missing" | "unknown";
-}
-
-export interface AttestationView {
-  id: string;
-  kind: "intoto" | "other";
-  predicateType?: string;
-  digest: HashSummary;
-  subject?: string;
-  issuer?: string;
-  timestamp?: string; // ISO string
-  status: AttestationStatus;
-  rekorEntry?: import("@app/client").RekorEntry;
-  rawStatementJson?: unknown;
-  rawBundleJson?: unknown;
-}
-
-// High-level view model returned by the verification endpoint once it
-// is extended to include structured signature/attestation/rekor data.
-export interface ArtifactVerificationViewModel {
-  artifact: ImageMetadataResponse;
-  summary: ArtifactSummaryView;
-  signatures: SignatureView[];
-  attestations: AttestationView[];
-}
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
   image: "ttl.sh/rhtas/test-image:1h",
@@ -125,7 +23,7 @@ export const artifactsImageDataMock: ImageMetadataResponse = {
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
 };
 
-// Draft view-model mock that matches the Artifacts designs. This is *not* what the
+// draft view-model mock that matches the Artifacts designs. This is *not* what the
 // API returns today, but represents the desired shape for the UI.
 export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = {
   artifact: artifactsImageDataMock,
@@ -161,7 +59,7 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       minIntegratedTime: "2025-11-06T08:59:07Z",
       maxIntegratedTime: "2025-11-06T09:09:07Z",
     },
-    overallStatus: "unknown"
+    overallStatus: "unknown",
   },
   signatures: [
     {
@@ -405,7 +303,7 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
       minIntegratedTime: undefined,
       maxIntegratedTime: undefined,
     },
-    overallStatus: "verified"
+    overallStatus: "verified",
   },
   signatures: [
     {

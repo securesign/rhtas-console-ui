@@ -1,4 +1,4 @@
-import type { ParsedCertificate } from "@app/queries/artifacts";
+import type { ParsedCertificate } from "@app/queries/artifacts.view-model";
 import type { TreeViewDataItem } from "@patternfly/react-core";
 
 export function buildCertificateTree(certificateChain: ParsedCertificate[]): TreeViewDataItem[] {

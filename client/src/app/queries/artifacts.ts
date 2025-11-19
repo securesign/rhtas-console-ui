@@ -7,10 +7,10 @@ import {
   postApiV1ArtifactsVerify,
   type VerifyArtifactRequest,
 } from "@app/client";
-import { useMockableMutation, useMockableQuery } from "./helpers";
+import { useMockableQuery } from "./helpers";
 import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
-import { useQueryClient } from "@tanstack/react-query";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deriveOverallVerificationStatus } from "@app/utils/utils";
 
 export const ArtifactsKeys = {
@@ -53,58 +53,37 @@ export const useVerifyArtifact = () => {
   // - TData: ArtifactVerificationViewModel   → what the UI consumes
   // - TError: AxiosError<_Error>             → error shape from the SDK
   // - TVariables: IVerifyArtifactVariables   → what the caller passes in (uri, expectedSAN, etc.)
-  return useMockableMutation<ArtifactVerificationViewModel, AxiosError<_Error>, IVerifyArtifactVariables>(
-    {
-      mutationFn: async ({ uri, expectedSAN }: IVerifyArtifactVariables) => {
-        // for now, the backend still returns VerifyArtifactResponse, not the full
-        // ArtifactVerificationViewModel. We keep calling the SDK so wiring is in place,
-        // but we return the locally defined view-model mock until the API contract is
-        // updated and we can map the response into the view-model shape.
-        const body: VerifyArtifactRequest = {
-          expectedSAN: expectedSAN ?? null,
-          // TEMP: accept any issuer
-          expectedOIDIssuerRegex: ".*",
-          ociImage: uri,
-        };
+  return useMutation<ArtifactVerificationViewModel, AxiosError<_Error>, IVerifyArtifactVariables>({
+    mutationFn: async ({ uri, expectedSAN }: IVerifyArtifactVariables) => {
+      // for now, the backend still returns VerifyArtifactResponse, not the full
+      // ArtifactVerificationViewModel. We keep calling the SDK so wiring is in place,
+      // but we return the locally defined view-model mock until the API contract is
+      // updated and we can map the response into the view-model shape.
+      const body: VerifyArtifactRequest = {
+        expectedSAN: expectedSAN ?? null,
+        // TEMP: accept any issuer
+        expectedOIDIssuerRegex: ".*",
+        ociImage: uri,
+      };
 
-        await postApiV1ArtifactsVerify({
-          client,
-          body,
-        });
+      await postApiV1ArtifactsVerify({
+        client,
+        body,
+      });
 
-        const baseVm = artifactVerificationViewModelMock;
+      const baseVm = artifactVerificationViewModelMock;
+      const overallStatus = deriveOverallVerificationStatus(baseVm);
 
-        const overallStatus = deriveOverallVerificationStatus(baseVm);
-
-        return {
-          ...baseVm,
-          summary: {
-            ...baseVm.summary,
-            overallStatus,
-          },
-        };
-      },
-      onSuccess: () => {
-        void queryClient.invalidateQueries({ queryKey: ArtifactsKeys.all });
-      },
+      return {
+        ...baseVm,
+        summary: {
+          ...baseVm.summary,
+          overallStatus,
+        },
+      };
     },
-    artifactVerificationViewModelMock
-  );
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ArtifactsKeys.all });
+    },
+  });
 };
-
-// re-export view-model types so consumers don't have to import from the mocks module.
-export type {
-  ArtifactIdentity,
-  ArtifactOverallStatus,
-  ArtifactSummaryView,
-  ArtifactVerificationViewModel,
-  AttestationStatus,
-  AttestationView,
-  CertificateRole,
-  HashSummary,
-  ParsedCertificate,
-  SignatureStatus,
-  SignatureVerificationStatus,
-  SignatureView,
-  TimeCoherenceSummary,
-} from "./mocks/artifacts.mock";

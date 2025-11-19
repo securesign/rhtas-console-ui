@@ -1,7 +1,7 @@
 import { RENDER_DATE_FORMAT } from "@app/Constants";
 import dayjs from "dayjs";
-import type { ArtifactVerificationViewModel, ArtifactOverallStatus } from "@app/queries/artifacts";
 import type { LabelProps } from "@patternfly/react-core";
+import type { ArtifactOverallStatus, ArtifactIdentity } from "@app/queries/artifacts.view-model";
 
 // minimal shape required for eslint, uses only we actually need
 // from the verification view-model
@@ -27,6 +27,21 @@ interface MinimalArtifactVerificationViewModel {
 }
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const dedupeIdentities = (identities: ArtifactIdentity[]): ArtifactIdentity[] => {
+  const seen = new Set<string>();
+
+  return identities.filter((identity) => {
+    const key = [identity.type, identity.value, identity.source, identity.issuer ?? ""].join("|");
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
 
 /**
  * Computes a verification status for an artifact
@@ -162,3 +177,7 @@ export const verificationStatusToLabelColor = (
       return { label: "Unknown", color: "grey" };
   }
 };
+
+export function relativeDateString(date: Date) {
+  return `${dayjs().to(date)}`;
+}

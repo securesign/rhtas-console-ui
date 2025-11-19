@@ -1,13 +1,12 @@
 import { useState } from "react";
 import type { ImageMetadataResponse } from "@app/client";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
   Content,
-  ContentVariants,
   Flex,
   FlexItem,
   Label,
@@ -39,11 +38,11 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
   };
 
   return (
-    <div style={{ margin: "2em auto" }}>
+    <div>
       <p>Showing 1 of 1</p>
-      <Card style={{ margin: "1.5em auto 2em", overflowY: "hidden" }}>
+      <Card style={{ overflowY: "hidden" }}>
         <CardHeader>
-          <Content component={ContentVariants.h4} style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+          <Content style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             <Flex className="border">
               <FlexItem>
                 Artifact: <Button variant="plain">{artifact.image}</Button>
@@ -55,11 +54,11 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
           </Content>
         </CardHeader>
         <CardBody>
-          <Panel style={{ margin: "0.75em auto" }}>
+          <Panel>
             {/** ARTIFACT RESULTS SUMMARY */}
             <ArtifactResultsSummary artifact={artifact} verification={verification} />
           </Panel>
-          <Panel style={{ marginTop: "1.25em" }}>
+          <Panel>
             <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
               <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Signatures">
                 {/** SIGNATURES */}

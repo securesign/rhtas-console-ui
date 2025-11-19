@@ -32,17 +32,19 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <ClipboardCopy truncation hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
+              <ClipboardCopy
+                truncation={{ maxCharsDisplayed: 14 }}
+                hoverTip="Copy"
+                clickTip="Copied"
+                variant="inline-compact"
+                isCode
+              >
                 {artifact.digest}
               </ClipboardCopy>
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Media Type</div>} bodyContent={<div>ref + resolved canonical digest</div>}>
-                <DescriptionListTermHelpTextButton> Media Type </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>Media Type</DescriptionListTermHelpText>
             <DescriptionListDescription>{artifact.metadata.mediaType}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -50,19 +52,11 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
             <DescriptionListDescription>{artifact.metadata.size}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Date</div>} bodyContent={<div>Date created</div>}>
-                <DescriptionListTermHelpTextButton> Created </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>Created</DescriptionListTermHelpText>
             <DescriptionListDescription>{formatDate(artifact.metadata.created)}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Labels</div>} bodyContent={<div>Additional labels info</div>}>
-                <DescriptionListTermHelpTextButton> Labels </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>Labels</DescriptionListTermHelpText>
             <DescriptionListDescription>
               <Button variant="link" isInline icon={<PlusCircleIcon />}>
                 {artifact.metadata.labels?.maintainer}
@@ -79,25 +73,18 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              {identities.map((identity, index) => (
-                <span key={identity.id}>
-                  <a href="#">{identity.value}</a>
-                  {index < identities.length - 1 && ", "}
-                </span>
+              {identities.map((identity) => (
+                <>
+                  <Label key={identity.id} isCompact>
+                    {identity.value}
+                  </Label>{" "}
+                </>
               ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Signatures</div>} bodyContent={<div>Additional labels info</div>}>
-                <DescriptionListTermHelpTextButton> Signatures </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" color="blue">
-                {summary.signatureCount} Signatures
-              </Label>
-            </DescriptionListDescription>
+            <DescriptionListTermHelpText>Signatures</DescriptionListTermHelpText>
+            <DescriptionListDescription>{summary.signatureCount} Signatures</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -113,11 +100,7 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
                 <DescriptionListTermHelpTextButton> Attestations </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" color="green">
-                {summary.attestationCount} Attestations
-              </Label>
-            </DescriptionListDescription>
+            <DescriptionListDescription>{summary.attestationCount} Attestations</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -125,11 +108,7 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
                 <DescriptionListTermHelpTextButton> Rekor Entries </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              <Label className="pf-v6-u-mb-sm" color="orange">
-                {summary.rekorEntryCount} Rekor Entries
-              </Label>
-            </DescriptionListDescription>
+            <DescriptionListDescription>{summary.rekorEntryCount} Rekor Entries</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -139,7 +118,7 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
               {timeCoherence.status === "ok"
-                ? `OK (${timeCoherence.minIntegratedTime} – ${timeCoherence.maxIntegratedTime})`
+                ? `OK (${formatDate(timeCoherence.minIntegratedTime)} – ${formatDate(timeCoherence.maxIntegratedTime)})`
                 : timeCoherence.status}
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -147,5 +126,6 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
       </CardBody>
     </Card>,
   ];
+
   return <MultiContentCard cards={summaryCards} />;
 };
