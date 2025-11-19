@@ -1,5 +1,6 @@
+import { useState } from "react";
 import type { ImageMetadataResponse } from "@app/client";
-import type { ArtifactOverallStatus, ArtifactVerificationViewModel } from "@app/queries/artifacts";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import {
   Button,
   Card,
@@ -14,12 +15,11 @@ import {
   Tab,
   Tabs,
   TabTitleText,
-  type LabelProps,
 } from "@patternfly/react-core";
 import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
 import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
-import { useState } from "react";
 import { ArtifactResultsAttestations } from "./ArtifactResultsAttestations";
+import { verificationStatusToLabelColor } from "@app/utils/utils";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
@@ -28,6 +28,8 @@ export interface IArtifactResultsProps {
 
 export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProps) => {
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
+  const { overallStatus } = verification.summary;
+  const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(overallStatus);
 
   const handleTabClick = (
     _event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
@@ -35,30 +37,6 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
   ) => {
     setActiveTabKey(tabIndex);
   };
-
-  const { overallStatus } = verification.summary;
-
-  function verificationStatusToLabelColor(status: ArtifactOverallStatus): {
-    label: string;
-    color: LabelProps["color"];
-  } {
-    switch (status) {
-      case "verified":
-        return { label: "Verified", color: "green" };
-      case "partially-verified":
-        return { label: "Partially verified", color: "orange" };
-      case "failed":
-        return { label: "Verification failed", color: "red" };
-      case "unsigned":
-        return { label: "Not signed", color: "grey" };
-      case "error":
-        return { label: "Verification error", color: "red" };
-      default:
-        return { label: "Unknown", color: "grey" };
-    }
-  }
-
-  const { label, color } = verificationStatusToLabelColor(overallStatus);
 
   return (
     <div style={{ margin: "2em auto" }}>
@@ -71,7 +49,7 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
                 Artifact: <Button variant="plain">{artifact.image}</Button>
               </FlexItem>
               <FlexItem align={{ default: "alignRight" }}>
-                <Label color={color}>{label}</Label>
+                <Label color={verificationLabelColor}>{verificationLabel}</Label>
               </FlexItem>
             </Flex>
           </Content>
@@ -83,15 +61,11 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
           </Panel>
           <Panel style={{ marginTop: "1.25em" }}>
             <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
-              <Tab
-                eventKey={0}
-                title={<TabTitleText>Signatures</TabTitleText>}
-                aria-label="Default content - signatures"
-              >
+              <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Signatures">
                 {/** SIGNATURES */}
                 <ArtifactResultsSignatures signatures={verification.signatures} />
               </Tab>
-              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
+              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>} aria-label="Attestations">
                 {/** ATTESTATIONS */}
                 <ArtifactResultsAttestations attestations={verification.attestations} />
               </Tab>

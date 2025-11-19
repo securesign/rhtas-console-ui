@@ -1,6 +1,7 @@
 import { RENDER_DATE_FORMAT } from "@app/Constants";
 import dayjs from "dayjs";
 import type { ArtifactVerificationViewModel, ArtifactOverallStatus } from "@app/queries/artifacts";
+import type { LabelProps } from "@patternfly/react-core";
 
 // minimal shape required for eslint, uses only we actually need
 // from the verification view-model
@@ -33,7 +34,7 @@ export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase(
  * @param vm ViewModel we use for extending API data shape
  * @returns A derived status
  */
-export function deriveOverallVerificationStatus(vm: MinimalArtifactVerificationViewModel): ArtifactOverallStatus {
+export const deriveOverallVerificationStatus = (vm: MinimalArtifactVerificationViewModel): ArtifactOverallStatus => {
   const { signatures, attestations, summary } = vm;
 
   const hasSignatures = signatures.length > 0;
@@ -83,7 +84,7 @@ export function deriveOverallVerificationStatus(vm: MinimalArtifactVerificationV
   }
 
   return "unknown";
-}
+};
 
 export const formatDate = (value?: string | null) => {
   return value ? dayjs(value).format(RENDER_DATE_FORMAT) : null;
@@ -138,4 +139,26 @@ export const stringMatcher = (filterValue: string, value: string) => {
   const lowerCaseItemValue = value.toLowerCase();
   const lowerCaseFilterValue = filterValue.toLowerCase();
   return lowerCaseItemValue.includes(lowerCaseFilterValue);
+};
+
+export const verificationStatusToLabelColor = (
+  status: ArtifactOverallStatus
+): {
+  label: string;
+  color: LabelProps["color"];
+} => {
+  switch (status) {
+    case "verified":
+      return { label: "Verified", color: "green" };
+    case "partially-verified":
+      return { label: "Partially verified", color: "orange" };
+    case "failed":
+      return { label: "Verification failed", color: "red" };
+    case "unsigned":
+      return { label: "Not signed", color: "grey" };
+    case "error":
+      return { label: "Verification error", color: "red" };
+    default:
+      return { label: "Unknown", color: "grey" };
+  }
 };
