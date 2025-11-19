@@ -30,11 +30,13 @@ import { signatureRelativeDateString } from "../utils/date";
 import { buildCertificateTree } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-export const ArtifactSignatureItem = ({ signature, key }: { signature: SignatureView; key: string }) => {
+export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+
+  const key = signature.hash.value.toString();
 
   const handleToggleSignatureItem = () => {
     setIsExpanded(!isExpanded);
