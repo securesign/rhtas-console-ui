@@ -19,16 +19,22 @@ import {
   Panel,
   CodeBlockAction,
   ClipboardCopyButton,
-  ExpandableSection,
+  Timestamp,
+  TimestampTooltipVariant,
+  TreeView,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
 import type { SignatureView } from "@app/queries/artifacts";
+import { signatureRelativeDateString } from "../utils/date";
+import { buildCertificateTree } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 export const ArtifactSignatureItem = ({ signature, key }: { signature: SignatureView; key: string }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggleSignatureItem = () => {
     setIsExpanded(!isExpanded);
@@ -39,6 +45,12 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
   const handleActionSelect = () => {
     // TODO: probably some logic there
     setActionsOpened(false);
+  };
+
+  const openInRekorSearch = () => {
+    if (signature.rekorEntry) {
+      navigate(`/rekor-search?uuid=${signature.rekorEntry.uuid}`);
+    }
   };
 
   const handleCopyCode = (code: string, id: string) => {
@@ -87,16 +99,24 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
         <DataListItemCells
           dataListCells={[
             <DataListCell key="identity">
-              <span id="compact-item1">ryordan@redhat.com</span>
+              <span id="compact-item1">{displayIdentity}</span>
             </DataListCell>,
             <DataListCell key="digest">
               <ClipboardCopy hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
-                sha256:77db
+                {digestDisplay}
               </ClipboardCopy>
             </DataListCell>,
-            <DataListCell key="signatureType">hashedrekord</DataListCell>,
-            <DataListCell key="integratedTime">4 months ago </DataListCell>,
-            <DataListCell key="verificationStatus">Signature ✓ / Rekor ✓ / Chain ✓</DataListCell>,
+            <DataListCell key="signatureType">{signature.kind}</DataListCell>,
+            <DataListCell key="integratedTime">
+              {signature.timestamp ? (
+                <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(signature.timestamp)}>
+                  {signatureRelativeDateString(new Date(signature.timestamp))}
+                </Timestamp>
+              ) : (
+                "N/A"
+              )}
+            </DataListCell>,
+            <DataListCell key="verificationStatus">{verificationStatusDisplay}</DataListCell>,
           ]}
         />
         <DataListAction
@@ -121,7 +141,7 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
             onOpenChange={setActionsOpened}
           >
             <DropdownList>
-              <DropdownItem key="link" to="#" onClick={(event: MouseEvent) => event.preventDefault()}>
+              <DropdownItem key="link" to="#" onClick={openInRekorSearch}>
                 Open in Rekor Search
               </DropdownItem>
               <DropdownItem key="download bundle" isDisabled>
@@ -139,17 +159,12 @@ export const ArtifactSignatureItem = ({ signature, key }: { signature: Signature
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
             Certificate Chain
           </Content>
-          {signature.certificateChain.map((cert, index) => (
-            <ExpandableSection
-              key={`cert-${index}`}
-              toggleText={`Certificate ${index + 1}`}
-              style={{ marginBottom: "1em" }}
-            >
-              <CodeBlock actions={getSharedCodeBlockActions(cert.pem, `cert-code-${index}`)}>
-                <CodeBlockCode id={`cert-code-${index}`}>{cert.pem}</CodeBlockCode>
-              </CodeBlock>
-            </ExpandableSection>
-          ))}
+          <TreeView
+            hasAnimations
+            hasGuides
+            aria-label="Certificate chain"
+            data={buildCertificateTree(signature.certificateChain)}
+          />
         </Panel>
         <Panel>
           <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
