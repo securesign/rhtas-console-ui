@@ -1,5 +1,13 @@
 import { test, expect } from "@playwright/test";
 
+test.describe("Rekor Search UI", () => {
+  test("should properly render home page", async ({ page }) => {
+    await page.goto("/");
+    // cy.get("body").should("contain", "Attribute");
+    // cy.get("body").should("contain", "Email");
+  });
+});
+
 test("has title", async ({ page }) => {
   await page.goto("https://playwright.dev/");
 
