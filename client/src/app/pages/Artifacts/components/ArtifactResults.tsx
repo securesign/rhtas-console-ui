@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { ImageMetadataResponse } from "@app/client";
 import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
 import {
@@ -9,6 +10,7 @@ import {
   ContentVariants,
   Flex,
   FlexItem,
+  Label,
   Panel,
   Tab,
   Tabs,
@@ -16,8 +18,8 @@ import {
 } from "@patternfly/react-core";
 import { ArtifactResultsSummary } from "./ArtifactResultsSummary";
 import { ArtifactResultsSignatures } from "./ArtifactResultsSignatures";
-import { useState } from "react";
 import { ArtifactResultsAttestations } from "./ArtifactResultsAttestations";
+import { verificationStatusToLabelColor } from "@app/utils/utils";
 
 export interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
@@ -26,6 +28,8 @@ export interface IArtifactResultsProps {
 
 export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProps) => {
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
+  const { overallStatus } = verification.summary;
+  const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(overallStatus);
 
   const handleTabClick = (
     _event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
@@ -44,7 +48,9 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
               <FlexItem>
                 Artifact: <Button variant="plain">{artifact.image}</Button>
               </FlexItem>
-              <FlexItem align={{ default: "alignRight" }}>Verified ✓</FlexItem>
+              <FlexItem align={{ default: "alignRight" }}>
+                <Label color={verificationLabelColor}>{verificationLabel}</Label>
+              </FlexItem>
             </Flex>
           </Content>
         </CardHeader>
@@ -55,15 +61,11 @@ export const ArtifactResults = ({ artifact, verification }: IArtifactResultsProp
           </Panel>
           <Panel style={{ marginTop: "1.25em" }}>
             <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
-              <Tab
-                eventKey={0}
-                title={<TabTitleText>Signatures</TabTitleText>}
-                aria-label="Default content - signatures"
-              >
+              <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Signatures">
                 {/** SIGNATURES */}
                 <ArtifactResultsSignatures signatures={verification.signatures} />
               </Tab>
-              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>}>
+              <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>} aria-label="Attestations">
                 {/** ATTESTATIONS */}
                 <ArtifactResultsAttestations attestations={verification.attestations} />
               </Tab>

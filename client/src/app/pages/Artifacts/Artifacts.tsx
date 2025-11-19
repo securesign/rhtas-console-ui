@@ -78,15 +78,20 @@ export const Artifacts = () => {
                 <Controller
                   name="searchInput"
                   control={control}
-                  rules={{ required: { value: true, message: "A value is required" } }}
+                  rules={{ required: { value: true, message: "A URI is required" } }}
                   render={({ field, fieldState }) => (
                     <FormGroup
-                      label="URI"
+                      label="Container Image URI"
                       labelHelp={
                         <Popover
                           triggerRef={labelHelpRef}
-                          headerContent={<div>URI of the container image</div>}
-                          bodyContent={<div>e.g., {PLACEHOLDER_URI}</div>}
+                          headerContent={<div>Uniform Resource Identifier (URI)</div>}
+                          bodyContent={
+                            <div>
+                              The URI identifies where a resource, like a container image, lives (e.g.,{" "}
+                              {PLACEHOLDER_URI})
+                            </div>
+                          }
                         >
                           <FormGroupLabelHelp ref={labelHelpRef} aria-label="More info for URI field" />
                         </Popover>
