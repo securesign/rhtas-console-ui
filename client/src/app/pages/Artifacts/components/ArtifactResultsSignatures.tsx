@@ -1,6 +1,6 @@
 import { DataList } from "@patternfly/react-core";
 import { ArtifactSignatureItem } from "./ArtifactSignatureItem";
-import type { SignatureView } from "@app/queries/artifacts";
+import type { SignatureView } from "@app/queries/artifacts.view-model";
 
 export const ArtifactResultsSignatures = ({ signatures }: { signatures?: SignatureView[] }) => {
   return (

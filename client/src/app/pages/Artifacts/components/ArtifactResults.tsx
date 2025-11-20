@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ImageMetadataResponse } from "@app/client";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 import {
   Button,
   Card,

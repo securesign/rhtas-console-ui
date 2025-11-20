@@ -1,4 +1,4 @@
-import type { AttestationView } from "@app/queries/artifacts";
+import type { AttestationView } from "@app/queries/artifacts.view-model";
 import { ArtifactAttestationItem } from "./ArtifactAttestationItem";
 import { DataList } from "@patternfly/react-core";
 

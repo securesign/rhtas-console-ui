@@ -25,7 +25,7 @@ import {
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState } from "react";
-import type { SignatureView } from "@app/queries/artifacts";
+import type { SignatureView } from "@app/queries/artifacts.view-model";
 import { buildCertificateTree } from "../utils/helpers";
 import { relativeDateString } from "@app/utils/utils";
 import { RekorEntryPanel } from "./RekorEntryPanel";
@@ -108,7 +108,9 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
                 "N/A"
               )}
             </DataListCell>,
-            <DataListCell style={{whiteSpace: 'nowrap'}} key="verificationStatus">{verificationStatusDisplay}</DataListCell>,
+            <DataListCell style={{ whiteSpace: "nowrap" }} key="verificationStatus">
+              {verificationStatusDisplay}
+            </DataListCell>,
           ]}
         />
         <DataListAction
