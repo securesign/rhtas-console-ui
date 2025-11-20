@@ -162,3 +162,7 @@ export const verificationStatusToLabelColor = (
       return { label: "Unknown", color: "grey" };
   }
 };
+
+export function relativeDateString(date: Date) {
+  return `${dayjs().to(date)}`;
+}
