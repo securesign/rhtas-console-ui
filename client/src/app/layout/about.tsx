@@ -23,13 +23,13 @@ export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) =>
       productName={about.displayName}
       brandImageAlt="Logo"
       brandImageSrc={about.imageSrc ?? TRANSPARENT_1x1_GIF}
-      trademark={`COPYRIGHT © 2020, ${new Date().getFullYear()}`}
+      trademark={`COPYRIGHT © 2025, ${new Date().getFullYear()}`}
     >
       <Content>
         <Content component={ContentVariants.p}>
-          {about.displayName} is a proactive service that assists in risk management of Open Source Software (OSS)
-          packages and dependencies. {about.displayName} brings awareness to and remediation of OSS vulnerabilities
-          discovered within the software supply chain.
+          {about.displayName} is a web-based UI for interacting with the Red Hat Trusted Artifact Signer (TAS)
+          ecosystem. It provides user-friendly workflows for retrieving, verifying, and monitoring signed software
+          artifacts, integrating with Sigstore services like Rekor, Fulcio, and TUF.
         </Content>
 
         {about.documentationUrl ? (

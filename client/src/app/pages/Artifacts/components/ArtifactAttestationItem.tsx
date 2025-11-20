@@ -1,10 +1,9 @@
-import type { AttestationView } from "@app/queries/artifacts";
+import type { AttestationView } from "@app/queries/artifacts.view-model";
 import {
   ClipboardCopy,
   CodeBlock,
   CodeBlockCode,
   Content,
-  ContentVariants,
   DataListAction,
   DataListCell,
   DataListContent,
@@ -115,7 +114,7 @@ export const ArtifactAttestationItem = ({ attestation }: { attestation: Attestat
       </DataListItemRow>
       <DataListContent aria-label="Attestation details" id={`attestation-expand-${key}`} isHidden={!isExpanded}>
         <Panel>
-          <Content component={ContentVariants.small}>
+          <Content>
             {/* <strong>Subject:</strong> {attestation.subject ?? "Unknown"}
             <br />
             <strong>Predicate type:</strong> {attestation.predicateType ?? "Unknown"}

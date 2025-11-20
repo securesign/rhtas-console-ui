@@ -1,6 +1,5 @@
 import {
   Content,
-  ContentVariants,
   DataListItem,
   DataListItemRow,
   DataListToggle,
@@ -148,9 +147,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
           <CodeBlockCode id="code-content">{signature.hash.value}</CodeBlockCode>
         </CodeBlock>
         <Panel>
-          <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-            Certificate Chain
-          </Content>
+          <Content>Certificate Chain</Content>
           <TreeView
             hasAnimations
             hasGuides

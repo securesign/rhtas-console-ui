@@ -1,13 +1,5 @@
 import type { RekorEntry } from "@app/client";
-import {
-  Button,
-  CodeBlock,
-  CodeBlockAction,
-  CodeBlockCode,
-  Content,
-  ContentVariants,
-  Panel,
-} from "@patternfly/react-core";
+import { Button, CodeBlock, CodeBlockAction, CodeBlockCode, Content, Panel } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undefined }) => {
@@ -34,9 +26,7 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
 
   return (
     <Panel>
-      <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-        Rekor Entry
-      </Content>
+      <Content>Rekor Entry</Content>
       <CodeBlock actions={codeBlockActions}>
         <CodeBlockCode id="code-content">{rekorEntryLabel}</CodeBlockCode>
       </CodeBlock>
