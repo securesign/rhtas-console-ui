@@ -9,7 +9,7 @@ import {
 } from "@app/client";
 import { useMockableQuery } from "./helpers";
 import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts";
+import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deriveOverallVerificationStatus } from "@app/utils/utils";
 
@@ -87,20 +87,3 @@ export const useVerifyArtifact = () => {
     },
   });
 };
-
-// re-export view-model types so consumers don't have to import from the mocks module.
-export type {
-  ArtifactIdentity,
-  ArtifactOverallStatus,
-  ArtifactSummaryView,
-  ArtifactVerificationViewModel,
-  AttestationStatus,
-  AttestationView,
-  CertificateRole,
-  HashSummary,
-  ParsedCertificate,
-  SignatureStatus,
-  SignatureVerificationStatus,
-  SignatureView,
-  TimeCoherenceSummary,
-} from "./mocks/artifacts.mock";
