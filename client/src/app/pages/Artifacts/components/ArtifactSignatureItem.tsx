@@ -26,15 +26,14 @@ import {
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState } from "react";
 import type { SignatureView } from "@app/queries/artifacts";
-import { signatureRelativeDateString } from "../utils/date";
 import { buildCertificateTree } from "../utils/helpers";
-import { useNavigate } from "react-router-dom";
+import { relativeDateString } from "@app/utils/utils";
+import { RekorEntryPanel } from "./RekorEntryPanel";
 
 export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate();
 
   const key = signature.hash.value.toString();
 
@@ -47,12 +46,6 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
   const handleActionSelect = () => {
     // TODO: probably some logic there
     setActionsOpened(false);
-  };
-
-  const openInRekorSearch = () => {
-    if (signature.rekorEntry) {
-      navigate(`/rekor-search?uuid=${signature.rekorEntry.uuid}`);
-    }
   };
 
   const handleCopyCode = (code: string, id: string) => {
@@ -85,9 +78,6 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
   const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
   const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
   const verificationStatusDisplay = `${signatureStatusBadge} / ${rekorStatusBadge} / ${chainStatusBadge}`;
-  const rekorEntryLabel = signature.rekorEntry
-    ? `Entry #${signature.rekorEntry.logIndex} (UUID ${signature.rekorEntry.uuid})`
-    : "No Rekor entry";
 
   return (
     <DataListItem aria-labelledby="signature-item-1" key="sig-1" isExpanded={isExpanded}>
@@ -112,13 +102,13 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
             <DataListCell key="integratedTime">
               {signature.timestamp ? (
                 <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(signature.timestamp)}>
-                  {signatureRelativeDateString(new Date(signature.timestamp))}
+                  {relativeDateString(new Date(signature.timestamp))}
                 </Timestamp>
               ) : (
                 "N/A"
               )}
             </DataListCell>,
-            <DataListCell key="verificationStatus">{verificationStatusDisplay}</DataListCell>,
+            <DataListCell style={{whiteSpace: 'nowrap'}} key="verificationStatus">{verificationStatusDisplay}</DataListCell>,
           ]}
         />
         <DataListAction
@@ -131,6 +121,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
             onSelect={handleActionSelect}
             toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
               <MenuToggle
+                size="sm"
                 ref={toggleRef}
                 isExpanded={isActionsOpened}
                 onClick={handleToggleActions}
@@ -143,9 +134,6 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
             onOpenChange={setActionsOpened}
           >
             <DropdownList>
-              <DropdownItem key="link" to="#" onClick={openInRekorSearch}>
-                Open in Rekor Search
-              </DropdownItem>
               <DropdownItem key="download bundle" isDisabled>
                 Download Bundle
               </DropdownItem>
@@ -168,14 +156,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
             data={buildCertificateTree(signature.certificateChain)}
           />
         </Panel>
-        <Panel>
-          <Content component={ContentVariants.h6} style={{ margin: "1em auto" }}>
-            Rekor Entry
-          </Content>
-          <CodeBlock>
-            <CodeBlockCode id="code-content">{rekorEntryLabel}</CodeBlockCode>
-          </CodeBlock>
-        </Panel>
+        <RekorEntryPanel rekorEntry={signature.rekorEntry} />
       </DataListContent>
     </DataListItem>
   );
