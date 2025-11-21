@@ -56,8 +56,14 @@ export const ArtifactAttestationItem = ({ attestation }: { attestation: Attestat
               <span id={`att-identity-${key}`}>{attestation.subject ?? "Unknown subject"}</span>
             </DataListCell>,
             <DataListCell key="digest">
-              <ClipboardCopy hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
-                {`${attestation.digest.algorithm}:${attestation.digest.value.slice(0, 8)}`}
+              <ClipboardCopy
+                truncation={{ maxCharsDisplayed: 14 }}
+                hoverTip="Copy"
+                clickTip="Copied"
+                variant="inline-compact"
+                isCode
+              >
+                {`${attestation.digest.algorithm}:${attestation.digest.value}`}
               </ClipboardCopy>
             </DataListCell>,
             <DataListCell key="attestationType">

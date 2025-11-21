@@ -72,7 +72,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
   );
 
   const displayIdentity = signature.identity.san ?? "Unknown identity";
-  const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value.slice(0, 8)}`;
+  const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value}`;
   const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
   const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
   const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
@@ -93,7 +93,13 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
               <span id="compact-item1">{displayIdentity}</span>
             </DataListCell>,
             <DataListCell key="digest">
-              <ClipboardCopy hoverTip="Copy" clickTip="Copied" variant="inline-compact" isCode>
+              <ClipboardCopy
+                truncation={{ maxCharsDisplayed: 14 }}
+                hoverTip="Copy"
+                clickTip="Copied"
+                variant="inline-compact"
+                isCode
+              >
                 {digestDisplay}
               </ClipboardCopy>
             </DataListCell>,
