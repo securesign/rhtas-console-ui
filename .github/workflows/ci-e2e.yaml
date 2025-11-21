@@ -104,5 +104,5 @@ jobs:
     uses: ./.github/workflows/ci-e2e-template.yaml
     with:
       artifact: test-images
-      ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
-      server_image: ghcr.io/securesign/rhtas-console:${{ needs.discover-envs-for-e2e-ci.outputs.image_tag }}
+      server_image: ghcr.io/securesign/rhtas-console:pr-test
+      ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test      
