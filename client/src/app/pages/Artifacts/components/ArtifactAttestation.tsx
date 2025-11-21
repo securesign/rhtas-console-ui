@@ -1,5 +1,8 @@
 import type { AttestationView } from "@app/queries/artifacts.view-model";
 import {
+  Card,
+  CardBody,
+  CardTitle,
   ClipboardCopy,
   CodeBlock,
   CodeBlockCode,
@@ -16,6 +19,8 @@ import {
   DropdownList,
   MenuToggle,
   Panel,
+  Stack,
+  StackItem,
   Timestamp,
   TimestampTooltipVariant,
   type MenuToggleElement,
@@ -25,7 +30,7 @@ import { RekorEntryPanel } from "./RekorEntryPanel";
 import { relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 
-export const ArtifactAttestationItem = ({ attestation }: { attestation: AttestationView }) => {
+export const ArtifactAttestation = ({ attestation }: { attestation: AttestationView }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isActionsOpened, setActionsOpened] = useState(false);
 
@@ -118,7 +123,33 @@ export const ArtifactAttestationItem = ({ attestation }: { attestation: Attestat
           </Dropdown>
         </DataListAction>
       </DataListItemRow>
-      <DataListContent aria-label="Attestation details" id={`attestation-expand-${key}`} isHidden={!isExpanded}>
+      <DataListContent
+        aria-label="Attestation expandable content details"
+        id={`attestation-expand-${key}`}
+        isHidden={!isExpanded}
+      >
+        <Stack hasGutter>
+          <StackItem>
+            <Card>
+              <CardTitle>Leaf Certificate Summary</CardTitle>
+              <CardBody>Here</CardBody>
+            </Card>
+          </StackItem>
+          <StackItem>
+            <Card style={{ overflow: "visible" }}>
+              <CardTitle>Certificate Chain</CardTitle>
+              <CardBody></CardBody>
+            </Card>
+          </StackItem>
+          <StackItem>
+            <Card>
+              <CardTitle>Rekor Entry</CardTitle>
+              <CardBody>
+                <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
+              </CardBody>
+            </Card>
+          </StackItem>
+        </Stack>
         <Panel>
           <Content>
             {/* <strong>Subject:</strong> {attestation.subject ?? "Unknown"}

@@ -3,28 +3,17 @@ import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
   image: "ttl.sh/rhtas/test-image:1h",
-
-  // container image metadata
   metadata: {
     created: "2025-11-06T08:58:50.271117116Z",
-
-    // media type of the container image (e.g., OCI manifest type)
     mediaType: "application/vnd.oci.image.manifest.v1+json",
-
-    // size of container image
     size: 414,
-
-    // key-value labels or annotations associated with image
     labels: {
       "io.buildah.version": "1.41.5",
     },
   } as Metadata,
-  // container image's digest
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
 };
 
-// draft view-model mock that matches the Artifacts designs. This is *not* what the
-// API returns today, but represents the desired shape for the UI.
 export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = {
   artifact: artifactsImageDataMock,
   summary: {
@@ -65,10 +54,16 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
     {
       id: "sig-0",
       kind: "hashedrekord",
-      identity: {
-        san: "ryordan@redhat.com",
-        issuer: "https://token.actions.githubusercontent.com",
-        issuerType: "github-oidc",
+      signingCertificate: {
+        subject: "CN=ryordan@redhat.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T08:59:07Z",
+        notAfter: "2025-11-06T09:09:07Z",
+        sans: ["ryordan@redhat.com"],
+        serialNumber: "59:72:f4:57:e5:53:bc:5f:bd:ef:34:9c:94:73:82:b5:8d:1b:60:75",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig0-leaf...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
       },
       hash: {
         algorithm: "sha256",
@@ -81,17 +76,6 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         chain: "valid",
       },
       certificateChain: [
-        {
-          role: "leaf",
-          subject: "CN=ryordan@redhat.com,O=sigstore.dev",
-          issuer: "CN=sigstore-intermediate,O=sigstore.dev",
-          notBefore: "2025-11-06T08:59:07Z",
-          notAfter: "2025-11-06T09:09:07Z",
-          sans: ["ryordan@redhat.com"],
-          serialNumber: "59:72:f4:57:e5:53:bc:5f:bd:ef:34:9c:94:73:82:b5:8d:1b:60:75",
-          isCa: false,
-          pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig0-leaf...\n-----END CERTIFICATE-----\n",
-        },
         {
           role: "intermediate",
           subject: "CN=sigstore-intermediate,O=sigstore.dev",
@@ -136,10 +120,16 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
     {
       id: "sig-1",
       kind: "hashedrekord",
-      identity: {
-        san: "release@redhat.com",
-        issuer: "https://token.actions.githubusercontent.com",
-        issuerType: "github-oidc",
+      signingCertificate: {
+        subject: "CN=release@redhat.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T09:00:00Z",
+        notAfter: "2025-11-06T09:10:00Z",
+        sans: ["release@redhat.com"],
+        serialNumber: "aa:bb:cc:dd:ee:ff",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig1-leaf...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
       },
       hash: {
         algorithm: "sha256",
@@ -152,17 +142,6 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         chain: "valid",
       },
       certificateChain: [
-        {
-          role: "leaf",
-          subject: "CN=release@redhat.com,O=sigstore.dev",
-          issuer: "CN=sigstore-intermediate,O=sigstore.dev",
-          notBefore: "2025-11-06T09:00:00Z",
-          notAfter: "2025-11-06T09:10:00Z",
-          sans: ["release@redhat.com"],
-          serialNumber: "aa:bb:cc:dd:ee:ff",
-          isCa: false,
-          pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...sig1-leaf...\n-----END CERTIFICATE-----\n",
-        },
         {
           role: "intermediate",
           subject: "CN=sigstore-intermediate,O=sigstore.dev",
@@ -210,11 +189,22 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       id: "att-0",
       kind: "intoto",
       predicateType: "https://slsa.dev/provenance/v1",
+      signingCertificate: {
+        subject: "CN=ryordan@redhat.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T09:00:00Z",
+        notAfter: "2025-11-06T09:10:00Z",
+        sans: ["ryordan@redhat.com"],
+        serialNumber: "cc:dd:ee:ff:00:11",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...att0-leaf...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
+      },
       digest: {
         algorithm: "sha256",
         value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
       },
-      subject: artifactsImageDataMock.image,
+      subject: artifactsImageDataMock.image!,
       issuer: "https://token.actions.githubusercontent.com",
       timestamp: "2025-11-06T09:00:00Z",
       status: {
@@ -243,11 +233,22 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       id: "att-1",
       kind: "intoto",
       predicateType: "https://slsa.dev/provenance/v1",
+      signingCertificate: {
+        subject: "CN=release@redhat.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T09:03:00Z",
+        notAfter: "2025-11-06T09:13:00Z",
+        sans: ["release@redhat.com"],
+        serialNumber: "dd:ee:ff:00:11:22",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICLEAFCERT...att1-leaf...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
+      },
       digest: {
         algorithm: "sha256",
-        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
+        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9182",
       },
-      subject: artifactsImageDataMock.image,
+      subject: artifactsImageDataMock.image!,
       issuer: "https://token.actions.githubusercontent.com",
       timestamp: "2025-11-06T09:03:00Z",
       status: {
@@ -309,11 +310,18 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
     {
       id: "sig-invalid-0",
       kind: "hashedrekord",
-      identity: {
-        san: "invalid@example.com",
-        issuer: "https://token.actions.githubusercontent.com",
-        issuerType: "github-oidc",
+      signingCertificate: {
+        subject: "CN=invalid@example.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T10:00:00Z",
+        notAfter: "2025-11-06T10:10:00Z",
+        sans: ["invalid@example.com"],
+        serialNumber: "ff:ff:ff:ff",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICINVALIDLEAFCERT...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
       },
+
       hash: {
         algorithm: "sha256",
         value: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
@@ -324,7 +332,7 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
         rekor: "missing",
         chain: "invalid",
       },
-      certificateChain: [],
+      certificateChain: [], // could still show intermediates if backend provides them
       rekorEntry: undefined,
     },
   ],
@@ -333,11 +341,22 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
       id: "att-invalid-0",
       kind: "intoto",
       predicateType: "https://slsa.dev/provenance/v1",
+      signingCertificate: {
+        subject: "CN=invalid@example.com,O=sigstore.dev",
+        issuer: "CN=sigstore-intermediate,O=sigstore.dev",
+        notBefore: "2025-11-06T10:05:00Z",
+        notAfter: "2025-11-06T10:15:00Z",
+        sans: ["invalid@example.com"],
+        serialNumber: "00:00:00:00",
+        pem: "-----BEGIN CERTIFICATE-----\nMIICINVALIDATTLEAF...\n-----END CERTIFICATE-----\n",
+        role: "leaf",
+        isCa: false,
+      },
       digest: {
         algorithm: "sha256",
         value: "0000000000000000000000000000000000000000000000000000000000000000",
       },
-      subject: artifactsImageDataMock.image,
+      subject: artifactsImageDataMock.image!,
       issuer: "https://token.actions.githubusercontent.com",
       timestamp: "2025-11-06T10:05:00Z",
       status: {

@@ -1,7 +1,12 @@
 import { RENDER_DATE_FORMAT } from "@app/Constants";
 import dayjs from "dayjs";
 import type { LabelProps } from "@patternfly/react-core";
-import type { ArtifactOverallStatus, ArtifactIdentity } from "@app/queries/artifacts.view-model";
+import type {
+  ArtifactOverallStatus,
+  ArtifactIdentity,
+  ParsedCertificate,
+  SignatureIdentity,
+} from "@app/queries/artifacts.view-model";
 
 // minimal shape required for eslint, uses only we actually need
 // from the verification view-model
@@ -28,6 +33,12 @@ interface MinimalArtifactVerificationViewModel {
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
+/**
+ * A post-processing utility function to remove duplicates
+ * from a list of identities
+ * @param identities List of identities
+ * @returns Deduped list of identities
+ */
 export const dedupeIdentities = (identities: ArtifactIdentity[]): ArtifactIdentity[] => {
   const seen = new Set<string>();
 
@@ -119,12 +130,87 @@ export const getCertificateStatusColor = (validTo: string) => {
 };
 
 /**
+ * Best-effort categorization of certificate issuer for UI labels.
+ * This is a convenience helper; backend may provide a richer field later.
+ */
+export function inferIssuerType(issuer?: string): SignatureIdentity["issuerType"] {
+  if (!issuer) return "unknown";
+
+  const lower = issuer.toLowerCase();
+
+  // common Sigstore/Fulcio issuers
+  if (lower.includes("sigstore") || lower.includes("fulcio")) {
+    return "fulcio";
+  }
+
+  return "other";
+}
+
+/**
  * Uses native string localCompare method with numeric option enabled.
  *
  * @param locale to be used by string compareFn
  */
 export const localeNumericCompare = (a: string, b: string, locale: string): number =>
   a.localeCompare(b, locale ?? "en", { numeric: true });
+
+export function relativeDateString(date: Date) {
+  return `${dayjs().to(date)}`;
+}
+
+/**
+ * Derives the fingerprint for a leaf certificate from its PEM value.
+ * (until it can be computed on the backend)
+ * @param pem Certificate PEM
+ * @returns An array of colon-separated hex pairs (common fingerprint style)
+ */
+export async function sha256FingerprintFromPem(pem: string): Promise<string> {
+  // strip PEM armor
+  const b64 = pem
+    .replace(/-----BEGIN CERTIFICATE-----/g, "")
+    .replace(/-----END CERTIFICATE-----/g, "")
+    .replace(/\s+/g, "");
+
+  // decode base64 to bytes
+  const derBytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+  // sha256 hash the DER bytes
+  const hashBuffer = await crypto.subtle.digest("SHA-256", derBytes);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+  // format as colon-separated hex pairs (common fingerprint style)
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join(":");
+}
+
+/**
+ *
+ * @returns false for any falsy value (regardless of the filter value), true if (coerced to string) lowercased value contains lowercased filter value.
+ */
+export const stringMatcher = (filterValue: string, value: string) => {
+  if (!value) return false;
+  const lowerCaseItemValue = value.toLowerCase();
+  const lowerCaseFilterValue = filterValue.toLowerCase();
+  return lowerCaseItemValue.includes(lowerCaseFilterValue);
+};
+
+/**
+ * Takes one leaf/signing cert and turns it into a lightweight SignatureIdentity
+ * for use in collapsed signature/attestation rows.
+ * @param leaf Leaf/signing certificate
+ * @returns Single signature identity
+ */
+export function toIdentity(leaf?: ParsedCertificate): SignatureIdentity | undefined {
+  if (!leaf) return undefined;
+
+  const san = Array.isArray(leaf.sans) && leaf.sans.length > 0 ? leaf.sans[0] : undefined;
+  const issuer = leaf.issuer || undefined;
+
+  return {
+    san,
+    issuer,
+    issuerType: inferIssuerType(issuer),
+  };
+}
 
 /**
  * Compares all types by converting them to string.
@@ -143,17 +229,6 @@ export const universalComparator = (
     return a - b;
   }
   return localeNumericCompare(String(a ?? ""), String(b ?? ""), locale);
-};
-
-/**
- *
- * @returns false for any falsy value (regardless of the filter value), true if (coerced to string) lowercased value contains lowercased filter value.
- */
-export const stringMatcher = (filterValue: string, value: string) => {
-  if (!value) return false;
-  const lowerCaseItemValue = value.toLowerCase();
-  const lowerCaseFilterValue = filterValue.toLowerCase();
-  return lowerCaseItemValue.includes(lowerCaseFilterValue);
 };
 
 export const verificationStatusToLabelColor = (
@@ -177,7 +252,3 @@ export const verificationStatusToLabelColor = (
       return { label: "Unknown", color: "grey" };
   }
 };
-
-export function relativeDateString(date: Date) {
-  return `${dayjs().to(date)}`;
-}

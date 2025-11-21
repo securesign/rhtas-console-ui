@@ -4,6 +4,9 @@ import type { ImageMetadataResponse } from "@app/client";
 // and represent exactly what the UI needs to render the artifact, signatures,
 // certificate chain, attestations, and Rekor entries.
 
+/**
+ *
+ */
 export interface ArtifactIdentity {
   id: string;
   type: "email" | "oidc-issuer" | "other";
@@ -59,19 +62,31 @@ export interface HashSummary {
 export interface SignatureView {
   id: string;
   kind: "hashedrekord" | "other";
-  identity: {
-    san?: string;
-    issuer?: string;
-    issuerType?: string;
-  };
+  // identity: SignatureIdentity;
   hash: HashSummary;
   timestamp?: string; // ISO string for "x minutes ago" display
   status: SignatureStatus;
+
+  /**
+   * certificateChain is used to validate the signing/leaf certificate,
+   * and includes the root + intermediate certificates
+   */
   certificateChain: ParsedCertificate[];
+  signingCertificate: ParsedCertificate; // leaf only
+
   // a single Rekor entry associated with this signature, once the backend
   // is updated to include it alongside the signature.
   rekorEntry?: import("@app/client").RekorEntry;
   rawBundleJson?: unknown; // or a typed SigstoreBundle
+}
+
+/**
+ * small, local identity for a single signature
+ */
+export interface SignatureIdentity {
+  san?: string;
+  issuer?: string;
+  issuerType?: "fulcio" | "other" | "unknown";
 }
 
 export interface AttestationStatus {
@@ -87,6 +102,8 @@ export interface AttestationView {
   subject?: string;
   issuer?: string;
   timestamp?: string; // ISO string
+  signingCertificate?: ParsedCertificate; // leaf
+  certificateChain?: ParsedCertificate[]; // intermediate + root
   status: AttestationStatus;
   rekorEntry?: import("@app/client").RekorEntry;
   rawStatementJson?: unknown;

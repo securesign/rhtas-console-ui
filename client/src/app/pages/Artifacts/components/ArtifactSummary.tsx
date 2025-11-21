@@ -16,7 +16,7 @@ import {
 import { PlusCircleIcon } from "@patternfly/react-icons";
 import type { IArtifactResultsProps } from "./ArtifactResults";
 
-export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResultsProps) => {
+export const ArtifactSummary = ({ artifact, verification }: IArtifactResultsProps) => {
   const { summary } = verification;
   const identities = summary.identities ?? [];
   const timeCoherence = summary.timeCoherence;
@@ -73,12 +73,10 @@ export const ArtifactResultsSummary = ({ artifact, verification }: IArtifactResu
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              {identities.map((identity) => (
-                <>
-                  <Label key={identity.id} isCompact>
-                    {identity.value}
-                  </Label>{" "}
-                </>
+              {identities.map((identity, idx) => (
+                <div key={idx}>
+                  <Label isCompact>{identity.value}</Label>{" "}
+                </div>
               ))}
             </DescriptionListDescription>
           </DescriptionListGroup>

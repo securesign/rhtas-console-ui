@@ -1,5 +1,4 @@
 import {
-  Content,
   DataListItem,
   DataListItemRow,
   DataListToggle,
@@ -13,25 +12,21 @@ import {
   DropdownList,
   DropdownItem,
   DataListContent,
-  CodeBlock,
-  CodeBlockCode,
-  Panel,
-  CodeBlockAction,
-  ClipboardCopyButton,
   Timestamp,
   TimestampTooltipVariant,
-  TreeView,
+  Stack,
+  StackItem,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState } from "react";
 import type { SignatureView } from "@app/queries/artifacts.view-model";
-import { buildCertificateTree } from "../utils/helpers";
-import { relativeDateString } from "@app/utils/utils";
+import { relativeDateString, toIdentity } from "@app/utils/utils";
 import { RekorEntryPanel } from "./RekorEntryPanel";
+import { LeafCertificate } from "./LeafCertificate";
+import { CertificateChain } from "./CertificateChain";
 
-export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView }) => {
+export const ArtifactSignature = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
-  const [codeCopiedIndex, setCodeCopiedIndex] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const key = signature.hash.value.toString();
@@ -47,39 +42,15 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
     setActionsOpened(false);
   };
 
-  const handleCopyCode = (code: string, id: string) => {
-    void navigator.clipboard.writeText(code.toString());
-    setCodeCopiedIndex(id);
-  };
-
-  const getSharedCodeBlockActions = (code: string, id: string) => (
-    <>
-      <CodeBlockAction>
-        <ClipboardCopyButton
-          id="basic-copy-button"
-          textId="code-content"
-          aria-label="Copy PEM to clipboard"
-          onClick={() => handleCopyCode(code, id)}
-          exitDelay={codeCopiedIndex === id ? 1500 : 600}
-          maxWidth="110px"
-          variant="plain"
-          onTooltipHidden={() => setCodeCopiedIndex(null)}
-        >
-          {codeCopiedIndex === id ? "Successfully copied PEM to clipboard!" : "Copy PEM to clipboard"}
-        </ClipboardCopyButton>
-      </CodeBlockAction>
-    </>
-  );
-
-  const displayIdentity = signature.identity.san ?? "Unknown identity";
+  const displayIdentity = toIdentity(signature.signingCertificate)?.san ?? "Unknown identity";
   const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value}`;
   const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
   const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
   const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
-  const verificationStatusDisplay = `${signatureStatusBadge} / ${rekorStatusBadge} / ${chainStatusBadge}`;
+  const verificationStatusDisplay = `${signatureStatusBadge} / ${chainStatusBadge} / ${rekorStatusBadge}`;
 
   return (
-    <DataListItem aria-labelledby="signature-item-1" key="sig-1" isExpanded={isExpanded}>
+    <DataListItem aria-labelledby={`signature-item-${key}`} key={`${key}`} isExpanded={isExpanded}>
       <DataListItemRow>
         <DataListToggle
           onClick={handleToggleSignatureItem}
@@ -87,15 +58,14 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
           id={`signature-toggle-${key}`}
           aria-controls={`sig-expand-${key}`}
         />
+        {/** SIGNATURE OVERVIEW */}
         <DataListItemCells
           dataListCells={[
-            <DataListCell key="identity">
-              <span id="compact-item1">{displayIdentity}</span>
-            </DataListCell>,
+            <DataListCell key="identity">{displayIdentity}</DataListCell>,
             <DataListCell key="digest">
               <ClipboardCopy
                 truncation={{ maxCharsDisplayed: 14 }}
-                hoverTip="Copy"
+                hoverTip="Copy signature SHA"
                 clickTip="Copied"
                 variant="inline-compact"
                 isCode
@@ -118,6 +88,7 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
             </DataListCell>,
           ]}
         />
+        {/** SIGNATURE ACTIONS */}
         <DataListAction
           aria-labelledby={`signature-item-${key} signature-action-${key}`}
           id={`signature-action-${key}`}
@@ -148,20 +119,25 @@ export const ArtifactSignatureItem = ({ signature }: { signature: SignatureView 
           </Dropdown>
         </DataListAction>
       </DataListItemRow>
-      <DataListContent aria-label="Signature expandable content details" id="sig-expand1" isHidden={!isExpanded}>
-        <CodeBlock actions={getSharedCodeBlockActions(signature.hash.value, "signature-code")}>
-          <CodeBlockCode id="code-content">{signature.hash.value}</CodeBlockCode>
-        </CodeBlock>
-        <Panel>
-          <Content>Certificate Chain</Content>
-          <TreeView
-            hasAnimations
-            hasGuides
-            aria-label="Certificate chain"
-            data={buildCertificateTree(signature.certificateChain)}
-          />
-        </Panel>
-        <RekorEntryPanel rekorEntry={signature.rekorEntry} />
+      <DataListContent
+        aria-label="Signature expandable content details"
+        id={`sig-expand-${key}`}
+        isHidden={!isExpanded}
+      >
+        <Stack hasGutter>
+          <StackItem>
+            {/** LEAF / SIGNING CERTIFICATE */}
+            <LeafCertificate leafCert={signature.signingCertificate} />
+          </StackItem>
+          <StackItem>
+            {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
+            <CertificateChain certificateChain={signature.certificateChain} />
+          </StackItem>
+          <StackItem>
+            {/** REKOR ENTRY */}
+            <RekorEntryPanel rekorEntry={signature.rekorEntry} />
+          </StackItem>
+        </Stack>
       </DataListContent>
     </DataListItem>
   );
