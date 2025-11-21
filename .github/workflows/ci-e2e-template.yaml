@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: ${{ inputs.artifact }}
-          path: /container_images
+          path: /tmp/container_images
       - name: Load images
         if: ${{ inputs.artifact != '' }}
         env:
@@ -118,7 +118,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: ${{ inputs.artifact }}
-          path: /container_images
+          path: /tmp/container_images
       - name: Load images
         if: ${{ inputs.artifact != '' }}
         env:
