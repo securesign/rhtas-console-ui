@@ -61,6 +61,7 @@ jobs:
           ref: ${{ needs.discover-envs-for-e2e-ci.outputs.image_tag }}
       - name: save rhtas-console image
         run: |
+          mkdir -p /tmp/images/
           docker build . -t ghcr.io/securesign/rhtas-console:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console.tar ghcr.io/securesign/rhtas-console:pr-test
       - name: Upload console image as artifact
@@ -77,6 +78,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: save rhtas-console-ui image
         run: |
+          mkdir -p /tmp/images/
           docker build . -t ghcr.io/securesign/rhtas-console-ui:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console-ui.tar ghcr.io/securesign/rhtas-console-ui:pr-test
       - name: Upload console-ui image as artifact

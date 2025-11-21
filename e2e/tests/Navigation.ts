@@ -10,20 +10,12 @@ export class Navigation {
     this._page = page;
   }
 
-  static async build(page: Page) {
+  static build(page: Page) {
     return new Navigation(page);
   }
 
   async goToSidebar(
-    menu:
-      | "Dashboard"
-      | "Search"
-      | "SBOMs"
-      | "Vulnerabilities"
-      | "Packages"
-      | "Advisories"
-      | "Importers"
-      | "Upload",
+    menu: "Dashboard" | "Search" | "SBOMs" | "Vulnerabilities" | "Packages" | "Advisories" | "Importers" | "Upload"
   ) {
     // By default, we do not initialize navigation at "/"" where the Dashboard is located
     // This should help us to save some time loading pages as the Dashboard fetches too much data
