@@ -94,7 +94,7 @@ jobs:
       - uses: actions/upload-artifact/merge@v4
         with:
           name: test-images
-          pattern: *-images
+          pattern: "*-images"
           delete-merged: true
           retention-days: 1
 
@@ -105,4 +105,4 @@ jobs:
     with:
       artifact: test-images
       server_image: ghcr.io/securesign/rhtas-console:pr-test
-      ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test      
+      ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
