@@ -17,23 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-upload-for-e2e-ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: save rhtas-console-ui image
-        run: |
-          docker build . -t ghcr.io/securesign/rhtas-console-ui:pr-test -f Dockerfile
-          docker save -o /tmp/rhtas-console-ui.tar ghcr.io/securesign/rhtas-console-ui:pr-test
-
-      - name: Upload console-ui image as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: rhtas-console-ui
-          path: /tmp/rhtas-console-ui.tar
-          retention-days: 1
-
   discover-envs-for-e2e-ci:
     runs-on: ubuntu-latest
     outputs:
@@ -66,14 +49,60 @@ jobs:
         id: set-outputs
         run: |
           echo ${{ env.image_tag }}
-          echo "image_tag=${{ env.image_tag }}" >> "$GITHUB_OUTPUT"
+
+  build-backend-and-upload-for-e2e-ci:
+    runs-on: ubuntu-latest
+    needs:
+      - discover-envs-for-e2e-ci
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: securesign/rhtas-console
+          ref: ${{ needs.discover-envs-for-e2e-ci.outputs.image_tag }}
+      - name: save rhtas-console image
+        run: |
+          docker build . -t ghcr.io/securesign/rhtas-console:pr-test -f Dockerfile
+          docker save -o /tmp/images/rhtas-console.tar ghcr.io/securesign/rhtas-console:pr-test
+      - name: Upload console image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-images
+          path: /tmp/images/**/*.tar
+
+  build-ui-and-upload-for-e2e-ci:
+    runs-on: ubuntu-latest
+    needs:
+      - discover-envs-for-e2e-ci
+    steps:
+      - uses: actions/checkout@v5
+      - name: save rhtas-console-ui image
+        run: |
+          docker build . -t ghcr.io/securesign/rhtas-console-ui:pr-test -f Dockerfile
+          docker save -o /tmp/images/rhtas-console-ui.tar ghcr.io/securesign/rhtas-console-ui:pr-test
+      - name: Upload console-ui image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-images
+          path: /tmp/images/**/*.tar
+
+  build-and-upload-for-e2e-ci:
+    runs-on: ubuntu-latest
+    needs:
+      - build-backend-and-upload-for-e2e-ci
+      - build-ui-and-upload-for-e2e-ci
+    steps:
+      - uses: actions/upload-artifact/merge@v4
+        with:
+          name: test-images
+          pattern: *-images
+          delete-merged: true
+          retention-days: 1
 
   run-e2e-ci:
     needs:
       - build-and-upload-for-e2e-ci
-      - discover-envs-for-e2e-ci
     uses: ./.github/workflows/ci-e2e-template.yaml
     with:
-      artifact: rhtas-console-ui
+      artifact: test-images
       ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
       server_image: ghcr.io/securesign/rhtas-console:${{ needs.discover-envs-for-e2e-ci.outputs.image_tag }}

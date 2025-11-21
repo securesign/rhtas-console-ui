@@ -5,9 +5,8 @@ on:
     inputs:
       artifact:
         description: |
-          The name of the component being tested, ie server etc.
-          Must correspond to an artifact storing the custom built image, named <artifact>,
-          and should contain the file <artifact>.tar inside.
+          The name of the artifact storing custom images to be used during the CI run. All
+          images stored in the artifact will be automatically loaded.
         required: false
         type: string
       ui_image:
@@ -29,9 +28,8 @@ on:
     inputs:
       artifact:
         description: |
-          The name of the component being tested, ie server etc.
-          Must correspond to an artifact storing the custom built image, named <artifact>,
-          and should contain the file <artifact>.tar inside.
+          The name of the artifact storing custom images to be used during the CI run. All
+          images stored in the artifact will be automatically loaded.
         required: false
         type: string
       ui_image:
@@ -63,14 +61,22 @@ jobs:
 
       - name: Download artifact
         if: "${{ inputs.artifact != '' }}"
+        id: download-artifact
         uses: actions/download-artifact@v5
         with:
           name: ${{ inputs.artifact }}
-          path: /tmp
+          path: /container_images
       - name: Load images
         if: ${{ inputs.artifact != '' }}
+        env:
+          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
         run: |
-          docker load --input /tmp/${{ inputs.artifact }}.tar
+          for image in $(
+            find "${IMAGES_PATH}" -type f -name "*.tar"
+          ); do
+            echo "Loading image \`${image}\`" >>"$GITHUB_STEP_SUMMARY"
+            docker load --input ${image}
+          done
       - name: Check ui image exists
         if: ${{ inputs.ui_image != '' }}
         run: |
@@ -108,14 +114,22 @@ jobs:
     steps:
       - name: Download artifact
         if: "${{ inputs.artifact != '' }}"
+        id: download-artifact
         uses: actions/download-artifact@v5
         with:
           name: ${{ inputs.artifact }}
-          path: /tmp
+          path: /container_images
       - name: Load images
         if: ${{ inputs.artifact != '' }}
+        env:
+          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
         run: |
-          docker load --input /tmp/${{ inputs.artifact }}.tar
+          for image in $(
+            find "${IMAGES_PATH}" -type f -name "*.tar"
+          ); do
+            echo "Loading image \`${image}\`" >>"$GITHUB_STEP_SUMMARY"
+            docker load --input ${image}
+          done
 
       - name: Checkout ui repo
         uses: actions/checkout@v5
