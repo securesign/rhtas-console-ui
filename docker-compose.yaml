@@ -43,3 +43,15 @@ services:
     depends_on:
       console:
         condition: service_started
+  
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.56.1-jammy
+    ports:
+      - "5000:5000"
+    network_mode: host
+    working_dir: /home/pwuser
+    command:
+      - /bin/sh
+      - -c
+      - npx -y playwright run-server --port 5000
+
