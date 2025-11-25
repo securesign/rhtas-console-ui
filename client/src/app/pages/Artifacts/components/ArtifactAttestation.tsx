@@ -22,8 +22,8 @@ import { useState } from "react";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
-import { CertificateChain } from "./CertificateChain";
-import { LeafCertificate } from "./LeafCertificate";
+// import { CertificateChain } from "./CertificateChain";
+// import { LeafCertificate } from "./LeafCertificate";
 
 export const ArtifactAttestation = ({ attestation }: { attestation: AttestationView }) => {
   const [isExpanded, setIsExpanded] = useState(false);

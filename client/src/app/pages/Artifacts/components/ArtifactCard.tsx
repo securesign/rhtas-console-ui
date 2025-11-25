@@ -18,6 +18,7 @@ import { ArtifactSummary } from "./ArtifactSummary";
 import { verificationStatusToLabelColor } from "@app/utils/utils";
 import { useState } from "react";
 import type { ImageMetadataResponse } from "@app/client";
+import { ExternalLinkSquareAltIcon } from "@patternfly/react-icons";
 
 interface IArtifactCard {
   artifact: ImageMetadataResponse;
@@ -42,7 +43,17 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
         <Content style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
           <Flex className="border">
             <FlexItem>
-              Artifact: <Button variant="plain">{artifact.image}</Button>
+              Artifact:{" "}
+              <Button
+                variant="link"
+                href={`https://${artifact.image}`}
+                component={"a"}
+                icon={<ExternalLinkSquareAltIcon />}
+                iconPosition="end"
+                target="_blank"
+              >
+                {artifact.image}
+              </Button>
             </FlexItem>
             <FlexItem align={{ default: "alignRight" }}>
               <Label color={verificationLabelColor}>{verificationLabel}</Label>

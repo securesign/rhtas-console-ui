@@ -1,4 +1,4 @@
-import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
+import type { ImageMetadataResponse, Metadata } from "@app/client";
 import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
@@ -274,14 +274,6 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       },
     },
   ],
-};
-
-export const artifactsVerificationInvalidMock: VerifyArtifactResponse = {
-  verified: false,
-  details: {
-    reason: "Signature verification failed",
-    errorCode: "SIGNATURE_INVALID",
-  },
 };
 
 export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewModel = {

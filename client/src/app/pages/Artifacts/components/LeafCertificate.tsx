@@ -1,5 +1,5 @@
 import type { ParsedCertificate } from "@app/queries/artifacts.view-model";
-import { formatDate, sha256FingerprintFromPem } from "@app/utils/utils";
+import { copyToClipboard, formatDate, sha256FingerprintFromPem } from "@app/utils/utils";
 import {
   DropdownItem,
   Dropdown,
@@ -14,14 +14,39 @@ import {
   CardBody,
   CardTitle,
   CardHeader,
+  Alert,
+  AlertGroup,
+  type AlertProps,
+  AlertActionCloseButton,
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useEffect, useState } from "react";
+
+interface ToastAlert {
+  key: React.Key;
+  title: string;
+  variant: AlertProps["variant"];
+}
 
 export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) => {
   const [leafCertFingerprint, setLeafCertFingerprint] = useState<string>("");
   const leafCertValidity = leafCert ? `${formatDate(leafCert.notBefore)} → ${formatDate(leafCert.notAfter)}` : "N/A";
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [alerts, setAlerts] = useState<ToastAlert[]>([]);
+
+  const addAlert = (title: string, variant: AlertProps["variant"], key: React.Key) => {
+    setAlerts((prevAlerts) => [{ title, variant, key }, ...prevAlerts]);
+  };
+
+  const removeAlert = (key: React.Key) => {
+    setAlerts((prevAlerts) => [...prevAlerts.filter((alert) => alert.key !== key)]);
+  };
+
+  const getUniqueToastId = () => new Date().getTime();
+
+  const addCopySuccessAlert = () => {
+    addAlert("Copied PEM to clipboard", "success", getUniqueToastId());
+  };
 
   const onSelect = () => {
     setIsOpen(!isOpen);
@@ -33,14 +58,24 @@ export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) =
     if (leafCert.pem) {
       sha256FingerprintFromPem(leafCert.pem)
         .then(setLeafCertFingerprint)
-        .catch(() => setLeafCertFingerprint("N/A"));
+        .catch((_err) => {
+          setLeafCertFingerprint("N/A");
+        });
     }
-    console.log(leafCert.pem);
   }, [leafCert.pem]);
 
   const leafCertActionItems = (
     <>
-      <DropdownItem key="copy-pem">Copy PEM</DropdownItem>
+      <DropdownItem
+        key="copy-pem"
+        onClick={() => {
+          if (!leafCert.pem) return;
+          void copyToClipboard(leafCert.pem);
+          addCopySuccessAlert();
+        }}
+      >
+        Copy PEM
+      </DropdownItem>
     </>
   );
 
@@ -97,6 +132,23 @@ export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) =
           </DescriptionListGroup>
         </DescriptionList>
       </CardBody>
+      <AlertGroup hasAnimations isToast isLiveRegion>
+        {alerts.map(({ key, variant, title }) => (
+          <Alert
+            key={key}
+            variant={variant}
+            title={title}
+            actionClose={
+              <AlertActionCloseButton
+                title={title}
+                variantLabel={`${variant} alert`}
+                onClose={() => removeAlert(key)}
+              />
+            }
+            timeout={2000}
+          />
+        ))}
+      </AlertGroup>
     </Card>
   );
 };

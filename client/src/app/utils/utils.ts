@@ -33,6 +33,14 @@ interface MinimalArtifactVerificationViewModel {
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
+export const copyToClipboard = async (value: string) => {
+  try {
+    await navigator.clipboard.writeText(value);
+  } catch (err) {
+    console.error("Failed to copy to clipboard", err);
+  }
+};
+
 /**
  * A post-processing utility function to remove duplicates
  * from a list of identities
@@ -116,6 +124,14 @@ export const formatDate = (value?: string | null) => {
   return value ? dayjs(value).format(RENDER_DATE_FORMAT) : null;
 };
 
+// mainly used for Rekor entries
+export const formatIntegratedTime = (unixSeconds: number): string => {
+  return new Date(unixSeconds * 1000).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+};
+
 export const getCertificateStatusColor = (validTo: string) => {
   if (!validTo) return "gray";
 
@@ -127,6 +143,41 @@ export const getCertificateStatusColor = (validTo: string) => {
   if (diffDays < 0) return "red"; // expired
   if (diffDays < 30) return "orange"; // expiring soon
   return "green"; // valid
+};
+
+export const getRekorEntryType = (bodyBase64: string): string | undefined => {
+  try {
+    const decoded = atob(bodyBase64);
+    const parsed: unknown = JSON.parse(decoded);
+
+    if (!parsed || typeof parsed !== "object") {
+      return undefined;
+    }
+
+    const maybeBody = parsed as { kind?: unknown };
+
+    return typeof maybeBody.kind === "string" ? maybeBody.kind : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+export const getRekorSetBytes = (signedEntryTimestamp?: string): Uint8Array | undefined => {
+  if (!signedEntryTimestamp) return undefined;
+
+  try {
+    // if Rekor ever sends URL-safe base64 (- and _), normalize it:
+    const normalized = signedEntryTimestamp
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(Math.ceil(signedEntryTimestamp.length / 4) * 4, "=");
+
+    return Uint8Array.from(atob(normalized), (c) => c.charCodeAt(0));
+  } catch (e) {
+    // best-effort, don't kill the UI
+    console.warn("Invalid signedEntryTimestamp, could not decode:", e);
+    return undefined;
+  }
 };
 
 /**
