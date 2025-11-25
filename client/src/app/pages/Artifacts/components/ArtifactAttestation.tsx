@@ -1,12 +1,6 @@
 import type { AttestationView } from "@app/queries/artifacts.view-model";
 import {
-  Card,
-  CardBody,
-  CardTitle,
   ClipboardCopy,
-  CodeBlock,
-  CodeBlockCode,
-  Content,
   DataListAction,
   DataListCell,
   DataListContent,
@@ -18,7 +12,6 @@ import {
   DropdownItem,
   DropdownList,
   MenuToggle,
-  Panel,
   Stack,
   StackItem,
   Timestamp,
@@ -29,6 +22,8 @@ import { useState } from "react";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
+import { CertificateChain } from "./CertificateChain";
+import { LeafCertificate } from "./LeafCertificate";
 
 export const ArtifactAttestation = ({ attestation }: { attestation: AttestationView }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -129,41 +124,16 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
         isHidden={!isExpanded}
       >
         <Stack hasGutter>
-          <StackItem>
-            <Card>
-              <CardTitle>Leaf Certificate Summary</CardTitle>
-              <CardBody>Here</CardBody>
-            </Card>
+          {/* <StackItem>
+            <LeafCertificate leafCert={attestation.signingCertificate} />
           </StackItem>
           <StackItem>
-            <Card style={{ overflow: "visible" }}>
-              <CardTitle>Certificate Chain</CardTitle>
-              <CardBody></CardBody>
-            </Card>
-          </StackItem>
+            <CertificateChain certificateChain={attestation.certificateChain} />
+          </StackItem> */}
           <StackItem>
-            <Card>
-              <CardTitle>Rekor Entry</CardTitle>
-              <CardBody>
-                <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
-              </CardBody>
-            </Card>
+            <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
           </StackItem>
         </Stack>
-        <Panel>
-          <Content>
-            {/* <strong>Subject:</strong> {attestation.subject ?? "Unknown"}
-            <br />
-            <strong>Predicate type:</strong> {attestation.predicateType ?? "Unknown"}
-            <br /> */}
-            <CodeBlock>
-              <CodeBlockCode id={`attestation-predicate-${key}`}>
-                {attestation.digest.algorithm}:{attestation.digest.value}
-              </CodeBlockCode>
-            </CodeBlock>
-            <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
-          </Content>
-        </Panel>
       </DataListContent>
     </DataListItem>
   );
