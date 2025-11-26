@@ -20,7 +20,7 @@ jobs:
   discover-envs-for-e2e-ci:
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ steps.set-outputs.outputs.image_tag }}
+      branch: ${{ steps.set-outputs.outputs.branch }}
     steps:
       - name: Extract vars for Pull Request
         shell: bash
@@ -29,26 +29,19 @@ jobs:
           base_ref: ${{ github.event.pull_request.base.ref || github.event.merge_group.base_ref }}
         run: |
           branch=$base_ref
-          branch=$(echo ${branch#refs/heads/})
-          image_tag="latest"
-          if [[ "$branch" != "main" ]]; then
-            image_tag="${branch#release/}"
-          fi
-          echo "image_tag=$image_tag" >> $GITHUB_ENV
+          branch=$(echo ${branch#refs/heads/})          
+          echo "branch=$branch" >> $GITHUB_ENV
       - name: Extract vars for Push
         shell: bash
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
         run: |
           branch=$(echo ${GITHUB_REF#refs/heads/})
-          image_tag="latest"
-          if [[ "$branch" != "main" ]]; then
-            image_tag="${branch#release/}"
-          fi
-          echo "image_tag=$image_tag" >> $GITHUB_ENV
+          echo "branch=$branch" >> $GITHUB_ENV
       - name: Set outputs
         id: set-outputs
         run: |
-          echo ${{ env.image_tag }}
+          echo ${{ env.branch }}
+          echo "branch=${{ env.branch }}" >> "$GITHUB_OUTPUT"
 
   build-backend-and-upload-for-e2e-ci:
     runs-on: ubuntu-latest
@@ -58,7 +51,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           repository: securesign/rhtas-console
-          ref: ${{ needs.discover-envs-for-e2e-ci.outputs.image_tag }}
+          ref: ${{ needs.discover-envs-for-e2e-ci.outputs.branch }}
       - name: save rhtas-console image
         run: |
           mkdir -p /tmp/images/
@@ -108,3 +101,4 @@ jobs:
       artifact: test-images
       server_image: ghcr.io/securesign/rhtas-console:pr-test
       ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
+      server_db_image: docker.io/library/mariadb:10.5

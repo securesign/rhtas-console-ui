@@ -12,7 +12,7 @@ inputs:
     required: false
     default: ""
   server_db_image:
-    description: image uri for server-postgres (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+    description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
     type: string
     required: false
     default: ""
@@ -29,7 +29,7 @@ outputs:
     description: Port where the UI is running
     value: ${{ steps.set-output.outputs.ui_port }}
   playwright_port:
-    description: Port where the UI is running
+    description: Port where the Playwright server is running
     value: ${{ steps.set-output.outputs.playwright_port }}
 runs:
   using: "composite"
@@ -47,7 +47,7 @@ runs:
           opts="${opts} CONSOLE_UI_IMAGE=${{ inputs.ui_image }}"
         fi
         if [ -n "${{ inputs.server_db_image }}" ]; then
-          opts="${opts} POSTGRESQL_IMAGE=${{ inputs.server_db_image }}"
+          opts="${opts} CONSOLE_DB_IMAGE=${{ inputs.server_db_image }}"
         fi
 
         if [ -n "${{ inputs.playwright_version }}" ]; then
