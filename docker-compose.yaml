@@ -53,5 +53,5 @@ services:
     command:
       - /bin/sh
       - -c
-      - npx -y playwright run-server --port 5000
+      - npx -y playwright@v1.56.1 run-server --port 5000
 
