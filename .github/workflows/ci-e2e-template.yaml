@@ -1,0 +1,163 @@
+name: Run e2e RHTAS Console CI tests
+
+on:
+  workflow_call:
+    inputs:
+      artifact:
+        description: |
+          The name of the artifact storing custom images to be used during the CI run. All
+          images stored in the artifact will be automatically loaded.
+        required: false
+        type: string
+      ui_image:
+        description: image uri for the ui (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+      server_image:
+        description: image uri for the server (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+      server_db_image:
+        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+  workflow_dispatch:
+    inputs:
+      artifact:
+        description: |
+          The name of the artifact storing custom images to be used during the CI run. All
+          images stored in the artifact will be automatically loaded.
+        required: false
+        type: string
+      ui_image:
+        description: image uri for the ui (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+      server_image:
+        description: image uri for the server (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+      server_db_image:
+        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
+        type: string
+        required: false
+        default: ""
+
+jobs:
+  check-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+
+      - name: Download artifact
+        if: "${{ inputs.artifact != '' }}"
+        id: download-artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact }}
+          path: /tmp/container_images
+      - name: Load images
+        if: ${{ inputs.artifact != '' }}
+        env:
+          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
+        run: |
+          for image in $(
+            find "${IMAGES_PATH}" -type f -name "*.tar"
+          ); do
+            echo "Loading image \`${image}\`" >>"$GITHUB_STEP_SUMMARY"
+            docker load --input ${image}
+          done
+      - name: Check ui image exists
+        if: ${{ inputs.ui_image != '' }}
+        run: |
+          if docker image inspect ${{ inputs.ui_image }} >/dev/null 2>&1; then
+              echo "Image exists locally"
+              docker image inspect ${{ inputs.ui_image }}
+          else
+              echo "Image does not exist locally"
+              docker manifest inspect ${{ inputs.ui_image }}
+          fi
+      - name: Check server image exists
+        if: ${{ inputs.server_image != '' }}
+        run: |
+          if docker image inspect ${{ inputs.server_image }} >/dev/null 2>&1; then
+              echo "Image exists locally"
+              docker image inspect ${{ inputs.server_image }}
+          else
+              echo "Image does not exist locally"
+              docker manifest inspect ${{ inputs.server_image }}
+          fi
+      - name: Check server_db_image image exists
+        if: ${{ inputs.server_db_image != '' }}
+        run: |
+          if docker image inspect ${{ inputs.server_db_image }} >/dev/null 2>&1; then
+              echo "Image exists locally"
+              docker image inspect ${{ inputs.server_db_image }}
+          else
+              echo "Image does not exist locally"
+              docker manifest inspect ${{ inputs.server_db_image }}
+          fi
+
+  e2e-integration-tests:
+    needs: check-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        if: "${{ inputs.artifact != '' }}"
+        id: download-artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact }}
+          path: /tmp/container_images
+      - name: Load images
+        if: ${{ inputs.artifact != '' }}
+        env:
+          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
+        run: |
+          for image in $(
+            find "${IMAGES_PATH}" -type f -name "*.tar"
+          ); do
+            echo "Loading image \`${image}\`" >>"$GITHUB_STEP_SUMMARY"
+            docker load --input ${image}
+          done
+
+      - name: Checkout ui repo
+        uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+      - name: Install dependencies
+        run: |
+          # Use "--ignore-scripts --no-audit" just to make it faster
+          npm ci --verbose --ignore-scripts --no-audit
+
+      - name: Start rhtas-console
+        uses: ./.github/actions/start-console
+        with:
+          ui_image: ${{ inputs.ui_image }}
+          server_image: ${{ inputs.server_image }}
+          server_db_image: ${{ inputs.server_db_image }}
+
+      - name: Run Playwright tests
+        run: |
+          PW_TEST_CONNECT_WS_ENDPOINT=ws://localhost:5000/ CONSOLE_UI_URL=http://localhost:8088 AUTH_REQUIRED=false npm run -w e2e test
+
+      - name: Upload Playwright artifacts
+        if: failure() # only upload if tests failed
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            e2e/test-results
+            e2e/playwright-report

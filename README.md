@@ -58,6 +58,7 @@ npm run start
 | --------------- | ----------------------------- | -------------------------------------- |
 | MOCK            | Enables or disables mock data | `off`                                  |
 | AUTH_REQUIRED   | Enable/Disable authentication | false                                  |
+| CONSOLE_API_URL | Set Console API URL           | http://localhost:8080                  |
 | OIDC_CLIENT_ID  | Set Oidc Client               | frontend                               |
 | OIDC_SERVER_URL | Set Oidc Server URL           | `http://localhost:8090/realms/console` |
 | OIDC_SCOPE      | Set Oidc Scope                | openid                                 |
@@ -90,7 +91,7 @@ podman run -it $BASE_IMAGE cat /etc/yum.repos.d/ubi.repo > ubi.repo
 
 Make sure the `ubi.repo` file has all repositories enabled `enabled = 1` and then:
 
-Also make sure the `ubi.repo` contains only repositories from https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/known_rpm_repositories.yml . Change the repository names manually if needed. E.g. 
+Also make sure the `ubi.repo` contains only repositories from https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/known_rpm_repositories.yml . Change the repository names manually if needed. E.g.
 
 - `ubi-9-for-baseos-rpms` change it to `ubi-9-for-x86_64-baseos-rpms` as only the latter is an accepted repository in Konflux.
 
@@ -128,13 +129,14 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
 1. **Set TUF_REPO_URL using a ConfigMap**:
 
    Before deploying, you need to retrieve the TUF repository URL from your running RHTAS instance. This value should be stored in a ConfigMap that the console backend can consume.
-  
-   * Retrieve the TUF route URL from your running RHTAS instance:
+   - Retrieve the TUF route URL from your running RHTAS instance:
+
    ```bash
    oc get tuf -o jsonpath='{.items[0].status.url}'
    ```
-   
-   * Create a ConfigMap with the retrieved URL:
+
+   - Create a ConfigMap with the retrieved URL:
+
    ```bash
    oc create configmap tuf-repo-config \
    --from-literal=TUF_REPO_URL=<output-from-above-command> \
@@ -151,7 +153,7 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    oc apply -k https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0
    ```
 
-4. **Verify the Deployment**:
+3. **Verify the Deployment**:
 
    Check the status of the deployed resources:
 
@@ -160,11 +162,12 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    ```
 
    You can access the console via a browser using the UI route:
+
    ```bash
    oc get route console-ui -o jsonpath='https://{.spec.host}{"\n"}'
    ```
 
-5. **Deletion**:
+4. **Deletion**:
 
    To delete the deployed resources:
 
