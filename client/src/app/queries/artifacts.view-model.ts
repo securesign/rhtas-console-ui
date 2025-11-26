@@ -62,7 +62,6 @@ export interface HashSummary {
 export interface SignatureView {
   id: string;
   kind: "hashedrekord" | "other";
-  // identity: SignatureIdentity;
   hash: HashSummary;
   timestamp?: string; // ISO string for "x minutes ago" display
   status: SignatureStatus;
@@ -77,7 +76,7 @@ export interface SignatureView {
   // a single Rekor entry associated with this signature, once the backend
   // is updated to include it alongside the signature.
   rekorEntry?: import("@app/client").RekorEntry;
-  rawBundleJson?: unknown; // or a typed SigstoreBundle
+  rawBundleJson?: unknown;
 }
 
 /**

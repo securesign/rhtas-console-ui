@@ -6,6 +6,7 @@ import type {
   ArtifactIdentity,
   ParsedCertificate,
   SignatureIdentity,
+  SignatureView,
 } from "@app/queries/artifacts.view-model";
 
 // minimal shape required for eslint, uses only we actually need
@@ -178,6 +179,33 @@ export const getRekorSetBytes = (signedEntryTimestamp?: string): Uint8Array | un
     console.warn("Invalid signedEntryTimestamp, could not decode:", e);
     return undefined;
   }
+};
+
+export const handleDownloadBundle = (signature: SignatureView) => {
+  if (!signature.rawBundleJson) {
+    return;
+  }
+
+  const bundleString =
+    typeof signature.rawBundleJson === "string"
+      ? signature.rawBundleJson
+      : JSON.stringify(signature.rawBundleJson, null, 2);
+
+  const blob = new Blob([bundleString], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  const hashPrefix = signature.hash.value.slice(0, 12);
+  link.download = `sigstore-bundle-${hashPrefix}.json`;
+  link.href = url;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
 };
 
 /**

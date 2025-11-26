@@ -20,7 +20,7 @@ import {
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState } from "react";
 import type { SignatureView } from "@app/queries/artifacts.view-model";
-import { relativeDateString, toIdentity } from "@app/utils/utils";
+import { handleDownloadBundle, relativeDateString, toIdentity } from "@app/utils/utils";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { LeafCertificate } from "./LeafCertificate";
 import { CertificateChain } from "./CertificateChain";
@@ -38,7 +38,6 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
   const handleToggleActions = () => setActionsOpened(!isActionsOpened);
 
   const handleActionSelect = () => {
-    // TODO: probably some logic there
     setActionsOpened(false);
   };
 
@@ -112,8 +111,12 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
             onOpenChange={setActionsOpened}
           >
             <DropdownList>
-              <DropdownItem key="download bundle" isDisabled>
-                Download Bundle
+              <DropdownItem
+                key="download-bundle"
+                isDisabled={!signature.rawBundleJson}
+                onClick={() => handleDownloadBundle(signature)}
+              >
+                Download bundle
               </DropdownItem>
             </DropdownList>
           </Dropdown>
