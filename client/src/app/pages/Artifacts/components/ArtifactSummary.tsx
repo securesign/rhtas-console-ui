@@ -19,7 +19,7 @@ import type { IArtifactResultsProps } from "./ArtifactResults";
 export const ArtifactSummary = ({ artifact, verification }: IArtifactResultsProps) => {
   const { summary } = verification;
   const identities = summary.identities ?? [];
-  const timeCoherence = summary.timeCoherence;
+  const { timeCoherence } = summary;
 
   const summaryCards = [
     <Card key="artifact-summary" isPlain>

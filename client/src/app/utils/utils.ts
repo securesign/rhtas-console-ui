@@ -167,15 +167,14 @@ export const getRekorSetBytes = (signedEntryTimestamp?: string): Uint8Array | un
   if (!signedEntryTimestamp) return undefined;
 
   try {
-    // if Rekor ever sends URL-safe base64 (- and _), normalize it:
-    const normalized = signedEntryTimestamp
-      .replace(/-/g, "+")
-      .replace(/_/g, "/")
-      .padEnd(Math.ceil(signedEntryTimestamp.length / 4) * 4, "=");
+    let normalized = signedEntryTimestamp.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = normalized.length % 4;
+    if (pad) {
+      normalized = normalized.padEnd(normalized.length + (4 - pad), "=");
+    }
 
     return Uint8Array.from(atob(normalized), (c) => c.charCodeAt(0));
   } catch (e) {
-    // best-effort, don't kill the UI
     console.warn("Invalid signedEntryTimestamp, could not decode:", e);
     return undefined;
   }
