@@ -65,40 +65,36 @@ export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) =
   }, [leafCert.pem]);
 
   const leafCertActionItems = (
-    <>
-      <DropdownItem
-        key="copy-pem"
-        onClick={() => {
-          if (!leafCert.pem) return;
-          void copyToClipboard(leafCert.pem);
-          addCopySuccessAlert();
-        }}
-      >
-        Copy PEM
-      </DropdownItem>
-    </>
+    <DropdownItem
+      key="copy-pem"
+      onClick={() => {
+        if (!leafCert.pem) return;
+        void copyToClipboard(leafCert.pem);
+        addCopySuccessAlert();
+      }}
+    >
+      Copy PEM
+    </DropdownItem>
   );
 
   const leafCertActions = (
-    <>
-      <Dropdown
-        onSelect={onSelect}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-          <MenuToggle
-            ref={toggleRef}
-            isExpanded={isOpen}
-            onClick={() => setIsOpen(!isOpen)}
-            variant="plain"
-            aria-label="Leaf certificate actions toggle"
-            icon={<EllipsisVIcon />}
-          />
-        )}
-        isOpen={isOpen}
-        onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
-      >
-        <DropdownList>{leafCertActionItems}</DropdownList>
-      </Dropdown>
-    </>
+    <Dropdown
+      onSelect={onSelect}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
+          ref={toggleRef}
+          isExpanded={isOpen}
+          onClick={() => setIsOpen(!isOpen)}
+          variant="plain"
+          aria-label="Leaf certificate actions toggle"
+          icon={<EllipsisVIcon />}
+        />
+      )}
+      isOpen={isOpen}
+      onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
+    >
+      <DropdownList>{leafCertActionItems}</DropdownList>
+    </Dropdown>
   );
 
   return (
@@ -108,28 +104,38 @@ export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) =
       </CardHeader>
       <CardBody>
         <DescriptionList aria-label="Leaf certificate details" isCompact isHorizontal>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>SAN</DescriptionListTermHelpText>
-            <DescriptionListDescription>{leafCert.sans.join(", ")}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Issuer</DescriptionListTermHelpText>
-            <DescriptionListDescription>{leafCert.issuer}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Validity</DescriptionListTermHelpText>
-            <DescriptionListDescription>{leafCertValidity}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Serial</DescriptionListTermHelpText>
-            <DescriptionListDescription>{leafCert.serialNumber}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Fingerprint</DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              {leafCert.pem ? leafCertFingerprint || "..." : "N/A"}
-            </DescriptionListDescription>
-          </DescriptionListGroup>
+          {leafCert.sans && leafCert.sans.length > 0 && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>SAN</DescriptionListTermHelpText>
+              <DescriptionListDescription>{leafCert.sans.join(", ")}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {leafCert.issuer && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Issuer</DescriptionListTermHelpText>
+              <DescriptionListDescription>{leafCert.issuer}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {leafCertValidity && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Validity</DescriptionListTermHelpText>
+              <DescriptionListDescription>{leafCertValidity}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {leafCert.serialNumber && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Serial</DescriptionListTermHelpText>
+              <DescriptionListDescription>{leafCert.serialNumber}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {leafCert.pem && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Fingerprint</DescriptionListTermHelpText>
+              <DescriptionListDescription>
+                {leafCert.pem ? leafCertFingerprint || "..." : "N/A"}
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
         </DescriptionList>
       </CardBody>
       <AlertGroup hasAnimations isToast isLiveRegion>

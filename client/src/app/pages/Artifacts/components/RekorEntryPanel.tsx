@@ -15,7 +15,6 @@ import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undefined }) => {
   if (!rekorEntry) return <></>;
-  console.table(rekorEntry);
   const entryType = getRekorEntryType(rekorEntry.body);
   const setBytes = getRekorSetBytes(rekorEntry.verification.signedEntryTimestamp);
 
@@ -24,40 +23,55 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
       <CardTitle>Rekor Entry</CardTitle>
       <CardBody>
         <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>UUID</DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              <ClipboardCopy isReadOnly hoverTip="Copy UUID" clickTip="Copied">
-                {rekorEntry.uuid}
-              </ClipboardCopy>
-            </DescriptionListDescription>
-          </DescriptionListGroup>
+          {rekorEntry.uuid && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>UUID</DescriptionListTermHelpText>
+              <DescriptionListDescription>
+                <ClipboardCopy isReadOnly hoverTip="Copy UUID" clickTip="Copied">
+                  {rekorEntry.uuid}
+                </ClipboardCopy>
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
           {entryType && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Entry Type</DescriptionListTermHelpText>
               <DescriptionListDescription>{entryType}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Integrated Time</DescriptionListTermHelpText>
-            <DescriptionListDescription>{formatIntegratedTime(rekorEntry.integratedTime)}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Log ID</DescriptionListTermHelpText>
-            <DescriptionListDescription>{rekorEntry.logID}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Log Index</DescriptionListTermHelpText>
-            <DescriptionListDescription>{rekorEntry.logIndex}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Tree Size</DescriptionListTermHelpText>
-            <DescriptionListDescription>{rekorEntry.verification.inclusionProof.treeSize}</DescriptionListDescription>
-          </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
-            <DescriptionListDescription>{rekorEntry.verification.inclusionProof.hashes}</DescriptionListDescription>
-          </DescriptionListGroup>
+          {rekorEntry.integratedTime && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Integrated Time</DescriptionListTermHelpText>
+              <DescriptionListDescription>{formatIntegratedTime(rekorEntry.integratedTime)}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {rekorEntry.logID && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Log ID</DescriptionListTermHelpText>
+              <DescriptionListDescription>{rekorEntry.logID}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {rekorEntry.logIndex && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Log Index</DescriptionListTermHelpText>
+              <DescriptionListDescription>{rekorEntry.logIndex}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {rekorEntry.verification.inclusionProof.treeSize && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Tree Size</DescriptionListTermHelpText>
+              <DescriptionListDescription>{rekorEntry.verification.inclusionProof.treeSize}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
+          {rekorEntry.verification.inclusionProof.hashes &&
+            rekorEntry.verification.inclusionProof.hashes.length > 0 && (
+              <DescriptionListGroup>
+                <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
+                <DescriptionListDescription>
+                  {rekorEntry.verification.inclusionProof.hashes.length}
+                </DescriptionListDescription>
+              </DescriptionListGroup>
+            )}
           {setBytes && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Signed Entry Timestamp</DescriptionListTermHelpText>

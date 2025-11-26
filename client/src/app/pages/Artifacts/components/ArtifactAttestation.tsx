@@ -22,8 +22,8 @@ import { useState } from "react";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
-// import { CertificateChain } from "./CertificateChain";
-// import { LeafCertificate } from "./LeafCertificate";
+import { CertificateChain } from "./CertificateChain";
+import { LeafCertificate } from "./LeafCertificate";
 
 export const ArtifactAttestation = ({ attestation }: { attestation: AttestationView }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -124,15 +124,24 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
         isHidden={!isExpanded}
       >
         <Stack hasGutter>
-          {/* <StackItem>
-            <LeafCertificate leafCert={attestation.signingCertificate} />
-          </StackItem>
-          <StackItem>
-            <CertificateChain certificateChain={attestation.certificateChain} />
-          </StackItem> */}
-          <StackItem>
-            <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
-          </StackItem>
+          {attestation.signingCertificate && (
+            <StackItem>
+              {/** LEAF / SIGNING CERTIFICATE */}
+              <LeafCertificate leafCert={attestation.signingCertificate} />
+            </StackItem>
+          )}
+          {attestation.certificateChain && attestation.certificateChain.length > 0 && (
+            <StackItem>
+              {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
+              <CertificateChain certificateChain={attestation.certificateChain} />
+            </StackItem>
+          )}
+          {attestation.rekorEntry && (
+            <StackItem>
+              {/** REKOR ENTRY */}
+              <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
+            </StackItem>
+          )}
         </Stack>
       </DataListContent>
     </DataListItem>

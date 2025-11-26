@@ -125,18 +125,24 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
         isHidden={!isExpanded}
       >
         <Stack hasGutter>
-          <StackItem>
-            {/** LEAF / SIGNING CERTIFICATE */}
-            <LeafCertificate leafCert={signature.signingCertificate} />
-          </StackItem>
-          <StackItem>
-            {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
-            <CertificateChain certificateChain={signature.certificateChain} />
-          </StackItem>
-          <StackItem>
-            {/** REKOR ENTRY */}
-            <RekorEntryPanel rekorEntry={signature.rekorEntry} />
-          </StackItem>
+          {signature.signingCertificate && (
+            <StackItem>
+              {/** LEAF / SIGNING CERTIFICATE */}
+              <LeafCertificate leafCert={signature.signingCertificate} />
+            </StackItem>
+          )}
+          {signature.certificateChain && signature.certificateChain.length > 0 && (
+            <StackItem>
+              {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
+              <CertificateChain certificateChain={signature.certificateChain} />
+            </StackItem>
+          )}
+          {signature.rekorEntry && (
+            <StackItem>
+              {/** REKOR ENTRY */}
+              <RekorEntryPanel rekorEntry={signature.rekorEntry} />
+            </StackItem>
+          )}
         </Stack>
       </DataListContent>
     </DataListItem>
