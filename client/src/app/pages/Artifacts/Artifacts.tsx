@@ -14,11 +14,10 @@ import {
   Popover,
   TextInput,
 } from "@patternfly/react-core";
-import { useFetchArtifactsImageData } from "@app/queries/artifacts";
+import { useFetchArtifactsImageData, useVerifyArtifact } from "@app/queries/artifacts";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { ArtifactResults } from "./components/ArtifactResults";
 import { Controller, useForm } from "react-hook-form";
-
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 const PLACEHOLDER_URI = "docker.io/library/nginx:latest";
@@ -28,7 +27,7 @@ interface FormInputs {
 }
 
 export const Artifacts = () => {
-  const [artifactUri, setArtifactUri] = useState<string | null>(null);
+  const [artifactUri, setArtifactUri] = useState<string | null>();
   const labelHelpRef = useRef(null);
 
   const {
@@ -36,6 +35,8 @@ export const Artifacts = () => {
     isFetching: isFetchingArtifactMetadata,
     fetchError: fetchErrorArtifactMetadata,
   } = useFetchArtifactsImageData({ uri: artifactUri });
+
+  const { mutate: verifyArtifact, data: verification, error: verifyError } = useVerifyArtifact();
 
   const {
     control,
@@ -54,6 +55,8 @@ export const Artifacts = () => {
     const uri = data.searchInput?.trim();
     if (!uri) return;
     setArtifactUri(uri);
+    // kick off verification for this URI as well
+    verifyArtifact({ uri, expectedSAN: null });
   };
 
   const query = watch("searchInput");
@@ -61,7 +64,7 @@ export const Artifacts = () => {
 
   return (
     <Fragment>
-      <PageSection variant="default">
+      <PageSection>
         <Content>
           <h1>Artifacts</h1>
           <p>Search for an artifact.</p>
@@ -75,15 +78,20 @@ export const Artifacts = () => {
                 <Controller
                   name="searchInput"
                   control={control}
-                  rules={{ required: { value: true, message: "A value is required" } }}
+                  rules={{ required: { value: true, message: "A URI is required" } }}
                   render={({ field, fieldState }) => (
                     <FormGroup
-                      label="URI"
+                      label="Container Image URI"
                       labelHelp={
                         <Popover
                           triggerRef={labelHelpRef}
-                          headerContent={<div>URI of the container image</div>}
-                          bodyContent={<div>e.g., {PLACEHOLDER_URI}</div>}
+                          headerContent={<div>Uniform Resource Identifier (URI)</div>}
+                          bodyContent={
+                            <div>
+                              The URI identifies where a resource, like a container image, lives (e.g.,{" "}
+                              {PLACEHOLDER_URI})
+                            </div>
+                          }
                         >
                           <FormGroupLabelHelp ref={labelHelpRef} aria-label="More info for URI field" />
                         </Popover>
@@ -118,10 +126,10 @@ export const Artifacts = () => {
             </Flex>
             <Flex
               direction={{ default: "column" }}
-              alignSelf={{ default: "alignSelfFlexStart" }}
+              alignSelf={{ default: "alignSelfFlexEnd" }}
               flex={{ default: "flex_1" }}
             >
-              <FlexItem style={{ marginTop: "2em" }}>
+              <FlexItem>
                 <Button
                   variant="primary"
                   id="search-form-button"
@@ -139,8 +147,8 @@ export const Artifacts = () => {
         </Form>
       </PageSection>
       <PageSection>
-        <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata}>
-          {artifact && <ArtifactResults artifact={artifact} />}
+        <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata ?? verifyError}>
+          {artifact && verification && <ArtifactResults artifact={artifact} verification={verification} />}
         </LoadingWrapper>
       </PageSection>
     </Fragment>

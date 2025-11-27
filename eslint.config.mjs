@@ -53,6 +53,7 @@ export default tseslint.config([
           singleQuote: false,
         },
       ],
+      "@typescript-eslint/no-unsafe-assignment": ["warn"],
     },
     settings: { react: { version: "18.3" } },
     ignores: ["client/config/**", "client/src/app/client/**", "client/types/**"],
