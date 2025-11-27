@@ -20,7 +20,7 @@ import {
 } from "@patternfly/react-core";
 import { useState } from "react";
 import { RekorEntryPanel } from "./RekorEntryPanel";
-import { relativeDateString } from "@app/utils/utils";
+import { handleDownloadBundle, relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { CertificateChain } from "./CertificateChain";
 import { LeafCertificate } from "./LeafCertificate";
@@ -35,7 +35,6 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
   const handleToggleActions = () => setActionsOpened(!isActionsOpened);
 
   const handleActionSelect = () => {
-    // TODO: probably some logic there
     setActionsOpened(false);
   };
 
@@ -111,7 +110,11 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
             onOpenChange={setActionsOpened}
           >
             <DropdownList>
-              <DropdownItem key="download bundle" isDisabled>
+              <DropdownItem
+                key="download bundle"
+                onClick={() => handleDownloadBundle(attestation)}
+                isDisabled={!attestation.rawBundleJson}
+              >
                 Download Bundle
               </DropdownItem>
             </DropdownList>

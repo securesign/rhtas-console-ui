@@ -7,6 +7,7 @@ import type {
   ParsedCertificate,
   SignatureIdentity,
   SignatureView,
+  AttestationView,
 } from "@app/queries/artifacts.view-model";
 
 // minimal shape required for eslint, uses only we actually need
@@ -180,24 +181,21 @@ export const getRekorSetBytes = (signedEntryTimestamp?: string): Uint8Array | un
   }
 };
 
-export const handleDownloadBundle = (signature: SignatureView) => {
-  if (!signature.rawBundleJson) {
+export const handleDownloadBundle = (source: SignatureView | AttestationView): void => {
+  if (!source.rawBundleJson) {
     return;
   }
 
   const bundleString =
-    typeof signature.rawBundleJson === "string"
-      ? signature.rawBundleJson
-      : JSON.stringify(signature.rawBundleJson, null, 2);
+    typeof source.rawBundleJson === "string" ? source.rawBundleJson : JSON.stringify(source.rawBundleJson, null, 2);
 
-  const blob = new Blob([bundleString], {
-    type: "application/json",
-  });
-
+  const blob = new Blob([bundleString], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
-  const hashPrefix = signature.hash.value.slice(0, 12);
+  const hashValue = "hash" in source ? source.hash.value : source.digest.value;
+  const hashPrefix = hashValue.slice(0, 12);
+
   link.download = `sigstore-bundle-${hashPrefix}.json`;
   link.href = url;
   document.body.appendChild(link);
