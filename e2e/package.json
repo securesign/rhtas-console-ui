@@ -5,13 +5,14 @@
   "scripts": {
     "clean": "rimraf ./test-results ./playwright-report",
     "clean:all": "rimraf ./dist ./node_modules",
+    "codegen": "npx playwright codegen http://localhost:3000",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check './tests/**/*.{ts,tsx,js,json}'",
     "format:fix": "prettier --write './tests/**/*.{ts,tsx,js,json}'",
     "test": "npx playwright test --project='chromium'",
     "test:trace": "npx playwright test --project='chromium' --trace on",
-    "test:ui:host": "npx playwright test --ui-host 127.0.0.1"    
+    "test:host": "npx playwright test --ui-host 127.0.0.1"    
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,14 @@
+services:
+  rhtas-console-playwright:
+    image: localhost/devcontainer-rhtas-console-e2e:latest
+    build:
+      dockerfile: ./Dockerfile
+    security_opt:
+      - "label=disable"
+    userns_mode: "keep-id"
+    network_mode: host
+    extra_hosts:
+      - "${HOSTNAME}:127.0.0.1"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes:
+      - ../..:/workspace:cached
