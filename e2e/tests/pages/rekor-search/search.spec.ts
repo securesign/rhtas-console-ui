@@ -1,6 +1,5 @@
 import { expect, Page, test } from "@playwright/test";
 
-import { Navigation } from "../../common/Navigation";
 import { RekorSearchPage } from "./RekorSearchPage";
 
 const verify_search_page_has_main_sections = async (page: Page) => {
@@ -11,11 +10,6 @@ const verify_search_page_has_main_sections = async (page: Page) => {
 };
 
 test.describe("Rekor Search UI", () => {
-  test.beforeEach(async ({ page }) => {
-    const navigation = Navigation.build(page);
-    await navigation.goToSidebar("Rekor Search");
-  });
-
   test("Search by email", async ({ page }) => {
     const rekorSearchPage = await RekorSearchPage.build(page);
     await rekorSearchPage.applySearch("Email", "carlosthe19916@gmail.com");
