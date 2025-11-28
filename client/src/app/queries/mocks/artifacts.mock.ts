@@ -12,6 +12,7 @@ export const artifactsImageDataMock: ImageMetadataResponse = {
     },
   } as Metadata,
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
+  registry: "https://ttl.sh",
 };
 
 export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = {
