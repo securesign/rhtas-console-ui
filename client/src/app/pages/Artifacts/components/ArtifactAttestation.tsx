@@ -1,4 +1,3 @@
-import type { AttestationView } from "@app/queries/artifacts.view-model";
 import {
   ClipboardCopy,
   DataListAction,
@@ -24,8 +23,14 @@ import { handleDownloadBundle, relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { CertificateChain } from "./CertificateChain";
 import { LeafCertificate } from "./LeafCertificate";
+import type { AttestationViewUI } from "@app/queries/artifacts.view-model";
+import type { RekorEntry } from "@app/client";
 
-export const ArtifactAttestation = ({ attestation }: { attestation: AttestationView }) => {
+interface IArtifactAttestation {
+  attestation: AttestationViewUI;
+}
+
+export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isActionsOpened, setActionsOpened] = useState(false);
 
@@ -38,7 +43,7 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
     setActionsOpened(false);
   };
 
-  const key = attestation.digest.value.toString();
+  const key = attestation.digest;
 
   return (
     <DataListItem aria-labelledby={`attestation-item-${key}`} isExpanded={isExpanded}>
@@ -62,23 +67,23 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
                 variant="inline-compact"
                 isCode
               >
-                {`${attestation.digest.algorithm}:${attestation.digest.value}`}
+                {`${attestation.digest}`}
               </ClipboardCopy>
             </DataListCell>,
             <DataListCell key="attestationType">
               {attestation.predicateType ?? attestation.kind ?? "Unknown"}
             </DataListCell>,
             <DataListCell key="timestamp">
-              {attestation.timestamp ? (
-                <Timestamp
-                  tooltip={{ variant: TimestampTooltipVariant.default }}
-                  date={new Date(attestation.timestamp)}
-                >
-                  {relativeDateString(new Date(attestation.timestamp))}
-                </Timestamp>
-              ) : (
-                "N/A"
-              )}
+              {typeof attestation.timestamp === "string"
+                ? (() => {
+                    const date = new Date(attestation.timestamp);
+                    return (
+                      <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={date}>
+                        {relativeDateString(date)}
+                      </Timestamp>
+                    );
+                  })()
+                : "N/A"}
             </DataListCell>,
             <DataListCell style={{ whiteSpace: "nowrap" }} key="verificationStatus">
               {`${attestation.status.verified ? "Attestation ✓" : "Attestation ✗"} / ${
@@ -142,7 +147,7 @@ export const ArtifactAttestation = ({ attestation }: { attestation: AttestationV
           {attestation.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
+              <RekorEntryPanel rekorEntry={attestation.rekorEntry as RekorEntry} />
             </StackItem>
           )}
         </Stack>

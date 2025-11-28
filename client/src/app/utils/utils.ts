@@ -1,37 +1,7 @@
 import { RENDER_DATE_FORMAT } from "@app/Constants";
 import dayjs from "dayjs";
 import type { LabelProps } from "@patternfly/react-core";
-import type {
-  ArtifactOverallStatus,
-  ArtifactIdentity,
-  ParsedCertificate,
-  SignatureIdentity,
-  SignatureView,
-  AttestationView,
-} from "@app/queries/artifacts.view-model";
-
-// minimal shape required for eslint, uses only we actually need
-// from the verification view-model
-interface MinimalArtifactVerificationViewModel {
-  signatures: {
-    status: {
-      signature: "verified" | "invalid" | "unverifiable" | "unknown";
-      rekor: "present" | "missing" | "unknown";
-      chain: "valid" | "invalid" | "partial" | "unknown";
-    };
-  }[];
-  attestations: {
-    status: {
-      verified: boolean;
-      rekor: "present" | "missing" | "unknown";
-    };
-  }[];
-  summary: {
-    timeCoherence: {
-      status: "ok" | "warning" | "error" | "unknown";
-    };
-  };
-}
+import type { ArtifactIdentity, ParsedCertificate } from "@app/client";
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -62,64 +32,6 @@ export const dedupeIdentities = (identities: ArtifactIdentity[]): ArtifactIdenti
     seen.add(key);
     return true;
   });
-};
-
-/**
- * Computes a verification status for an artifact
- * based on verification of signatures & attestations
- * @param vm ViewModel we use for extending API data shape
- * @returns A derived status
- */
-export const deriveOverallVerificationStatus = (vm: MinimalArtifactVerificationViewModel): ArtifactOverallStatus => {
-  const { signatures, attestations, summary } = vm;
-
-  const hasSignatures = signatures.length > 0;
-  const hasAttestations = attestations.length > 0;
-
-  if (!hasSignatures && !hasAttestations) {
-    return "unsigned";
-  }
-
-  const allSignaturesGood =
-    hasSignatures &&
-    signatures.every(
-      (s) => s.status.signature === "verified" && s.status.chain === "valid" && s.status.rekor === "present"
-    );
-
-  const anySignatureBad = signatures.some(
-    (s) => s.status.signature === "invalid" || s.status.chain === "invalid" || s.status.rekor === "missing"
-  );
-
-  const allAttestationsGood =
-    hasAttestations && attestations.every((a) => a.status.verified && a.status.rekor === "present");
-
-  const anyAttestationBad = attestations.some((a) => !a.status.verified || a.status.rekor === "missing");
-
-  const timeStatus = summary.timeCoherence.status;
-
-  // if time coherence is clearly broken, treat as error.
-  if (timeStatus === "error") {
-    return "error";
-  }
-
-  // fully verified: all evidence good, time is ok-ish.
-  if (allSignaturesGood && (!hasAttestations || allAttestationsGood) && timeStatus !== "warning") {
-    return "verified";
-  }
-
-  // completely failed: there is evidence, but every bit of it is bad.
-  const noGoodSignatures = hasSignatures && !signatures.some((s) => s.status.signature === "verified");
-  const noGoodAttestations = hasAttestations && !attestations.some((a) => a.status.verified);
-
-  if ((hasSignatures && noGoodSignatures) || (hasAttestations && noGoodAttestations)) {
-    return "failed";
-  }
-
-  if (anySignatureBad || anyAttestationBad || timeStatus === "warning") {
-    return "partially-verified";
-  }
-
-  return "unknown";
 };
 
 export const formatDate = (value?: string | null) => {
@@ -181,21 +93,28 @@ export const getRekorSetBytes = (signedEntryTimestamp?: string): Uint8Array | un
   }
 };
 
-export const handleDownloadBundle = (source: SignatureView | AttestationView): void => {
-  if (!source.rawBundleJson) {
+interface DownloadableSignature {
+  rawBundleJson?: unknown;
+  hash?: {
+    value?: string | null;
+  };
+}
+
+export const handleDownloadBundle = (signature: DownloadableSignature) => {
+  const { rawBundleJson, hash } = signature;
+
+  if (!rawBundleJson) {
     return;
   }
 
-  const bundleString =
-    typeof source.rawBundleJson === "string" ? source.rawBundleJson : JSON.stringify(source.rawBundleJson, null, 2);
+  const bundleString = typeof rawBundleJson === "string" ? rawBundleJson : JSON.stringify(rawBundleJson, null, 2);
 
   const blob = new Blob([bundleString], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
-  const hashValue = "hash" in source ? source.hash.value : source.digest.value;
-  const hashPrefix = hashValue.slice(0, 12);
-
+  const hashValue = typeof hash?.value === "string" ? hash.value : "";
+  const hashPrefix = hashValue ? hashValue.slice(0, 12) : "bundle";
   link.download = `sigstore-bundle-${hashPrefix}.json`;
   link.href = url;
   document.body.appendChild(link);
@@ -209,7 +128,7 @@ export const handleDownloadBundle = (source: SignatureView | AttestationView): v
  * Best-effort categorization of certificate issuer for UI labels.
  * This is a convenience helper; backend may provide a richer field later.
  */
-export function inferIssuerType(issuer?: string): SignatureIdentity["issuerType"] {
+export function inferIssuerType(issuer?: string): string {
   if (!issuer) return "unknown";
 
   const lower = issuer.toLowerCase();
@@ -275,7 +194,7 @@ export const stringMatcher = (filterValue: string, value: string) => {
  * @param leaf Leaf/signing certificate
  * @returns Single signature identity
  */
-export function toIdentity(leaf?: ParsedCertificate): SignatureIdentity | undefined {
+export function toIdentity(leaf?: ParsedCertificate): { san: string; issuer: string; issuerType: string } | undefined {
   if (!leaf) return undefined;
 
   const san = Array.isArray(leaf.sans) && leaf.sans.length > 0 ? leaf.sans[0] : undefined;
@@ -308,7 +227,7 @@ export const universalComparator = (
 };
 
 export const verificationStatusToLabelColor = (
-  status: ArtifactOverallStatus
+  status: string
 ): {
   label: string;
   color: LabelProps["color"];

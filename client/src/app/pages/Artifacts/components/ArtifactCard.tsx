@@ -1,4 +1,3 @@
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 import {
   Card,
   CardHeader,
@@ -15,20 +14,23 @@ import {
 import { ArtifactAttestations } from "./ArtifactAttestations";
 import { ArtifactSignatures } from "./ArtifactSignatures";
 import { ArtifactSummary } from "./ArtifactSummary";
-import { verificationStatusToLabelColor } from "@app/utils/utils";
+// import { verificationStatusToLabelColor } from "@app/utils/utils";
 import { useState } from "react";
-import type { ImageMetadataResponse } from "@app/client";
+import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 import { ExternalLinkSquareAltIcon } from "@patternfly/react-icons";
 
 interface IArtifactCard {
   artifact: ImageMetadataResponse;
-  verification: ArtifactVerificationViewModel;
+  verification: VerifyArtifactResponse;
 }
 
 export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
-  const { overallStatus } = verification.summary;
-  const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(overallStatus);
+  // coming soon, disabling for now
+  // const { overallStatus } = verification.summary;
+  // const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(overallStatus);
+  const verificationLabel = "";
+  const verificationLabelColor = "green";
 
   const handleTabClick = (
     _event: React.MouseEvent<unknown> | React.KeyboardEvent | MouseEvent,
