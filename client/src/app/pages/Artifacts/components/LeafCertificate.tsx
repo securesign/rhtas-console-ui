@@ -1,4 +1,4 @@
-import type { ParsedCertificate } from "@app/queries/artifacts.view-model";
+import type { ParsedCertificate } from "@app/client";
 import { copyToClipboard, formatDate, sha256FingerprintFromPem } from "@app/utils/utils";
 import {
   DropdownItem,
@@ -28,7 +28,11 @@ interface ToastAlert {
   variant: AlertProps["variant"];
 }
 
-export const LeafCertificate = ({ leafCert }: { leafCert: ParsedCertificate }) => {
+interface ILeafCertificate {
+  leafCert: ParsedCertificate;
+}
+
+export const LeafCertificate = ({ leafCert }: ILeafCertificate) => {
   const [leafCertFingerprint, setLeafCertFingerprint] = useState<string>("");
   const leafCertValidity = leafCert ? `${formatDate(leafCert.notBefore)} → ${formatDate(leafCert.notAfter)}` : "N/A";
   const [isOpen, setIsOpen] = useState<boolean>(false);

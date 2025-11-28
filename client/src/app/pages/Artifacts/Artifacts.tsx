@@ -36,7 +36,12 @@ export const Artifacts = () => {
     fetchError: fetchErrorArtifactMetadata,
   } = useFetchArtifactsImageData({ uri: artifactUri });
 
-  const { mutate: verifyArtifact, data: verification, error: verifyError } = useVerifyArtifact();
+  const {
+    verification,
+    isFetching: isFetchingVerification,
+    fetchError: fetchErrorVerification,
+    refetch: refetchVerification,
+  } = useVerifyArtifact({ uri: artifactUri });
 
   const {
     control,
@@ -54,9 +59,13 @@ export const Artifacts = () => {
   const onSubmit = (data: FormInputs) => {
     const uri = data.searchInput?.trim();
     if (!uri) return;
-    setArtifactUri(uri);
-    // kick off verification for this URI as well
-    verifyArtifact({ uri, expectedSAN: null });
+
+    // if the URI hasn't changed, manually refetch verification
+    if (uri === artifactUri) {
+      void refetchVerification();
+    } else {
+      setArtifactUri(uri);
+    }
   };
 
   const query = watch("searchInput");
@@ -147,7 +156,10 @@ export const Artifacts = () => {
         </Form>
       </PageSection>
       <PageSection>
-        <LoadingWrapper isFetching={isFetchingArtifactMetadata} fetchError={fetchErrorArtifactMetadata ?? verifyError}>
+        <LoadingWrapper
+          isFetching={isFetchingArtifactMetadata || isFetchingVerification}
+          fetchError={fetchErrorArtifactMetadata ?? fetchErrorVerification}
+        >
           {artifact && verification && <ArtifactResults artifact={artifact} verification={verification} />}
         </LoadingWrapper>
       </PageSection>
