@@ -1,119 +1,89 @@
-import type { ImageMetadataResponse } from "@app/client";
-
-// View-model types for the Artifacts designs. These sit on top of the raw API types
-// and represent exactly what the UI needs to render the artifact, signatures,
-// certificate chain, attestations, and Rekor entries.
+import type {
+  ArtifactIdentity,
+  ArtifactSummaryView,
+  ImageMetadataResponse,
+  ParsedCertificate,
+  RekorEntry,
+} from "@app/client";
 
 /**
- *
+ * View-model types to extend the raw API types generated from
+ * the OpenAPI spec. Usually for enforcing a particular type,
+ * or temporarily while the backend implements changes.
  */
-export interface ArtifactIdentity {
-  id: string;
+export interface ArtifactIdentityUI extends ArtifactIdentity {
   type: "email" | "oidc-issuer" | "other";
-  value: string;
   source: "san" | "issuer" | "other";
-  issuer?: string;
 }
 
-export interface TimeCoherenceSummary {
-  status: "ok" | "warning" | "error" | "unknown";
-  minIntegratedTime?: string; // ISO string
-  maxIntegratedTime?: string; // ISO string
+export type ArtifactOverallStatusUI = "verified" | "partially-verified" | "failed" | "unsigned" | "error" | "unknown";
+
+export interface ArtifactSummaryViewUI extends ArtifactSummaryView {
+  identities: ArtifactIdentityUI[];
+  overallStatus: ArtifactOverallStatusUI;
 }
 
-export type ArtifactOverallStatus = "verified" | "partially-verified" | "failed" | "unsigned" | "error" | "unknown";
+export type CertificateRoleUI = "leaf" | "intermediate" | "root";
 
-export interface ArtifactSummaryView {
-  identities: ArtifactIdentity[];
-  signatureCount: number;
-  attestationCount: number;
-  rekorEntryCount: number;
-  timeCoherence: TimeCoherenceSummary;
-  overallStatus: ArtifactOverallStatus;
-}
+export type SignatureVerificationStatusUI = "verified" | "invalid" | "unverifiable" | "unknown";
 
-export type CertificateRole = "leaf" | "intermediate" | "root";
-
-export interface ParsedCertificate {
-  role: CertificateRole;
-  subject: string;
-  issuer: string;
-  notBefore: string; // ISO string
-  notAfter: string; // ISO string
-  sans: string[];
-  serialNumber?: string;
-  isCa: boolean;
-  pem: string;
-}
-
-export type SignatureVerificationStatus = "verified" | "invalid" | "unverifiable" | "unknown";
-
-export interface SignatureStatus {
-  signature: SignatureVerificationStatus;
+export interface SignatureStatusUI {
+  signature: SignatureVerificationStatusUI;
   rekor: "present" | "missing" | "unknown";
   chain: "valid" | "invalid" | "partial" | "unknown";
 }
 
-export interface HashSummary {
-  algorithm: string;
-  value: string;
+export interface SignatureViewUI {
+  id: number;
+  digest: string;
+  signingCertificate: ParsedCertificate;
+  // eslint-disable-next-line @typescript-eslint/array-type
+  certificateChain: Array<ParsedCertificate>;
+  rawBundleJson: string;
+  signatureStatus: string;
+  timestamp?: string;
+
+  kind?: "hashedrekord" | "other";
+  status: SignatureStatusUI;
+
+  // temporary while backend renames to rekorEntry
+  rekorEntry: RekorEntry;
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  tlogEntry: { [key: string]: unknown };
 }
 
-export interface SignatureView {
-  id: string;
-  kind: "hashedrekord" | "other";
-  hash: HashSummary;
-  timestamp?: string; // ISO string for "x minutes ago" display
-  status: SignatureStatus;
-
-  /**
-   * certificateChain is used to validate the signing/leaf certificate,
-   * and includes the root + intermediate certificates
-   */
-  certificateChain: ParsedCertificate[];
-  signingCertificate: ParsedCertificate; // leaf only
-
-  // a single Rekor entry associated with this signature, once the backend
-  // is updated to include it alongside the signature.
-  rekorEntry?: import("@app/client").RekorEntry;
-  rawBundleJson?: unknown;
-}
-
-/**
- * small, local identity for a single signature
- */
-export interface SignatureIdentity {
-  san?: string;
-  issuer?: string;
-  issuerType?: "fulcio" | "other" | "unknown";
-}
-
-export interface AttestationStatus {
+export interface AttestationStatusUI {
   verified: boolean;
   rekor: "present" | "missing" | "unknown";
 }
 
-export interface AttestationView {
-  id: string;
-  kind: "intoto" | "other";
-  predicateType?: string;
-  digest: HashSummary;
+export interface AttestationViewUI {
+  kind?: "intoto" | "other";
+  digest: string;
+  id: number;
+  status: AttestationStatusUI;
+  // subject isn't in the backend type yet, but we use it in the UI
   subject?: string;
-  issuer?: string;
-  timestamp?: string; // ISO string
-  signingCertificate?: ParsedCertificate; // leaf
-  certificateChain?: ParsedCertificate[]; // intermediate + root
-  status: AttestationStatus;
-  rekorEntry?: import("@app/client").RekorEntry;
-  rawStatementJson?: unknown;
-  rawBundleJson?: unknown;
+
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  rekorEntry: { [key: string]: unknown };
+  predicateType: string;
+
+  // temporary while backend renames to rekorEntry
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  tlogEntry: { [key: string]: unknown };
+  timestamp?: string;
+  signingCertificate?: ParsedCertificate;
+  // eslint-disable-next-line @typescript-eslint/array-type
+  certificateChain?: Array<ParsedCertificate>;
+  rawBundleJson: string;
 }
 
 // high-level view model returned by the verification endpoint once it
 // is extended to include structured signature/attestation/rekor data.
-export interface ArtifactVerificationViewModel {
+export interface ArtifactVerificationUI {
   artifact: ImageMetadataResponse;
-  summary: ArtifactSummaryView;
-  signatures: SignatureView[];
-  attestations: AttestationView[];
+  summary: ArtifactSummaryViewUI;
+  signatures: SignatureViewUI[];
+  attestations: AttestationViewUI[];
 }
