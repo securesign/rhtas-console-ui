@@ -8,6 +8,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ViteEjsPlugin } from "vite-plugin-ejs";
 import { viteStaticCopy } from "vite-plugin-static-copy";
+import IstanbulPlugin from "vite-plugin-istanbul";
 
 import { brandingStrings, CONSOLE_ENV, encodeEnv, SERVER_ENV_KEYS } from "@console-ui/common";
 
@@ -70,6 +71,18 @@ export default defineConfig({
           },
         ]
       : []),
+      ...(process.env.NODE_ENV === "development"
+      ? [
+          IstanbulPlugin({
+            include: "src/*",
+            exclude: ["node_modules", "test/"],
+            extension: [".js", ".jsx", ".ts", ".tsx"],
+            requireEnv: false,
+            checkProd: false,
+            forceBuildInstrument: true,
+          }),
+        ]
+      : []),
   ],
   resolve: {
     alias: {
@@ -84,6 +97,7 @@ export default defineConfig({
         },
       },
     },
+    sourcemap: process.env.NODE_ENV === "development",
   },
   server: {
     proxy: {

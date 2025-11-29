@@ -1,4 +1,7 @@
-import { expect, Page, test } from "@playwright/test";
+import { Page } from "@playwright/test";
+
+import { expect } from "../../assertions";
+import { test } from "../../fixtures";
 
 import { RekorSearchPage } from "./RekorSearchPage";
 
