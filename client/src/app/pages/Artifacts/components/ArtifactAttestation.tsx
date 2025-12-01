@@ -56,7 +56,9 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
         <DataListItemCells
           dataListCells={[
             <DataListCell key="identity">
-              <span id={`att-identity-${key}`}>{attestation.signingCertificate?.sans ?? "Unknown subject"}</span>
+              <span id={`att-identity-${key}`}>
+                {attestation.signingCertificate?.sans.join(", ") ?? "Unknown subject"}
+              </span>
             </DataListCell>,
             <DataListCell key="digest">
               <ClipboardCopy
@@ -144,7 +146,7 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
           {attestation.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={attestation.rekorEntry as RekorEntry} />
+              <RekorEntryPanel rekorEntry={attestation.rekorEntry as RekorEntry | undefined} />
             </StackItem>
           )}
         </Stack>

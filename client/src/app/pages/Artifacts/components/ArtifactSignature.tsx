@@ -144,7 +144,7 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
           {signature.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={signature.rekorEntry as RekorEntry} />
+              <RekorEntryPanel rekorEntry={signature.rekorEntry as RekorEntry | undefined} />
             </StackItem>
           )}
         </Stack>
