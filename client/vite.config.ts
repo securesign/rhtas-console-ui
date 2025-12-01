@@ -97,12 +97,20 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./test-setup.ts",
+    browser: {
+      instances: [{ browser: "chromium" }],
+    },
     server: {
       deps: {
         inline: [
           "@patternfly/react-styles", // Ensures its CSS imports are ignored
         ],
       },
+    },
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      reportsDirectory: "./coverage",
     },
   },
 });
