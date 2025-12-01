@@ -1,0 +1,33 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test -- --coverage
+
+      - name: Generate coverage badge
+        uses: tj-actions/coverage-badge@v2
+        with:
+          coverage-summary-path: coverage/coverage-summary.json
+
+      - name: Commit coverage badge
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update coverage badge"
+          file_pattern: coverage-badge.svg
