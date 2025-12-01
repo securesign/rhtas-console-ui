@@ -23,10 +23,9 @@ import { handleDownloadBundle, relativeDateString, toIdentity } from "@app/utils
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { LeafCertificate } from "./LeafCertificate";
 import { CertificateChain } from "./CertificateChain";
-import type { SignatureViewUI } from "@app/queries/artifacts.view-model";
-import type { RekorEntry } from "@app/client";
+import type { RekorEntry, SignatureView } from "@app/client";
 
-export const ArtifactSignature = ({ signature }: { signature: SignatureViewUI }) => {
+export const ArtifactSignature = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -43,9 +42,9 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureViewUI })
   };
 
   const displayIdentity = toIdentity(signature.signingCertificate)?.san ?? "Unknown identity";
-  const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
-  const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
-  const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
+  const signatureStatusBadge = signature.signatureStatus.signature === "verified" ? "Signature ✓" : "Signature ✗";
+  const rekorStatusBadge = signature.signatureStatus.rekor === "verified" ? "Rekor ✓" : "Rekor ✗";
+  const chainStatusBadge = signature.signatureStatus.chain === "verified" ? "Chain ✓" : "Chain ✗";
   const verificationStatusDisplay = `${signatureStatusBadge} / ${chainStatusBadge} / ${rekorStatusBadge}`;
 
   return (
@@ -72,7 +71,6 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureViewUI })
                 {signature.digest}
               </ClipboardCopy>
             </DataListCell>,
-            <DataListCell key="signatureType">{signature.kind}</DataListCell>,
             <DataListCell key="integratedTime">
               {typeof signature.timestamp === "string"
                 ? (() => {
@@ -143,10 +141,10 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureViewUI })
               <CertificateChain certificateChain={signature.certificateChain} />
             </StackItem>
           )}
-          {signature.tlogEntry && (
+          {signature.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={signature.tlogEntry as RekorEntry} />
+              <RekorEntryPanel rekorEntry={signature.rekorEntry as RekorEntry} />
             </StackItem>
           )}
         </Stack>

@@ -1,9 +1,9 @@
 import { ArtifactAttestation } from "./ArtifactAttestation";
 import { DataList } from "@patternfly/react-core";
-import type { AttestationViewUI } from "@app/queries/artifacts.view-model";
+import type { AttestationView } from "@app/client";
 
 interface IArtifactAttestationsProps {
-  attestations: AttestationViewUI[];
+  attestations: AttestationView[];
 }
 
 export const ArtifactAttestations = ({ attestations }: IArtifactAttestationsProps) => {

@@ -23,11 +23,10 @@ import { handleDownloadBundle, relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { CertificateChain } from "./CertificateChain";
 import { LeafCertificate } from "./LeafCertificate";
-import type { AttestationViewUI } from "@app/queries/artifacts.view-model";
-import type { RekorEntry } from "@app/client";
+import type { AttestationView, RekorEntry } from "@app/client";
 
 interface IArtifactAttestation {
-  attestation: AttestationViewUI;
+  attestation: AttestationView;
 }
 
 export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
@@ -57,7 +56,7 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
         <DataListItemCells
           dataListCells={[
             <DataListCell key="identity">
-              <span id={`att-identity-${key}`}>{attestation.subject ?? "Unknown subject"}</span>
+              <span id={`att-identity-${key}`}>{attestation.signingCertificate?.sans ?? "Unknown subject"}</span>
             </DataListCell>,
             <DataListCell key="digest">
               <ClipboardCopy
@@ -70,9 +69,7 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
                 {`${attestation.digest}`}
               </ClipboardCopy>
             </DataListCell>,
-            <DataListCell key="attestationType">
-              {attestation.predicateType ?? attestation.kind ?? "Unknown"}
-            </DataListCell>,
+            <DataListCell key="attestationType">{attestation.predicateType ?? "Unknown"}</DataListCell>,
             <DataListCell key="timestamp">
               {typeof attestation.timestamp === "string"
                 ? (() => {
@@ -86,8 +83,8 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
                 : "N/A"}
             </DataListCell>,
             <DataListCell style={{ whiteSpace: "nowrap" }} key="verificationStatus">
-              {`${attestation.status.verified ? "Attestation ✓" : "Attestation ✗"} / ${
-                attestation.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗"
+              {`${attestation.attestationStatus.attestation === "verified" ? "Attestation ✓" : "Attestation ✗"} / ${
+                attestation.attestationStatus.rekor === "verified" ? "Rekor ✓" : "Rekor ✗"
               }`}
             </DataListCell>,
           ]}

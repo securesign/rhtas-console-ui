@@ -9,7 +9,7 @@ import {
   type VerifyArtifactResponse,
 } from "@app/client";
 import { useMockableQuery } from "./helpers";
-import { artifactsImageDataMock } from "./mocks/artifacts.mock";
+import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
 
 export const ArtifactsKeys = {
   all: ["Artifacts" as const],
@@ -68,8 +68,7 @@ export const useVerifyArtifact = ({
         return response.data ?? null;
       },
     },
-    // temporary: no verify mock
-    null
+    artifactVerificationViewModelMock
   );
 
   return {

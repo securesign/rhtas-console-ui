@@ -3,7 +3,7 @@ import type { VerifyArtifactResponse } from "@app/client";
 import { Panel, PanelMain, PanelMainBody } from "@patternfly/react-core";
 import { ArtifactCard } from "./ArtifactCard";
 
-export interface IArtifactResultsProps {
+interface IArtifactResultsProps {
   artifact: ImageMetadataResponse;
   verification: VerifyArtifactResponse;
 }

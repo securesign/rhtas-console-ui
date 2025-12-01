@@ -194,7 +194,9 @@ export const stringMatcher = (filterValue: string, value: string) => {
  * @param leaf Leaf/signing certificate
  * @returns Single signature identity
  */
-export function toIdentity(leaf?: ParsedCertificate): { san: string; issuer: string; issuerType: string } | undefined {
+export function toIdentity(
+  leaf?: ParsedCertificate
+): { san: string | undefined; issuer: string | undefined; issuerType: string } | undefined {
   if (!leaf) return undefined;
 
   const san = Array.isArray(leaf.sans) && leaf.sans.length > 0 ? leaf.sans[0] : undefined;
