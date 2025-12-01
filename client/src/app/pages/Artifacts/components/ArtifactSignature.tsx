@@ -19,17 +19,17 @@ import {
 } from "@patternfly/react-core";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { useState } from "react";
-import type { SignatureView } from "@app/queries/artifacts.view-model";
 import { handleDownloadBundle, relativeDateString, toIdentity } from "@app/utils/utils";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { LeafCertificate } from "./LeafCertificate";
 import { CertificateChain } from "./CertificateChain";
+import type { RekorEntry, SignatureView } from "@app/client";
 
 export const ArtifactSignature = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const key = signature.hash.value.toString();
+  const key = signature.digest;
 
   const handleToggleSignatureItem = () => {
     setIsExpanded(!isExpanded);
@@ -42,10 +42,9 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
   };
 
   const displayIdentity = toIdentity(signature.signingCertificate)?.san ?? "Unknown identity";
-  const digestDisplay = `${signature.hash.algorithm}:${signature.hash.value}`;
-  const signatureStatusBadge = signature.status.signature === "verified" ? "Signature ✓" : "Signature ✗";
-  const rekorStatusBadge = signature.status.rekor === "present" ? "Rekor ✓" : "Rekor ✗";
-  const chainStatusBadge = signature.status.chain === "valid" ? "Chain ✓" : "Chain ✗";
+  const signatureStatusBadge = signature.signatureStatus.signature === "verified" ? "Signature ✓" : "Signature ✗";
+  const rekorStatusBadge = signature.signatureStatus.rekor === "verified" ? "Rekor ✓" : "Rekor ✗";
+  const chainStatusBadge = signature.signatureStatus.chain === "verified" ? "Chain ✓" : "Chain ✗";
   const verificationStatusDisplay = `${signatureStatusBadge} / ${chainStatusBadge} / ${rekorStatusBadge}`;
 
   return (
@@ -69,18 +68,20 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
                 variant="inline-compact"
                 isCode
               >
-                {digestDisplay}
+                {signature.digest}
               </ClipboardCopy>
             </DataListCell>,
-            <DataListCell key="signatureType">{signature.kind}</DataListCell>,
             <DataListCell key="integratedTime">
-              {signature.timestamp ? (
-                <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(signature.timestamp)}>
-                  {relativeDateString(new Date(signature.timestamp))}
-                </Timestamp>
-              ) : (
-                "N/A"
-              )}
+              {typeof signature.timestamp === "string"
+                ? (() => {
+                    const date = new Date(signature.timestamp);
+                    return (
+                      <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={date}>
+                        {relativeDateString(date)}
+                      </Timestamp>
+                    );
+                  })()
+                : "N/A"}
             </DataListCell>,
             <DataListCell style={{ whiteSpace: "nowrap" }} key="verificationStatus">
               {verificationStatusDisplay}
@@ -143,7 +144,7 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
           {signature.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={signature.rekorEntry} />
+              <RekorEntryPanel rekorEntry={signature.rekorEntry as RekorEntry | undefined} />
             </StackItem>
           )}
         </Stack>

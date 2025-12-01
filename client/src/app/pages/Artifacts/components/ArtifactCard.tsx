@@ -1,4 +1,3 @@
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
 import {
   Card,
   CardHeader,
@@ -17,12 +16,12 @@ import { ArtifactSignatures } from "./ArtifactSignatures";
 import { ArtifactSummary } from "./ArtifactSummary";
 import { verificationStatusToLabelColor } from "@app/utils/utils";
 import { useState } from "react";
-import type { ImageMetadataResponse } from "@app/client";
+import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 import { ExternalLinkSquareAltIcon } from "@patternfly/react-icons";
 
 interface IArtifactCard {
   artifact: ImageMetadataResponse;
-  verification: ArtifactVerificationViewModel;
+  verification: VerifyArtifactResponse;
 }
 
 export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {

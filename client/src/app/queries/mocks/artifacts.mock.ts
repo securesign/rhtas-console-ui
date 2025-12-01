@@ -1,5 +1,4 @@
-import type { ImageMetadataResponse, Metadata } from "@app/client";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
+import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
   image: "ttl.sh/rhtas/test-image:1h",
@@ -15,26 +14,26 @@ export const artifactsImageDataMock: ImageMetadataResponse = {
   registry: "https://ttl.sh",
 };
 
-export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = {
+export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
   artifact: artifactsImageDataMock,
   summary: {
     identities: [
       {
-        id: "builder-email",
+        id: 343543,
         type: "email",
         value: "builder@example.com",
         source: "san",
         issuer: "https://token.actions.githubusercontent.com",
       },
       {
-        id: "github-oidc",
+        id: 53532532,
         type: "oidc-issuer",
         value: "GitHub OIDC",
         source: "issuer",
         issuer: "https://token.actions.githubusercontent.com",
       },
       {
-        id: "release-email",
+        id: 654644,
         type: "email",
         value: "release@example.com",
         source: "san",
@@ -49,12 +48,11 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
       minIntegratedTime: "2025-11-06T08:59:07Z",
       maxIntegratedTime: "2025-11-06T09:09:07Z",
     },
-    overallStatus: "unknown",
+    overallStatus: "verified",
   },
   signatures: [
     {
-      id: "sig-0",
-      kind: "hashedrekord",
+      id: 65463456,
       signingCertificate: {
         subject: "CN=ryordan@redhat.com,O=sigstore.dev",
         issuer: "CN=sigstore-intermediate,O=sigstore.dev",
@@ -66,16 +64,8 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         role: "leaf",
         isCa: false,
       },
-      hash: {
-        algorithm: "sha256",
-        value: "571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
-      },
+      digest: "571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
       timestamp: "2025-11-06T08:59:07Z",
-      status: {
-        signature: "verified",
-        rekor: "present",
-        chain: "valid",
-      },
       certificateChain: [
         {
           role: "intermediate",
@@ -117,10 +107,15 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
           signedEntryTimestamp: "BASE64_SET_SIG0",
         },
       },
+      rawBundleJson: "",
+      signatureStatus: {
+        signature: "verified",
+        chain: "verified",
+        rekor: "verified",
+      },
     },
     {
-      id: "sig-1",
-      kind: "hashedrekord",
+      id: 3532652464,
       signingCertificate: {
         subject: "CN=release@redhat.com,O=sigstore.dev",
         issuer: "CN=sigstore-intermediate,O=sigstore.dev",
@@ -132,15 +127,12 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         role: "leaf",
         isCa: false,
       },
-      hash: {
-        algorithm: "sha256",
-        value: "aa7b9c0d17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
-      },
+      digest: "aa7b9c0d17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
       timestamp: "2025-11-06T09:05:00Z",
-      status: {
+      signatureStatus: {
         signature: "verified",
-        rekor: "present",
-        chain: "valid",
+        rekor: "verified",
+        chain: "verified",
       },
       certificateChain: [
         {
@@ -183,12 +175,12 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
           signedEntryTimestamp: "BASE64_SET_SIG1",
         },
       },
+      rawBundleJson: "",
     },
   ],
   attestations: [
     {
-      id: "att-0",
-      kind: "intoto",
+      id: 65463456,
       predicateType: "https://slsa.dev/provenance/v1",
       signingCertificate: {
         subject: "CN=ryordan@redhat.com,O=sigstore.dev",
@@ -201,17 +193,8 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         role: "leaf",
         isCa: false,
       },
-      digest: {
-        algorithm: "sha256",
-        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
-      },
-      subject: artifactsImageDataMock.image!,
-      issuer: "https://token.actions.githubusercontent.com",
+      digest: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
       timestamp: "2025-11-06T09:00:00Z",
-      status: {
-        verified: true,
-        rekor: "present",
-      },
       rekorEntry: {
         uuid: "att-0-uuid-1111",
         body: "BASE64_BODY_ATT0",
@@ -229,10 +212,17 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
           signedEntryTimestamp: "BASE64_SET_ATT0",
         },
       },
+      type: "",
+      rawBundleJson: "",
+      rawStatementJson: "",
+      attestationStatus: {
+        chain: "verified",
+        rekor: "verified",
+        attestation: "verified",
+      },
     },
     {
-      id: "att-1",
-      kind: "intoto",
+      id: 832154,
       predicateType: "https://slsa.dev/provenance/v1",
       signingCertificate: {
         subject: "CN=release@redhat.com,O=sigstore.dev",
@@ -245,17 +235,8 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
         role: "leaf",
         isCa: false,
       },
-      digest: {
-        algorithm: "sha256",
-        value: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9182",
-      },
-      subject: artifactsImageDataMock.image!,
-      issuer: "https://token.actions.githubusercontent.com",
+      digest: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9182",
       timestamp: "2025-11-06T09:03:00Z",
-      status: {
-        verified: true,
-        rekor: "present",
-      },
       rekorEntry: {
         uuid: "att-1-uuid-2222",
         body: "BASE64_BODY_ATT1",
@@ -273,16 +254,24 @@ export const artifactVerificationViewModelMock: ArtifactVerificationViewModel = 
           signedEntryTimestamp: "BASE64_SET_ATT1",
         },
       },
+      type: "",
+      rawBundleJson: "",
+      rawStatementJson: "",
+      attestationStatus: {
+        attestation: "verified",
+        chain: "verified",
+        rekor: "verified",
+      },
     },
   ],
 };
 
-export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewModel = {
+export const artifactVerificationViewModelInvalidMock: VerifyArtifactResponse = {
   artifact: artifactsImageDataMock,
   summary: {
     identities: [
       {
-        id: "invalid-email",
+        id: 643634,
         type: "email",
         value: "invalid@example.com",
         source: "san",
@@ -301,8 +290,7 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
   },
   signatures: [
     {
-      id: "sig-invalid-0",
-      kind: "hashedrekord",
+      id: 33565,
       signingCertificate: {
         subject: "CN=invalid@example.com,O=sigstore.dev",
         issuer: "CN=sigstore-intermediate,O=sigstore.dev",
@@ -314,25 +302,21 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
         role: "leaf",
         isCa: false,
       },
-
-      hash: {
-        algorithm: "sha256",
-        value: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-      },
+      digest: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       timestamp: "2025-11-06T10:00:00Z",
-      status: {
-        signature: "invalid",
-        rekor: "missing",
-        chain: "invalid",
+      signatureStatus: {
+        signature: "verified",
+        rekor: "failed",
+        chain: "failed",
       },
-      certificateChain: [], // could still show intermediates if backend provides them
-      rekorEntry: undefined,
+      certificateChain: [],
+      rekorEntry: {},
+      rawBundleJson: "",
     },
   ],
   attestations: [
     {
-      id: "att-invalid-0",
-      kind: "intoto",
+      id: 352566,
       predicateType: "https://slsa.dev/provenance/v1",
       signingCertificate: {
         subject: "CN=invalid@example.com,O=sigstore.dev",
@@ -345,18 +329,17 @@ export const artifactVerificationViewModelInvalidMock: ArtifactVerificationViewM
         role: "leaf",
         isCa: false,
       },
-      digest: {
-        algorithm: "sha256",
-        value: "0000000000000000000000000000000000000000000000000000000000000000",
-      },
-      subject: artifactsImageDataMock.image!,
-      issuer: "https://token.actions.githubusercontent.com",
+      digest: "0000000000000000000000000000000000000000000000000000000000000000",
       timestamp: "2025-11-06T10:05:00Z",
-      status: {
-        verified: false,
-        rekor: "missing",
+      rekorEntry: {},
+      type: "",
+      rawBundleJson: "",
+      rawStatementJson: "",
+      attestationStatus: {
+        attestation: "failed",
+        chain: "failed",
+        rekor: "failed",
       },
-      rekorEntry: undefined,
     },
   ],
 };
