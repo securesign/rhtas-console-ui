@@ -48,7 +48,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       minIntegratedTime: "2025-11-06T08:59:07Z",
       maxIntegratedTime: "2025-11-06T09:09:07Z",
     },
-    // overallStatus: "unknown",
+    overallStatus: "verified",
   },
   signatures: [
     {
@@ -66,11 +66,6 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       },
       digest: "571e79e17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
       timestamp: "2025-11-06T08:59:07Z",
-      status: {
-        signature: "verified",
-        rekor: "present",
-        chain: "valid",
-      },
       certificateChain: [
         {
           role: "intermediate",
@@ -95,7 +90,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
           pem: "-----BEGIN CERTIFICATE-----\nMIICROOTCERT...sig0-root...\n-----END CERTIFICATE-----\n",
         },
       ],
-      tlogEntry: {
+      rekorEntry: {
         uuid: "sig-0-uuid-1234",
         body: "BASE64_BODY_SIG0",
         integratedTime: 1730883547,
@@ -113,7 +108,11 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
       },
       rawBundleJson: "",
-      signatureStatus: "",
+      signatureStatus: {
+        signature: "verified",
+        chain: "verified",
+        rekor: "verified",
+      },
     },
     {
       id: 3532652464,
@@ -130,10 +129,10 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       },
       digest: "aa7b9c0d17938efb4b8459da79453fe4019ae11374af1155a8fa9972a7f1b93c2",
       timestamp: "2025-11-06T09:05:00Z",
-      status: {
+      signatureStatus: {
         signature: "verified",
-        rekor: "present",
-        chain: "valid",
+        rekor: "verified",
+        chain: "verified",
       },
       certificateChain: [
         {
@@ -159,7 +158,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
           pem: "-----BEGIN CERTIFICATE-----\nMIICROOTCERT...sig1-root...\n-----END CERTIFICATE-----\n",
         },
       ],
-      tlogEntry: {
+      rekorEntry: {
         uuid: "sig-1-uuid-5678",
         body: "BASE64_BODY_SIG1",
         integratedTime: 1730883600,
@@ -177,7 +176,6 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
       },
       rawBundleJson: "",
-      signatureStatus: "",
     },
   ],
   attestations: [
@@ -197,11 +195,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       },
       digest: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9181",
       timestamp: "2025-11-06T09:00:00Z",
-      status: {
-        verified: true,
-        rekor: "present",
-      },
-      tlogEntry: {
+      rekorEntry: {
         uuid: "att-0-uuid-1111",
         body: "BASE64_BODY_ATT0",
         integratedTime: 1730883660,
@@ -221,7 +215,11 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       type: "",
       rawBundleJson: "",
       rawStatementJson: "",
-      attestationStatus: "",
+      attestationStatus: {
+        chain: "verified",
+        rekor: "verified",
+        attestation: "verified",
+      },
     },
     {
       id: 832154,
@@ -239,11 +237,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       },
       digest: "65738dc1b314fe7e0bb369cb9e596024dcdb2256a4dc29d6a268c2a03eff9182",
       timestamp: "2025-11-06T09:03:00Z",
-      status: {
-        verified: true,
-        rekor: "present",
-      },
-      tlogEntry: {
+      rekorEntry: {
         uuid: "att-1-uuid-2222",
         body: "BASE64_BODY_ATT1",
         integratedTime: 1730883720,
@@ -263,7 +257,11 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       type: "",
       rawBundleJson: "",
       rawStatementJson: "",
-      attestationStatus: "",
+      attestationStatus: {
+        attestation: "verified",
+        chain: "verified",
+        rekor: "verified",
+      },
     },
   ],
 };
@@ -288,7 +286,7 @@ export const artifactVerificationViewModelInvalidMock: VerifyArtifactResponse = 
       minIntegratedTime: undefined,
       maxIntegratedTime: undefined,
     },
-    // overallStatus: "verified",
+    overallStatus: "verified",
   },
   signatures: [
     {
@@ -306,15 +304,14 @@ export const artifactVerificationViewModelInvalidMock: VerifyArtifactResponse = 
       },
       digest: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       timestamp: "2025-11-06T10:00:00Z",
-      status: {
-        signature: "invalid",
-        rekor: "missing",
-        chain: "invalid",
+      signatureStatus: {
+        signature: "verified",
+        rekor: "failed",
+        chain: "failed",
       },
       certificateChain: [],
-      tlogEntry: {},
+      rekorEntry: {},
       rawBundleJson: "",
-      signatureStatus: "",
     },
   ],
   attestations: [
@@ -334,15 +331,15 @@ export const artifactVerificationViewModelInvalidMock: VerifyArtifactResponse = 
       },
       digest: "0000000000000000000000000000000000000000000000000000000000000000",
       timestamp: "2025-11-06T10:05:00Z",
-      status: {
-        verified: false,
-        rekor: "missing",
-      },
-      tlogEntry: {},
+      rekorEntry: {},
       type: "",
       rawBundleJson: "",
       rawStatementJson: "",
-      attestationStatus: "",
+      attestationStatus: {
+        attestation: "failed",
+        chain: "failed",
+        rekor: "failed",
+      },
     },
   ],
 };
