@@ -25,12 +25,16 @@ jobs:
         run: npm run test -- --coverage
 
       - name: Generate coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: tj-actions/coverage-badge-js@v2
         with:
           path: .
+          report_path: coverage/coverage-summary.json
+          output_path: coverage-badge.svg
 
       - name: Commit coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update coverage badge"
-          file_pattern: coverage/badge.svg
+          file_pattern: coverage-badge.svg
