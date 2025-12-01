@@ -16,7 +16,7 @@ import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undefined }) => {
   if (!rekorEntry) return <></>;
   const entryType = getRekorEntryType(rekorEntry.body);
-  const setBytes = getRekorSetBytes(rekorEntry.verification.signedEntryTimestamp);
+  const setBytes = getRekorSetBytes(rekorEntry.verification?.signedEntryTimestamp);
 
   return (
     <Card>
@@ -57,14 +57,14 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
               <DescriptionListDescription>{rekorEntry.logIndex}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.verification.inclusionProof.treeSize && (
+          {rekorEntry.verification?.inclusionProof.treeSize && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Tree Size</DescriptionListTermHelpText>
               <DescriptionListDescription>{rekorEntry.verification.inclusionProof.treeSize}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.verification.inclusionProof.hashes &&
-            rekorEntry.verification.inclusionProof.hashes.length > 0 && (
+          {rekorEntry.verification?.inclusionProof.hashes &&
+            rekorEntry.verification?.inclusionProof.hashes.length > 0 && (
               <DescriptionListGroup>
                 <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
                 <DescriptionListDescription>
