@@ -32,7 +32,7 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.7",
     "js-yaml": "^4.1.0",
-    "oidc-client-ts": "^2.4.0",
+    "oidc-client-ts": "^3.4.1",
     "pvtsutils": "^1.3.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
