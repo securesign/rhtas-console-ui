@@ -1,4 +1,4 @@
-import type { RekorEntry } from "@app/client";
+import type { TransparencyLogEntry } from "@app/client";
 import { formatIntegratedTime, getRekorEntryType, getRekorSetBytes } from "@app/utils/utils";
 import {
   Button,
@@ -13,17 +13,18 @@ import {
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
-export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undefined }) => {
+export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEntry | undefined }) => {
   if (!rekorEntry) return <></>;
-  const entryType = getRekorEntryType(rekorEntry.body);
-  const setBytes = getRekorSetBytes(rekorEntry.verification?.signedEntryTimestamp);
-
+  const entryType = getRekorEntryType(rekorEntry.canonicalizedBody);
+  const setBytes = getRekorSetBytes(rekorEntry.inclusionPromise?.signedEntryTimestamp);
+  
   return (
     <Card>
       <CardTitle>Rekor Entry</CardTitle>
       <CardBody>
         <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
-          {rekorEntry.uuid && (
+          {/* Commented this part because TransparencyLogEntry don't have uuid property */}
+          {/* {rekorEntry.uuid && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>UUID</DescriptionListTermHelpText>
               <DescriptionListDescription>
@@ -32,7 +33,7 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
                 </ClipboardCopy>
               </DescriptionListDescription>
             </DescriptionListGroup>
-          )}
+          )} */}
           {entryType && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Entry Type</DescriptionListTermHelpText>
@@ -45,10 +46,10 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
               <DescriptionListDescription>{formatIntegratedTime(rekorEntry.integratedTime)}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.logID && (
+          {rekorEntry.logId?.keyId && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Log ID</DescriptionListTermHelpText>
-              <DescriptionListDescription>{rekorEntry.logID}</DescriptionListDescription>
+              <DescriptionListDescription>{rekorEntry.logId?.keyId}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
           {rekorEntry.logIndex && (
@@ -57,18 +58,18 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
               <DescriptionListDescription>{rekorEntry.logIndex}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.verification?.inclusionProof.treeSize && (
+          {rekorEntry.inclusionProof?.treeSize && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Tree Size</DescriptionListTermHelpText>
-              <DescriptionListDescription>{rekorEntry.verification.inclusionProof.treeSize}</DescriptionListDescription>
+              <DescriptionListDescription>{rekorEntry.inclusionProof?.treeSize}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.verification?.inclusionProof.hashes &&
-            rekorEntry.verification?.inclusionProof.hashes.length > 0 && (
+          {rekorEntry.inclusionProof?.hashes &&
+            rekorEntry.inclusionProof?.hashes.length > 0 && (
               <DescriptionListGroup>
                 <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
                 <DescriptionListDescription>
-                  {rekorEntry.verification.inclusionProof.hashes.length}
+                  {rekorEntry.inclusionProof?.hashes.length}
                 </DescriptionListDescription>
               </DescriptionListGroup>
             )}
@@ -78,7 +79,7 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
               <DescriptionListDescription>
                 {/* probably better to show base64 or hex string rather than raw bytes array */}
                 <ClipboardCopy isReadOnly hoverTip="Copy SET" clickTip="Copied">
-                  {rekorEntry.verification.signedEntryTimestamp}
+                  {Array.from(setBytes).map(b => b.toString(16)).join('')}
                 </ClipboardCopy>
               </DescriptionListDescription>
             </DescriptionListGroup>
@@ -89,7 +90,7 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: RekorEntry | undef
               <Button
                 component="a"
                 variant="link"
-                href={`/rekor-search?uuid=${rekorEntry.uuid}`}
+                href={`/rekor-search?logIndex=${rekorEntry.logIndex}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 icon={<ExternalLinkAltIcon />}

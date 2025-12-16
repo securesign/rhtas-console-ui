@@ -23,7 +23,7 @@ import { handleDownloadBundle, relativeDateString, toIdentity } from "@app/utils
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { LeafCertificate } from "./LeafCertificate";
 import { CertificateChain } from "./CertificateChain";
-import type { RekorEntry, SignatureView } from "@app/client";
+import type { SignatureView } from "@app/client";
 
 export const ArtifactSignature = ({ signature }: { signature: SignatureView }) => {
   const [isActionsOpened, setActionsOpened] = useState(false);
@@ -144,7 +144,7 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
           {signature.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={signature.rekorEntry as RekorEntry | undefined} />
+              <RekorEntryPanel rekorEntry={signature.rekorEntry} />
             </StackItem>
           )}
         </Stack>
