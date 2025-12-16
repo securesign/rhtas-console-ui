@@ -6,17 +6,16 @@ import {
   type ImageMetadataResponse,
   postApiV1ArtifactsVerify,
   type VerifyArtifactRequest,
+  type VerifyArtifactResponse,
 } from "@app/client";
 import { useMockableQuery } from "./helpers";
-import { artifactsImageDataMock } from "./mocks/artifacts.mock";
-import type { ArtifactVerificationViewModel } from "@app/queries/artifacts.view-model";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deriveOverallVerificationStatus } from "@app/utils/utils";
+import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
 
 export const ArtifactsKeys = {
   all: ["Artifacts" as const],
   image: (uri: string) => ["Artifacts", "image", uri] as const,
-  verify: (id: string | number) => ["Artifacts", "verify", id] as const,
+  verify: (uri: string, expectedSAN: string | null | undefined) =>
+    ["Artifacts", "verify", uri, expectedSAN ?? null] as const,
 };
 
 export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undefined }) => {
@@ -38,48 +37,44 @@ export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undef
   return { artifact: data, isFetching: isLoading, fetchError: error, refetch };
 };
 
-// Variables accepted by the verify mutation. This represents the data we send to the
-// backend (request), which is separate from the view-model we use for rendering
-// (ArtifactVerificationViewModel).
-interface IVerifyArtifactVariables {
-  uri: string;
+export const useVerifyArtifact = ({
+  uri,
+  expectedSAN,
+}: {
+  uri: string | null | undefined;
   expectedSAN?: string | null;
-}
+}) => {
+  const enabled = typeof uri === "string" && uri.trim().length > 0;
 
-export const useVerifyArtifact = () => {
-  const queryClient = useQueryClient();
+  const { data, isLoading, error, refetch } = useMockableQuery<VerifyArtifactResponse | null, AxiosError<_Error>>(
+    {
+      queryKey: ArtifactsKeys.verify(uri ?? "", expectedSAN ?? null),
+      enabled,
+      refetchOnWindowFocus: false,
+      queryFn: async () => {
+        if (!uri) {
+          return null;
+        }
 
-  // NOTE:
-  // - TData: ArtifactVerificationViewModel   → what the UI consumes
-  // - TError: AxiosError<_Error>             → error shape from the SDK
-  // - TVariables: IVerifyArtifactVariables   → what the caller passes in (uri, expectedSAN, etc.)
-  return useMutation<ArtifactVerificationViewModel, AxiosError<_Error>, IVerifyArtifactVariables>({
-    mutationFn: async ({ uri, expectedSAN }: IVerifyArtifactVariables) => {
-      const body: VerifyArtifactRequest = {
-        expectedSAN: expectedSAN ?? null,
-        // temporarily accept any issuer
-        expectedOIDIssuerRegex: ".*",
-        ociImage: uri,
-      };
+        const body: VerifyArtifactRequest = {
+          expectedSAN: expectedSAN ?? null,
+          // temporarily accept any issuer
+          expectedOIDIssuerRegex: ".*",
+          ociImage: uri,
+        };
 
-      const response = await postApiV1ArtifactsVerify({
-        client,
-        body,
-      });
+        const response = await postApiV1ArtifactsVerify({ client, body });
 
-      const baseVm = response.data as unknown as ArtifactVerificationViewModel;
-      const overallStatus = deriveOverallVerificationStatus(baseVm);
-
-      return {
-        ...baseVm,
-        summary: {
-          ...baseVm.summary,
-          overallStatus,
-        },
-      };
+        return response.data ?? null;
+      },
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ArtifactsKeys.all });
-    },
-  });
+    artifactVerificationViewModelMock
+  );
+
+  return {
+    verification: data,
+    isFetching: isLoading,
+    fetchError: error,
+    refetch,
+  };
 };

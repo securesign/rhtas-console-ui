@@ -1,3 +1,5 @@
+![Coverage](./coverage-badge.svg)
+
 # RHTAS Console UI
 
 The RHTAS Console is a web-based frontend for interacting with the [Red Hat Trusted Artifact Signer (TAS)](https://developers.redhat.com/products/trusted-artifact-signer/overview) ecosystem. It provides user-friendly workflows for retrieving, verifying, and monitoring signed software artifacts, integrating with [Sigstore](https://www.sigstore.dev/) services like Rekor, Fulcio, and [TUF](https://theupdateframework.io/) (The Update Framework).

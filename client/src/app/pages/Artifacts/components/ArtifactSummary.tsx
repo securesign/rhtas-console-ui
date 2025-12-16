@@ -14,9 +14,14 @@ import {
   Label,
 } from "@patternfly/react-core";
 import { PlusCircleIcon } from "@patternfly/react-icons";
-import type { IArtifactResultsProps } from "./ArtifactResults";
+import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
-export const ArtifactSummary = ({ artifact, verification }: IArtifactResultsProps) => {
+interface IArtifactSummaryProps {
+  artifact: ImageMetadataResponse;
+  verification: VerifyArtifactResponse;
+}
+
+export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProps) => {
   const { summary } = verification;
   const identities = summary.identities ?? [];
   const { timeCoherence } = summary;
@@ -108,18 +113,20 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactResultsProp
             </DescriptionListTermHelpText>
             <DescriptionListDescription>{summary.rekorEntryCount} Rekor Entries</DescriptionListDescription>
           </DescriptionListGroup>
-          <DescriptionListGroup>
-            <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Time Coherence</div>} bodyContent={<div>min/max integratedTime</div>}>
-                <DescriptionListTermHelpTextButton> Time Coherence </DescriptionListTermHelpTextButton>
-              </Popover>
-            </DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              {timeCoherence.status === "ok"
-                ? `OK (${formatDate(timeCoherence.minIntegratedTime)} – ${formatDate(timeCoherence.maxIntegratedTime)})`
-                : timeCoherence.status}
-            </DescriptionListDescription>
-          </DescriptionListGroup>
+          {timeCoherence && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>
+                <Popover headerContent={<div>Time Coherence</div>} bodyContent={<div>min/max integratedTime</div>}>
+                  <DescriptionListTermHelpTextButton> Time Coherence </DescriptionListTermHelpTextButton>
+                </Popover>
+              </DescriptionListTermHelpText>
+              <DescriptionListDescription>
+                {timeCoherence.status === "ok"
+                  ? `OK (${formatDate(timeCoherence.minIntegratedTime)} – ${formatDate(timeCoherence.maxIntegratedTime)})`
+                  : timeCoherence.status}
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
         </DescriptionList>
       </CardBody>
     </Card>,

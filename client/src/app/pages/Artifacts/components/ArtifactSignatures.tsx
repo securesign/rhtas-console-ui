@@ -1,12 +1,12 @@
 import { DataList } from "@patternfly/react-core";
 import { ArtifactSignature } from "./ArtifactSignature";
-import type { SignatureView } from "@app/queries/artifacts.view-model";
+import type { SignatureView } from "@app/client";
 
-export const ArtifactSignatures = ({ signatures }: { signatures?: SignatureView[] }) => {
+export const ArtifactSignatures = ({ signatures }: { signatures: SignatureView[] }) => {
   return (
     <DataList aria-label="Signatures list">
       {signatures?.map((signature: SignatureView) => (
-        <ArtifactSignature signature={signature} key={signature.hash.value.toString()} />
+        <ArtifactSignature signature={signature} key={signature.digest} />
       ))}
     </DataList>
   );

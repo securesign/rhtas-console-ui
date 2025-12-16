@@ -12,11 +12,15 @@ import {
   DescriptionListGroup,
   DescriptionListTermHelpText,
 } from "@patternfly/react-core";
-import type { ParsedCertificate } from "@app/queries/artifacts.view-model";
+import type { ParsedCertificate } from "@app/client";
 import { useState } from "react";
 import { capitalizeFirstLetter, formatDate } from "@app/utils/utils";
 
-export const CertificateChain = ({ certificateChain }: { certificateChain: ParsedCertificate[] }) => {
+interface ICertificateChain {
+  certificateChain: ParsedCertificate[];
+}
+
+export const CertificateChain = ({ certificateChain }: ICertificateChain) => {
   const [expanded, setExpanded] = useState("");
 
   const onToggle = (id: string) => {
