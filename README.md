@@ -1,4 +1,4 @@
-![Coverage](./coverage-badge.svg)
+[![codecov](https://codecov.io/gh/securesign/rhtas-console-ui/graph/badge.svg?token=VHMDKU365L)](https://codecov.io/gh/securesign/rhtas-console-ui)
 
 # RHTAS Console UI
 
