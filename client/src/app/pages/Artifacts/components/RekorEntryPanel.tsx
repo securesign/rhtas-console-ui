@@ -17,7 +17,7 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEnt
   if (!rekorEntry) return <></>;
   const entryType = getRekorEntryType(rekorEntry.canonicalizedBody);
   const setBytes = getRekorSetBytes(rekorEntry.inclusionPromise?.signedEntryTimestamp);
-  
+
   return (
     <Card>
       <CardTitle>Rekor Entry</CardTitle>
@@ -64,22 +64,21 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEnt
               <DescriptionListDescription>{rekorEntry.inclusionProof?.treeSize}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {rekorEntry.inclusionProof?.hashes &&
-            rekorEntry.inclusionProof?.hashes.length > 0 && (
-              <DescriptionListGroup>
-                <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  {rekorEntry.inclusionProof?.hashes.length}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
-            )}
+          {rekorEntry.inclusionProof?.hashes && rekorEntry.inclusionProof?.hashes.length > 0 && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>Proof Depth</DescriptionListTermHelpText>
+              <DescriptionListDescription>{rekorEntry.inclusionProof?.hashes.length}</DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
           {setBytes && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Signed Entry Timestamp</DescriptionListTermHelpText>
               <DescriptionListDescription>
                 {/* probably better to show base64 or hex string rather than raw bytes array */}
                 <ClipboardCopy isReadOnly hoverTip="Copy SET" clickTip="Copied">
-                  {Array.from(setBytes).map(b => b.toString(16)).join('')}
+                  {Array.from(setBytes)
+                    .map((b) => b.toString(16))
+                    .join("")}
                 </ClipboardCopy>
               </DescriptionListDescription>
             </DescriptionListGroup>
