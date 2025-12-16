@@ -17,24 +17,22 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 
       - name: Run tests with coverage
         run: npm run test -- --coverage
 
-      - name: Generate coverage badge
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: tj-actions/coverage-badge-js@v2
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v5
         with:
-          path: .
-          report_path: coverage/coverage-summary.json
-          output_path: coverage-badge.svg
-
-      - name: Commit coverage badge
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: stefanzweifel/git-auto-commit-action@v5
+          name: coverage-report
+          path: coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          commit_message: "chore: update coverage badge"
-          file_pattern: coverage-badge.svg
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ${{ github.repository_owner }}/rhtas-console-ui
+          flags: unit
+          directory: client

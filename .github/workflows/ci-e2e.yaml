@@ -29,7 +29,7 @@ jobs:
           base_ref: ${{ github.event.pull_request.base.ref || github.event.merge_group.base_ref }}
         run: |
           branch=$base_ref
-          branch=$(echo ${branch#refs/heads/})          
+          branch=$(echo ${branch#refs/heads/})
           echo "branch=$branch" >> $GITHUB_ENV
       - name: Extract vars for Push
         shell: bash
@@ -102,3 +102,19 @@ jobs:
       server_image: ghcr.io/securesign/rhtas-console:pr-test
       ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
       server_db_image: docker.io/library/mariadb:10.5
+
+  run-e2e-coverage:
+    needs:
+      - build-and-upload-for-e2e-ci
+    uses: ./.github/workflows/ci-e2e-coverage-template.yaml
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'main')
+    with:
+      artifact: test-images
+      server_image: ghcr.io/securesign/rhtas-console:pr-test
+      # Won't be used as for coverage the ui will start in dev mode
+      ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
+      server_db_image: docker.io/library/mariadb:10.5
+    secrets:
+      codecov_token: ${{ secrets.CODECOV_TOKEN }}
