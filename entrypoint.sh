@@ -7,17 +7,6 @@ if [[ -z "$CONSOLE_API_URL" ]]; then
   exit 1
 fi
 
-if [[ $AUTH_REQUIRED != "false" ]]; then
-  if [[ -z "$OIDC_CLIENT_ID" ]]; then
-    echo "You must provide OIDC_CLIENT_ID environment variable" 1>&2
-    exit 1
-  fi
-  if [[ -z "$OIDC_SERVER_URL" ]]; then
-    echo "You must provide OIDC_SERVER_URL environment variable" 1>&2
-    exit 1
-  fi
-fi
-
 if [[ -z "${NODE_EXTRA_CA_CERTS}" ]]; then
     # Nothing to do
     echo "No NODE_EXTRA_CA_CERTS found"
