@@ -48,7 +48,7 @@ jobs:
     needs:
       - discover-envs-for-e2e-ci
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           repository: securesign/rhtas-console
           ref: ${{ needs.discover-envs-for-e2e-ci.outputs.branch }}
@@ -68,7 +68,7 @@ jobs:
     needs:
       - discover-envs-for-e2e-ci
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: save rhtas-console-ui image
         run: |
           mkdir -p /tmp/images/
