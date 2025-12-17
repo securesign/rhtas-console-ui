@@ -23,17 +23,6 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEnt
       <CardTitle>Rekor Entry</CardTitle>
       <CardBody>
         <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
-          {/* Commented this part because TransparencyLogEntry don't have uuid property */}
-          {/* {rekorEntry.uuid && (
-            <DescriptionListGroup>
-              <DescriptionListTermHelpText>UUID</DescriptionListTermHelpText>
-              <DescriptionListDescription>
-                <ClipboardCopy isReadOnly hoverTip="Copy UUID" clickTip="Copied">
-                  {rekorEntry.uuid}
-                </ClipboardCopy>
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          )} */}
           {entryType && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Entry Type</DescriptionListTermHelpText>
