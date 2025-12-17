@@ -8,7 +8,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "@app/dayjs";
 
 import App from "@app/App";
-import { OidcProvider } from "@app/components/OidcProvider";
 
 const queryClient = new QueryClient();
 
@@ -19,12 +18,10 @@ const root = createRoot(container!);
 const renderApp = () => {
   return root.render(
     <React.StrictMode>
-      <OidcProvider>
-        <QueryClientProvider client={queryClient}>
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </OidcProvider>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </React.StrictMode>
   );
 };

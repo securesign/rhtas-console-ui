@@ -49,8 +49,6 @@ spec:
         env:
         - name: CONSOLE_API_URL
           value: http://console-backend:8080
-        - name: AUTH_REQUIRED
-          value: "false"
         - name: VERSION
           value: "v0.1.0"
         ports:
