@@ -21,7 +21,12 @@ export const RekorSearch: React.FC = () => {
             </Content>
           </SplitItem>
           <SplitItem>
-            <Button variant="plain" icon={<CogIcon />} onClick={() => setSettingsOpen(true)} />
+            <Button
+              variant="plain"
+              icon={<CogIcon />}
+              onClick={() => setSettingsOpen(true)}
+              data-testid="settings-button"
+            />
           </SplitItem>
         </Split>
       </PageSection>

@@ -23,7 +23,7 @@ import { handleDownloadBundle, relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon } from "@patternfly/react-icons";
 import { CertificateChain } from "./CertificateChain";
 import { LeafCertificate } from "./LeafCertificate";
-import type { AttestationView, RekorEntry } from "@app/client";
+import type { AttestationView } from "@app/client";
 
 interface IArtifactAttestation {
   attestation: AttestationView;
@@ -146,7 +146,7 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
           {attestation.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={attestation.rekorEntry as RekorEntry | undefined} />
+              <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
             </StackItem>
           )}
         </Stack>

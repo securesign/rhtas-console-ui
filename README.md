@@ -1,4 +1,4 @@
-![Coverage](./coverage-badge.svg)
+[![codecov](https://codecov.io/gh/securesign/rhtas-console-ui/graph/badge.svg?token=VHMDKU365L)](https://codecov.io/gh/securesign/rhtas-console-ui)
 
 # RHTAS Console UI
 
@@ -59,11 +59,7 @@ npm run start
 | ENV VAR         | Description                   | Default value                          |
 | --------------- | ----------------------------- | -------------------------------------- |
 | MOCK            | Enables or disables mock data | `off`                                  |
-| AUTH_REQUIRED   | Enable/Disable authentication | false                                  |
 | CONSOLE_API_URL | Set Console API URL           | http://localhost:8080                  |
-| OIDC_CLIENT_ID  | Set Oidc Client               | frontend                               |
-| OIDC_SERVER_URL | Set Oidc Server URL           | `http://localhost:8090/realms/console` |
-| OIDC_SCOPE      | Set Oidc Scope                | openid                                 |
 
 ## Code quality tools
 

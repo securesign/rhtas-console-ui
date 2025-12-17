@@ -1,12 +1,8 @@
 import type React from "react";
 import { useReducer, useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
 
 import {
-  Avatar,
   Brand,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownList,
@@ -34,10 +30,8 @@ import HelpIcon from "@patternfly/react-icons/dist/esm/icons/help-icon";
 import BarsIcon from "@patternfly/react-icons/dist/js/icons/bars-icon";
 import ExternalLinkAltIcon from "@patternfly/react-icons/dist/js/icons/external-link-alt-icon";
 
-import { isAuthRequired } from "@app/Constants";
 import useBranding from "@app/hooks/useBranding";
 
-import imgAvatar from "../images/avatar.svg";
 import { AboutApp } from "./about";
 
 export const HeaderApp: React.FC = () => {
@@ -45,15 +39,9 @@ export const HeaderApp: React.FC = () => {
     masthead: { leftBrand, leftTitle, rightBrand, supportUrl },
   } = useBranding();
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const auth = (isAuthRequired && useAuth()) || undefined;
-
-  const navigate = useNavigate();
-
   const [isAboutModalOpen, toggleIsAboutModalOpen] = useReducer((state) => !state, false);
   const [isHelpDropdownOpen, setIsHelpDropdownOpen] = useState(false);
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false);
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const onHelpDropdownToggle = () => {
     setIsHelpDropdownOpen(!isHelpDropdownOpen);
@@ -61,18 +49,6 @@ export const HeaderApp: React.FC = () => {
 
   const onKebabDropdownToggle = () => {
     setIsKebabDropdownOpen(!isKebabDropdownOpen);
-  };
-
-  const logout = () => {
-    auth
-      ?.signoutRedirect()
-      .then(() => {
-        console.log("Log out success");
-      })
-      .catch((err) => {
-        console.error("Logout failed:", err);
-        navigate("/");
-      });
   };
 
   return (
@@ -195,12 +171,6 @@ export const HeaderApp: React.FC = () => {
                     )}
                   >
                     <DropdownList>
-                      {auth && (
-                        <DropdownItem key="logout" onClick={logout}>
-                          Logout
-                        </DropdownItem>
-                      )}
-                      <Divider key="separator" component="li" />
                       {supportUrl && (
                         <DropdownItem
                           key="support"
@@ -221,43 +191,6 @@ export const HeaderApp: React.FC = () => {
                     </DropdownList>
                   </Dropdown>
                 </ToolbarItem>
-              </ToolbarGroup>
-
-              {/* Show the SSO menu at desktop sizes */}
-              <ToolbarGroup
-                id="header-toolbar-sso"
-                visibility={{
-                  default: "hidden",
-                  md: "visible",
-                }}
-              >
-                {auth && (
-                  <ToolbarItem visibility={{ default: "hidden", md: "visible" }}>
-                    <Dropdown
-                      isOpen={isUserDropdownOpen}
-                      onSelect={() => setIsUserDropdownOpen(false)}
-                      onOpenChange={(isOpen: boolean) => setIsUserDropdownOpen(isOpen)}
-                      popperProps={{ position: "right" }}
-                      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                        <MenuToggle
-                          ref={toggleRef}
-                          onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                          isFullHeight
-                          isExpanded={isUserDropdownOpen}
-                          icon={<Avatar src={imgAvatar} alt="" size="sm" />}
-                        >
-                          {auth.user?.profile.preferred_username ?? auth.user?.profile.sub}
-                        </MenuToggle>
-                      )}
-                    >
-                      <DropdownList>
-                        <DropdownItem key="logout" onClick={logout}>
-                          Logout
-                        </DropdownItem>
-                      </DropdownList>
-                    </Dropdown>
-                  </ToolbarItem>
-                )}
               </ToolbarGroup>
 
               {rightBrand ? (
