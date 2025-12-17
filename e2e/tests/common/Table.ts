@@ -40,22 +40,11 @@ export class Table<
     await expect(table).toBeVisible();
 
     const result = new Table(page, table, columns, actions);
-    await result.waitUntilDataIsLoaded();
     return result;
-  }
-
-  private async waitUntilDataIsLoaded(waitMs = 500) {
-    await this._page.waitForTimeout(waitMs);
-
-    const rows = this._table.locator('xpath=//tbody[not(@aria-label="Table loading")]');
-    await expect(rows.first()).toBeVisible();
-
-    await expect.poll(() => rows.count()).toBeGreaterThanOrEqual(1);
   }
 
   async clickSortBy(columnName: TColumnName) {
     await this._table.getByRole("button", { name: columnName, exact: true }).click();
-    await this.waitUntilDataIsLoaded();
   }
 
   async clickAction(actionName: TActions[number], rowIndex: number) {

@@ -130,6 +130,8 @@ jobs:
           server_db_image: ${{ inputs.server_db_image }}
 
       - name: rhtas-console-ui - start in dev mode
+        env:
+          COVERAGE: "true"
         run: |
           CONSOLE_API_URL=http://localhost:${{ steps.start-rhtas-console.outputs.server_port }} npm run start:dev & echo "dev ui started"
       - name: rhtas-console-ui - wait
@@ -140,7 +142,7 @@ jobs:
           done
 
       - name: Tests with coverage
-        working-directory: e2e
+        working-directory: e2e        
         run: |
           PW_TEST_CONNECT_WS_ENDPOINT=ws://localhost:${{ steps.start-rhtas-console.outputs.playwright_port }}/ CONSOLE_UI_URL=http://localhost:3000 npm run test
           ls -la .nyc_output

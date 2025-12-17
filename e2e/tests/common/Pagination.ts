@@ -36,7 +36,7 @@ export class Pagination {
    * @param perPage Number of rows
    */
   async selectItemsPerPage(perPage: 10 | 20 | 50 | 100) {
-    await this._pagination.locator(`//button[@aria-haspopup='listbox']`).click();
+    await this._pagination.locator("button[aria-haspopup='listbox']").click();
     await this._page.getByRole("menuitem", { name: `${perPage} per page` }).click();
 
     await expect(this._pagination.locator("input")).toHaveValue("1");

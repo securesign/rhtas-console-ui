@@ -71,7 +71,7 @@ export default defineConfig({
           },
         ]
       : []),
-      ...(process.env.NODE_ENV === "development"
+    ...(process.env.COVERAGE === "true"
       ? [
           IstanbulPlugin({
             include: "src/*",

@@ -56,10 +56,11 @@ npm run start
 
 ## Environment variables
 
-| ENV VAR         | Description                   | Default value                          |
-| --------------- | ----------------------------- | -------------------------------------- |
-| MOCK            | Enables or disables mock data | `off`                                  |
-| CONSOLE_API_URL | Set Console API URL           | http://localhost:8080                  |
+| ENV VAR         | Description                   | Default value         |
+| --------------- | ----------------------------- | --------------------- |
+| MOCK            | Enables or disables mock data | `off`                 |
+| CONSOLE_API_URL | Set Console API URL           | http://localhost:8080 |
+| COVERAGE        | Enables code instrumentation  |                       |
 
 ## Code quality tools
 
