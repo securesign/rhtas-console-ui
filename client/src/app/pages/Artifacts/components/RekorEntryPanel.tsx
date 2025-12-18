@@ -12,6 +12,7 @@ import {
   DescriptionListTermHelpText,
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
+import { Link } from "react-router-dom";
 
 export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEntry | undefined }) => {
   if (!rekorEntry) return <></>;
@@ -75,18 +76,11 @@ export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEnt
           <DescriptionListGroup>
             <DescriptionListTermHelpText>Entry</DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button
-                component="a"
-                variant="link"
-                href={`/rekor-search?logIndex=${rekorEntry.logIndex}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={<ExternalLinkAltIcon />}
-                iconPosition="right"
-                aria-label={`rekorlink`}
-              >
-                Open in Rekor Search
-              </Button>
+              <Link to={`/rekor-search?logIndex=${rekorEntry.logIndex}`} target="_blank" rel="noopener noreferrer">
+                <Button variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" aria-label={`rekorlink`}>
+                  Open in Rekor Search
+                </Button>
+              </Link>
             </DescriptionListDescription>
           </DescriptionListGroup>
         </DescriptionList>
