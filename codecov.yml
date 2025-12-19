@@ -3,6 +3,10 @@ coverage:
     project:
       unit:
         informational: true
+      e2e:
+        informational: true
     patch:
       unit:
+        informational: true
+      e2e:
         informational: true

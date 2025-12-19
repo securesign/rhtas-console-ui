@@ -185,16 +185,22 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
               <Tbody key={rowIndex} isExpanded={isCellExpanded(certificate)}>
                 <Tr key={rowIndex}>
                   <Td {...getSingleExpandButtonTdProps({ item: certificate, rowIndex })} />
-                  <Td modifier="breakWord">{certificate.issuer}</Td>
-                  <Td modifier="breakWord">{certificate.subject}</Td>
-                  <Td modifier="breakWord">{certificate.target}</Td>
-                  <Td width={10} modifier="truncate">
+                  <Td data-label="Issuer" modifier="breakWord">
+                    {certificate.issuer}
+                  </Td>
+                  <Td data-label="Subject" modifier="breakWord">
+                    {certificate.subject}
+                  </Td>
+                  <Td data-label="Target" modifier="breakWord">
+                    {certificate.target}
+                  </Td>
+                  <Td data-label="Type" width={10} modifier="truncate">
                     {certificate.type}
                   </Td>
-                  <Td width={10} modifier="truncate">
+                  <Td data-label="Status" width={10} modifier="truncate">
                     <CertificateStatusIcon status={certificate.status} /> {certificate.status}
                   </Td>
-                  <Td width={10} modifier="truncate">
+                  <Td data-label="Expiration" width={10} modifier="truncate">
                     {formatDate(certificate.expiration)}
                   </Td>
                   <Td isActionCell>
