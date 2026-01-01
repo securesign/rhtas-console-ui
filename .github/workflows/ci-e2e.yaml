@@ -58,7 +58,7 @@ jobs:
           docker build . -t ghcr.io/securesign/rhtas-console:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console.tar ghcr.io/securesign/rhtas-console:pr-test
       - name: Upload console image as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: backend-images
           path: /tmp/images/**/*.tar
@@ -75,7 +75,7 @@ jobs:
           docker build . -t ghcr.io/securesign/rhtas-console-ui:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console-ui.tar ghcr.io/securesign/rhtas-console-ui:pr-test
       - name: Upload console-ui image as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ui-images
           path: /tmp/images/**/*.tar
@@ -86,7 +86,7 @@ jobs:
       - build-backend-and-upload-for-e2e-ci
       - build-ui-and-upload-for-e2e-ci
     steps:
-      - uses: actions/upload-artifact/merge@v4
+      - uses: actions/upload-artifact/merge@v6
         with:
           name: test-images
           pattern: "*-images"
