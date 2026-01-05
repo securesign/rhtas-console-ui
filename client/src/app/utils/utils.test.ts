@@ -83,9 +83,9 @@ describe("utils", () => {
   describe("dedupeIdentities", () => {
     it("should remove duplicate identities", () => {
       const identities: ArtifactIdentity[] = [
-        { type: "email", value: "test@example.com", source: "source1", issuer: "issuer1" },
-        { type: "email", value: "test@example.com", source: "source1", issuer: "issuer1" },
-        { type: "email", value: "other@example.com", source: "source1", issuer: "issuer1" },
+        { id: 1, type: "email", value: "test@example.com", source: "san", issuer: "issuer1" },
+        { id: 2, type: "email", value: "test@example.com", source: "san", issuer: "issuer1" },
+        { id: 3, type: "email", value: "other@example.com", source: "san", issuer: "issuer1" },
       ];
 
       const result = dedupeIdentities(identities);
@@ -96,9 +96,9 @@ describe("utils", () => {
 
     it("should handle identities with different properties as unique", () => {
       const identities: ArtifactIdentity[] = [
-        { type: "email", value: "test@example.com", source: "source1", issuer: "issuer1" },
-        { type: "email", value: "test@example.com", source: "source2", issuer: "issuer1" },
-        { type: "email", value: "test@example.com", source: "source1", issuer: "issuer2" },
+        { id: 1, type: "email", value: "test@example.com", source: "san", issuer: "issuer1" },
+        { id: 2, type: "email", value: "test@example.com", source: "issuer", issuer: "issuer1" },
+        { id: 3, type: "email", value: "test@example.com", source: "san", issuer: "issuer2" },
       ];
 
       const result = dedupeIdentities(identities);
@@ -107,8 +107,8 @@ describe("utils", () => {
 
     it("should handle identities with undefined issuer", () => {
       const identities: ArtifactIdentity[] = [
-        { type: "email", value: "test@example.com", source: "source1", issuer: undefined },
-        { type: "email", value: "test@example.com", source: "source1", issuer: undefined },
+        { id: 1, type: "email", value: "test@example.com", source: "san", issuer: undefined },
+        { id: 2, type: "email", value: "test@example.com", source: "san", issuer: undefined },
       ];
 
       const result = dedupeIdentities(identities);
@@ -122,7 +122,7 @@ describe("utils", () => {
 
     it("should handle single identity", () => {
       const identities: ArtifactIdentity[] = [
-        { type: "email", value: "test@example.com", source: "source1", issuer: "issuer1" },
+        { id: 1, type: "email", value: "test@example.com", source: "san", issuer: "issuer1" },
       ];
 
       const result = dedupeIdentities(identities);
@@ -322,6 +322,7 @@ describe("utils", () => {
       global.URL.revokeObjectURL = mockRevokeObjectURL;
 
       // Mock document.createElement
+      // @ts-expect-error - vi.spyOn type inference doesn't work well with document.createElement overloads
       createElementSpy = vi.spyOn(document, "createElement").mockImplementation((tagName: string) => {
         if (tagName === "a") {
           return {
@@ -365,7 +366,7 @@ describe("utils", () => {
       handleDownloadBundle(signature);
 
       expect(mockCreateObjectURL).toHaveBeenCalled();
-      const blobCall = mockCreateObjectURL.mock.calls[0][0];
+      const blobCall = mockCreateObjectURL.mock.calls[0][0] as Blob;
       expect(blobCall).toBeInstanceOf(Blob);
       expect(blobCall.type).toBe("application/json");
     });
@@ -419,7 +420,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const linkElement = (document.createElement as ReturnType<typeof vi.fn>).mock.results[0].value;
+      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      expect(mockCall).toBeDefined();
+      const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
+        ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");
     });
   });
@@ -500,7 +504,7 @@ describe("utils", () => {
 
   describe("sha256FingerprintFromPem", () => {
     // Create a minimal valid PEM certificate for testing
-    const createTestPem = (content: string = "dGVzdA==") => {
+    const createTestPem = (content = "dGVzdA==") => {
       return `-----BEGIN CERTIFICATE-----\n${content}\n-----END CERTIFICATE-----`;
     };
 
@@ -623,7 +627,7 @@ describe("utils", () => {
     });
 
     it("should handle certificate without issuer", () => {
-      const leaf: ParsedCertificate = {
+      const leaf: Partial<ParsedCertificate> = {
         subject: "CN=test",
         issuer: undefined,
         sans: ["test@example.com"],
@@ -635,7 +639,7 @@ describe("utils", () => {
         role: "leaf",
       };
 
-      const result = toIdentity(leaf);
+      const result = toIdentity(leaf as ParsedCertificate);
       expect(result?.issuer).toBeUndefined();
       expect(result?.issuerType).toBe("unknown");
     });
