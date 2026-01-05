@@ -156,7 +156,7 @@ describe("useMockableQuery", () => {
         ),
       {
         wrapper,
-        initialProps: { queryKey: ["test", "key1"] as const },
+        initialProps: { queryKey: ["test", "key1"] as readonly unknown[] },
       }
     );
 
@@ -170,7 +170,7 @@ describe("useMockableQuery", () => {
     expect(result.current.data).toEqual(mockData1);
 
     // Change query key
-    rerender({ queryKey: ["test", "key2"] as const });
+    rerender({ queryKey: ["test", "key2"] as readonly unknown[] });
 
     await waitFor(
       () => {
