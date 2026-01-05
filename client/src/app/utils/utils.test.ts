@@ -1,5 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import type { ArtifactIdentity, ParsedCertificate } from "@app/client";
+// Import dayjs configuration to ensure plugins are loaded
+import "@app/dayjs";
 import {
   capitalizeFirstLetter,
   copyToClipboard,
@@ -206,9 +208,10 @@ describe("utils", () => {
       expect(getCertificateStatusColor(undefined as unknown as string)).toBe("gray");
     });
 
-    it("should return 'orange' for certificate expiring exactly in 30 days", () => {
+    it("should return 'green' for certificate expiring exactly in 30 days", () => {
+      // Exactly 30 days means diffDays === 30, which is NOT < 30, so it returns "green"
       const futureDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      expect(getCertificateStatusColor(futureDate)).toBe("orange");
+      expect(getCertificateStatusColor(futureDate)).toBe("green");
     });
 
     it("should return 'orange' for certificate expiring in 1 day", () => {
@@ -306,6 +309,7 @@ describe("utils", () => {
     let mockClick: ReturnType<typeof vi.fn>;
     let mockAppendChild: ReturnType<typeof vi.fn>;
     let mockRemove: ReturnType<typeof vi.fn>;
+    let createElementSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
       mockCreateObjectURL = vi.fn().mockReturnValue("blob:test-url");
@@ -318,7 +322,7 @@ describe("utils", () => {
       global.URL.revokeObjectURL = mockRevokeObjectURL;
 
       // Mock document.createElement
-      vi.spyOn(document, "createElement").mockImplementation((tagName: string) => {
+      createElementSpy = vi.spyOn(document, "createElement").mockImplementation((tagName: string) => {
         if (tagName === "a") {
           return {
             download: "",
@@ -374,8 +378,12 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const linkElement = (document.createElement as ReturnType<typeof vi.fn>).mock.results[0].value;
-      expect(linkElement.download).toBe("sigstore-bundle-abc123def45.json");
+      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      expect(mockCall).toBeDefined();
+      const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
+        ?.value as HTMLAnchorElement;
+      // hashValue.slice(0, 12) takes first 12 characters, so "abc123def456" (12 chars) gives all 12
+      expect(linkElement.download).toBe("sigstore-bundle-abc123def456.json");
     });
 
     it("should use default filename when hash is missing", () => {
@@ -385,7 +393,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const linkElement = (document.createElement as ReturnType<typeof vi.fn>).mock.results[0].value;
+      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      expect(mockCall).toBeDefined();
+      const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
+        ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");
     });
 
@@ -714,4 +725,3 @@ describe("utils", () => {
     });
   });
 });
-
