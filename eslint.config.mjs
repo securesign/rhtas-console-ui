@@ -9,7 +9,7 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default tseslint.config([
-  globalIgnores(["**/dist"]),
+  globalIgnores(["**/dist", "**/coverage"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [

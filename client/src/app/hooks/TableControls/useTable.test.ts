@@ -321,7 +321,8 @@ describe("useTable", () => {
     ];
 
     const { result } = renderHook(() =>
-      useTable({ items: mockItems,
+      useTable({
+        items: mockItems,
         filtering: {
           filterCategories,
         },

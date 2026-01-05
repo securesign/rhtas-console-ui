@@ -72,7 +72,7 @@ describe("useWithUiId", () => {
       { id: 2, name: "Item 2" },
     ];
 
-    const generator = vi.fn((item, index) => `generated-${item.id}-${index}`);
+    const generator = vi.fn((item: { id: number; name: string }, index: number) => `generated-${item.id}-${index}`);
 
     const { result } = renderHook(() => useWithUiId(data, generator));
 
