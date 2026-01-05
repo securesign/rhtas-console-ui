@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/// <reference types="vitest/globals" />
+/// <reference lib="dom" />
+
 import { expect } from "vitest";
 import * as matchers from "@testing-library/jest-dom/matchers";
 
@@ -29,6 +31,6 @@ if (typeof window !== "undefined" && !window.matchMedia) {
   });
 }
 
-if (!window.matchMedia) {
+if (typeof window !== "undefined" && !window.matchMedia) {
   throw new Error("matchMedia polyfill failed to initialize");
 }
