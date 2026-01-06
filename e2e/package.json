@@ -12,13 +12,13 @@
     "format:fix": "prettier --write './tests/**/*.{ts,tsx,js,json}'",
     "test": "npx playwright test --project='chromium'",
     "test:trace": "npx playwright test --project='chromium' --trace on",
-    "test:host": "npx playwright test --ui-host 127.0.0.1"    
+    "test:host": "npx playwright test --ui-host 127.0.0.1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.56.1"
+    "@playwright/test": "^1.57.0"
   }
 }
