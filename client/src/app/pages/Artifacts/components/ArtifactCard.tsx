@@ -69,11 +69,19 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick} aria-label="Artifact results" role="region">
           <Tab eventKey={0} title={<TabTitleText>Signatures</TabTitleText>} aria-label="Signatures">
             {/** SIGNATURES */}
-            {verification.signatures ? <ArtifactSignatures signatures={verification.signatures} /> : <NoDataEmptyState />}
+            {verification.signatures ? (
+              <ArtifactSignatures signatures={verification.signatures} />
+            ) : (
+              <NoDataEmptyState />
+            )}
           </Tab>
           <Tab eventKey={1} title={<TabTitleText>Attestations</TabTitleText>} aria-label="Attestations">
             {/** ATTESTATIONS */}
-            {verification.attestations ? <ArtifactAttestations attestations={verification.attestations} /> : <NoDataEmptyState />}
+            {verification.attestations ? (
+              <ArtifactAttestations attestations={verification.attestations} />
+            ) : (
+              <NoDataEmptyState />
+            )}
           </Tab>
         </Tabs>
       </CardBody>
