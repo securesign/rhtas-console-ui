@@ -118,6 +118,7 @@ export default defineConfig({
       deps: {
         inline: [
           "@patternfly/react-styles", // Ensures its CSS imports are ignored
+          "@console-ui/common", // Required for vite.config.ts imports
         ],
       },
     },
