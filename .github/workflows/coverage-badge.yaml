@@ -21,8 +21,12 @@ jobs:
 
       - run: npm ci
 
+      - name: Build common package
+        run: npm run build -w common
+
       - name: Run tests with coverage
-        run: npm run test -- --coverage
+        working-directory: client
+        run: npm run coverage
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v5

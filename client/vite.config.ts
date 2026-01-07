@@ -118,6 +118,7 @@ export default defineConfig({
       deps: {
         inline: [
           "@patternfly/react-styles", // Ensures its CSS imports are ignored
+          "@console-ui/common", // Required for vite.config.ts imports
         ],
       },
     },
@@ -125,6 +126,19 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       reportsDirectory: "./coverage",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.spec.{ts,tsx}",
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/coverage/**",
+        "**/*.d.ts",
+        "**/test-setup.ts",
+        "**/vite.config.ts",
+        "**/config/**",
+        "**/types/**",
+      ],
     },
   },
 });
