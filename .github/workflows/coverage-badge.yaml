@@ -21,6 +21,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Build common package
+        run: npm run build -w common
+
       - name: Run tests with coverage
         working-directory: client
         run: npm run coverage
