@@ -152,7 +152,7 @@ jobs:
           npx nyc report --temp-dir e2e/.nyc_output --reporter=html --reporter=text --reporter=lcov
       - name: Upload Playwright artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-artifacts
           path: |
@@ -160,7 +160,7 @@ jobs:
             e2e/playwright-report
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: coverage
