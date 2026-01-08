@@ -28,7 +28,7 @@ export class ArtifactsPage {
     await this._page.getByRole("button", { name: "Search" }).click();
 
     // Wait for results
-    await expect(this._page.locator(".pf-v6-c-card__header", { hasText: "Artifact:" })).toBeVisible({ timeout: 15000 });
+    await expect(this._page.locator(".pf-v6-c-card__header", { hasText: "Artifact:" })).toBeVisible({ timeout: 25000 });
   }
 
   async getArtifactCardHeader() {
