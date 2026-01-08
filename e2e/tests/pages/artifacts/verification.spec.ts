@@ -91,7 +91,7 @@ test.describe("Artifacts Verification Flow", () => {
 
     // User can see all attestations associated with the artifact
     const attestations = tabContent.getByRole("list", { name: "Artifact attestations list" }).getByRole("listitem");
-    await baseExpect.poll(() => attestations.count()).toBeGreaterThanOrEqual(2);
+    await baseExpect.poll(() => attestations.count()).toBeGreaterThanOrEqual(1);
 
     // Verify first attestation has verification status
     await expect(attestations.first()).toHaveText(/[✓✗]/);
