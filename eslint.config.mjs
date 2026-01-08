@@ -7,6 +7,7 @@ import { globalIgnores } from "eslint/config";
 import react from "eslint-plugin-react";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import prettierConfig from "./.prettierrc.mjs";
 
 export default tseslint.config([
   globalIgnores(["**/dist", "**/coverage"]),
@@ -49,9 +50,7 @@ export default tseslint.config([
       "react/prop-types": "off",
       "prettier/prettier": [
         "warn",
-        {
-          singleQuote: false,
-        },
+        prettierConfig,
       ],
       "@typescript-eslint/no-unsafe-assignment": ["warn"],
     },

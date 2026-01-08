@@ -1,0 +1,18 @@
+{
+  "prettier.requireConfig": true,
+  "prettier.configPath": ".prettierrc.mjs",
+  "prettier.resolveGlobalModules": false,
+  "prettier.useEditorConfig": true,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.useESLintClass": true,
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.workingDirectories": [
+    { "pattern": "./client" },
+    { "pattern": "./common" },
+    { "pattern": "./server" },
+    { "pattern": "./e2e" }
+  ]
+}
