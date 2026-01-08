@@ -149,6 +149,14 @@ jobs:
           server_image: ${{ inputs.server_image }}
           server_db_image: ${{ inputs.server_db_image }}
 
+      - name: Wait for Playwright server to be ready
+        run: |
+          until timeout 1 bash -c "echo > /dev/tcp/localhost/5000" 2>/dev/null; do
+            echo "Waiting for Playwright server on port 5000..."
+            sleep 2
+          done
+          echo "Playwright server is ready"
+
       - name: Run Playwright tests
         run: |
           PW_TEST_CONNECT_WS_ENDPOINT=ws://localhost:5000/ CONSOLE_UI_URL=http://localhost:8088 npm run -w e2e test

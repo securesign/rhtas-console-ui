@@ -129,6 +129,14 @@ jobs:
           server_image: ${{ inputs.server_image }}
           server_db_image: ${{ inputs.server_db_image }}
 
+      - name: Wait for Playwright server to be ready
+        run: |
+          until timeout 1 bash -c "echo > /dev/tcp/localhost/${{ steps.start-rhtas-console.outputs.playwright_port }}" 2>/dev/null; do
+            echo "Waiting for Playwright server on port ${{ steps.start-rhtas-console.outputs.playwright_port }}..."
+            sleep 2
+          done
+          echo "Playwright server is ready"
+
       - name: rhtas-console-ui - start in dev mode
         env:
           COVERAGE: "true"

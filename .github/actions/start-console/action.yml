@@ -72,6 +72,13 @@ runs:
           echo "Waiting for HTML page on port 8088..."
           sleep 2
         done
+        
+        # Wait for Playwright server (check if port is listening)
+        until timeout 1 bash -c "echo > /dev/tcp/localhost/5000" 2>/dev/null; do
+          echo "Waiting for Playwright server on port 5000..."
+          sleep 2
+        done
+        echo "Playwright server is ready"
 
     - id: set-output
       shell: bash
