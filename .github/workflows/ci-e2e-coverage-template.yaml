@@ -49,7 +49,7 @@ jobs:
       - name: Load images
         if: ${{ inputs.artifact != '' }}
         env:
-          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
+          IMAGES_PATH: /tmp/container_images
         run: |
           for image in $(
             find "${IMAGES_PATH}" -type f -name "*.tar"
@@ -102,7 +102,7 @@ jobs:
       - name: Load images
         if: ${{ inputs.artifact != '' }}
         env:
-          IMAGES_PATH: ${{ steps.download-artifact.outputs.download-path }}
+          IMAGES_PATH: /tmp/container_images
         run: |
           for image in $(
             find "${IMAGES_PATH}" -type f -name "*.tar"
@@ -154,7 +154,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-artifacts
+          name: playwright-artifacts-${{ github.run_id }}
           path: |
             e2e/test-results
             e2e/playwright-report
