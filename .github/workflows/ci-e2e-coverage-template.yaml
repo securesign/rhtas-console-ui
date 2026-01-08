@@ -137,6 +137,24 @@ jobs:
           done
           echo "Playwright server is ready"
 
+      - name: Wait for repository initialization
+        run: |
+          echo "Waiting for repository to be initialized..."
+          max_attempts=30
+          attempt=0
+          while [ $attempt -lt $max_attempts ]; do
+            if curl -s http://localhost:${{ steps.start-rhtas-console.outputs.server_port }}/api/v1/trust/config 2>/dev/null | jq -e '.fulcioCertAuthorities' >/dev/null 2>&1; then
+              echo "Repository is initialized"
+              break
+            fi
+            attempt=$((attempt + 1))
+            echo "Attempt $attempt/$max_attempts: Repository not ready yet, waiting..."
+            sleep 2
+          done
+          if [ $attempt -eq $max_attempts ]; then
+            echo "Warning: Repository may not be fully initialized after $max_attempts attempts"
+          fi
+
       - name: rhtas-console-ui - start in dev mode
         env:
           COVERAGE: "true"
@@ -162,7 +180,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-artifacts-${{ github.run_id }}
+          name: playwright-artifacts-coverage-${{ github.run_id }}
           path: |
             e2e/test-results
             e2e/playwright-report
