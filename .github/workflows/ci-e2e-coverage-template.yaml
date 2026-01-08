@@ -131,8 +131,15 @@ jobs:
 
       - name: Wait for Playwright server to be ready
         run: |
-          until timeout 1 bash -c "echo > /dev/tcp/localhost/${{ steps.start-rhtas-console.outputs.playwright_port }}" 2>/dev/null; do
-            echo "Waiting for Playwright server on port ${{ steps.start-rhtas-console.outputs.playwright_port }}..."
+          max_attempts=60
+          attempt=0
+          until bash -c "echo > /dev/tcp/localhost/${{ steps.start-rhtas-console.outputs.playwright_port }}" 2>/dev/null; do
+            attempt=$((attempt + 1))
+            if [ $attempt -ge $max_attempts ]; then
+              echo "ERROR: Playwright server failed to start after $max_attempts attempts (120 seconds)"
+              exit 1
+            fi
+            echo "Waiting for Playwright server on port ${{ steps.start-rhtas-console.outputs.playwright_port }}... (attempt $attempt/$max_attempts)"
             sleep 2
           done
           echo "Playwright server is ready"
