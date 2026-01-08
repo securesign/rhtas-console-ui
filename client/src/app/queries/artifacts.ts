@@ -2,7 +2,7 @@ import type { AxiosError } from "axios";
 import { client } from "@app/axios-config/apiInit";
 import {
   getApiV1ArtifactsImage,
-  type _Error,
+  type Error,
   type ImageMetadataResponse,
   postApiV1ArtifactsVerify,
   type VerifyArtifactRequest,
@@ -20,7 +20,7 @@ export const ArtifactsKeys = {
 
 export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undefined }) => {
   const enabled = typeof uri === "string" && uri.trim().length > 0;
-  const { data, isLoading, error, refetch } = useMockableQuery<ImageMetadataResponse | null, AxiosError<_Error>>(
+  const { data, isLoading, error, refetch } = useMockableQuery<ImageMetadataResponse | null, AxiosError<Error>>(
     {
       queryKey: ArtifactsKeys.image(uri ?? ""),
       queryFn: async () => {
@@ -46,7 +46,7 @@ export const useVerifyArtifact = ({
 }) => {
   const enabled = typeof uri === "string" && uri.trim().length > 0;
 
-  const { data, isLoading, error, refetch } = useMockableQuery<VerifyArtifactResponse | null, AxiosError<_Error>>(
+  const { data, isLoading, error, refetch } = useMockableQuery<VerifyArtifactResponse | null, AxiosError<Error>>(
     {
       queryKey: ArtifactsKeys.verify(uri ?? "", expectedSAN ?? null),
       enabled,

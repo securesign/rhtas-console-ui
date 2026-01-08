@@ -63,6 +63,8 @@ export const EXTENSIONS_CONFIG: Record<string, ExtensionConfig> = {
     name: "Subject Alternative Name",
     toJSON(rawExtension: Extension) {
       const ext = new SubjectAlternativeNameExtension(rawExtension.rawData);
+      // @ts-expect-error - toJSON exists at runtime but TypeScript types may be incomplete
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
       return ext.toJSON();
     },
   },

@@ -5,7 +5,7 @@ import {
   getApiV1TrustConfig,
   getApiV1TrustRootMetadataInfo,
   getApiV1TrustTargetsCertificates,
-  type _Error,
+  type Error,
   type CertificateInfoList,
   type RootMetadataInfoList,
   type TrustConfig,
@@ -17,7 +17,7 @@ import { trustConfigMock, trustRootMetadataInfoMock, trustTargetCertificatesMock
 export const TrustKey = "Trust";
 
 export const useFetchTrustConfig = () => {
-  const { data, isLoading, error, refetch } = useMockableQuery<TrustConfig | null, AxiosError<_Error>>(
+  const { data, isLoading, error, refetch } = useMockableQuery<TrustConfig | null, AxiosError<Error>>(
     {
       queryKey: [TrustKey, "config"],
       queryFn: async () => {
@@ -39,7 +39,7 @@ export const useFetchTrustConfig = () => {
 };
 
 export const useFetchTrustRootMetadataInfo = () => {
-  const { data, isLoading, error, refetch } = useMockableQuery<RootMetadataInfoList | null, AxiosError<_Error>>(
+  const { data, isLoading, error, refetch } = useMockableQuery<RootMetadataInfoList | null, AxiosError<Error>>(
     {
       queryKey: [TrustKey, "metadata"],
       queryFn: async () => {
@@ -61,7 +61,7 @@ export const useFetchTrustRootMetadataInfo = () => {
 };
 
 export const useFetchTrustTargetCertificates = () => {
-  const { data, isLoading, error, refetch } = useMockableQuery<CertificateInfoList | null, AxiosError<_Error>>(
+  const { data, isLoading, error, refetch } = useMockableQuery<CertificateInfoList | null, AxiosError<Error>>(
     {
       queryKey: [TrustKey, "certificates"],
       queryFn: async () => {
