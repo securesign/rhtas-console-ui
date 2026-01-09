@@ -1,10 +1,11 @@
-import { expect, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+import { expect } from "../assertions";
 
-export class Tabs<TTabs extends readonly string[]> {
+export class Tabs<TTabName extends readonly string[]> {
   private readonly _page: Page;
-  private readonly _tabs: TTabs;
+  private readonly _tabs: TTabName;
 
-  private constructor(page: Page, tabs: TTabs) {
+  private constructor(page: Page, tabs: TTabName) {
     this._page = page;
     this._tabs = tabs;
   }
@@ -13,12 +14,16 @@ export class Tabs<TTabs extends readonly string[]> {
     return new Tabs(page, tabs);
   }
 
-  async select(tabName: TTabs[number]) {
+  /**
+   * Select tab and return content
+   * @param tabName
+   */
+  async select(tabName: TTabName[number]) {
     const tab = this._page.locator("button[role='tab']", { hasText: tabName });
     await expect(tab).toBeVisible();
     await tab.click();
 
-    const tabContent = this._page.getByLabel(tabName, { exact: true });
+    const tabContent = this._page.locator('section[role="tabpanel"]:not([hidden])');
     await expect(tabContent).toBeVisible();
     return tabContent;
   }

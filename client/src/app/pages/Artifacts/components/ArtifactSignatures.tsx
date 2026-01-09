@@ -6,7 +6,7 @@ export const ArtifactSignatures = ({ signatures }: { signatures: SignatureView[]
   return (
     <DataList aria-label="Signatures list">
       {signatures?.map((signature: SignatureView) => (
-        <ArtifactSignature signature={signature} key={signature.digest} />
+        <ArtifactSignature signature={signature} key={`id-${signature.id}-digest-${signature.digest}`} />
       ))}
     </DataList>
   );
