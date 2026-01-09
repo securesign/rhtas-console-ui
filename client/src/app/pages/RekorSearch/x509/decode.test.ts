@@ -30,7 +30,7 @@ vi.mock("@peculiar/x509", () => {
     notAfter: Date;
     publicKey: { algorithm: string };
     subjectName: string;
-    extensions: Array<{ type: string; critical: boolean; value: ArrayBuffer }>;
+    extensions: { type: string; critical: boolean; value: ArrayBuffer }[];
 
     constructor() {
       this.serialNumber = mockX509CertificateData.serialNumber;
@@ -46,7 +46,7 @@ vi.mock("@peculiar/x509", () => {
 });
 
 vi.mock("../utils/date", () => ({
-  toRelativeDateString: vi.fn().mockImplementation((date: Date) => `Relative date for ${date}`),
+  toRelativeDateString: vi.fn().mockImplementation((date: Date) => `Relative date for ${String(date)}`),
 }));
 
 vi.mock("./extensions", () => ({

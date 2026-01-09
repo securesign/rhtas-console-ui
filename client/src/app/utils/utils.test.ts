@@ -379,10 +379,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       // hashValue.slice(0, 12) takes first 12 characters, so "abc123def456" (12 chars) gives all 12
@@ -396,10 +396,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");
@@ -424,10 +424,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");

@@ -26,7 +26,7 @@ export const ErrorFallback = ({
             variant="primary"
             className={spacing.mtSm}
             onClick={() => {
-              navigate("/");
+              void navigate("/");
               resetErrorBoundary(false);
             }}
           >
