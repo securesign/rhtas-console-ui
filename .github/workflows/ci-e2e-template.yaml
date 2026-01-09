@@ -62,7 +62,7 @@ jobs:
       - name: Download artifact
         if: "${{ inputs.artifact != '' }}"
         id: download-artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ inputs.artifact }}
           path: /tmp/container_images
@@ -115,7 +115,7 @@ jobs:
       - name: Download artifact
         if: "${{ inputs.artifact != '' }}"
         id: download-artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ inputs.artifact }}
           path: /tmp/container_images
