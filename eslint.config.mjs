@@ -9,7 +9,7 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default tseslint.config([
-  globalIgnores(["**/dist"]),
+  globalIgnores(["**/dist", "**/coverage"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [
@@ -18,7 +18,7 @@ export default tseslint.config([
       tseslint.configs.stylisticTypeChecked,
       prettierRecommended,
       ...pluginQuery.configs["flat/recommended"],
-      reactHooks.configs["recommended-latest"],
+      reactHooks.configs.flat["recommended-latest"],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
@@ -33,7 +33,10 @@ export default tseslint.config([
       react,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      ...reactHooks.configs.flat.recommended.rules,
+      // Disable new react-hooks v7 rules that require significant refactoring
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/incompatible-library": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
