@@ -309,7 +309,8 @@ describe("utils", () => {
     let mockClick: ReturnType<typeof vi.fn>;
     let mockAppendChild: ReturnType<typeof vi.fn>;
     let mockRemove: ReturnType<typeof vi.fn>;
-    let createElementSpy: ReturnType<typeof vi.spyOn>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let createElementSpy: any;
 
     beforeEach(() => {
       mockCreateObjectURL = vi.fn().mockReturnValue("blob:test-url");
@@ -318,11 +319,10 @@ describe("utils", () => {
       mockAppendChild = vi.fn();
       mockRemove = vi.fn();
 
-      global.URL.createObjectURL = mockCreateObjectURL;
-      global.URL.revokeObjectURL = mockRevokeObjectURL;
+      global.URL.createObjectURL = mockCreateObjectURL as (obj: Blob | MediaSource) => string;
+      global.URL.revokeObjectURL = mockRevokeObjectURL as (url: string) => void;
 
       // Mock document.createElement
-      // @ts-expect-error - vi.spyOn type inference doesn't work well with document.createElement overloads
       createElementSpy = vi.spyOn(document, "createElement").mockImplementation((tagName: string) => {
         if (tagName === "a") {
           return {
@@ -335,7 +335,7 @@ describe("utils", () => {
         return document.createElement(tagName);
       });
 
-      vi.spyOn(document.body, "appendChild").mockImplementation(mockAppendChild);
+      vi.spyOn(document.body, "appendChild").mockImplementation(mockAppendChild as (node: Node) => Node);
     });
 
     afterEach(() => {
@@ -379,8 +379,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       // hashValue.slice(0, 12) takes first 12 characters, so "abc123def456" (12 chars) gives all 12
@@ -394,8 +396,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");
@@ -420,8 +424,10 @@ describe("utils", () => {
 
       handleDownloadBundle(signature);
 
-      const mockCall = createElementSpy.mock.calls.find((call) => call[0] === "a");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      const mockCall = createElementSpy.mock.calls.find((call: string[]) => call[0] === "a");
       expect(mockCall).toBeDefined();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const linkElement = createElementSpy.mock.results[mockCall ? createElementSpy.mock.calls.indexOf(mockCall) : 0]
         ?.value as HTMLAnchorElement;
       expect(linkElement.download).toBe("sigstore-bundle-bundle.json");
