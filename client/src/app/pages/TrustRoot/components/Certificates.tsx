@@ -17,7 +17,7 @@ import {
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 import { ActionsColumn, ExpandableRowContent, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
-import type { _Error, CertificateInfo } from "@app/client";
+import type { Error as ApiError, CertificateInfo } from "@app/client";
 import { CertificateStatusIcon } from "@app/components/CertificateStatusIcon";
 import { FilterToolbar } from "@app/components/FilterToolbar/FilterToolbar";
 import { MultiselectFilterControl } from "@app/components/FilterToolbar/MultiselectFilterControl";
@@ -33,7 +33,7 @@ import { ErrorRetrievingCertificate } from "./ErrorStates/ErrorRetrievingCertifi
 interface ICertificatesTableProps {
   certificates: CertificateInfo[];
   isFetching: boolean;
-  fetchError: AxiosError<_Error> | null;
+  fetchError: AxiosError<ApiError> | null;
 }
 
 export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certificates, isFetching, fetchError }) => {
