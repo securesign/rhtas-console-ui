@@ -28,8 +28,9 @@ export interface FilterSelectOptionProps {
   groupLabel?: string;
 }
 
-export interface IMultiselectFilterControlProps<TFilterCategoryKey extends string>
-  extends IFilterControlProps<TFilterCategoryKey> {
+export interface IMultiselectFilterControlProps<
+  TFilterCategoryKey extends string,
+> extends IFilterControlProps<TFilterCategoryKey> {
   /** The full set of options to select from for this filter. */
   selectOptions: FilterSelectOptionProps[];
   placeholderText: string;
