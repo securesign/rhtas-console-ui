@@ -8,7 +8,7 @@ import { ArtifactsPage } from "./ArtifactsPage";
 test.describe("Artifacts Verification Flow", () => {
   test("Complete flow: input -> verification -> result display", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("docker.io/library/nginx:latest");
+    await artifactsPage.searchArtifact("docker.io/library/nginx:1.29.4");
 
     // Verify results are displayed
     await expect(page.getByText("Showing 1 of 1")).toBeVisible();
@@ -16,7 +16,7 @@ test.describe("Artifacts Verification Flow", () => {
 
   test("User can view artifact metadata fields in summary", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("docker.io/library/nginx:latest");
+    await artifactsPage.searchArtifact("docker.io/library/nginx:1.29.4");
 
     // Verify metadata fields are visible
     await expect(page.locator("dt", { hasText: "Digest" }).locator("+ dd", { hasText: "sha256:8c329" })).toBeVisible();
@@ -48,21 +48,21 @@ test.describe("Artifacts Verification Flow", () => {
 
   test("User can navigate to registry by clicking on card title", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("docker.io/library/nginx:latest");
+    await artifactsPage.searchArtifact("docker.io/library/nginx:1.29.4");
 
-    const carHeader = await artifactsPage.getArtifactCardHeader();
-    const artifactLink = carHeader.getByRole("link");
+    const cardHeader = await artifactsPage.getArtifactCardHeader();
+    const artifactLink = cardHeader.getByRole("link");
 
-    await expect(artifactLink).toHaveAttribute("href", "https://docker.io/library/nginx:latest");
+    await expect(artifactLink).toHaveAttribute("href", "https://docker.io/library/nginx:1.29.4");
     await expect(artifactLink).toHaveAttribute("target", "_blank");
   });
 
   test("User has clear indicator of overall verification status of the artifact", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("docker.io/library/nginx:latest");
+    await artifactsPage.searchArtifact("docker.io/library/nginx:1.29.4");
 
-    const carHeader = await artifactsPage.getArtifactCardHeader();
-    await expect(carHeader.locator(".pf-v6-c-label", { hasText: "Not signed" })).toBeVisible();
+    const cardHeader = await artifactsPage.getArtifactCardHeader();
+    await expect(cardHeader.locator(".pf-v6-c-label", { hasText: "Not signed" })).toBeVisible();
   });
 
   test("User has clear indicator of verification status per signature", async ({ page }) => {
