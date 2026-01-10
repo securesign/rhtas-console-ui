@@ -128,7 +128,7 @@ export function Explorer() {
     (formInputs: FormInputs) => {
       setPage(1);
 
-      navigate({
+      void navigate({
         pathname: location.pathname,
         search: `?${formInputs.attribute}=${formInputs.value}`,
       });

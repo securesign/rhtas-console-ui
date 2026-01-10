@@ -1,16 +1,52 @@
-import { vi, type Mock } from "vitest";
+import { vi } from "vitest";
 
-import { decodex509 } from "./decode";
-import { X509Certificate } from "@peculiar/x509";
-import { toRelativeDateString } from "../utils/date";
 import { EXTENSIONS_CONFIG } from "./extensions";
 
-vi.mock("@peculiar/x509", () => ({
-  X509Certificate: vi.fn(),
-}));
+// Store the mock implementation so we can change it per test
+let mockX509CertificateData = {
+  serialNumber: "123456",
+  issuer: "Issuer Name",
+  notBefore: new Date("2020-01-01"),
+  notAfter: new Date("2022-01-01"),
+  publicKey: {
+    algorithm: "rsaEncryption",
+  },
+  subjectName: "Subject Name",
+  extensions: [
+    {
+      type: "1.2.3.4.5",
+      critical: false,
+      value: new ArrayBuffer(8),
+    },
+  ],
+};
+
+vi.mock("@peculiar/x509", () => {
+  // Use a class to properly mock the constructor for Vitest 4.x
+  const X509Certificate = class {
+    serialNumber: string;
+    issuer: string;
+    notBefore: Date;
+    notAfter: Date;
+    publicKey: { algorithm: string };
+    subjectName: string;
+    extensions: { type: string; critical: boolean; value: ArrayBuffer }[];
+
+    constructor() {
+      this.serialNumber = mockX509CertificateData.serialNumber;
+      this.issuer = mockX509CertificateData.issuer;
+      this.notBefore = mockX509CertificateData.notBefore;
+      this.notAfter = mockX509CertificateData.notAfter;
+      this.publicKey = mockX509CertificateData.publicKey;
+      this.subjectName = mockX509CertificateData.subjectName;
+      this.extensions = mockX509CertificateData.extensions;
+    }
+  };
+  return { X509Certificate };
+});
 
 vi.mock("../utils/date", () => ({
-  toRelativeDateString: vi.fn(),
+  toRelativeDateString: vi.fn().mockImplementation((date: Date) => `Relative date for ${String(date)}`),
 }));
 
 vi.mock("./extensions", () => ({
@@ -22,12 +58,15 @@ vi.mock("./extensions", () => ({
   },
 }));
 
+// Import after mocks are set up
+import { decodex509 } from "./decode";
+
 describe("decodex509", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (toRelativeDateString as Mock).mockImplementation((date) => `Relative date for ${date}`);
-    (X509Certificate as unknown as Mock).mockImplementation(() => ({
+    // Reset mock data to default
+    mockX509CertificateData = {
       serialNumber: "123456",
       issuer: "Issuer Name",
       notBefore: new Date("2020-01-01"),
@@ -43,7 +82,7 @@ describe("decodex509", () => {
           value: new ArrayBuffer(8),
         },
       ],
-    }));
+    };
   });
 
   it("should decode a raw X.509 certificate", () => {
@@ -58,8 +97,8 @@ describe("decodex509", () => {
   EXTENSIONS_CONFIG.unknownExtensionType = undefined;
 
   it("converts ArrayBuffer to hex string for unknown extension types", () => {
-    (X509Certificate as unknown as Mock).mockImplementation(() => ({
-      // mock certificate fields as above, adjusting for this specific test
+    // Update mock data for this specific test
+    mockX509CertificateData = {
       serialNumber: "654321",
       issuer: "New Issuer",
       notBefore: new Date("2021-01-01"),
@@ -75,7 +114,7 @@ describe("decodex509", () => {
           value: new Uint8Array([1, 2, 3, 4]).buffer, // tests bufferToHex
         },
       ],
-    }));
+    };
 
     const rawCertificate = "anotherRawCertificateString";
     const decoded = decodex509(rawCertificate);
