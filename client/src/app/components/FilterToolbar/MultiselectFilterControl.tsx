@@ -204,6 +204,7 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
           autoComplete="off"
           innerRef={textInputRef}
           placeholder={placeholderText}
+          aria-label="Type to filter"
           aria-activedescendant={getFocusedItem() ? withPrefix(`option-${focusedItemIndex}`) : undefined}
           role="combobox"
           isExpanded={isFilterDropdownOpen}
