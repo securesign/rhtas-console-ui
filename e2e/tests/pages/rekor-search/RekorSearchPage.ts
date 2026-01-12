@@ -15,8 +15,8 @@ export class RekorSearchPage {
     return new RekorSearchPage(page);
   }
 
-  async applySearch(attribute: "Email" | "Hash" | "Entry SHA" | "Entry UUID" | "Log Index", value: string) {
-    await this._page.locator("#rekor-search-attribute").selectOption(attribute);
+  async applySearch(attribute: "Email" | "Hash" | "Commit SHA" | "Entry UUID" | "Log Index", value: string) {
+    await this._page.locator("#rekor-search-attribute").selectOption({ label: attribute });
     await this._page.locator(`[name="${attribute}"]`).fill(value);
     await this._page.getByRole("button", { name: "Search" }).click();
   }
