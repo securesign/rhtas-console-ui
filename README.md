@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/securesign/rhtas-console-ui/graph/badge.svg?token=VHMDKU365L)](https://codecov.io/gh/securesign/rhtas-console-ui)
+[![CodeQL](https://github.com/securesign/rhtas-console-ui/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/securesign/rhtas-console-ui/actions/workflows/ci.yaml) &nbsp; [![codecov](https://codecov.io/gh/securesign/rhtas-console-ui/graph/badge.svg?token=VHMDKU365L)](https://codecov.io/gh/securesign/rhtas-console-ui)
 
 # RHTAS Console UI
 
