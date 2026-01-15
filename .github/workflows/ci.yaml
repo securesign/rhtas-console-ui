@@ -29,3 +29,20 @@ jobs:
         run: npm run lint
       - name: Check
         run: npm run format
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v5
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          queries: security-extended,security-and-quality
+          build-mode: none
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@v3
