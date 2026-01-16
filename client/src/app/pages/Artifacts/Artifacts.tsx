@@ -19,6 +19,7 @@ import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { ArtifactResults } from "./components/ArtifactResults";
 import { Controller, useForm } from "react-hook-form";
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
+import { DocumentMetadata } from "@app/components/DocumentMetadata";
 
 const PLACEHOLDER_URI = "docker.io/library/nginx:latest";
 
@@ -73,6 +74,7 @@ export const Artifacts = () => {
 
   return (
     <Fragment>
+      <DocumentMetadata title="Artifacts" />
       <PageSection>
         <Content>
           <h1>Artifacts</h1>

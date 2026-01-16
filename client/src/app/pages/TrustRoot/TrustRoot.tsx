@@ -10,6 +10,7 @@ import { CertificatesTable } from "./components/Certificates";
 import { Overview } from "./components/Overview";
 import { RootDetails } from "./components/RootDetails";
 import { MetadataNotAvailable } from "./components/ErrorStates/MetadataNotAvailable";
+import { DocumentMetadata } from "@app/components/DocumentMetadata";
 
 export const TrustRoots: React.FC = () => {
   const {
@@ -37,6 +38,7 @@ export const TrustRoots: React.FC = () => {
 
   return (
     <Fragment>
+      <DocumentMetadata title="Trust Root" />
       <PageSection variant="default">
         <Content>
           <h1>Trust Root</h1>
