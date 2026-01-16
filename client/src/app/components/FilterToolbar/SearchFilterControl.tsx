@@ -20,7 +20,7 @@ export const SearchFilterControl = <TFilterCategoryKey extends string>({
   isDisabled = false,
   placeholderText,
   isNumeric = false,
-}: React.PropsWithChildren<ISearchFilterControlProps<TFilterCategoryKey>>): JSX.Element | null => {
+}: React.PropsWithChildren<ISearchFilterControlProps<TFilterCategoryKey>>): React.ReactNode => {
   // Keep internal copy of value until submitted by user
   const [inputValue, setInputValue] = React.useState(filterValue?.[0] ?? "");
   // Update it if it changes externally

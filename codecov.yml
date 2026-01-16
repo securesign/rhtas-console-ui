@@ -2,7 +2,7 @@ coverage:
   status:
     project:
       unit:
-        informational: true
+        target: 50%
       e2e:
         informational: true
     patch:

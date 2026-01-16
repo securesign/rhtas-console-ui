@@ -11,27 +11,36 @@ vi.mock("@peculiar/asn1-schema", () => ({
   },
 }));
 
-vi.mock("@peculiar/x509", () => ({
-  AuthorityKeyIdentifierExtension: vi.fn().mockImplementation(() => ({
-    keyId: "01020304",
-    certId: undefined,
-  })),
-  BasicConstraintsExtension: vi.fn().mockImplementation(() => ({
-    ca: false,
-  })),
-  ExtendedKeyUsageExtension: vi.fn().mockImplementation(() => ({
-    usages: ["1.3.6.1.5.5.7.3.3"],
-  })),
-  KeyUsagesExtension: vi.fn().mockImplementation(() => ({
-    usages: 3,
-  })),
-  SubjectAlternativeNameExtension: vi.fn().mockImplementation(() => ({
-    names: [],
-  })),
-  SubjectKeyIdentifierExtension: vi.fn().mockImplementation(() => ({
-    keyId: "01020304",
-  })),
-}));
+vi.mock("@peculiar/x509", () => {
+  // Use class syntax to properly mock constructors for Vitest 4.x
+  const AuthorityKeyIdentifierExtension = class {
+    keyId = "01020304";
+    certId = undefined;
+  };
+  const BasicConstraintsExtension = class {
+    ca = false;
+  };
+  const ExtendedKeyUsageExtension = class {
+    usages = ["1.3.6.1.5.5.7.3.3"];
+  };
+  const KeyUsagesExtension = class {
+    usages = 3;
+  };
+  const SubjectAlternativeNameExtension = class {
+    names: string[] = [];
+  };
+  const SubjectKeyIdentifierExtension = class {
+    keyId = "01020304";
+  };
+  return {
+    AuthorityKeyIdentifierExtension,
+    BasicConstraintsExtension,
+    ExtendedKeyUsageExtension,
+    KeyUsagesExtension,
+    SubjectAlternativeNameExtension,
+    SubjectKeyIdentifierExtension,
+  };
+});
 
 vi.mock("./constants", () => ({
   KEY_USAGE_NAMES: {

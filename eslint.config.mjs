@@ -18,7 +18,7 @@ export default tseslint.config([
       tseslint.configs.stylisticTypeChecked,
       prettierRecommended,
       ...pluginQuery.configs["flat/recommended"],
-      reactHooks.configs["recommended-latest"],
+      reactHooks.configs.flat["recommended-latest"],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
@@ -33,7 +33,10 @@ export default tseslint.config([
       react,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      ...reactHooks.configs.flat.recommended.rules,
+      // Disable new react-hooks v7 rules that require significant refactoring
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/incompatible-library": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
@@ -55,7 +58,7 @@ export default tseslint.config([
       ],
       "@typescript-eslint/no-unsafe-assignment": ["warn"],
     },
-    settings: { react: { version: "18.3" } },
+    settings: { react: { version: "19" } },
     ignores: ["client/config/**", "client/src/app/client/**", "client/types/**"],
   },
 ]);

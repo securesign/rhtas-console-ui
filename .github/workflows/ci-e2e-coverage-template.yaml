@@ -112,7 +112,7 @@ jobs:
           done
 
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
@@ -154,7 +154,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-artifacts
+          name: playwright-artifacts-coverage
           path: |
             e2e/test-results
             e2e/playwright-report

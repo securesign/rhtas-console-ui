@@ -19,7 +19,7 @@ import {
 } from "@patternfly/react-core";
 import { InfoAltIcon } from "@patternfly/react-icons";
 
-import type { _Error, CertificateInfo } from "@app/client";
+import type { Error as ApiError, CertificateInfo } from "@app/client";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { formatDate } from "@app/utils/utils";
 import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
@@ -27,7 +27,7 @@ import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
 interface IOverviewProps {
   certificates: CertificateInfo[];
   isFetching: boolean;
-  fetchError: AxiosError<_Error> | null;
+  fetchError: AxiosError<ApiError> | null;
   rootLink?: string;
 }
 

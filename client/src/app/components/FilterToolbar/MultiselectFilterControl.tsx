@@ -48,10 +48,10 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
   selectOptions,
   placeholderText,
   isScrollable = false,
-}: React.PropsWithChildren<IMultiselectFilterControlProps<TFilterCategoryKey>>): JSX.Element | null => {
+}: React.PropsWithChildren<IMultiselectFilterControlProps<TFilterCategoryKey>>): React.ReactNode => {
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState<string>("");
-  const textInputRef = React.useRef<HTMLInputElement>();
+  const textInputRef = React.useRef<HTMLInputElement>(null);
 
   const idPrefix = `filter-control-${categoryKey}`;
   const withPrefix = (id: string) => `${idPrefix}-${id}`;
@@ -203,6 +203,7 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
           autoComplete="off"
           innerRef={textInputRef}
           placeholder={placeholderText}
+          aria-label="Type to filter"
           aria-activedescendant={getFocusedItem() ? withPrefix(`option-${focusedItemIndex}`) : undefined}
           role="combobox"
           isExpanded={isFilterDropdownOpen}

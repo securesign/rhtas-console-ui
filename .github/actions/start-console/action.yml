@@ -61,17 +61,21 @@ runs:
     - name: Wait for services to be ready
       shell: bash
       run: |
-        # Wait for backend
+        # Wait for backend health endpoint
+        echo "Waiting for backend health check..."
         until curl -s http://localhost:8087/healthz | jq -e '.status == "ok"' >/dev/null 2>&1; do
           echo "Waiting for healthy service response on port 8087..."
           sleep 2
         done
+        echo "Backend health check passed!"
         
         # Wait for ui
+        echo "Waiting for UI..."
         until curl -s http://localhost:8088 | grep -qi "<html"; do
           echo "Waiting for HTML page on port 8088..."
           sleep 2
         done
+        echo "UI is ready!"
 
     - id: set-output
       shell: bash
