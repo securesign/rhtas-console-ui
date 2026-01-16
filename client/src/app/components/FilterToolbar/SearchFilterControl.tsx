@@ -5,8 +5,9 @@ import { SearchIcon } from "@patternfly/react-icons";
 
 import type { IFilterControlProps } from "./FilterControl";
 
-export interface ISearchFilterControlProps<TFilterCategoryKey extends string>
-  extends IFilterControlProps<TFilterCategoryKey> {
+export interface ISearchFilterControlProps<
+  TFilterCategoryKey extends string,
+> extends IFilterControlProps<TFilterCategoryKey> {
   placeholderText: string;
   isNumeric?: boolean;
 }
