@@ -6,12 +6,14 @@ import { CogIcon } from "@patternfly/react-icons";
 
 import { Explorer } from "./components/Explorer";
 import { Settings } from "./components/Settings";
+import { DocumentMetadata } from "@app/components/DocumentMetadata";
 
 export const RekorSearch: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <RekorClientProvider>
+      <DocumentMetadata title="Rekor Search" />
       <PageSection variant="default">
         <Split>
           <SplitItem isFilled>
