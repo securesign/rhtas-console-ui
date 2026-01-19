@@ -128,32 +128,30 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
       <Toolbar {...toolbarProps} aria-label="certificates toolbar">
         <ToolbarContent>
           <FilterToolbar {...filterToolbarProps} showFilterDropdown>
-            {filterToolbarProps.currentFilterCategoryKey === "subject" && (
-              <SearchFilterControl
-                {...getFilterControlProps({ categoryKey: "subject" })}
-                placeholderText="Search by subject"
-              />
-            )}
-            {filterToolbarProps.currentFilterCategoryKey === "status" && (
-              <MultiselectFilterControl
-                {...getFilterControlProps({ categoryKey: "status" })}
-                selectOptions={[
-                  {
-                    value: "active",
-                    label: "Active",
-                  },
-                  {
-                    value: "expiring",
-                    label: "Expiring",
-                  },
-                  {
-                    value: "expired",
-                    label: "Expired",
-                  },
-                ]}
-                placeholderText="Status"
-              />
-            )}
+            <SearchFilterControl
+              {...getFilterControlProps({ categoryKey: "subject" })}
+              placeholderText="Search by subject"
+              showToolbarItem={filterToolbarProps.currentFilterCategoryKey === "subject"}
+            />
+            <MultiselectFilterControl
+              {...getFilterControlProps({ categoryKey: "status" })}
+              selectOptions={[
+                {
+                  value: "active",
+                  label: "Active",
+                },
+                {
+                  value: "expiring",
+                  label: "Expiring",
+                },
+                {
+                  value: "expired",
+                  label: "Expired",
+                },
+              ]}
+              placeholderText="Status"
+              showToolbarItem={filterToolbarProps.currentFilterCategoryKey === "status"}
+            />
           </FilterToolbar>
           <ToolbarItem {...paginationToolbarItemProps}>
             <SimplePagination idPrefix="certificates-table" isTop paginationProps={paginationProps} />
