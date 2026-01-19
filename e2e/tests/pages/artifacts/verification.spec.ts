@@ -14,34 +14,34 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(page.getByText("Showing 1 of 1")).toBeVisible();
   });
 
-  // TODO: This test relies on hardcoded metadata values that may vary across environments.
-  // Consider refactoring to check for field presence rather than specific values.
-  test.skip("User can view artifact metadata fields in summary", async ({ page }) => {
+  test("User can view artifact metadata fields in summary", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact("docker.io/library/nginx:1.29.4");
 
     // Verify metadata fields are visible
-    await expect(page.locator("dt", { hasText: "Digest" }).locator("+ dd", { hasText: "sha256:8c329" })).toBeVisible();
-    await expect(page.locator("dt", { hasText: "Size" }).locator("+ dd", { hasText: "10229" })).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Digest" }).locator("+ dd", { hasText: /^sha256:.+/ })).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Size" }).locator("+ dd", { hasText: /\d+/ })).toBeVisible();
     await expect(
       page
         .locator("dt", { hasText: "Labels" })
         .locator("+ dd", { hasText: "NGINX Docker Maintainers <docker-maint@nginx.com>" })
     ).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: "0 Signatures" })
+      page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+\s+Signatures$/ })
     ).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: "0 Rekor Entries" })
+      page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+\s+Rekor Entries$/ })
     ).toBeVisible();
     await expect(
       page
         .locator("dt", { hasText: "Media Type" })
         .locator("+ dd", { hasText: "application/vnd.oci.image.index.v1+json" })
     ).toBeVisible();
-    await expect(page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: "Dec 29, 2025" })).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: "0 Attestations" })
+      page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+    ).toBeVisible();
+    await expect(
+      page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+\s+Attestations$/ })
     ).toBeVisible();
     await expect(
       page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" })
