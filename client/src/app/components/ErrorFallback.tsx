@@ -1,15 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import type { FallbackProps } from "react-error-boundary";
 
 import { Bullseye, Button, EmptyState, EmptyStateBody, EmptyStateVariant } from "@patternfly/react-core";
 import UserNinjaIcon from "@patternfly/react-icons/dist/esm/icons/user-ninja-icon";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
-export const ErrorFallback = ({
-  resetErrorBoundary,
-}: {
-  error: Error;
-  resetErrorBoundary: (...args: unknown[]) => void;
-}) => {
+export const ErrorFallback = ({ resetErrorBoundary }: FallbackProps) => {
   const navigate = useNavigate();
 
   return (
