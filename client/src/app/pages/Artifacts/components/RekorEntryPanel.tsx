@@ -1,27 +1,18 @@
 import type { TransparencyLogEntry, SignatureStatus } from "@app/client";
-import {
-  formatIntegratedTime,
-  getRekorEntryType,
-  getRekorSetBytes,
-  verificationStatusToLabelColor,
-} from "@app/utils/utils";
+import { formatIntegratedTime, getRekorEntryType, getRekorSetBytes } from "@app/utils/utils";
 import {
   Button,
   Card,
   CardBody,
-  CardHeader,
-  CardTitle,
   ClipboardCopy,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTermHelpText,
-  Flex,
-  FlexItem,
-  Label,
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { Link } from "react-router-dom";
+import { StatusCardHeader } from "./StatusCardHeader";
 
 export const RekorEntryPanel = ({
   rekorEntry,
@@ -33,20 +24,10 @@ export const RekorEntryPanel = ({
   if (!rekorEntry) return <></>;
   const entryType = getRekorEntryType(rekorEntry.canonicalizedBody);
   const setBytes = getRekorSetBytes(rekorEntry.inclusionPromise?.signedEntryTimestamp);
-  const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(status);
 
   return (
     <Card>
-      <CardHeader>
-        <Flex>
-          <FlexItem>
-            <CardTitle>Rekor Entry</CardTitle>
-          </FlexItem>
-          <FlexItem align={{ default: "alignRight" }}>
-            <Label color={verificationLabelColor}>{verificationLabel}</Label>
-          </FlexItem>
-        </Flex>
-      </CardHeader>
+      <StatusCardHeader title="Rekor Entry" status={status} />
       <CardBody>
         <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
           {entryType && (
