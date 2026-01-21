@@ -5,22 +5,27 @@ import {
   AccordionToggle,
   Card,
   CardBody,
+  CardHeader,
   CardTitle,
   ClipboardCopy,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTermHelpText,
+  Flex,
+  FlexItem,
+  Label,
 } from "@patternfly/react-core";
-import type { ParsedCertificate } from "@app/client";
+import type { ParsedCertificate, SignatureStatus } from "@app/client";
 import { useState } from "react";
-import { capitalizeFirstLetter, formatDate } from "@app/utils/utils";
+import { capitalizeFirstLetter, formatDate, verificationStatusToLabelColor } from "@app/utils/utils";
 
 interface ICertificateChain {
   certificateChain: ParsedCertificate[];
+  status: SignatureStatus["chain"];
 }
 
-export const CertificateChain = ({ certificateChain }: ICertificateChain) => {
+export const CertificateChain = ({ certificateChain, status }: ICertificateChain) => {
   const [expanded, setExpanded] = useState("");
 
   const onToggle = (id: string) => {
@@ -30,10 +35,19 @@ export const CertificateChain = ({ certificateChain }: ICertificateChain) => {
       setExpanded(id);
     }
   };
-
+  const { label: verificationLabel, color: verificationLabelColor } = verificationStatusToLabelColor(status);
   return (
     <Card style={{ overflow: "visible" }}>
-      <CardTitle>Certificate Chain</CardTitle>
+      <CardHeader>
+        <Flex>
+          <FlexItem>
+            <CardTitle>Certificate Chain</CardTitle>
+          </FlexItem>
+          <FlexItem align={{ default: "alignRight" }}>
+            <Label color={verificationLabelColor}>{verificationLabel}</Label>
+          </FlexItem>
+        </Flex>
+      </CardHeader>
       <CardBody>
         <Accordion>
           {certificateChain.map((cert, idx) => {
