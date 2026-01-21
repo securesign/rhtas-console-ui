@@ -1,10 +1,9 @@
-import type { TransparencyLogEntry } from "@app/client";
+import type { TransparencyLogEntry, SignatureStatus } from "@app/client";
 import { formatIntegratedTime, getRekorEntryType, getRekorSetBytes } from "@app/utils/utils";
 import {
   Button,
   Card,
   CardBody,
-  CardTitle,
   ClipboardCopy,
   DescriptionList,
   DescriptionListDescription,
@@ -13,15 +12,22 @@ import {
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { Link } from "react-router-dom";
+import { StatusCardHeader } from "./StatusCardHeader";
 
-export const RekorEntryPanel = ({ rekorEntry }: { rekorEntry: TransparencyLogEntry | undefined }) => {
+export const RekorEntryPanel = ({
+  rekorEntry,
+  status,
+}: {
+  rekorEntry: TransparencyLogEntry | undefined;
+  status: SignatureStatus["rekor"];
+}) => {
   if (!rekorEntry) return <></>;
   const entryType = getRekorEntryType(rekorEntry.canonicalizedBody);
   const setBytes = getRekorSetBytes(rekorEntry.inclusionPromise?.signedEntryTimestamp);
 
   return (
     <Card>
-      <CardTitle>Rekor Entry</CardTitle>
+      <StatusCardHeader title="Rekor Entry" status={status} />
       <CardBody>
         <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
           {entryType && (
