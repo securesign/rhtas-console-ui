@@ -5,22 +5,23 @@ import {
   AccordionToggle,
   Card,
   CardBody,
-  CardTitle,
   ClipboardCopy,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTermHelpText,
 } from "@patternfly/react-core";
-import type { ParsedCertificate } from "@app/client";
+import type { ParsedCertificate, SignatureStatus } from "@app/client";
 import { useState } from "react";
 import { capitalizeFirstLetter, formatDate } from "@app/utils/utils";
+import { StatusCardHeader } from "./StatusCardHeader";
 
 interface ICertificateChain {
   certificateChain: ParsedCertificate[];
+  status: SignatureStatus["chain"];
 }
 
-export const CertificateChain = ({ certificateChain }: ICertificateChain) => {
+export const CertificateChain = ({ certificateChain, status }: ICertificateChain) => {
   const [expanded, setExpanded] = useState("");
 
   const onToggle = (id: string) => {
@@ -33,7 +34,7 @@ export const CertificateChain = ({ certificateChain }: ICertificateChain) => {
 
   return (
     <Card style={{ overflow: "visible" }}>
-      <CardTitle>Certificate Chain</CardTitle>
+      <StatusCardHeader title="Certificate Chain" status={status} />
       <CardBody>
         <Accordion>
           {certificateChain.map((cert, idx) => {
