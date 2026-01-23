@@ -140,13 +140,16 @@ export const ArtifactAttestation = ({ attestation }: IArtifactAttestation) => {
           {attestation.certificateChain && attestation.certificateChain.length > 0 && (
             <StackItem>
               {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
-              <CertificateChain certificateChain={attestation.certificateChain} />
+              <CertificateChain
+                certificateChain={attestation.certificateChain}
+                status={attestation.attestationStatus.chain}
+              />
             </StackItem>
           )}
           {attestation.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={attestation.rekorEntry} />
+              <RekorEntryPanel rekorEntry={attestation.rekorEntry} status={attestation.attestationStatus.rekor} />
             </StackItem>
           )}
         </Stack>

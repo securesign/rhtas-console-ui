@@ -138,13 +138,16 @@ export const ArtifactSignature = ({ signature }: { signature: SignatureView }) =
           {signature.certificateChain && signature.certificateChain.length > 0 && (
             <StackItem>
               {/** CERTIFICATE CHAIN (INTERMEDIATE + ROOT) */}
-              <CertificateChain certificateChain={signature.certificateChain} />
+              <CertificateChain
+                certificateChain={signature.certificateChain}
+                status={signature.signatureStatus.chain}
+              />
             </StackItem>
           )}
           {signature.rekorEntry && (
             <StackItem>
               {/** REKOR ENTRY */}
-              <RekorEntryPanel rekorEntry={signature.rekorEntry} />
+              <RekorEntryPanel rekorEntry={signature.rekorEntry} status={signature.signatureStatus.rekor} />
             </StackItem>
           )}
         </Stack>
