@@ -5,7 +5,7 @@ import { test } from "../../fixtures";
 
 import { ArtifactsPage } from "./ArtifactsPage";
 
-test.describe("Artifacts page Accessability", () => {
+test.describe("Artifacts page Accessibility", () => {
   test("Default page view", async ({ page }) => {
     await ArtifactsPage.build(page);
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();

@@ -5,7 +5,7 @@ import { test } from "../../fixtures";
 
 import { RekorSearchPage } from "./RekorSearchPage";
 
-test.describe("Rekor Search UI - Accessability", () => {
+test.describe("Rekor Search UI - Accessibility", () => {
   test("Default Page view", async ({ page }) => {
     await RekorSearchPage.build(page);
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();

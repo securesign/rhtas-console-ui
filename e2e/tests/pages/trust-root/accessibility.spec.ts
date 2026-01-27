@@ -5,7 +5,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 import { TrustRootPage } from "./TrustRootPage";
 
-test.describe("Trust Root - Accessability", () => {
+test.describe("Trust Root - Accessibility", () => {
   test("Page view: Overview tab", async ({ page }) => {
     const trustRootPage = await TrustRootPage.build(page);
     await trustRootPage.getTabs().select("Overview");
