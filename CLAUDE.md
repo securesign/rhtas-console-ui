@@ -69,6 +69,17 @@ Managed through `common/src/environment.ts`. Key variables:
 - `CONSOLE_API_URL` - Backend API URL (default: http://localhost:8080)
 - `COVERAGE` - Enable code instrumentation for coverage
 
+## Dependency Management
+
+### Playwright Version Synchronization
+
+Playwright versions must remain synchronized across multiple files. Renovate is configured (`renovate.json`) to automatically update these files together:
+- `e2e/package.json` - npm package version
+- `docker-compose.yaml` - Docker image and npx command versions
+- `.devcontainer/playwright/Dockerfile` - Devcontainer image version
+
+**Never update Playwright versions manually** - let Renovate handle it. If manual updates are necessary, update all three files with the same version number.
+
 ## Best Practices
 
 **Data fetching**: Model hooks around semantic operation (read vs write), not HTTP verb. Use queries for idempotent read/verify calls even when POST endpoints. Avoid cache invalidations for read-only operations.

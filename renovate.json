@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["@playwright/test"],
+      "matchDatasources": ["npm"],
+      "groupName": "Playwright",
+      "additionalPaths": [
+        "docker-compose.yaml",
+        "e2e/package.json"
+      ]
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "^docker-compose\\.ya?ml$",
+        "^\\.devcontainer\\/playwright\\/Dockerfile$"
+      ],
+      "matchStrings": [
+        "mcr\\.microsoft\\.com\\/playwright:v(?<currentValue>[\\d.]+)-jammy",
+        "playwright@v(?<currentValue>[\\d.]+) "
+      ],
+      "depNameTemplate": "@playwright/test",
+      "datasourceTemplate": "npm"
+    }
+  ]
+}
