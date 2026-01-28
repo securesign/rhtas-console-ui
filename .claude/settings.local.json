@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/kahboom/Projects/rhtas-console-ui diff)",
+      "Bash(git -C /Users/kahboom/Projects/rhtas-console-ui log --oneline -5)"
+    ]
+  }
+}
