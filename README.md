@@ -149,7 +149,7 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    Deploy the console using Kustomize:
 
    ```bash
-   oc apply -k https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0
+   oc apply -k 'https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0'
    ```
 
 3. **Verify the Deployment**:
@@ -163,7 +163,7 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    You can access the console via a browser using the UI route:
 
    ```bash
-   oc get route console-ui -o jsonpath='https://{.spec.host}{"\n"}'
+   oc get route console-ui -o jsonpath='https://{.spec.host}{"\n"}' -n trusted-artifact-signer
    ```
 
 4. **Deletion**:
@@ -171,5 +171,5 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    To delete the deployed resources:
 
    ```bash
-   oc delete -k https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0
+   oc delete -k 'https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0'
    ```
