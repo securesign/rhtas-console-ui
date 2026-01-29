@@ -1,29 +1,24 @@
-import { expect } from "../../assertions";
+import { runA11yAudit } from "../../common/a11y";
 import { test } from "../../fixtures";
-
-import AxeBuilder from "@axe-core/playwright";
 
 import { TrustRootPage } from "./TrustRootPage";
 
 test.describe("Trust Root - Accessibility", () => {
-  test("Page view: Overview tab", async ({ page }) => {
+  test("Page view: Overview tab", async ({ page }, testInfo) => {
     const trustRootPage = await TrustRootPage.build(page);
     await trustRootPage.getTabs().select("Overview");
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
+    await runA11yAudit(page, testInfo, { label: "trust-root-overview" });
   });
 
-  test("Page view: Certificates tab", async ({ page }) => {
+  test("Page view: Certificates tab", async ({ page }, testInfo) => {
     const trustRootPage = await TrustRootPage.build(page);
     await trustRootPage.getTabs().select("Certificates");
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
+    await runA11yAudit(page, testInfo, { label: "trust-root-certificates" });
   });
 
-  test("Page view: Root details tab", async ({ page }) => {
+  test("Page view: Root details tab", async ({ page }, testInfo) => {
     const trustRootPage = await TrustRootPage.build(page);
     await trustRootPage.getTabs().select("Root details");
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
+    await runA11yAudit(page, testInfo, { label: "trust-root-root-details" });
   });
 });
