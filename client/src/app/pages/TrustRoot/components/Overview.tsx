@@ -73,6 +73,7 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
                   legendOrientation="vertical"
                   legendPosition="right"
                   name="Certificates"
+                  ariaTitle="Certificates donut chart"
                   padding={{
                     bottom: 20,
                     left: 20,

@@ -111,7 +111,13 @@ export function Settings({ open, onClose }: { open: boolean; onClose: () => void
         <Button key="confirm" variant="primary" onClick={onSave} data-testid={"settings-confirm-button"}>
           Confirm
         </Button>
-        <Button key="cancel" variant="link" onClick={handleClose} data-testid={"settings-close-button"}>
+        <Button
+          key="cancel"
+          variant="link"
+          aria-label="cancel button"
+          onClick={handleClose}
+          data-testid={"settings-close-button"}
+        >
           Cancel
         </Button>
         ,
