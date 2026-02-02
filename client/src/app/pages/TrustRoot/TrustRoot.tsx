@@ -44,7 +44,12 @@ export const TrustRoots: React.FC = () => {
           <Content component={ContentVariants.h1}>Trust Root</Content>
           <Content component={ContentVariants.p}>This information represents the update framework.</Content>
           <Content component={ContentVariants.p}>
-            <Content component={ContentVariants.a} href={rootMetadataList?.["repo-url"]} target="_blank" rel="noreferrer">
+            <Content
+              component={ContentVariants.a}
+              href={rootMetadataList?.["repo-url"]}
+              target="_blank"
+              rel="noreferrer"
+            >
               {rootMetadataList?.["repo-url"]} <ExternalLinkAltIcon />
             </Content>
           </Content>

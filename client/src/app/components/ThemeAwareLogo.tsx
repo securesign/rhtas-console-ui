@@ -3,8 +3,8 @@ import { Brand } from "@patternfly/react-core";
 import { useIsDarkMode } from "@app/hooks/useDarkMode.tsx";
 
 interface ThemeAwareLogoProps {
-  lightSrc: string
-  darkSrc: string
+  lightSrc: string;
+  darkSrc: string;
   alt: string;
   heights: { default: string };
 }
