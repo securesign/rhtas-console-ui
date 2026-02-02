@@ -50,10 +50,10 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
 
     if (isDark) {
       htmlElement.classList.add(DARK_MODE_KEY);
-      themeMeta?.setAttribute('content', '#000000');
+      themeMeta?.setAttribute("content", "#000000");
     } else {
       htmlElement.classList.remove(DARK_MODE_KEY);
-      themeMeta?.setAttribute('content', '#ffffff');
+      themeMeta?.setAttribute("content", "#ffffff");
     }
 
     localStorage.setItem(STORAGE_KEY, mode);

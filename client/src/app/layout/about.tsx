@@ -18,9 +18,7 @@ export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) =>
   const { about } = useBranding();
   const isDark = useIsDarkMode();
 
-  const logoSrc = isDark && about.darkModeImageSrc ?
-    about.darkModeImageSrc
-    : about.imageSrc ?? TRANSPARENT_1x1_GIF;
+  const logoSrc = isDark && about.darkModeImageSrc ? about.darkModeImageSrc : (about.imageSrc ?? TRANSPARENT_1x1_GIF);
 
   return (
     <AboutModal
