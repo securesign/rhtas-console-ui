@@ -28,6 +28,7 @@ export const RekorSearch: React.FC = () => {
               icon={<CogIcon />}
               onClick={() => setSettingsOpen(true)}
               data-testid="settings-button"
+              aria-label="settings-button"
             />
           </SplitItem>
         </Split>
