@@ -18,13 +18,9 @@ export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) =>
   const { about } = useBranding();
   const isDark = useIsDarkMode();
 
-  // NOTE: A masthead-logo-dark.svg file exists.
-  // Toggle files based on theme.
-  const logoSrc = about.imageSrc
-    ? isDark
-      ? about.imageSrc.replace(".svg", "-dark.svg")
-      : about.imageSrc
-    : TRANSPARENT_1x1_GIF;
+  const logoSrc = isDark && about.darkModeImageSrc ?
+    about.darkModeImageSrc
+    : about.imageSrc ?? TRANSPARENT_1x1_GIF;
 
   return (
     <AboutModal

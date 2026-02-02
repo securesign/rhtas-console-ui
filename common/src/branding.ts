@@ -21,6 +21,7 @@ export interface BrandingStrings {
   about: {
     displayName: string;
     imageSrc?: string;
+    darkModeImageSrc?: string;
     documentationUrl?: string;
   };
 

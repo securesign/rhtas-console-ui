@@ -7,6 +7,7 @@
   "about": {
     "displayName": "RHTAS Console",
     "imageSrc": "<%= brandingRoot %>/images/masthead-logo.svg",
+    "darkModeImageSrc": "<%= brandingRoot %>/images/masthead-logo-dark.svg",
     "documentationUrl": "https://access.redhat.com/products/red-hat-trusted-artifact-signer"
   },
   "masthead": {
