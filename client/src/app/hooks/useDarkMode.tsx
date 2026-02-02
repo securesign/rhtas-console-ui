@@ -16,6 +16,7 @@ export const THEME_MODES = {
 export type ThemeMode = (typeof THEME_MODES)[keyof typeof THEME_MODES];
 
 const getSystemTheme = (): "light" | "dark" => {
+  if (typeof window === "undefined" || !window.matchMedia) return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 };
 
@@ -45,11 +46,14 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   // Set mode
   useEffect(() => {
     const htmlElement = document.documentElement;
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
 
     if (isDark) {
       htmlElement.classList.add(DARK_MODE_KEY);
+      themeMeta?.setAttribute('content', '#000000');
     } else {
       htmlElement.classList.remove(DARK_MODE_KEY);
+      themeMeta?.setAttribute('content', '#ffffff');
     }
 
     localStorage.setItem(STORAGE_KEY, mode);
