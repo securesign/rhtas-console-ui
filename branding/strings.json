@@ -12,6 +12,7 @@
   "masthead": {
     "leftBrand": {
       "src": "<%= brandingRoot %>/images/masthead-logo.svg",
+      "darkModeSrc": "<%= brandingRoot %>/images/masthead-logo-dark.svg",
       "alt": "brand",
       "height": "40px"
     },

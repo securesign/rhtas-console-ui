@@ -1,5 +1,6 @@
 export interface MastheadBrand {
   src: string;
+  darkModeSrc: string;
   alt: string;
   height: string;
 }

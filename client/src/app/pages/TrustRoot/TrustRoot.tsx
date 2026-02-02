@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import { Content, PageSection, Tab, TabContent, Tabs, TabTitleText } from "@patternfly/react-core";
+import { Content, ContentVariants, PageSection, Tab, TabContent, Tabs, TabTitleText } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
@@ -41,13 +41,13 @@ export const TrustRoots: React.FC = () => {
       <DocumentMetadata title="Trust Root" />
       <PageSection variant="default">
         <Content>
-          <h1>Trust Root</h1>
-          <p>This information represents the update framework.</p>
-          <p>
-            <a href={rootMetadataList?.["repo-url"]} target="_blank" rel="noreferrer">
+          <Content component={ContentVariants.h1}>Trust Root</Content>
+          <Content component={ContentVariants.p}>This information represents the update framework.</Content>
+          <Content component={ContentVariants.p}>
+            <Content component={ContentVariants.a} href={rootMetadataList?.["repo-url"]} target="_blank" rel="noreferrer">
               {rootMetadataList?.["repo-url"]} <ExternalLinkAltIcon />
-            </a>
-          </p>
+            </Content>
+          </Content>
         </Content>
       </PageSection>
       <PageSection variant="default">
