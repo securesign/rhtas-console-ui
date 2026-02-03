@@ -5,7 +5,7 @@ import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import ENV from "@app/env";
 import useBranding from "@app/hooks/useBranding";
-import { useIsDarkMode } from "@app/hooks/useDarkMode.tsx";
+import { useIsDarkMode } from "@app/hooks/useDarkMode";
 
 interface IButtonAboutAppProps {
   isOpen: boolean;

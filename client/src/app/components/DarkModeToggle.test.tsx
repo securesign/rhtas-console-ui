@@ -4,15 +4,15 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { THEME_MODES } from "@app/hooks/useDarkMode";
 
-vi.mock("@app/hooks/useDarkMode.tsx", async () => {
-  const actual = await vi.importActual("@app/hooks/useDarkMode.tsx");
+vi.mock("@app/hooks/useDarkMode", async () => {
+  const actual = await vi.importActual("@app/hooks/useDarkMode");
   return {
     ...actual,
     useDarkMode: vi.fn(),
   };
 });
 
-import { useDarkMode } from "@app/hooks/useDarkMode.tsx";
+import { useDarkMode } from "@app/hooks/useDarkMode";
 
 const mockUseDarkMode = vi.mocked(useDarkMode);
 

@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { Select, SelectGroup, SelectList, SelectOption, MenuToggle, Icon, Spinner } from "@patternfly/react-core";
-import { useDarkMode, type ThemeMode } from "@app/hooks/useDarkMode.tsx";
+import { useDarkMode, type ThemeMode } from "@app/hooks/useDarkMode";
 import { OutlinedMoonIcon, OutlinedSunIcon, DesktopIcon } from "@patternfly/react-icons";
 
 const ColorSchemeGroupLabel = (

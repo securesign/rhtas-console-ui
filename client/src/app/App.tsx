@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import { AppRoutes } from "./Routes";
 import { DefaultLayout } from "./layout";
-import { DarkModeProvider } from "./hooks/useDarkMode.tsx";
+import { DarkModeProvider } from "./hooks/useDarkMode";
 
 import "@patternfly/patternfly/patternfly.css";
 import "@patternfly/patternfly/patternfly-addons.css";

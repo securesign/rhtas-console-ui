@@ -1,6 +1,6 @@
 import type React from "react";
 import { Brand } from "@patternfly/react-core";
-import { useIsDarkMode } from "@app/hooks/useDarkMode.tsx";
+import { useIsDarkMode } from "@app/hooks/useDarkMode";
 
 interface ThemeAwareLogoProps {
   lightSrc: string;

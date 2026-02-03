@@ -2,11 +2,11 @@ import { render, screen } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
-vi.mock("@app/hooks/useDarkMode.tsx", () => ({
+vi.mock("@app/hooks/useDarkMode", () => ({
   useIsDarkMode: vi.fn(),
 }));
 
-import { useIsDarkMode } from "@app/hooks/useDarkMode.tsx";
+import { useIsDarkMode } from "@app/hooks/useDarkMode";
 
 const mockUseIsDarkMode = vi.mocked(useIsDarkMode);
 
