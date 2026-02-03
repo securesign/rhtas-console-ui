@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 // docs: https://www.patternfly.org/developer-resources/dark-theme-handbook/
 const DARK_MODE_KEY = "pf-v6-theme-dark";
 // LocalStorage key for storing theme preference
-const STORAGE_KEY = "theme-preference";
+export const STORAGE_KEY = "theme-preference";
 
 export const THEME_MODES = {
   SYSTEM: "system",
