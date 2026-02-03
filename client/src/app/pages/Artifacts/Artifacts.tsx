@@ -2,7 +2,6 @@ import { Fragment, useRef, useState } from "react";
 import {
   Button,
   Content,
-  ContentVariants,
   Flex,
   FlexItem,
   Form,
@@ -78,8 +77,8 @@ export const Artifacts = () => {
       <DocumentMetadata title="Artifacts" />
       <PageSection>
         <Content>
-          <Content component={ContentVariants.h1}>Artifacts</Content>
-          <Content component={ContentVariants.p}>Search for an artifact.</Content>
+          <h1>Artifacts</h1>
+          <p>Search for an artifact.</p>
         </Content>
       </PageSection>
       <PageSection>

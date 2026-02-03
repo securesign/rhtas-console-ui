@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { RekorClientProvider } from "@app/pages/RekorSearch/api/context";
-import { Button, Content, ContentVariants, PageSection, Split, SplitItem } from "@patternfly/react-core";
+import { Button, Content, PageSection, Split, SplitItem } from "@patternfly/react-core";
 import { CogIcon } from "@patternfly/react-icons";
 
 import { Explorer } from "./components/Explorer";
@@ -18,8 +18,8 @@ export const RekorSearch: React.FC = () => {
         <Split>
           <SplitItem isFilled>
             <Content>
-              <Content component={ContentVariants.h1}>Rekor Search</Content>
-              <Content component={ContentVariants.p}>Search the Rekor public transparency log.</Content>
+              <h1>Rekor Search</h1>
+              <p>Search the Rekor public transparency log.</p>
             </Content>
           </SplitItem>
           <SplitItem>
