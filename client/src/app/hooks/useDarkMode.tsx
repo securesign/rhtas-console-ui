@@ -30,12 +30,10 @@ const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined
 
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeMode>(() => {
-    // Check for existing theme preference
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && Object.values(THEME_MODES).includes(stored as ThemeMode)) {
       return stored as ThemeMode;
     }
-    // Default to system preference
     return THEME_MODES.SYSTEM;
   });
 
@@ -43,7 +41,6 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
 
   const isDark = mode === THEME_MODES.DARK || (mode === THEME_MODES.SYSTEM && systemTheme === "dark");
 
-  // Set mode
   useEffect(() => {
     const htmlElement = document.documentElement;
     const themeMeta = document.querySelector('meta[name="theme-color"]');
@@ -55,11 +52,12 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
       htmlElement.classList.remove(DARK_MODE_KEY);
       themeMeta?.setAttribute("content", "#ffffff");
     }
+  }, [isDark]);
 
+  useEffect(() => {
     localStorage.setItem(STORAGE_KEY, mode);
-  }, [mode, isDark]);
+  }, [mode]);
 
-  // Check for user's color scheme preference
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = () => {
@@ -67,8 +65,6 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (mediaQuery.addEventListener) {
-      // When the system theme preference changes
-      // update our reference of what the user prefers
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     }
