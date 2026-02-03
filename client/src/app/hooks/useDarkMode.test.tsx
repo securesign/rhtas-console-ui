@@ -151,3 +151,13 @@ describe("useDarkMode hook", () => {
     });
   });
 });
+
+describe("useIsDarkMode hook", () => {
+  describe("Context Provider", () => {
+    it("should throw error when used outside provider", () => {
+      expect(() => {
+        renderHook(() => useIsDarkMode());
+      }).toThrow("useIsDarkMode must be used within DarkModeProvider");
+    });
+  });
+});
