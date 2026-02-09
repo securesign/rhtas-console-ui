@@ -18,7 +18,8 @@ test.describe("Overriding the Rekor Endpoint", () => {
 
     // Verify search
     const response = await page.waitForResponse((response) => {
-      return response.url().includes("https://rekor.sigstore.dev") && response.request().method() === "GET";
+      const url = new URL(response.url());
+      return url.origin === "https://rekor.sigstore.dev" && response.request().method() === "GET";
     });
 
     await rekorSearchPage.applySearch("Email", "bob.callaway@gmail.com");

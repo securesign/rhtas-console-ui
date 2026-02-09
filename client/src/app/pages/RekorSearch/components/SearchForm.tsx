@@ -95,7 +95,7 @@ const inputConfigByAttribute: Record<FormInputs["attribute"], InputConfig> = {
     placeholder: "24296fb24b8ad77a71b9c1374e207537bafdd75b4f591dcee10f3f697f150d7cc5d0b725eea641e7",
     rules: {
       pattern: {
-        value: /^[0-9a-fA-F]{64}|[0-9a-fA-F]{80}$/,
+        value: /^([0-9a-fA-F]{64}|[0-9a-fA-F]{80})$/,
         message: "Entered value does not match the entry UUID format: '^[0-9a-fA-F]{64}|[0-9a-fA-F]{80}$'",
       },
     },
