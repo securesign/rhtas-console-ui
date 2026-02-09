@@ -107,7 +107,7 @@ export const LeafCertificate = ({ leafCert }: ILeafCertificate) => {
         <CardTitle>Leaf Certificate</CardTitle>
       </CardHeader>
       <CardBody>
-        <DescriptionList aria-label="Leaf certificate details" isCompact isHorizontal>
+        <DescriptionList aria-label="Leaf certificate details" isCompact>
           {leafCert.sans && leafCert.sans.length > 0 && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>SAN</DescriptionListTermHelpText>
