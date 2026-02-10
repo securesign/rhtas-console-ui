@@ -39,13 +39,13 @@ export const ArtifactAttestations = ({ attestations }: IArtifactAttestationsProp
 
   const {
     tableState: { currentPageItems },
-    propHelpers: { paginationProps, paginationToolbarItemProps, getFilterControlProps },
+    propHelpers: { paginationProps, paginationToolbarItemProps, getFilterControlProps, toolbarProps },
   } = tableState;
 
   const tableColumns = ["Identity", "Digest", "Attestation Type", "Timestamp", "Attestation", "Rekor"];
   return (
     <Fragment>
-      <Toolbar inset={{ default: "insetXl" }} aria-label="Attestations toolbar">
+      <Toolbar inset={{ default: "insetXl" }} aria-label="Attestations toolbar" {...toolbarProps}>
         <ToolbarContent>
           <SearchFilterControl
             {...getFilterControlProps({ categoryKey: "identity" })}

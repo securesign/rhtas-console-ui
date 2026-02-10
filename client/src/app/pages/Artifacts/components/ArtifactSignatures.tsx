@@ -36,13 +36,13 @@ export const ArtifactSignatures = ({ signatures }: { signatures: SignatureView[]
 
   const {
     tableState: { currentPageItems },
-    propHelpers: { paginationProps, paginationToolbarItemProps, getFilterControlProps },
+    propHelpers: { paginationProps, paginationToolbarItemProps, getFilterControlProps, toolbarProps },
   } = tableState;
 
   const tableColumns = ["Identity", "Digest", "Signed On", "Signed", "Chain", "Rekor"];
   return (
     <Fragment>
-      <Toolbar inset={{ default: "insetXl" }} aria-label="Signatures toolbar">
+      <Toolbar inset={{ default: "insetXl" }} aria-label="Signatures toolbar" {...toolbarProps}>
         <ToolbarContent>
           <SearchFilterControl
             {...getFilterControlProps({ categoryKey: "identity" })}
