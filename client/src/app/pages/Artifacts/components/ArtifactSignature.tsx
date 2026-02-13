@@ -12,7 +12,7 @@ import {
   Truncate,
 } from "@patternfly/react-core";
 import { CheckIcon, EllipsisVIcon, TimesIcon } from "@patternfly/react-icons";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { handleDownloadBundle, relativeDateString, toIdentity } from "@app/utils/utils";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { LeafCertificate } from "./LeafCertificate";
@@ -42,13 +42,13 @@ export const ArtifactSignature = ({ signature, index }: { signature: SignatureVi
   const chainStatusBadge = signature.signatureStatus.chain === "verified" ? <CheckIcon /> : <TimesIcon />;
 
   return (
-    <Fragment>
+    <>
       <Tr isContentExpanded={isExpanded}>
         <Td
           expand={{
             rowIndex: index,
             isExpanded,
-            onToggle: () => handleToggleSignatureItem(),
+            onToggle: handleToggleSignatureItem,
           }}
         />
         <Td>
@@ -139,6 +139,6 @@ export const ArtifactSignature = ({ signature, index }: { signature: SignatureVi
           </ExpandableRowContent>
         </Td>
       </Tr>
-    </Fragment>
+    </>
   );
 };

@@ -11,7 +11,7 @@ import {
   Truncate,
   type MenuToggleElement,
 } from "@patternfly/react-core";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { RekorEntryPanel } from "./RekorEntryPanel";
 import { handleDownloadBundle, relativeDateString } from "@app/utils/utils";
 import { EllipsisVIcon, CheckIcon, TimesIcon } from "@patternfly/react-icons";
@@ -42,7 +42,7 @@ export const ArtifactAttestation = ({ attestation, index }: IArtifactAttestation
   const key = attestation.digest;
 
   return (
-    <Fragment>
+    <>
       <Tr aria-labelledby={`attestation-item-${key}`} isContentExpanded={isExpanded}>
         <Td
           id={`attestation-toggle-${key}`}
@@ -50,7 +50,7 @@ export const ArtifactAttestation = ({ attestation, index }: IArtifactAttestation
           expand={{
             rowIndex: index,
             isExpanded,
-            onToggle: () => handleToggleAttestationItem(),
+            onToggle: handleToggleAttestationItem,
           }}
         />
         <Td key="identity">
@@ -146,6 +146,6 @@ export const ArtifactAttestation = ({ attestation, index }: IArtifactAttestation
           </ExpandableRowContent>
         </Td>
       </Tr>
-    </Fragment>
+    </>
   );
 };
