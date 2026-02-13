@@ -29,7 +29,7 @@ export const RekorEntryPanel = ({
     <Card>
       <StatusCardHeader title="Rekor Entry" status={status} />
       <CardBody>
-        <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
+        <DescriptionList aria-label="Certificate chain details" isCompact>
           {entryType && (
             <DescriptionListGroup>
               <DescriptionListTermHelpText>Entry Type</DescriptionListTermHelpText>

@@ -26,12 +26,8 @@ test.describe("Artifacts Verification Flow", () => {
         .locator("dt", { hasText: "Labels" })
         .locator("+ dd", { hasText: "NGINX Docker Maintainers <docker-maint@nginx.com>" })
     ).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+\s+Signatures$/ })
-    ).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+\s+Rekor Entries$/ })
-    ).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page
         .locator("dt", { hasText: "Media Type" })
@@ -40,9 +36,7 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(
       page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
     ).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+\s+Attestations$/ })
-    ).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" })
     ).toBeVisible();
@@ -71,31 +65,41 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // User can see all signatures associated with the artifact
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(2);
+    // User can see all signatures in the table
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    // Verify first signature has verification status
-    await expect(signatures.first()).toHaveText(/[✓✗]/);
+    // Get main data rows (those with expand toggle cells, not expandable content rows)
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(2);
+
+    // Verify first signature row has verification status icons (CheckIcon/TimesIcon SVGs)
+    await expect(dataRows.first().locator("svg").first()).toBeVisible();
   });
 
   test("User has clear indicator of verification status per attestation", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
 
-    // Switch to Attestations tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Attestations");
+    // Expand the Attestations card
+    await artifactsPage.expandAttestationsCard();
 
-    // User can see all attestations associated with the artifact
-    const attestations = tabContent.getByRole("list", { name: "Artifact attestations list" }).getByRole("listitem");
-    await baseExpect.poll(() => attestations.count()).toBeGreaterThanOrEqual(1);
+    // User can see all attestations in the table
+    const attTable = page.locator('table[aria-label="Artifact Attestation Table"]');
+    await expect(attTable).toBeVisible();
 
-    // Verify first attestation has verification status
-    await expect(attestations.first()).toHaveText(/[✓✗]/);
+    // Get main data rows (those with expand toggle cells, not expandable content rows)
+    const dataRows = attTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
+
+    // Verify first attestation row has verification status icons (CheckIcon/TimesIcon SVGs)
+    await expect(dataRows.first().locator("svg").first()).toBeVisible();
   });
 });
