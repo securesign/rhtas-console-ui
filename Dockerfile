@@ -21,7 +21,7 @@ RUN microdnf -y install tar procps-ng && microdnf clean all
 
 USER 1001
 
-LABEL name="securesign/rhtas-console-ui" \
+LABEL name="rhtas/rhtas-console-ui-rhel9" \
       description="RHTAS Console - User Interface" \
       help="For more information visit https://github.com/securesign/" \
       license="Apache License 2.0" \
