@@ -13,4 +13,4 @@ images:
   digest: sha256:58d18702c7157dce3af56eacf00363a989c20ef3665f951aefc68b386e9dcd7d
 - name: default/console-db-image
   newName: registry.redhat.io/rhel9/mariadb-105
-  digest: sha256:050dd5a7a32395b73b8680570e967e55050b152727412fdd73a25d8816e62d53
+  digest: sha256:48dba8b187a38dc25f7d67ade4ac0ac90982a0f1300706ca2f2752de35327741
