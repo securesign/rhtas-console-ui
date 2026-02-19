@@ -50,7 +50,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Media Type</div>} bodyContent={<div>TODO</div>}>
+              <Popover isVisible={false} headerContent={<div>Media Type</div>} bodyContent={<div>TODO</div>}>
                 <DescriptionListTermHelpTextButton>Media Type</DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
@@ -66,7 +66,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover headerContent={<div>Labels</div>} bodyContent={<div>TODO</div>}>
+              <Popover isVisible={false} headerContent={<div>Labels</div>} bodyContent={<div>TODO</div>}>
                 <DescriptionListTermHelpTextButton>
                   Labels <PencilAltIcon />
                 </DescriptionListTermHelpTextButton>
