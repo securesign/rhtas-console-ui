@@ -13,7 +13,7 @@ import {
   Button,
   Label,
 } from "@patternfly/react-core";
-import { PlusCircleIcon } from "@patternfly/react-icons";
+import { PencilAltIcon } from "@patternfly/react-icons";
 import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
 interface IArtifactSummaryProps {
@@ -29,7 +29,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
   const summaryCards = [
     <Card key="artifact-summary" isPlain>
       <CardBody>
-        <DescriptionList aria-label="Digest help text" isCompact isHorizontal columnModifier={{ default: "2Col" }}>
+        <DescriptionList aria-label="Digest help text" columnModifier={{ default: "2Col" }}>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
               <Popover headerContent={<div>Digest</div>} bodyContent={<div>ref + resolved canonical digest</div>}>
@@ -49,7 +49,11 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>Media Type</DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>
+              <Popover isVisible={false} headerContent={<div>Media Type</div>} bodyContent={<div>TODO</div>}>
+                <DescriptionListTermHelpTextButton>Media Type</DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
             <DescriptionListDescription>{artifact.metadata.mediaType}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -61,9 +65,15 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
             <DescriptionListDescription>{formatDate(artifact.metadata.created)}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>Labels</DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>
+              <Popover isVisible={false} headerContent={<div>Labels</div>} bodyContent={<div>TODO</div>}>
+                <DescriptionListTermHelpTextButton>
+                  Labels <PencilAltIcon />
+                </DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button variant="link" isInline icon={<PlusCircleIcon />}>
+              <Button variant="link" isInline>
                 {artifact.metadata.labels?.maintainer}
               </Button>
             </DescriptionListDescription>
@@ -87,7 +97,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>Signatures</DescriptionListTermHelpText>
-            <DescriptionListDescription>{summary.signatureCount} Signatures</DescriptionListDescription>
+            <DescriptionListDescription>{summary.signatureCount}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -103,7 +113,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
                 <DescriptionListTermHelpTextButton> Attestations </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>{summary.attestationCount} Attestations</DescriptionListDescription>
+            <DescriptionListDescription>{summary.attestationCount}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -111,7 +121,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
                 <DescriptionListTermHelpTextButton> Rekor Entries </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>{summary.rekorEntryCount} Rekor Entries</DescriptionListDescription>
+            <DescriptionListDescription>{summary.rekorEntryCount}</DescriptionListDescription>
           </DescriptionListGroup>
           {timeCoherence && (
             <DescriptionListGroup>
@@ -132,5 +142,5 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
     </Card>,
   ];
 
-  return <MultiContentCard cards={summaryCards} />;
+  return <MultiContentCard isPlain cards={summaryCards} />;
 };
