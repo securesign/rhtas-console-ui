@@ -1,5 +1,4 @@
 import { CONSOLE_ENV } from "@console-ui/common";
-import * as cookie from "cookie";
 
 /** @type Logger */
 const logger =
