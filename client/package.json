@@ -43,7 +43,7 @@
     "victory": "^37.3.4"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.90.0",
+    "@hey-api/openapi-ts": "^0.91.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
