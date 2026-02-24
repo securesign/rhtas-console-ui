@@ -49,7 +49,7 @@ export const CertificateChain = ({ certificateChain, status }: ICertificateChain
                   {capitalizeFirstLetter(cert.role)}
                 </AccordionToggle>
                 <AccordionContent id={`cert-chain-expand-${idx}`}>
-                  <DescriptionList aria-label="Certificate chain details" isCompact isHorizontal>
+                  <DescriptionList aria-label="Certificate chain details" isCompact>
                     {cert.subject && (
                       <DescriptionListGroup>
                         <DescriptionListTermHelpText>Subject</DescriptionListTermHelpText>

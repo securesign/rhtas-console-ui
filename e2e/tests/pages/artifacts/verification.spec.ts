@@ -28,12 +28,8 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(
       page.locator("dt", { hasText: "Labels" }).locator("+ dd", { hasText: "kdacosta@redhat.com" })
     ).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+\s+Signatures$/ })
-    ).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+\s+Rekor Entries$/ })
-    ).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page
         .locator("dt", { hasText: "Media Type" })
@@ -42,10 +38,7 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(
       page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
     ).toBeVisible();
-    await expect(page.locator("dt", { hasText: "Identities" })).toBeVisible();
-    await expect(
-      page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+\s+Attestations$/ })
-    ).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" })
     ).toBeVisible();
@@ -74,56 +67,64 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // User can see all signatures associated with the artifact
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(2);
+    // User can see all signatures in the table
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    // Verify first signature has verification status
-    await expect(signatures.first()).toHaveText(/[✓✗]/);
+    // Get main data rows (those with expand toggle cells, not expandable content rows)
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(2);
+
+    // Verify first signature row has verification status icons (CheckIcon/TimesIcon SVGs)
+    await expect(dataRows.first().locator("svg").first()).toBeVisible();
   });
 
   test("User has clear indicator of verification status per attestation", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Switch to Attestations tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Attestations");
+    // Expand the Attestations card
+    await artifactsPage.expandAttestationsCard();
 
-    // User can see all attestations associated with the artifact
-    const attestations = tabContent.getByRole("list", { name: "Artifact attestations list" }).getByRole("listitem");
-    await baseExpect.poll(() => attestations.count()).toBeGreaterThanOrEqual(1);
+    // User can see all attestations in the table
+    const attTable = page.locator('table[aria-label="Artifact Attestation Table"]');
+    await expect(attTable).toBeVisible();
 
-    // Verify first attestation has verification status
-    await expect(attestations.first()).toHaveText(/[✓✗]/);
+    // Get main data rows (those with expand toggle cells, not expandable content rows)
+    const dataRows = attTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
+
+    // Verify first attestation row has verification status icons (CheckIcon/TimesIcon SVGs)
+    await expect(dataRows.first().locator("svg").first()).toBeVisible();
   });
 
   test("User can see the signing/leaf certificate for each signature", async ({ page }) => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature and expand it
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table and expand the first row
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    // Click the toggle button to expand the first signature
-    const firstSignature = signatures.first();
-    await firstSignature.locator(".pf-v6-c-data-list__toggle").click();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
 
-    // Get the expanded content section within the first signature
-    const expandedContent = firstSignature.locator(".pf-v6-c-data-list__expandable-content");
-    await expect(expandedContent).toBeVisible();
+    await dataRows.first().locator("td.pf-v6-c-table__toggle button").click();
 
-    // Verify Leaf Certificate card is visible within the expanded section
-    const leafCertCard = expandedContent.locator(".pf-v6-c-card", { hasText: "Leaf Certificate" });
+    // Verify Leaf Certificate card is visible within the expanded row
+    const leafCertCard = sigTable.locator(".pf-v6-c-card", { hasText: "Leaf Certificate" }).first();
     await expect(leafCertCard).toBeVisible();
 
     // Verify all expected certificate fields are present with values
@@ -146,24 +147,22 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature and expand it
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table and expand the first row
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    // Click the toggle button to expand the first signature
-    const firstSignature = signatures.first();
-    await firstSignature.locator(".pf-v6-c-data-list__toggle").click();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
 
-    // Get the expanded content section within the first signature
-    const expandedContent = firstSignature.locator(".pf-v6-c-data-list__expandable-content");
-    await expect(expandedContent).toBeVisible();
+    await dataRows.first().locator("td.pf-v6-c-table__toggle button").click();
 
-    // Verify Rekor Entry card is visible within the expanded section
-    const rekorEntryCard = expandedContent.locator(".pf-v6-c-card", { hasText: "Rekor Entry" });
+    // Verify Rekor Entry card is visible within the expanded row
+    const rekorEntryCard = sigTable.locator(".pf-v6-c-card", { hasText: "Rekor Entry" }).first();
     await expect(rekorEntryCard).toBeVisible();
 
     // Verify all expected Rekor entry fields are present with values
@@ -197,24 +196,22 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature and expand it
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table and expand the first row
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    // Click the toggle button to expand the first signature
-    const firstSignature = signatures.first();
-    await firstSignature.locator(".pf-v6-c-data-list__toggle").click();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
 
-    // Get the expanded content section within the first signature
-    const expandedContent = firstSignature.locator(".pf-v6-c-data-list__expandable-content");
-    await expect(expandedContent).toBeVisible();
+    await dataRows.first().locator("td.pf-v6-c-table__toggle button").click();
 
-    // Find the Rekor Entry card and the link within the expanded section
-    const rekorEntryCard = expandedContent.locator(".pf-v6-c-card", { hasText: "Rekor Entry" });
+    // Find the Rekor Entry card and the link within the expanded row
+    const rekorEntryCard = sigTable.locator(".pf-v6-c-card", { hasText: "Rekor Entry" }).first();
     const rekorSearchLink = rekorEntryCard.locator("a", { hasText: "Open in Rekor Search" });
 
     // Verify link has correct href with logIndex parameter
@@ -226,22 +223,22 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature and expand it
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table and expand the first row
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    const firstSignature = signatures.first();
-    await firstSignature.locator(".pf-v6-c-data-list__toggle").click();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
 
-    const expandedContent = firstSignature.locator(".pf-v6-c-data-list__expandable-content");
-    await expect(expandedContent).toBeVisible();
+    await dataRows.first().locator("td.pf-v6-c-table__toggle button").click();
 
-    // Verify Certificate Chain card is visible
-    const certChainCard = expandedContent.locator(".pf-v6-c-card", { hasText: "Certificate Chain" });
+    // Verify Certificate Chain card is visible within the expanded row
+    const certChainCard = sigTable.locator(".pf-v6-c-card", { hasText: "Certificate Chain" }).first();
     await expect(certChainCard).toBeVisible();
 
     // Verify Intermediate and Root certificates are present in the accordion
@@ -317,22 +314,22 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature and expand it
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table and expand the first row
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    const firstSignature = signatures.first();
-    await firstSignature.locator(".pf-v6-c-data-list__toggle").click();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
 
-    const expandedContent = firstSignature.locator(".pf-v6-c-data-list__expandable-content");
-    await expect(expandedContent).toBeVisible();
+    await dataRows.first().locator("td.pf-v6-c-table__toggle button").click();
 
     // Find Certificate Chain card and expand Root
-    const certChainCard = expandedContent.locator(".pf-v6-c-card", { hasText: "Certificate Chain" });
+    const certChainCard = sigTable.locator(".pf-v6-c-card", { hasText: "Certificate Chain" }).first();
     await certChainCard.locator("button", { hasText: "Root" }).click();
 
     // Find copy button and verify it exists
@@ -348,18 +345,22 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(SIGNED_IMAGE);
 
-    // Ensure we're on the Signatures tab
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    // Expand the Signatures card
+    await artifactsPage.expandSignaturesCard();
 
-    // Find the first signature
-    const signatures = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem");
-    await baseExpect.poll(() => signatures.count()).toBeGreaterThanOrEqual(1);
+    // Find the signatures table
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
 
-    const firstSignature = signatures.first();
+    const dataRows = sigTable.locator("tbody tr").filter({
+      has: page.locator("td.pf-v6-c-table__toggle"),
+    });
+    await baseExpect.poll(() => dataRows.count()).toBeGreaterThanOrEqual(1);
+
+    const firstRow = dataRows.first();
 
     // Click kebab menu (3 dots) - aria-label is "Signature actions"
-    const kebabMenu = firstSignature.getByRole("button", { name: "Signature actions" });
+    const kebabMenu = firstRow.getByRole("button", { name: "Signature actions" });
     await expect(kebabMenu).toBeVisible();
     await kebabMenu.click();
 
@@ -381,13 +382,14 @@ test.describe("Artifacts Verification Flow", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact(UNSIGNED_IMAGE);
 
-    // Check Signatures tab shows empty state
-    const tabs = artifactsPage.getTabs();
-    const signaturesTab = await tabs.select("Signatures");
-    await expect(signaturesTab.getByRole("heading", { name: "No data available" })).toBeVisible();
+    // Expand Signatures card and check for empty state
+    await artifactsPage.expandSignaturesCard();
+    const sigCard = page.locator(".pf-v6-c-card").filter({ hasText: /Signatures - \d+/ });
+    await expect(sigCard.getByRole("heading", { name: "No data available" })).toBeVisible();
 
-    // Check Attestations tab shows empty state
-    const attestationsTab = await tabs.select("Attestations");
-    await expect(attestationsTab.getByRole("heading", { name: "No data available" })).toBeVisible();
+    // Expand Attestations card and check for empty state
+    await artifactsPage.expandAttestationsCard();
+    const attCard = page.locator(".pf-v6-c-card").filter({ hasText: /Attestations - \d+/ });
+    await expect(attCard.getByRole("heading", { name: "No data available" })).toBeVisible();
   });
 });
