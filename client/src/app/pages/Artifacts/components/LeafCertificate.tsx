@@ -1,5 +1,5 @@
 import type { ParsedCertificate } from "@app/client";
-import { copyToClipboard, formatDate, sha256FingerprintFromPem } from "@app/utils/utils";
+import { formatDate, sha256FingerprintFromPem } from "@app/utils/utils";
 import {
   DropdownItem,
   Dropdown,
@@ -52,6 +52,10 @@ export const LeafCertificate = ({ leafCert }: ILeafCertificate) => {
     addAlert("Copied PEM to clipboard", "success", getUniqueToastId());
   };
 
+  const addCopyErrorAlert = () => {
+    addAlert("Failed to copy to clipboard", "danger", getUniqueToastId());
+  };
+
   const onSelect = () => {
     setIsOpen(!isOpen);
   };
@@ -73,8 +77,10 @@ export const LeafCertificate = ({ leafCert }: ILeafCertificate) => {
       key="copy-pem"
       onClick={() => {
         if (!leafCert.pem) return;
-        void copyToClipboard(leafCert.pem);
-        addCopySuccessAlert();
+        navigator.clipboard.writeText(leafCert.pem).then(
+          () => addCopySuccessAlert(),
+          () => addCopyErrorAlert()
+        );
       }}
     >
       Copy PEM
