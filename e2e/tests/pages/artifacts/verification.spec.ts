@@ -38,6 +38,7 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(
       page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
     ).toBeVisible();
+    await expect(page.locator("dt", { hasText: "Identities" })).toBeVisible();
     await expect(page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" })
