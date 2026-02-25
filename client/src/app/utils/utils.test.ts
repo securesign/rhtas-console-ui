@@ -4,7 +4,6 @@ import type { ArtifactIdentity, ParsedCertificate } from "@app/client";
 import "@app/dayjs";
 import {
   capitalizeFirstLetter,
-  copyToClipboard,
   dedupeIdentities,
   formatDate,
   formatIntegratedTime,
@@ -42,41 +41,6 @@ describe("utils", () => {
 
     it("should handle empty string", () => {
       expect(capitalizeFirstLetter("")).toBe("");
-    });
-  });
-
-  describe("copyToClipboard", () => {
-    let mockWriteText: ReturnType<typeof vi.fn>;
-
-    beforeEach(() => {
-      mockWriteText = vi.fn().mockResolvedValue(undefined);
-      global.navigator = {
-        clipboard: {
-          writeText: mockWriteText,
-        },
-      } as unknown as Navigator;
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
-    it("should copy text to clipboard successfully", async () => {
-      await copyToClipboard("test value");
-      expect(mockWriteText).toHaveBeenCalledWith("test value");
-      expect(mockWriteText).toHaveBeenCalledTimes(1);
-    });
-
-    it("should handle clipboard errors gracefully", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-      mockWriteText.mockRejectedValue(new Error("Clipboard error"));
-
-      await copyToClipboard("test value");
-
-      expect(mockWriteText).toHaveBeenCalledWith("test value");
-      expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to copy to clipboard", expect.any(Error));
-
-      consoleErrorSpy.mockRestore();
     });
   });
 

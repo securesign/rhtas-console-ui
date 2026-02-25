@@ -51,6 +51,8 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
                 icon={<ExternalLinkSquareAltIcon />}
                 iconPosition="end"
                 target="_blank"
+                aria-label="artifact link"
+                rel="noopener noreferrer"
               >
                 {artifact.image}
               </Button>
