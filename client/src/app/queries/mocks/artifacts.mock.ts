@@ -1,7 +1,7 @@
 import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
-  image: "ttl.sh/rhtas/test-image:1h",
+  image: "quay.io/rh_ee_kdacosta/console-test-unsigned:v1",
   metadata: {
     created: "2025-11-06T08:58:50.271117116Z",
     mediaType: "application/vnd.oci.image.manifest.v1+json",
@@ -12,7 +12,7 @@ export const artifactsImageDataMock: ImageMetadataResponse = {
     },
   } as Metadata,
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
-  registry: "https://ttl.sh",
+  registry: "https://quay.io",
 };
 
 export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
@@ -94,7 +94,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       rekorEntry: {
         canonicalizedBody: "eyJraW5kIjoiaGFzaGVkcmVrb3JkIn0=",
         integratedTime: 1730883547,
-        logId: { keyId: "wNI9atQGlz+VWfO6LRygH4QUfY/8W4RFwiT5i5WRgB0=" },
+        logId: { keyId: "d4c1a7f2-0000-0000-0000-000000000000" },
         logIndex: 1234,
         inclusionProof: {
           checkpoint: { envelope: "rekor.sigstore.dev - 123456" },
@@ -103,7 +103,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
           rootHash: "cafebabe",
           treeSize: 987654,
         },
-        inclusionPromise: { signedEntryTimestamp: "4261736536345f5345545f534947300a" },
+        inclusionPromise: { signedEntryTimestamp: "BASE64_SET_SIG0" },
       },
       rawBundleJson:
         '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json","verificationMaterial":{},"messageSignature":{}}',
@@ -160,7 +160,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
       rekorEntry: {
         canonicalizedBody: "eyJraW5kIjoiaGFzaGVkcmVrb3JkIn0=",
         integratedTime: 1730883600,
-        logId: { keyId: "wNI9atQGlz+VWfO6LRygH4QUfY/8W4RFwiT5i5WRgB0=" },
+        logId: { keyId: "d4c1a7f2-0000-0000-0000-000000000000" },
         logIndex: 1235,
         inclusionProof: {
           checkpoint: { envelope: "rekor.sigstore.dev - 123457" },
@@ -169,7 +169,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
           rootHash: "deadbeef",
           treeSize: 987655,
         },
-        inclusionPromise: { signedEntryTimestamp: "4261736536345f5345545f534947310a" },
+        inclusionPromise: { signedEntryTimestamp: "BASE64_SET_SIG1" },
       },
       rawBundleJson:
         '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json","verificationMaterial":{},"messageSignature":{}}',

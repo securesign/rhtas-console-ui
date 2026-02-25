@@ -52,7 +52,7 @@ test.describe("Artifacts Verification Flow", () => {
     const cardHeader = await artifactsPage.getArtifactCardHeader();
     const artifactLink = cardHeader.getByRole("link");
 
-    await expect(artifactLink).toHaveAttribute("href", "https://ttl.sh/rhtas/test-image:1h");
+    await expect(artifactLink).toHaveAttribute("href", `https://${UNSIGNED_IMAGE}`);
     await expect(artifactLink).toHaveAttribute("target", "_blank");
   });
 
@@ -176,7 +176,7 @@ test.describe("Artifacts Verification Flow", () => {
         .locator("dt", { hasText: "Integrated Time" })
         .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}(,|\s+at)\s+\d{1,2}:\d{2}\s+(AM|PM)/ })
     ).toBeVisible();
-    await expect(rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /=/ })).toBeVisible();
+    await expect(rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /[\w-]+/ })).toBeVisible();
     await expect(
       rekorEntryCard.locator("dt", { hasText: "Log Index" }).locator("+ dd", { hasText: /\d+/ })
     ).toBeVisible();
