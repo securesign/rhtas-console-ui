@@ -77,7 +77,7 @@ describe("ArtifactCard", () => {
 
     render(<ArtifactCard artifact={artifact} verification={verification} />);
 
-    const link = screen.getByRole("link", { name: "quay.io/myorg/myapp" });
+    const link = screen.getByRole("link", { name: "artifact link" });
     expect(link).toHaveAttribute("href", "https://quay.io/myorg/myapp");
     expect(link).toHaveAttribute("target", "_blank");
   });
