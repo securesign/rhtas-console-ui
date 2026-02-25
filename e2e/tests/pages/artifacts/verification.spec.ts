@@ -52,7 +52,7 @@ test.describe("Artifacts Verification Flow", () => {
     const cardHeader = await artifactsPage.getArtifactCardHeader();
     const artifactLink = cardHeader.getByRole("link");
 
-    await expect(artifactLink).toHaveAttribute("href", `https://${UNSIGNED_IMAGE}`);
+    await expect(artifactLink).toHaveAttribute("href", "https://ttl.sh/rhtas/test-image:1h");
     await expect(artifactLink).toHaveAttribute("target", "_blank");
   });
 

@@ -59,7 +59,11 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
           </Content>
         </CardHeader>
         <CardExpandableContent>
-          {verification.signatures ? <ArtifactSignatures signatures={verification.signatures} /> : <NoDataEmptyState />}
+          {verification.signatures?.length ? (
+            <ArtifactSignatures signatures={verification.signatures} />
+          ) : (
+            <NoDataEmptyState />
+          )}
         </CardExpandableContent>
       </Card>
 
@@ -72,7 +76,7 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
           </Content>
         </CardHeader>
         <CardExpandableContent>
-          {verification.attestations ? (
+          {verification.attestations?.length ? (
             <ArtifactAttestations attestations={verification.attestations} />
           ) : (
             <NoDataEmptyState />

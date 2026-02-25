@@ -9,7 +9,11 @@ import {
   type VerifyArtifactResponse,
 } from "@app/client";
 import { useMockableQuery } from "./helpers";
-import { artifactsImageDataMock, artifactVerificationViewModelMock } from "./mocks/artifacts.mock";
+import {
+  artifactsImageDataMock,
+  artifactVerificationViewModelMock,
+  artifactVerificationUnsignedMock,
+} from "./mocks/artifacts.mock";
 
 export const ArtifactsKeys = {
   all: ["Artifacts" as const],
@@ -46,6 +50,8 @@ export const useVerifyArtifact = ({
 }) => {
   const enabled = typeof uri === "string" && uri.trim().length > 0;
 
+  const verifyMock = uri?.includes("unsigned") ? artifactVerificationUnsignedMock : artifactVerificationViewModelMock;
+
   const { data, isLoading, error, refetch } = useMockableQuery<VerifyArtifactResponse | null, AxiosError<ApiError>>(
     {
       queryKey: ArtifactsKeys.verify(uri ?? "", expectedSAN ?? null),
@@ -68,7 +74,7 @@ export const useVerifyArtifact = ({
         return response.data ?? null;
       },
     },
-    artifactVerificationViewModelMock
+    verifyMock
   );
 
   return {
