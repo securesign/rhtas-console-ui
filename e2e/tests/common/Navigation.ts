@@ -1,4 +1,5 @@
 import type { Page } from "playwright-core";
+import { expect } from "../assertions";
 
 /**
  * Used to navigate to different pages
@@ -17,5 +18,13 @@ export class Navigation {
   async goToSidebar(menu: "Trust root" | "Artifacts" | "Rekor Search") {
     await this._page.goto("/");
     await this._page.getByRole("link", { name: menu }).click();
+    const targets: Record<"Trust root" | "Artifacts" | "Rekor Search", { path: string; h1: string }> = {
+      "Trust root": { path: "/trust-root", h1: "Trust Root" },
+      Artifacts: { path: "/artifacts", h1: "Artifacts" },
+      "Rekor Search": { path: "/rekor-search", h1: "Rekor Search" },
+    };
+
+    const target = targets[menu];
+    await expect(this._page.getByRole("heading", { level: 1, name: target.h1 })).toBeVisible();
   }
 }

@@ -63,7 +63,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           <DescriptionListGroup>
             <DescriptionListTermHelpText>Labels</DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button variant="link" isInline icon={<PlusCircleIcon />}>
+              <Button variant="link" aria-label="add label button" isInline icon={<PlusCircleIcon />}>
                 {artifact.metadata.labels?.maintainer}
               </Button>
             </DescriptionListDescription>
