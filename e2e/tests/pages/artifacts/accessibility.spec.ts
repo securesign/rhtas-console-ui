@@ -21,13 +21,13 @@ test.describe("Artifacts page Accessibility", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
 
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Signatures");
+    await artifactsPage.expandSignaturesCard();
 
-    const firstSignature = tabContent.getByRole("list", { name: "Signatures list" }).getByRole("listitem").first();
-    const firstSignatureDetailsToggle = firstSignature.locator('button[aria-label="Details"]');
-    await firstSignatureDetailsToggle.click();
-    await expect(firstSignatureDetailsToggle).toHaveAttribute("aria-expanded", "true");
+    const sigTable = page.locator('table[aria-label="Signatures Table"]');
+    await expect(sigTable).toBeVisible();
+
+    const firstRowToggle = sigTable.locator("tbody tr td.pf-v6-c-table__toggle button").first();
+    await firstRowToggle.click();
 
     await runA11yAudit(page, testInfo, { label: "artifacts-signature-expanded" });
   });
@@ -36,16 +36,13 @@ test.describe("Artifacts page Accessibility", () => {
     const artifactsPage = await ArtifactsPage.build(page);
     await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
 
-    const tabs = artifactsPage.getTabs();
-    const tabContent = await tabs.select("Attestations");
+    await artifactsPage.expandAttestationsCard();
 
-    const firstAttestation = tabContent
-      .getByRole("list", { name: "Artifact attestations list" })
-      .getByRole("listitem")
-      .first();
-    const firstAttestationDetailsToggle = firstAttestation.locator('button[aria-label="Details"]');
-    await firstAttestationDetailsToggle.click();
-    await expect(firstAttestationDetailsToggle).toHaveAttribute("aria-expanded", "true");
+    const attTable = page.locator('table[aria-label="Artifact Attestation Table"]');
+    await expect(attTable).toBeVisible();
+
+    const firstRowToggle = attTable.locator("tbody tr td.pf-v6-c-table__toggle button").first();
+    await firstRowToggle.click();
 
     await runA11yAudit(page, testInfo, { label: "artifacts-attestation-expanded" });
   });

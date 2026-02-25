@@ -1,17 +1,18 @@
 import type { ImageMetadataResponse, Metadata, VerifyArtifactResponse } from "@app/client";
 
 export const artifactsImageDataMock: ImageMetadataResponse = {
-  image: "ttl.sh/rhtas/test-image:1h",
+  image: "quay.io/rh_ee_kdacosta/console-test-unsigned:v1",
   metadata: {
     created: "2025-11-06T08:58:50.271117116Z",
     mediaType: "application/vnd.oci.image.manifest.v1+json",
     size: 414,
     labels: {
       "io.buildah.version": "1.41.5",
+      maintainer: "kdacosta@redhat.com",
     },
   } as Metadata,
   digest: "sha256:dcb43136e08351ec346aacd6b7b5b4d12eb84f7151f180a3eb2a4d4a17b25bc2",
-  registry: "https://ttl.sh",
+  registry: "https://quay.io",
 };
 
 export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
@@ -91,7 +92,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
       ],
       rekorEntry: {
-        canonicalizedBody: "BASE64_BODY_SIG0",
+        canonicalizedBody: "eyJraW5kIjoiaGFzaGVkcmVrb3JkIn0=",
         integratedTime: 1730883547,
         logId: { keyId: "d4c1a7f2-0000-0000-0000-000000000000" },
         logIndex: 1234,
@@ -104,7 +105,8 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
         inclusionPromise: { signedEntryTimestamp: "BASE64_SET_SIG0" },
       },
-      rawBundleJson: "",
+      rawBundleJson:
+        '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json","verificationMaterial":{},"messageSignature":{}}',
       signatureStatus: {
         signature: "verified",
         chain: "verified",
@@ -156,7 +158,7 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
       ],
       rekorEntry: {
-        canonicalizedBody: "BASE64_BODY_SIG1",
+        canonicalizedBody: "eyJraW5kIjoiaGFzaGVkcmVrb3JkIn0=",
         integratedTime: 1730883600,
         logId: { keyId: "d4c1a7f2-0000-0000-0000-000000000000" },
         logIndex: 1235,
@@ -169,7 +171,8 @@ export const artifactVerificationViewModelMock: VerifyArtifactResponse = {
         },
         inclusionPromise: { signedEntryTimestamp: "BASE64_SET_SIG1" },
       },
-      rawBundleJson: "",
+      rawBundleJson:
+        '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json","verificationMaterial":{},"messageSignature":{}}',
     },
   ],
   attestations: [
@@ -330,4 +333,20 @@ export const artifactVerificationViewModelInvalidMock: VerifyArtifactResponse = 
       },
     },
   ],
+};
+
+export const artifactVerificationUnsignedMock: VerifyArtifactResponse = {
+  artifact: artifactsImageDataMock,
+  summary: {
+    identities: [],
+    signatureCount: 0,
+    attestationCount: 0,
+    rekorEntryCount: 0,
+    timeCoherence: {
+      status: "unknown",
+    },
+    overallStatus: "unsigned",
+  },
+  signatures: [],
+  attestations: [],
 };
