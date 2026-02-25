@@ -52,6 +52,7 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
                 iconPosition="end"
                 target="_blank"
                 aria-label="artifact link"
+                rel="noopener noreferrer"
               >
                 {artifact.image}
               </Button>

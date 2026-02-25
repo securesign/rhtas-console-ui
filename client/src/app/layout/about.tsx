@@ -5,6 +5,7 @@ import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import ENV from "@app/env";
 import useBranding from "@app/hooks/useBranding";
+import { useIsDarkMode } from "@app/hooks/useDarkMode";
 
 interface IButtonAboutAppProps {
   isOpen: boolean;
@@ -15,6 +16,9 @@ const TRANSPARENT_1x1_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5B
 
 export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) => {
   const { about } = useBranding();
+  const isDark = useIsDarkMode();
+
+  const logoSrc = isDark && about.darkModeImageSrc ? about.darkModeImageSrc : (about.imageSrc ?? TRANSPARENT_1x1_GIF);
 
   return (
     <AboutModal
@@ -22,7 +26,7 @@ export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) =>
       onClose={onClose}
       productName={about.displayName}
       brandImageAlt="Logo"
-      brandImageSrc={about.imageSrc ?? TRANSPARENT_1x1_GIF}
+      brandImageSrc={logoSrc}
       trademark={`COPYRIGHT © 2025, ${new Date().getFullYear()}`}
     >
       <Content>
