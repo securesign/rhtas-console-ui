@@ -31,6 +31,8 @@ import BarsIcon from "@patternfly/react-icons/dist/js/icons/bars-icon";
 import ExternalLinkAltIcon from "@patternfly/react-icons/dist/js/icons/external-link-alt-icon";
 
 import useBranding from "@app/hooks/useBranding";
+import { DarkModeToggle } from "@app/components/DarkModeToggle";
+import { ThemeAwareLogo } from "@app/components/ThemeAwareLogo";
 
 import { AboutApp } from "./about";
 
@@ -67,7 +69,12 @@ export const HeaderApp: React.FC = () => {
               <Split>
                 <SplitItem>
                   {leftBrand ? (
-                    <Brand src={leftBrand.src} alt={leftBrand.alt} heights={{ default: leftBrand.height }} />
+                    <ThemeAwareLogo
+                      lightSrc={leftBrand.src}
+                      darkSrc={leftBrand.darkModeSrc}
+                      alt={leftBrand.alt}
+                      heights={{ default: leftBrand.height }}
+                    />
                   ) : null}
                 </SplitItem>
                 <SplitItem isFilled>
@@ -104,6 +111,9 @@ export const HeaderApp: React.FC = () => {
                   md: "hidden",
                 }}
               >
+                <ToolbarItem>
+                  <DarkModeToggle />
+                </ToolbarItem>
                 <ToolbarItem>
                   <Dropdown
                     isOpen={isHelpDropdownOpen}
@@ -152,6 +162,9 @@ export const HeaderApp: React.FC = () => {
                 gap={{ default: "gapNone", md: "gapMd" }}
                 visibility={{ lg: "hidden" }}
               >
+                <ToolbarItem>
+                  <DarkModeToggle />
+                </ToolbarItem>
                 <ToolbarItem>
                   <Dropdown
                     isOpen={isKebabDropdownOpen}
