@@ -30,7 +30,8 @@
     "test": "npm run build -w common && npm run test -w common -w client -w server --if-present --",
     "e2e:test": "npm run test -w e2e --if-present --",
     "e2e:test:trace": "npm run test:trace -w e2e --if-present --",
-    "e2e:test:host": "npm run test:ui:host -w e2e --if-present --"
+    "e2e:test:host": "npm run test:ui:host -w e2e --if-present --",
+    "a11y:test": "npm run test:a11y -w e2e --if-present --"
   },
   "workspaces": [
     "common",
