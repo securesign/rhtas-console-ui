@@ -73,7 +73,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button variant="link" isInline>
+              <Button variant="link" isInline aria-label="add label button">
                 {artifact.metadata.labels?.maintainer}
               </Button>
             </DescriptionListDescription>
