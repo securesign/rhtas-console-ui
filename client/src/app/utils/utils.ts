@@ -5,14 +5,6 @@ import type { ArtifactIdentity, ParsedCertificate } from "@app/client";
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
-export const copyToClipboard = async (value: string) => {
-  try {
-    await navigator.clipboard.writeText(value);
-  } catch (err) {
-    console.error("Failed to copy to clipboard", err);
-  }
-};
-
 /**
  * A post-processing utility function to remove duplicates
  * from a list of identities
