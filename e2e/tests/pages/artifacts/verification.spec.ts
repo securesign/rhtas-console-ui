@@ -176,7 +176,9 @@ test.describe("Artifacts Verification Flow", () => {
         .locator("dt", { hasText: "Integrated Time" })
         .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}(,|\s+at)\s+\d{1,2}:\d{2}\s+(AM|PM)/ })
     ).toBeVisible();
-    await expect(rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /[\w-]+/ })).toBeVisible();
+    await expect(
+      rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /[\w-]+/ })
+    ).toBeVisible();
     await expect(
       rekorEntryCard.locator("dt", { hasText: "Log Index" }).locator("+ dd", { hasText: /\d+/ })
     ).toBeVisible();
