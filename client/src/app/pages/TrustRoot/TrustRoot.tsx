@@ -44,7 +44,7 @@ export const TrustRoots: React.FC = () => {
           <h1>Trust Root</h1>
           <p>This information represents the update framework.</p>
           <p>
-            <a href={rootMetadataList?.["repo-url"]} target="_blank" rel="noreferrer">
+            <a href={rootMetadataList?.["repo-url"]} target="_blank" rel="noopener noreferrer">
               {rootMetadataList?.["repo-url"]} <ExternalLinkAltIcon />
             </a>
           </p>
