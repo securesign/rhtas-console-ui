@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Disable ESLint major updates until @tanstack/eslint-plugin-query supports ESLint 10",
+      "matchPackageNames": ["eslint", "@eslint/js"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
+}
