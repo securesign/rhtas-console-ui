@@ -13,6 +13,24 @@ export function isAttribute(input: string): input is Attribute {
   return ATTRIBUTES_SET.has(input);
 }
 
+const ATTRIBUTE_MATCHERS: { attribute: Attribute; pattern: RegExp }[] = [
+  { attribute: "email", pattern: /\S+@\S+\.\S+/ },
+  { attribute: "hash", pattern: /^sha256:[0-9a-fA-F]{64}$/ },
+  { attribute: "hash", pattern: /^sha1:[0-9a-fA-F]{40}$/ },
+  { attribute: "uuid", pattern: /^[0-9a-fA-F]{80}$/ },
+  { attribute: "uuid", pattern: /^[0-9a-fA-F]{64}$/ },
+  { attribute: "commitSha", pattern: /^[0-9a-fA-F]{40}$/ },
+  { attribute: "logIndex", pattern: /^\d+$/ },
+];
+
+export function detectAttribute(value: string): Attribute | null {
+  const trimmed = value.trim();
+  for (const { attribute, pattern } of ATTRIBUTE_MATCHERS) {
+    if (pattern.test(trimmed)) return attribute;
+  }
+  return null;
+}
+
 export type SearchQuery =
   | {
       attribute: "email" | "hash" | "commitSha" | "uuid";

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import { isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../api/rekor-api";
+import { detectAttribute, isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../api/rekor-api";
 import { type FormInputs, SearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner, Pagination } from "@patternfly/react-core";
 import { Entry } from "./Entry";
@@ -97,7 +97,7 @@ function LoadingIndicator() {
 export function Explorer() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [formInputs, setFormInputs] = useState<FormInputs>();
+  const [defaultSearch, setDefaultSearch] = useState<string>();
   const [query, setQuery] = useState<SearchQuery>();
   const search = useRekorSearch();
 
@@ -124,13 +124,16 @@ export function Explorer() {
     fetch();
   }, [query, page, search]);
 
-  const setQueryParams = useCallback(
-    (formInputs: FormInputs) => {
-      setPage(1);
+  const handleSubmit = useCallback(
+    ({ search }: FormInputs) => {
+      const value = search.trim();
+      const attribute = detectAttribute(value);
+      if (!attribute) return;
 
+      setPage(1);
       void navigate({
         pathname: location.pathname,
-        search: `?${formInputs.attribute}=${formInputs.value}`,
+        search: `?${attribute}=${encodeURIComponent(value)}`,
       });
     },
     [navigate, location.pathname]
@@ -144,33 +147,19 @@ export function Explorer() {
     if (!value || Array.isArray(value)) {
       return;
     }
-    setFormInputs({ attribute, value });
-  }, [location.search]);
 
-  useEffect(() => {
-    if (formInputs) {
-      setPage(1);
+    setDefaultSearch(value);
+    setPage(1);
 
-      switch (formInputs.attribute) {
-        case "logIndex":
-          // eslint-disable-next-line no-case-declarations
-          const query = parseInt(formInputs.value);
-          if (!isNaN(query)) {
-            // Ignore invalid numbers.
-            setQuery({
-              attribute: formInputs.attribute,
-              query,
-            });
-          }
-          break;
-        default:
-          setQuery({
-            attribute: formInputs.attribute,
-            query: formInputs.value,
-          });
+    if (attribute === "logIndex") {
+      const parsed = parseInt(value);
+      if (!isNaN(parsed)) {
+        setQuery({ attribute, query: parsed });
       }
+    } else {
+      setQuery({ attribute, query: value });
     }
-  }, [formInputs]);
+  }, [location.search]);
 
   const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
     setPage(newPage);
@@ -178,7 +167,11 @@ export function Explorer() {
 
   return (
     <Fragment>
-      <SearchForm defaultValues={formInputs} isLoading={loading} onSubmit={setQueryParams} />
+      <SearchForm
+        defaultValues={defaultSearch ? { search: defaultSearch } : undefined}
+        isLoading={loading}
+        onSubmit={handleSubmit}
+      />
 
       {error ? (
         <Error error={error} />
