@@ -3,7 +3,7 @@ import { ENV } from "@app/env";
 
 interface FeatureFlagsContextType {
   features: {
-    observability: boolean;
+    monitoringAlerting: boolean;
   };
 }
 
@@ -12,7 +12,7 @@ const FeatureFlagsContext = createContext<FeatureFlagsContextType | undefined>(u
 export const FeatureFlagsProvider = ({ children }: { children: ReactNode }) => {
   const features = useMemo(
     () => ({
-      observability: ENV.FEATURE_OBSERVABILITY === "on",
+      monitoringAlerting: ENV.FEATURE_MONITORING === "on",
     }),
     []
   );

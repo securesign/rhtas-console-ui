@@ -10,7 +10,7 @@ export class ObservabilityPage {
 
   static async build(page: Page) {
     const navigation = Navigation.build(page);
-    await navigation.goToSidebar("Observability");
+    await navigation.goToSidebar("Monitoring");
 
     return new ObservabilityPage(page);
   }

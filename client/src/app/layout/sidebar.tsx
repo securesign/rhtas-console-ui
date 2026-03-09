@@ -47,15 +47,15 @@ export const SidebarApp: React.FC = () => {
               Rekor Search
             </NavLink>
           </li>
-          {features.observability && (
+          {features.monitoringAlerting && (
             <li className={nav.navItem}>
               <NavLink
-                to={Paths.observability}
+                to={Paths.monitoringAlerting}
                 className={({ isActive }) => {
                   return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
                 }}
               >
-                Observability
+                Monitoring
               </NavLink>
             </li>
           )}
