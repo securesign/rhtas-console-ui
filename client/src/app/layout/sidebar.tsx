@@ -50,12 +50,12 @@ export const SidebarApp: React.FC = () => {
           {features.observability && (
             <li className={nav.navItem}>
               <NavLink
-                to={Paths.monitoring}
+                to={Paths.observability}
                 className={({ isActive }) => {
                   return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
                 }}
               >
-                Monitoring
+                Observability
               </NavLink>
             </li>
           )}

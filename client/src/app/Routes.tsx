@@ -10,13 +10,13 @@ import { useFeatureFlags } from "./hooks/useFeatureFlags";
 const Artifacts = lazy(() => import("./pages/Artifacts"));
 const TrustRoot = lazy(() => import("./pages/TrustRoot"));
 const RekorSearch = lazy(() => import("./pages/RekorSearch"));
-const Monitoring = lazy(() => import("./pages/Monitoring"));
+const Observability = lazy(() => import("./pages/Observability"));
 
 export const Paths = {
   artifacts: "/artifacts",
   rekorSearch: "/rekor-search",
   trustRoot: "/trust-root",
-  monitoring: "/monitoring",
+  observability: "/observability",
 } as const;
 
 export const AppRoutes = () => {
@@ -27,7 +27,7 @@ export const AppRoutes = () => {
     { path: Paths.trustRoot, element: <TrustRoot /> },
     { path: Paths.artifacts, element: <Artifacts /> },
     { path: Paths.rekorSearch, element: <RekorSearch /> },
-    ...(features.observability ? [{ path: Paths.monitoring, element: <Monitoring /> }] : []),
+    ...(features.observability ? [{ path: Paths.observability, element: <Observability /> }] : []),
     { path: "*", element: <NotFound /> },
   ]);
 
