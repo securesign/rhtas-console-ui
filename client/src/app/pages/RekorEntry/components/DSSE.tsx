@@ -2,14 +2,14 @@ import { dump } from "js-yaml";
 import { Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { type IntotoV002Schema } from "rekor";
-import { decodex509 } from "../x509/decode";
+import { type DSSEV001Schema } from "rekor";
 import { Panel } from "@patternfly/react-core";
+import { decodex509 } from "../utils/x509/decode";
 import { Paths } from "@app/Routes";
 
-export function IntotoViewer002({ intoto }: { intoto: IntotoV002Schema }) {
-  const signature = intoto.content.envelope?.signatures[0];
-  const certContent = window.atob(signature?.publicKey || "");
+export function DSSEViewer({ dsse }: { dsse: DSSEV001Schema }) {
+  const sig = dsse.signatures?.[0];
+  const certContent = window.atob(sig?.verifier ?? "");
 
   const publicKey = {
     title: "Public Key",
@@ -25,11 +25,11 @@ export function IntotoViewer002({ intoto }: { intoto: IntotoV002Schema }) {
 
   return (
     <Panel>
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>
+      <h5 style={{ paddingTop: "1em" }}>
         <Link
           to={{
             pathname: Paths.rekorSearch,
-            search: `?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`,
+            search: `?hash=${dsse.payloadHash?.algorithm}:${dsse.payloadHash?.value}`,
           }}
         >
           Hash
@@ -37,14 +37,14 @@ export function IntotoViewer002({ intoto }: { intoto: IntotoV002Schema }) {
       </h5>
 
       <SyntaxHighlighter language="text" style={atomDark}>
-        {`${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`}
+        {`${dsse.payloadHash?.algorithm}:${dsse.payloadHash?.value}`}
       </SyntaxHighlighter>
 
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>Signature</h5>
+      <h5 style={{ paddingTop: "1em" }}>Signature</h5>
       <SyntaxHighlighter language="text" style={atomDark}>
-        {window.atob(signature?.sig || "")}
+        {sig?.signature ?? ""}
       </SyntaxHighlighter>
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>{publicKey.title}</h5>
+      <h5 style={{ paddingTop: "1em" }}>{publicKey.title}</h5>
       <SyntaxHighlighter language="yaml" style={atomDark}>
         {publicKey.content}
       </SyntaxHighlighter>

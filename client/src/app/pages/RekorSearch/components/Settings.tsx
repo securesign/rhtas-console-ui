@@ -18,7 +18,7 @@ import {
 import { ExclamationCircleIcon, HelpIcon } from "@patternfly/react-icons";
 import styles from "@patternfly/react-styles/css/components/Form/form";
 import { type FormEvent, useCallback, useState } from "react";
-import { validateUrl } from "../utils/validateUrl";
+import { validateUrl } from "../../RekorEntry/utils/validateUrl";
 
 export function Settings({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [baseUrl, setBaseUrl] = useRekorBaseUrl();

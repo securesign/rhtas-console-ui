@@ -7,7 +7,7 @@ describe("SearchForm", () => {
   it("should render form with default values", () => {
     render(
       <RekorClientProvider>
-        <SearchForm defaultValues={{ attribute: "email", value: "" }} isLoading={false} onSubmit={vi.fn()} />
+        <SearchForm defaultValues={{ search: "" }} isLoading={false} onSubmit={vi.fn()} />
       </RekorClientProvider>
     );
 

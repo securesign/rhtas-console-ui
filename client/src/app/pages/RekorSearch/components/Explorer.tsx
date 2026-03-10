@@ -3,10 +3,8 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
 import { detectAttribute, isAttribute, type RekorEntries, type SearchQuery, useRekorSearch } from "../api/rekor-api";
 import { type FormInputs, SearchForm } from "./SearchForm";
-import { Alert, Flex, Spinner, Pagination } from "@patternfly/react-core";
-import { Entry } from "./Entry";
-
-const PAGE_SIZE = 20;
+import { Alert, Flex, Spinner } from "@patternfly/react-core";
+import { RekorList } from "./RekorList";
 
 function isApiError(error: unknown): error is ApiError {
   return !!error && typeof error === "object" && Object.hasOwn(error, "body");
@@ -36,53 +34,6 @@ function Error({ error }: { error: unknown }) {
     <Alert style={{ margin: "1em auto" }} title={title} variant={"danger"}>
       {detail}
     </Alert>
-  );
-}
-
-function RekorList({
-  rekorEntries,
-  page,
-  onSetPage,
-}: {
-  rekorEntries?: RekorEntries;
-  page: number;
-  onSetPage: (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, _newPage: number) => void;
-}) {
-  if (!rekorEntries) {
-    return <Fragment></Fragment>;
-  }
-
-  if (rekorEntries.entries.length === 0) {
-    return <Alert title={"No matching entries found"} variant={"info"} />;
-  }
-
-  const pageCount = Math.ceil(rekorEntries.totalCount / PAGE_SIZE);
-
-  const firstItem = (page - 1) * PAGE_SIZE + 1;
-  const lastItem = firstItem + rekorEntries.entries.length - 1;
-
-  return (
-    <div style={{ margin: "2em auto" }}>
-      <p>
-        Showing {firstItem} - {lastItem} of {rekorEntries.totalCount}
-      </p>
-
-      {rekorEntries.entries.map((entry) => (
-        <Entry key={Object.values(entry)[0].logIndex} entry={entry} />
-      ))}
-
-      {pageCount > 1 && (
-        <Pagination
-          itemCount={rekorEntries.totalCount}
-          perPage={PAGE_SIZE}
-          page={page}
-          onSetPage={onSetPage}
-          perPageOptions={[]}
-          variant="bottom"
-          style={{ marginTop: "1em" }}
-        />
-      )}
-    </div>
   );
 }
 
