@@ -1,14 +1,14 @@
 import { expect } from "../../assertions";
 import { test } from "../../fixtures";
 
-const isObservabilityEnabled = process.env.FEATURE_MONITORING === "on";
+const isMonitoringAlertingEnabled = process.env.FEATURE_MONITORING === "on";
 
 test.describe("Monitoring - Feature flag", () => {
-  test(`sidebar link is ${isObservabilityEnabled ? "visible" : "hidden"}`, async ({ page }) => {
+  test(`sidebar link is ${isMonitoringAlertingEnabled ? "visible" : "hidden"}`, async ({ page }) => {
     await page.goto("/");
     const link = page.getByRole("link", { name: "Monitoring" });
 
-    if (isObservabilityEnabled) {
+    if (isMonitoringAlertingEnabled) {
       await expect(link).toBeVisible();
       await link.click();
       await expect(page.getByRole("heading", { level: 1, name: "Monitoring" })).toBeVisible();
@@ -17,11 +17,11 @@ test.describe("Monitoring - Feature flag", () => {
     }
   });
 
-  test(`page is ${isObservabilityEnabled ? "accessible" : "not accessible"} via direct URL`, async ({ page }) => {
+  test(`page is ${isMonitoringAlertingEnabled ? "accessible" : "not accessible"} via direct URL`, async ({ page }) => {
     await page.goto("/monitoring");
     const heading = page.getByRole("heading", { level: 1, name: "Monitoring" });
 
-    if (isObservabilityEnabled) {
+    if (isMonitoringAlertingEnabled) {
       await expect(heading).toBeVisible();
     } else {
       await expect(heading).not.toBeVisible();

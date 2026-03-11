@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { Navigation } from "../../common/Navigation";
 
-export class ObservabilityPage {
+export class MonitoringPage {
   private readonly _page: Page;
 
   private constructor(page: Page) {
@@ -12,6 +12,6 @@ export class ObservabilityPage {
     const navigation = Navigation.build(page);
     await navigation.goToSidebar("Monitoring");
 
-    return new ObservabilityPage(page);
+    return new MonitoringPage(page);
   }
 }
