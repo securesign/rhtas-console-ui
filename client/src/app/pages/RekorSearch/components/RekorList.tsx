@@ -8,9 +8,9 @@ import { ConditionalTableBody } from "@app/components/TableControls/ConditionalT
 import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { formatIntegratedTime, stringMatcher } from "@app/utils/utils";
-import { Alert, Button, Icon, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
+import { Alert, Button, Flex, FlexItem, Icon, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
 import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
-import { CheckCircleIcon, ExclamationCircleIcon, ExternalLinkAltIcon } from "@patternfly/react-icons";
+import { CheckCircleIcon, ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { generatePath, Link } from "react-router-dom";
 import type { RekorEntries } from "../../../utils/rekor/api/rekor-api";
 
@@ -261,19 +261,23 @@ export function RekorList({
                   </Td>
                   <Td dataLabel="Public Certificate">
                     {row.hasValidPublicCertificate ? (
-                      <span>
-                        <Icon status="success">
-                          <CheckCircleIcon />
-                        </Icon>
-                        Valid
-                      </span>
+                      <Flex spaceItems={{ default: "spaceItemsXs" }}>
+                        <FlexItem>
+                          <Icon status="success">
+                            <CheckCircleIcon />
+                          </Icon>
+                        </FlexItem>
+                        <FlexItem>Valid</FlexItem>
+                      </Flex>
                     ) : (
-                      <span>
-                        <Icon status="danger">
-                          <ExclamationCircleIcon />
-                        </Icon>
-                        Invalid
-                      </span>
+                      <Flex spaceItems={{ default: "spaceItemsXs" }}>
+                        <FlexItem>
+                          <Icon status="danger">
+                            <CheckCircleIcon />
+                          </Icon>
+                        </FlexItem>
+                        <FlexItem>Invalid</FlexItem>
+                      </Flex>
                     )}
                   </Td>
                   <Td dataLabel="Integrated time">{formatIntegratedTime(row.integratedTime)}</Td>
