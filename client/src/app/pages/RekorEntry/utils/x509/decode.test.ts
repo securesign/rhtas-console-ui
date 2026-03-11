@@ -45,7 +45,7 @@ vi.mock("@peculiar/x509", () => {
   return { X509Certificate };
 });
 
-vi.mock("../utils/date", () => ({
+vi.mock("../date", () => ({
   toRelativeDateString: vi.fn().mockImplementation((date: Date) => `Relative date for ${String(date)}`),
 }));
 

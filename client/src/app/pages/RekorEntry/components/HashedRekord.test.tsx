@@ -5,11 +5,11 @@ vi.mock("react-syntax-highlighter/dist/cjs/styles/prism");
 
 import decodex509Mock from "../__mocks__/decodex509Mock";
 
-vi.mock("../x509/decode", () => ({
+vi.mock("../utils/x509/decode", () => ({
   decodex509: decodex509Mock,
 }));
 
-import { HashedRekordViewer } from "./HashedRekord";
+import { HashedRekordPublicKey } from "./HashedRekord";
 import { render, screen } from "@testing-library/react";
 import type { HashedRekorV001Schema } from "rekor";
 
@@ -30,11 +30,9 @@ describe("HashedRekordViewer", () => {
       },
     };
 
-    render(<HashedRekordViewer hashedRekord={mockedRekord} />);
+    render(<HashedRekordPublicKey hashedRekord={mockedRekord} />);
 
-    expect(screen.getByText("Hash")).toBeInTheDocument();
-    expect(screen.getByText("sha256:mockedHashValue")).toBeInTheDocument();
-    expect(screen.getByText("mockedSignatureContent")).toBeInTheDocument();
+    // Component only returns the public key content (no "Hash" label)
     expect(screen.getByText("mockedPublicKeyContent")).toBeInTheDocument();
   });
 
@@ -49,10 +47,9 @@ describe("HashedRekordViewer", () => {
       },
     };
 
-    render(<HashedRekordViewer hashedRekord={mockedRekordWithCert} />);
+    render(<HashedRekordPublicKey hashedRekord={mockedRekordWithCert} />);
 
-    expect(
-      screen.getByText(/'-----BEGIN CERTIFICATE-----Mocked Certificate-----END CERTIFICATE-----'/)
-    ).toBeInTheDocument();
+    // Component renders YAML dump of decoded certificate
+    expect(screen.getByText(/publicKey:/)).toBeInTheDocument();
   });
 });

@@ -11,9 +11,8 @@ describe("SearchForm", () => {
       </RekorClientProvider>
     );
 
-    expect(screen.getByLabelText("Attribute")).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: /email/i })).toHaveValue("");
+    // Form now has single "Search" field
+    expect(screen.getByRole("textbox", { name: "Search input field" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
   });
 
@@ -25,14 +24,16 @@ describe("SearchForm", () => {
       </RekorClientProvider>
     );
 
-    // assume "email" is the default selected attribute; otherwise, select it first
-    await userEvent.type(screen.getByLabelText(/Email input field/i), "test@example.com");
+    // Enter search value
+    await userEvent.type(screen.getByRole("textbox", { name: "Search input field" }), "test@example.com");
 
     // submit the form
-    await userEvent.click(screen.getByText(/Search/i));
+    await userEvent.click(screen.getByRole("button", { name: "Search" }));
 
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
+      const callArgs = mockOnSubmit.mock.calls[0];
+      expect(callArgs[0]).toEqual({ search: "test@example.com" });
     });
   });
 });

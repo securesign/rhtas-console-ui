@@ -4,7 +4,7 @@ import atobMock from "../__mocks__/atobMock";
 import decodex509Mock from "../__mocks__/decodex509Mock";
 
 import { render, screen } from "@testing-library/react";
-import { IntotoViewer002 } from "./Intoto002";
+import { IntotoViewer002Hash, IntotoViewer002Publickey, IntotoViewer002Signature } from "./Intoto002";
 import type { IntotoV002Schema } from "rekor";
 
 vi.mock("react-router-dom", () => ({ Link: ({ children }: any) => <a>{children}</a> }));
@@ -13,7 +13,7 @@ const pemCertificate = `-----BEGIN CERTIFICATE-----\n${Buffer.from("Mocked Publi
   "base64"
 )}\n-----END CERTIFICATE-----`;
 
-vi.mock("../x509/decode", () => ({
+vi.mock("../utils/x509/decode", () => ({
   decodex509: decodex509Mock,
 }));
 
@@ -45,14 +45,22 @@ describe("IntotoViewer", () => {
   };
 
   it("renders the component with payload hash, signature, and certificate", () => {
-    render(<IntotoViewer002 intoto={mockIntoto} />);
+    render(<IntotoViewer002Hash intoto={mockIntoto} />);
 
-    // verify the hash link is rendered correctly
-    expect(screen.getByText("Hash")).toBeInTheDocument();
+    // Component only returns the hash value (no "Hash" label)
     expect(screen.getByText("sha256:hashValue")).toBeInTheDocument();
+  });
+
+  it("renders the component with signature", () => {
+    render(<IntotoViewer002Signature intoto={mockIntoto} />);
 
     // verify the signature is rendered & decoded
     expect(screen.getByText("signature content")).toBeInTheDocument();
-    expect(screen.getByText(/BEGIN CERTIFICATE/)).toBeInTheDocument();
+  });
+
+  it("renders the component with payload hash, signature, and certificate", () => {
+    render(<IntotoViewer002Publickey intoto={mockIntoto} />);
+    // Component renders YAML dump of decoded certificate
+    expect(screen.getByText(/publicKey:/)).toBeInTheDocument();
   });
 });

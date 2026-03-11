@@ -5,13 +5,13 @@ import decodex509Mock from "../__mocks__/decodex509Mock";
 
 vi.mock("react-router-dom", () => ({ Link: ({ children }: any) => <a>{children}</a> }));
 
-vi.mock("../x509/decode", () => ({
+vi.mock("../utils/x509/decode", () => ({
   decodex509: decodex509Mock,
 }));
 
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { DSSEViewer } from "./DSSE";
+import { DSSEHash, DSSEPublicKey, DSSESignature } from "./DSSE";
 import type { DSSEV001Schema } from "rekor";
 
 describe("DSSEViewer Component", () => {
@@ -37,23 +37,20 @@ describe("DSSEViewer Component", () => {
     ],
   };
 
-  it("renders without crashing", () => {
-    render(<DSSEViewer dsse={mockDSSE} />);
-    expect(screen.getByText("Hash")).toBeInTheDocument();
-  });
-
   it("displays the payload hash correctly", () => {
-    render(<DSSEViewer dsse={mockDSSE} />);
+    render(<DSSEHash dsse={mockDSSE} />);
     expect(screen.getByText(`${mockDSSE.payloadHash?.algorithm}:${mockDSSE.payloadHash?.value}`)).toBeInTheDocument();
   });
 
   it("displays the signature correctly", () => {
-    render(<DSSEViewer dsse={mockDSSE} />);
+    render(<DSSESignature dsse={mockDSSE} />);
     expect(screen.getByText(mockDSSE.signatures![0].signature)).toBeInTheDocument();
   });
 
   it("displays the public key certificate title and content correctly", () => {
-    render(<DSSEViewer dsse={mockDSSE} />);
-    expect(screen.getByText("Public Key Certificate")).toBeInTheDocument();
+    render(<DSSEPublicKey dsse={mockDSSE} />);
+    // Component renders YAML dump of decoded certificate
+    expect(screen.getByText(/publicKey:/)).toBeInTheDocument();
+    expect(screen.getByText(/subject:/)).toBeInTheDocument();
   });
 });

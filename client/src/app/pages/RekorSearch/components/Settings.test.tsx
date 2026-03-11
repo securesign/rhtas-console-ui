@@ -1,4 +1,4 @@
-vi.mock("../api/context", () => ({
+vi.mock("@app/utils/rekor/api/context", () => ({
   useRekorBaseUrl: vi.fn(),
 }));
 

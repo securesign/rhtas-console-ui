@@ -40,8 +40,8 @@ describe("Explorer", () => {
       </RekorClientProvider>
     );
 
-    expect(screen.getByLabelText("Attribute")).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "Email input field" })).toBeInTheDocument();
+    // Form now has single "Search" field
+    expect(screen.getByRole("textbox", { name: "Search input field" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
   });
 

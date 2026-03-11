@@ -7,7 +7,9 @@ vi.mock("../utils/date", () => ({
   toRelativeDateString: vi.fn().mockReturnValue("Some Date"),
 }));
 vi.mock("./HashedRekord", () => ({
-  HashedRekordViewer: () => <div>MockedHashedRekordViewer</div>,
+  HashedRekordHash: () => <div>MockedHashedRekordHash</div>,
+  HashedRekordSignature: () => <div>MockedHashedRekordSignature</div>,
+  HashedRekordPublicKey: () => <div>MockedHashedRekordPublicKey</div>,
 }));
 
 import atobMock from "../__mocks__/atobMock";
@@ -26,7 +28,16 @@ describe("Entry", () => {
 
   const mockEntry = {
     someUuid: {
-      body: Buffer.from(JSON.stringify({ kind: "hashedrekord", apiVersion: "v1", spec: {} })).toString("base64"),
+      body: Buffer.from(
+        JSON.stringify({
+          kind: "hashedrekord",
+          apiVersion: "v1",
+          spec: {
+            data: { hash: { algorithm: "sha256", value: "abc123" } },
+            signature: { content: "sig" },
+          },
+        })
+      ).toString("base64"),
       attestation: { data: Buffer.from("{}").toString("base64") },
       logID: "123",
       logIndex: 123,
@@ -43,7 +54,7 @@ describe("Entry", () => {
   it("renders and toggles the accordion content", () => {
     render(<Entry entry={mockEntry} />);
 
-    expect(screen.getByText("apiVersion")).not.toBeVisible();
+    expect(screen.getByText(/apiVersion/)).not.toBeVisible();
 
     // check if UUID link is rendered
     expect(screen.getByText("someUuid")).toBeInTheDocument();
@@ -53,7 +64,7 @@ describe("Entry", () => {
     fireEvent.click(toggleButton);
 
     // now the accordion content should be visible
-    expect(screen.getByText("apiVersion")).toBeVisible();
+    expect(screen.getByText(/apiVersion/)).toBeVisible();
   });
 });
 
