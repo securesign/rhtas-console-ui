@@ -88,8 +88,8 @@ function renderSignature(body?: RekorBody): string {
 }
 
 function hasValidPublicCertificate(body?: RekorBody): boolean {
-  console.log(body);
-  return true;
+  //TODO: make a proper validation
+  return !!body;
 }
 
 function getShortCommitHash(hash: string): string {
@@ -286,7 +286,7 @@ export function RekorList({
                           {...buttonProps}
                           to={{
                             pathname: generatePath(Paths.rekorEntry, {
-                              rekorUuid: row.entryUuid,
+                              logIndex: String(row.logIndex),
                             }),
                           }}
                         />

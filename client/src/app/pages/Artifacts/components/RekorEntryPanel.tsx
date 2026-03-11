@@ -82,7 +82,7 @@ export const RekorEntryPanel = ({
           <DescriptionListGroup>
             <DescriptionListTermHelpText>Entry</DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Link to={`/rekor-search?logIndex=${rekorEntry.logIndex}`} target="_blank" rel="noopener noreferrer">
+              <Link to={`/rekor-search/${rekorEntry.logIndex}`} target="_blank" rel="noopener noreferrer">
                 <Button variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" aria-label={`rekorlink`}>
                   Open in Rekor Search
                 </Button>

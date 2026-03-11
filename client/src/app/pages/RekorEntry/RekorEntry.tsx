@@ -10,7 +10,7 @@ import type { LogEntry } from "rekor";
 import { Entry } from "./components/Entry";
 
 const RekorEntryContent: React.FC = () => {
-  const rekorUuid = useRouteParams("rekorUuid");
+  const logIndex = useRouteParams("logIndex");
   const client = useRekorClient();
 
   const [entry, setEntry] = useState<LogEntry | null>(null);
@@ -22,7 +22,7 @@ const RekorEntryContent: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const result = await client.entries.getLogEntryByUuid({ entryUuid: rekorUuid });
+        const result = await client.entries.getLogEntryByIndex({ logIndex: Number(logIndex) });
         setEntry(result);
       } catch (err) {
         setError(err instanceof Error ? err : new Error(String(err)));
@@ -32,7 +32,7 @@ const RekorEntryContent: React.FC = () => {
     }
 
     void fetch();
-  }, [rekorUuid, client]);
+  }, [logIndex, client]);
 
   console.log(entry);
 
@@ -44,12 +44,12 @@ const RekorEntryContent: React.FC = () => {
           <BreadcrumbItem>
             <Link to={Paths.rekorSearch}>Logs</Link>
           </BreadcrumbItem>
-          <BreadcrumbItem isActive>{rekorUuid}</BreadcrumbItem>
+          <BreadcrumbItem isActive>{logIndex}</BreadcrumbItem>
         </Breadcrumb>
       </PageSection>
       <PageSection>
         <Content>
-          <Content component="h1">{rekorUuid}</Content>
+          <Content component="h1">{logIndex}</Content>
           <Content component="p">This page shows transparency logs detail.</Content>
         </Content>
       </PageSection>

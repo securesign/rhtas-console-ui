@@ -14,7 +14,7 @@ const RekorEntry = lazy(() => import("./pages/RekorEntry"));
 export const Paths = {
   artifacts: "/artifacts",
   rekorSearch: "/rekor-search",
-  rekorEntry: `/rekor-search/:rekorUuid`,
+  rekorEntry: `/rekor-search/:logIndex`,
   trustRoot: "/trust-root",
 } as const;
 
@@ -43,7 +43,7 @@ export const AppRoutes = () => {
   );
 };
 
-export const useRouteParams = (pathParam: "rekorUuid") => {
+export const useRouteParams = (pathParam: "logIndex") => {
   const params = useParams();
   const value = params[pathParam];
   if (value === undefined) {

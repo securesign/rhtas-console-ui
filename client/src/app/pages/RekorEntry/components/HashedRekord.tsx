@@ -1,14 +1,8 @@
-import type { PrismTheme } from "types/prism-theme";
 import { dump } from "js-yaml";
-import { Link } from "react-router-dom";
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism";
-import { atomDark as darkTheme } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type RekorSchema } from "rekor";
 import { decodex509 } from "../utils/x509/decode";
-import { Panel } from "@patternfly/react-core";
-import { Paths } from "@app/Routes";
 
-export function HashedRekordViewer({ hashedRekord }: { hashedRekord: RekorSchema }) {
+export function HashedRekordPublicKey({ hashedRekord }: { hashedRekord: RekorSchema }) {
   const certContent = window.atob(hashedRekord.signature.publicKey?.content ?? "");
 
   const publicKey = {
@@ -23,31 +17,13 @@ export function HashedRekordViewer({ hashedRekord }: { hashedRekord: RekorSchema
     });
   }
 
-  return (
-    <Panel style={{ marginTop: "1.25em" }}>
-      <h5 style={{ margin: "1em auto" }}>
-        <Link
-          to={{
-            pathname: Paths.rekorSearch,
-            search: `?hash=${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`,
-          }}
-        >
-          Hash
-        </Link>
-      </h5>
-      <SyntaxHighlighter language="text" style={darkTheme as unknown as PrismTheme}>
-        {`${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`}
-      </SyntaxHighlighter>
+  return <>{publicKey.content}</>;
+}
 
-      <h5 style={{ margin: "1em auto" }}>Signature</h5>
-      <SyntaxHighlighter language="text" style={darkTheme as unknown as PrismTheme}>
-        {hashedRekord.signature.content ?? ""}
-      </SyntaxHighlighter>
+export function HashedRekordHash({ hashedRekord }: { hashedRekord: RekorSchema }) {
+  return <>{`${hashedRekord.data.hash?.algorithm}:${hashedRekord.data.hash?.value}`}</>;
+}
 
-      <h5 style={{ margin: "1em auto" }}>{publicKey.title}</h5>
-      <SyntaxHighlighter language="yaml" style={darkTheme as unknown as PrismTheme}>
-        {publicKey.content}
-      </SyntaxHighlighter>
-    </Panel>
-  );
+export function HashedRekordSignature({ hashedRekord }: { hashedRekord: RekorSchema }) {
+  return <>{hashedRekord.signature.content ?? ""}</>;
 }

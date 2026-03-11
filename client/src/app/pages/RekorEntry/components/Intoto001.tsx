@@ -1,13 +1,8 @@
 import { dump } from "js-yaml";
-import { Link } from "react-router-dom";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type IntotoV001Schema } from "rekor";
 import { decodex509 } from "../utils/x509/decode";
-import { Panel } from "@patternfly/react-core";
-import { Paths } from "@app/Routes";
 
-export function IntotoViewer001({ intoto }: { intoto: IntotoV001Schema }) {
+export function IntotoViewer001PublicKey({ intoto }: { intoto: IntotoV001Schema }) {
   const certContent = window.atob(intoto.publicKey || "");
 
   const publicKey = {
@@ -22,31 +17,13 @@ export function IntotoViewer001({ intoto }: { intoto: IntotoV001Schema }) {
     });
   }
 
-  return (
-    <Panel>
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>
-        <Link
-          to={{
-            pathname: Paths.rekorSearch,
-            search: `?hash=${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`,
-          }}
-        >
-          Hash
-        </Link>
-      </h5>
+  return <>{publicKey.content}</>;
+}
 
-      <SyntaxHighlighter language="text" style={atomDark}>
-        {`${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`}
-      </SyntaxHighlighter>
+export function IntotoViewer001Hash({ intoto }: { intoto: IntotoV001Schema }) {
+  return <>{`${intoto.content.payloadHash?.algorithm}:${intoto.content.payloadHash?.value}`}</>;
+}
 
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>Signature</h5>
-      <SyntaxHighlighter language="text" style={atomDark}>
-        {"Missing for intoto v0.0.1 entries"}
-      </SyntaxHighlighter>
-      <h5 style={{ paddingTop: "1.5em", paddingBottom: "1.5em" }}>{publicKey.title}</h5>
-      <SyntaxHighlighter language="yaml" style={atomDark}>
-        {publicKey.content}
-      </SyntaxHighlighter>
-    </Panel>
-  );
+export function IntotoViewer001Signature() {
+  return "Missing for intoto v0.0.1 entries";
 }

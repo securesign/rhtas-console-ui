@@ -1,16 +1,7 @@
 import { dump, load } from "js-yaml";
 import { Convert } from "pvtsutils";
-import { Fragment, type ReactNode, useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import {
-  type DSSEV001Schema,
-  type IntotoV001Schema,
-  type IntotoV002Schema,
-  type LogEntry,
-  type RekorSchema,
-} from "rekor";
-import { toRelativeDateString } from "../utils/date";
+import { type ReactNode, useState } from "react";
+import { type LogEntry } from "rekor";
 import {
   Accordion,
   AccordionItem,
@@ -21,16 +12,18 @@ import {
   Divider,
   Flex,
   FlexItem,
-  Grid,
-  GridItem,
-  Panel,
+  CardHeader,
+  CardTitle,
+  DescriptionList,
+  DescriptionListGroup,
+  DescriptionListTermHelpText,
+  DescriptionListDescription,
+  Content,
 } from "@patternfly/react-core";
-import { IntotoViewer001 } from "./Intoto001";
-import { IntotoViewer002 } from "./Intoto002";
-import { DSSEViewer } from "./DSSE";
-import { HashedRekordViewer } from "./HashedRekord";
-import { Link } from "react-router-dom";
-import { Paths } from "@app/Routes";
+import { formatIntegratedTime } from "@app/utils/utils";
+import { Hash } from "./Hash";
+import { Signature } from "./Signature";
+import { PublicKey } from "./PublicKey";
 
 const DUMP_OPTIONS: jsyaml.DumpOptions = {
   replacer: (_key, value: string) => {
@@ -129,61 +122,67 @@ export function Entry({ entry }: { entry: LogEntry }) {
   }
   const attestation = tryJSONParse(rawAttestation);
 
-  let parsed: ReactNode | undefined;
-  switch (body.kind) {
-    case "hashedrekord":
-      parsed = <HashedRekordViewer hashedRekord={body.spec as RekorSchema} />;
-      break;
-    case "intoto":
-      if (body.apiVersion == "0.0.1") {
-        parsed = <IntotoViewer001 intoto={body.spec as IntotoV001Schema} />;
-        break;
-      } else {
-        parsed = <IntotoViewer002 intoto={body.spec as IntotoV002Schema} />;
-        break;
-      }
-    case "dsse":
-      parsed = <DSSEViewer dsse={body.spec as DSSEV001Schema} />;
-      break;
-  }
-
   return (
-    <Card style={{ margin: "1.5em auto 2em", overflowY: "hidden" }}>
-      <CardBody>
-        <h2
-          style={{
-            margin: "1.25em auto",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          Entry UUID: <Link to={{ pathname: Paths.rekorSearch, search: `?uuid=${uuid}` }}>{uuid}</Link>
-        </h2>
-        <Divider />
-        <Grid hasGutter={true}>
-          <GridItem sm={3}>
-            <EntryCard title="Type" content={body.kind} dividerProps={{ display: "none" }} />
-          </GridItem>
-          <GridItem sm={3}>
-            <EntryCard
-              title="Log Index"
-              content={
-                <Link to={{ pathname: Paths.rekorSearch, search: `?logIndex=${obj.logIndex}` }}>{obj.logIndex}</Link>
-              }
-            />
-          </GridItem>
-          <GridItem sm={6}>
-            <EntryCard title="Integrated time" content={toRelativeDateString(new Date(obj.integratedTime * 1000))} />
-          </GridItem>
-        </Grid>
-        <Divider />
-        {parsed}
-        <Panel
-          style={{
-            margin: "0.75em auto",
-          }}
-        >
-          <Fragment>
+    <Flex direction={{ default: "column" }} spaceItems={{ default: "spaceItemsXl" }}>
+      <FlexItem>
+        <Card>
+          <CardHeader>
+            <CardTitle>Log details</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <DescriptionList columnModifier={{ default: "1Col" }}>
+              <DescriptionList columnModifier={{ default: "3Col" }}>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Type</DescriptionListTermHelpText>
+                  <DescriptionListDescription>{body.kind}</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Log index</DescriptionListTermHelpText>
+                  <DescriptionListDescription>{obj.logIndex}</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Integrated time</DescriptionListTermHelpText>
+                  <DescriptionListDescription>{formatIntegratedTime(obj.integratedTime)}</DescriptionListDescription>
+                </DescriptionListGroup>
+              </DescriptionList>
+              <DescriptionList columnModifier={{ default: "1Col" }}>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Entry UUID</DescriptionListTermHelpText>
+                  <DescriptionListDescription>{uuid}</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Hash</DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    <Hash type={body.kind} apiVersion={body.apiVersion} spec={body.spec} />
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                  <DescriptionListTermHelpText>Signature</DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    <Signature type={body.kind} apiVersion={body.apiVersion} spec={body.spec} />
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+              </DescriptionList>
+            </DescriptionList>
+          </CardBody>
+        </Card>
+      </FlexItem>
+      <FlexItem>
+        <Card>
+          <CardHeader>
+            <CardTitle>Public Key Certificate</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <PublicKey type={body.kind} apiVersion={body.apiVersion} spec={body.spec} />
+          </CardBody>
+        </Card>
+      </FlexItem>
+      <FlexItem>
+        <Card>
+          <CardHeader>
+            <CardTitle>Recommended safety guardrails</CardTitle>
+          </CardHeader>
+          <CardBody>
             <Accordion>
               <>
                 <AccordionItem isExpanded={expanded.includes("body-content")}>
@@ -194,12 +193,12 @@ export function Entry({ entry }: { entry: LogEntry }) {
                       toggle("body-content");
                     }}
                   >
-                    <b>Raw Body</b>
+                    Raw Body
                   </AccordionToggle>
                   <AccordionContent>
-                    <SyntaxHighlighter language="yaml" style={atomDark}>
+                    <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
                       {dump(body, DUMP_OPTIONS)}
-                    </SyntaxHighlighter>
+                    </Content>
                   </AccordionContent>
                 </AccordionItem>
                 {attestation && (
@@ -214,9 +213,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                       <b>Attestation</b>
                     </AccordionToggle>
                     <AccordionContent>
-                      <SyntaxHighlighter language="yaml" style={atomDark}>
-                        {dump(attestation)}
-                      </SyntaxHighlighter>
+                      <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{dump(attestation)}</Content>
                     </AccordionContent>
                   </AccordionItem>
                 )}
@@ -232,17 +229,17 @@ export function Entry({ entry }: { entry: LogEntry }) {
                       <h3>Verification</h3>
                     </AccordionToggle>
                     <AccordionContent>
-                      <SyntaxHighlighter language="yaml" style={atomDark}>
+                      <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
                         {dump(obj.verification)}
-                      </SyntaxHighlighter>
+                      </Content>
                     </AccordionContent>
                   </AccordionItem>
                 )}
               </>
             </Accordion>
-          </Fragment>
-        </Panel>
-      </CardBody>
-    </Card>
+          </CardBody>
+        </Card>
+      </FlexItem>
+    </Flex>
   );
 }
