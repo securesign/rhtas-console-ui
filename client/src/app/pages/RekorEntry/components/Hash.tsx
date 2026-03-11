@@ -14,7 +14,6 @@ export function Hash({ type, spec, apiVersion }: { type: string; apiVersion: str
         return <IntotoViewer001Hash intoto={spec as IntotoV001Schema} />;
       } else {
         return <IntotoViewer002Hash intoto={spec as IntotoV002Schema} />;
-        break;
       }
     case "dsse":
       return <DSSEHash dsse={spec as DSSEV001Schema} />;

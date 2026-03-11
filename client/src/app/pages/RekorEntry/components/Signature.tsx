@@ -14,7 +14,6 @@ export function Signature({ type, spec, apiVersion }: { type: string; apiVersion
         return <IntotoViewer001Signature />;
       } else {
         return <IntotoViewer002Signature intoto={spec as IntotoV002Schema} />;
-        break;
       }
     case "dsse":
       return <DSSESignature dsse={spec as DSSEV001Schema} />;
