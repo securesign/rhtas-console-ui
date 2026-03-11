@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { RekorClientProvider, useRekorClient } from "@app/pages/RekorSearch/api/context";
+import { RekorClientProvider, useRekorClient } from "@app/utils/rekor/api/context";
 import { Alert, Breadcrumb, BreadcrumbItem, Content, PageSection, Spinner } from "@patternfly/react-core";
 
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
@@ -33,8 +33,6 @@ const RekorEntryContent: React.FC = () => {
 
     void fetch();
   }, [logIndex, client]);
-
-  console.log(entry);
 
   return (
     <>

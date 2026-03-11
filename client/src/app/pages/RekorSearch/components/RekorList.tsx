@@ -12,7 +12,7 @@ import { Alert, Button, Icon, Toolbar, ToolbarContent, ToolbarItem } from "@patt
 import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { CheckCircleIcon, ExclamationCircleIcon, ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { generatePath, Link } from "react-router-dom";
-import type { RekorEntries } from "../api/rekor-api";
+import type { RekorEntries } from "../../../utils/rekor/api/rekor-api";
 
 interface RekorBody {
   kind?: string;

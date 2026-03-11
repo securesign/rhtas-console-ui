@@ -4,7 +4,7 @@ vi.mock("../api/context", () => ({
 
 import { render, screen } from "@testing-library/react";
 import { Settings } from "./Settings";
-import { useRekorBaseUrl } from "../api/context";
+import { useRekorBaseUrl } from "../../../utils/rekor/api/context";
 import type { Mock } from "vitest";
 
 describe("Settings Component", () => {
