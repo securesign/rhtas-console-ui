@@ -8,8 +8,8 @@ import NotFound from "./pages/NotFound";
 
 const Artifacts = lazy(() => import("./pages/Artifacts"));
 const TrustRoot = lazy(() => import("./pages/TrustRoot"));
-const RekorSearch = lazy(() => import("./pages/RekorSearch"));
-const RekorEntry = lazy(() => import("./pages/RekorEntry"));
+const RekorSearch = lazy(() => import("./pages/Rekor/RekorSearch"));
+const RekorEntry = lazy(() => import("./pages/Rekor/RekorEntry"));
 
 export const Paths = {
   artifacts: "/artifacts",

@@ -1,11 +1,11 @@
-vi.mock("@app/utils/rekor/api/context", () => ({
+vi.mock("../../shared/utils/rekor/api/context", () => ({
   useRekorBaseUrl: vi.fn(),
 }));
 
 import { render, screen } from "@testing-library/react";
 import { Settings } from "./Settings";
-import { useRekorBaseUrl } from "../../../utils/rekor/api/context";
 import type { Mock } from "vitest";
+import { useRekorBaseUrl } from "../../shared/utils/rekor/api/context";
 
 describe("Settings Component", () => {
   const mockOnClose = vi.fn();

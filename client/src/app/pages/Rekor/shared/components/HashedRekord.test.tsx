@@ -3,7 +3,7 @@
 vi.mock("react-router-dom", () => ({ Link: ({ children }: any) => <a>{children}</a> }));
 vi.mock("react-syntax-highlighter/dist/cjs/styles/prism");
 
-import decodex509Mock from "../__mocks__/decodex509Mock";
+import decodex509Mock from "../../RekorEntry/__mocks__/decodex509Mock";
 
 vi.mock("../utils/x509/decode", () => ({
   decodex509: decodex509Mock,

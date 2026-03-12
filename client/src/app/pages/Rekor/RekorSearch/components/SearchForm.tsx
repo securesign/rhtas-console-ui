@@ -1,8 +1,8 @@
 import { Form, FormGroup, FormHelperText, HelperText, HelperTextItem, SearchInput } from "@patternfly/react-core";
 import { useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { detectAttribute } from "../../../utils/rekor/api/rekor-api";
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
+import { detectAttribute } from "../../shared/utils/rekor/api/rekor-api";
 
 export interface FormProps {
   defaultValues?: FormInputs;

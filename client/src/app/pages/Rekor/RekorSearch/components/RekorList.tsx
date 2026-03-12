@@ -8,96 +8,25 @@ import { ConditionalTableBody } from "@app/components/TableControls/ConditionalT
 import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { formatIntegratedTime, stringMatcher } from "@app/utils/utils";
-import { Alert, Button, Flex, FlexItem, Icon, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
+import { Alert, Button, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
 import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
-import { CheckCircleIcon, ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { generatePath, Link } from "react-router-dom";
-import type { RekorEntries } from "../../../utils/rekor/api/rekor-api";
+import { Hash } from "@app/pages/Rekor/shared/components/Hash";
+import { Signature } from "@app/pages/Rekor/shared/components/Signature";
+import type { RekorEntries } from "../../shared/utils/rekor/api/rekor-api";
+import { PublicKey } from "../../shared/components/PublicKey";
 
 interface RekorBody {
-  kind?: string;
-  spec?: {
-    data?: {
-      hash?: {
-        algorithm?: string;
-        value?: string;
-      };
-    };
-    content?: {
-      payloadHash?: {
-        algorithm?: string;
-        value?: string;
-      };
-      envelope?: {
-        signatures?: {
-          sig?: string;
-          publicKey?: string;
-        }[];
-      };
-    };
-    signature?: {
-      content?: string;
-      publicKey?: {
-        content?: string;
-      };
-    };
-    signatures?: {
-      signature?: string;
-      verifier?: string;
-    }[];
-    publicKey?: string;
-  };
+  kind: string;
+  spec: unknown;
+  apiVersion: string;
 }
 
 interface RekorListRow {
   entryUuid: string;
   logIndex: number;
   integratedTime: number;
-  type: string;
-  commitHash: string;
-  signature: string;
-  hasValidPublicCertificate: boolean;
-}
-
-function decodeBody(bodyRaw: unknown): RekorBody | undefined {
-  if (typeof bodyRaw !== "string") {
-    return undefined;
-  }
-
-  try {
-    return JSON.parse(window.atob(bodyRaw)) as RekorBody;
-  } catch {
-    return undefined;
-  }
-}
-
-function renderHash(body?: RekorBody): string {
-  const hash = body?.spec?.data?.hash ?? body?.spec?.content?.payloadHash;
-  if (!hash?.algorithm || !hash?.value) {
-    return "-";
-  }
-  return `${hash.algorithm}:${hash.value}`;
-}
-
-function renderSignature(body?: RekorBody): string {
-  const signature =
-    body?.spec?.signature?.content ??
-    body?.spec?.content?.envelope?.signatures?.[0]?.sig ??
-    body?.spec?.signatures?.[0]?.signature;
-  return signature ?? "-";
-}
-
-function hasValidPublicCertificate(body?: RekorBody): boolean {
-  //TODO: make a proper validation
-  return !!body;
-}
-
-function getShortCommitHash(hash: string): string {
-  if (hash === "-") {
-    return "-";
-  }
-  const hashValue = hash.includes(":") ? hash.split(":")[1] : hash;
-  return hashValue.slice(0, 7);
+  body: RekorBody;
 }
 
 export function RekorList({
@@ -114,21 +43,19 @@ export function RekorList({
   const rows = useWithUiId(
     entries.map((entry): RekorListRow => {
       const [entryUuid, data] = Object.entries(entry)[0];
-      const body = decodeBody(data.body);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const body = JSON.parse(window.atob(data.body)) as RekorBody;
       return {
         entryUuid,
         logIndex: data.logIndex,
         integratedTime: data.integratedTime,
-        type: body?.kind ?? "-",
-        commitHash: renderHash(body),
-        signature: renderSignature(body),
-        hasValidPublicCertificate: hasValidPublicCertificate(body),
+        body,
       };
     }),
     (item) => `${item.entryUuid}-${item.logIndex}`
   );
 
-  const typeOptions = Array.from(new Set(rows.map((row) => row.type).filter((value) => value && value !== "-")))
+  const typeOptions = Array.from(new Set(rows.map((row) => row.body.kind).filter((value) => value && value !== "-")))
     .sort()
     .map((value) => ({ value, label: value }));
 
@@ -150,7 +77,7 @@ export function RekorList({
         },
         {
           categoryKey: "type",
-          matcher: (filterValue, item) => filterValue.toLowerCase() === item.type.toLowerCase(),
+          matcher: (filterValue, item) => filterValue.toLowerCase() === item.body.kind.toLowerCase(),
         },
       ],
     },
@@ -229,56 +156,23 @@ export function RekorList({
               return (
                 <Tr key={row._ui_unique_id}>
                   <Td dataLabel="Commit Hash" modifier="breakWord">
-                    {row.commitHash === "-" ? (
-                      "-"
-                    ) : (
-                      <Button
-                        variant="link"
-                        isInline
-                        icon={<ExternalLinkAltIcon />}
-                        iconPosition="right"
-                        component={(buttonProps) => (
-                          <Link
-                            {...buttonProps}
-                            to={{
-                              pathname: Paths.rekorSearch,
-                              search: `?hash=${encodeURIComponent(row.commitHash)}`,
-                            }}
-                          />
-                        )}
-                      >
-                        {getShortCommitHash(row.commitHash)}
-                      </Button>
-                    )}
+                    <Hash apiVersion={row.body.apiVersion} spec={row.body.spec} type={row.body.kind} variant="short" />
                   </Td>
                   <Td dataLabel="Log Index">{row.logIndex}</Td>
                   <Td dataLabel="Entry UUID" modifier="truncate">
                     {row.entryUuid}
                   </Td>
-                  <Td dataLabel="Type">{row.type}</Td>
+                  <Td dataLabel="Type">{row.body.kind}</Td>
                   <Td dataLabel="Signature" modifier="truncate">
-                    {row.signature}
+                    <Signature apiVersion={row.body.apiVersion} spec={row.body.spec} type={row.body.kind} />
                   </Td>
                   <Td dataLabel="Public Certificate">
-                    {row.hasValidPublicCertificate ? (
-                      <Flex spaceItems={{ default: "spaceItemsXs" }}>
-                        <FlexItem>
-                          <Icon status="success">
-                            <CheckCircleIcon />
-                          </Icon>
-                        </FlexItem>
-                        <FlexItem>Valid</FlexItem>
-                      </Flex>
-                    ) : (
-                      <Flex spaceItems={{ default: "spaceItemsXs" }}>
-                        <FlexItem>
-                          <Icon status="danger">
-                            <CheckCircleIcon />
-                          </Icon>
-                        </FlexItem>
-                        <FlexItem>Invalid</FlexItem>
-                      </Flex>
-                    )}
+                    <PublicKey
+                      apiVersion={row.body.apiVersion}
+                      spec={row.body.spec}
+                      type={row.body.kind}
+                      variant="validity"
+                    />
                   </Td>
                   <Td dataLabel="Integrated time">{formatIntegratedTime(row.integratedTime)}</Td>
                   <Td dataLabel="Action">

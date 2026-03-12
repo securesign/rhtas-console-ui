@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import atobMock from "../__mocks__/atobMock";
-import decodex509Mock from "../__mocks__/decodex509Mock";
+import atobMock from "../../RekorEntry/__mocks__/atobMock";
+import decodex509Mock from "../../RekorEntry/__mocks__/decodex509Mock";
 
 import { render, screen } from "@testing-library/react";
 import { IntotoViewer001Hash } from "./Intoto001";

@@ -21,9 +21,9 @@ import {
   Content,
 } from "@patternfly/react-core";
 import { formatIntegratedTime } from "@app/utils/utils";
-import { Hash } from "./Hash";
-import { Signature } from "./Signature";
-import { PublicKey } from "./PublicKey";
+import { Hash } from "../../shared/components/Hash";
+import { Signature } from "../../shared/components/Signature";
+import { PublicKey } from "../../shared/components/PublicKey";
 
 const DUMP_OPTIONS: jsyaml.DumpOptions = {
   replacer: (_key, value: string) => {

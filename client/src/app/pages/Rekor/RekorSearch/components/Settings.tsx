@@ -1,4 +1,4 @@
-import { useRekorBaseUrl } from "@app/utils/rekor/api/context";
+import { useRekorBaseUrl } from "@app/pages/Rekor/shared/utils/rekor/api/context";
 import {
   Button,
   Form,
@@ -18,7 +18,7 @@ import {
 import { ExclamationCircleIcon, HelpIcon } from "@patternfly/react-icons";
 import styles from "@patternfly/react-styles/css/components/Form/form";
 import { type FormEvent, useCallback, useState } from "react";
-import { validateUrl } from "../../RekorEntry/utils/validateUrl";
+import { validateUrl } from "../../shared/utils/validateUrl";
 
 export function Settings({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [baseUrl, setBaseUrl] = useRekorBaseUrl();

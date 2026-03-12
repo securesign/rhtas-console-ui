@@ -7,7 +7,7 @@ import {
   type RekorEntries,
   type SearchQuery,
   useRekorSearch,
-} from "@app/utils/rekor/api/rekor-api";
+} from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 import { type FormInputs, SearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";

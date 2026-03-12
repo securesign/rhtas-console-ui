@@ -39,3 +39,27 @@ export function decodex509(rawCertificate: string) {
   };
   return decodedCert;
 }
+
+export function hasValidPublicCertificate(decoded: string) {
+  // Check if it's a certificate (not just a public key)
+  if (!decoded.includes("BEGIN CERTIFICATE")) {
+    return false;
+  }
+
+  // Try to parse the certificate
+  const cert = new X509Certificate(decoded);
+  const now = new Date();
+  if (cert.notBefore > now || cert.notAfter < now) {
+    return false;
+  }
+
+  return true;
+}
+
+export function getShortCommitHash(hash: string): string {
+  if (hash === "-") {
+    return "-";
+  }
+  const hashValue = hash.includes(":") ? hash.split(":")[1] : hash;
+  return hashValue.slice(0, 7);
+}

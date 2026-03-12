@@ -19,8 +19,8 @@ beforeEach(() => {
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { Mock } from "vitest";
-import { RekorClientProvider } from "../../../utils/rekor/api/context";
 import { Explorer } from "./Explorer";
+import { RekorClientProvider } from "../../shared/utils/rekor/api/context";
 
 describe("Explorer", () => {
   it("renders without issues", () => {
