@@ -17,6 +17,9 @@ export interface ConsoleEnvType {
   /** Controls how mock data is injected on the client */
   MOCK: string;
 
+  /** Controls whether monitoring&alerting features are enabled */
+  FEATURE_MONITORING: string;
+
   /** UI upload file size limit in megabytes (MB), suffixed with "m" */
   UI_INGRESS_PROXY_BODY_SIZE: string;
 
@@ -47,6 +50,7 @@ export const buildConsoleEnv = ({
   PORT,
   VERSION = "99.0.0",
   MOCK = "off",
+  FEATURE_MONITORING = "off",
 
   UI_INGRESS_PROXY_BODY_SIZE = "500m",
   CONSOLE_API_URL,
@@ -57,6 +61,7 @@ export const buildConsoleEnv = ({
   PORT,
   VERSION,
   MOCK,
+  FEATURE_MONITORING,
 
   UI_INGRESS_PROXY_BODY_SIZE,
   CONSOLE_API_URL,
