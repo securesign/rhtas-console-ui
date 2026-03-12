@@ -69,10 +69,16 @@ export function RekorList({
       categoryTitles: {
         entryUuid: "Entry UUID",
         type: "Type",
+        commitHash: "Commit hash",
       },
     },
     filtering: {
       filterCategories: [
+        {
+          categoryKey: "commitHash",
+          matcher: (filterValue, item) =>
+            stringMatcher(filterValue, getHash({ type: item.body?.kind, spec: item?.body.spec }) ?? ""),
+        },
         {
           categoryKey: "entryUuid",
           matcher: (filterValue, item) => stringMatcher(filterValue, item.entryUuid),
@@ -121,6 +127,11 @@ export function RekorList({
       <Toolbar {...toolbarProps} aria-label="Rekor Entries toolbar">
         <ToolbarContent>
           <FilterToolbar {...filterToolbarProps} showFilterDropdown>
+            <SearchFilterControl
+              {...getFilterControlProps({ categoryKey: "commitHash" })}
+              placeholderText="Search by commit hash"
+              showToolbarItem={filterToolbarProps.currentFilterCategoryKey === "commitHash"}
+            />
             <SearchFilterControl
               {...getFilterControlProps({ categoryKey: "entryUuid" })}
               placeholderText="Search by entry UUID"
