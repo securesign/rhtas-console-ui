@@ -8,13 +8,14 @@ import { ConditionalTableBody } from "@app/components/TableControls/ConditionalT
 import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { formatIntegratedTime, stringMatcher } from "@app/utils/utils";
-import { Alert, Button, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
+import { Alert, Button, Flex, FlexItem, Label, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
 import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { generatePath, Link } from "react-router-dom";
 import { Hash } from "@app/pages/Rekor/shared/components/Hash";
 import { Signature } from "@app/pages/Rekor/shared/components/Signature";
 import type { RekorEntries } from "../../shared/utils/rekor/api/rekor-api";
 import { PublicKey } from "../../shared/components/PublicKey";
+import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 interface RekorBody {
   kind: string;
@@ -156,7 +157,31 @@ export function RekorList({
               return (
                 <Tr key={row._ui_unique_id}>
                   <Td dataLabel="Commit Hash" modifier="breakWord">
-                    <Hash apiVersion={row.body.apiVersion} spec={row.body.spec} type={row.body.kind} variant="short" />
+                    <Button
+                      variant="link"
+                      isInline
+                      href="https://google.com" //TODO: change the link to the proper (?) one
+                      component={"a"}
+                      target="_blank"
+                      aria-label="artifact link"
+                      rel="noopener noreferrer"
+                    >
+                      <Label isCompact color="blue" variant="outline">
+                        <Flex spaceItems={{ default: "spaceItemsXs" }}>
+                          <FlexItem>
+                            <Hash
+                              apiVersion={row.body.apiVersion}
+                              spec={row.body.spec}
+                              type={row.body.kind}
+                              variant="short"
+                            />
+                          </FlexItem>
+                          <FlexItem>
+                            <ExternalLinkAltIcon />
+                          </FlexItem>
+                        </Flex>
+                      </Label>
+                    </Button>
                   </Td>
                   <Td dataLabel="Log Index">{row.logIndex}</Td>
                   <Td dataLabel="Entry UUID" modifier="truncate">
