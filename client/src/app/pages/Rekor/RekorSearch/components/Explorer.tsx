@@ -8,7 +8,7 @@ import {
   type SearchQuery,
   useRekorSearch,
 } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
-import { type FormInputs, SearchForm } from "./SearchForm";
+import { RekorSearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";
 
@@ -81,8 +81,7 @@ export function Explorer() {
   }, [query, page, search]);
 
   const handleSubmit = useCallback(
-    ({ search }: FormInputs) => {
-      const value = search.trim();
+    (value: string) => {
       const attribute = detectAttribute(value);
       if (!attribute) return;
 
@@ -123,11 +122,7 @@ export function Explorer() {
 
   return (
     <Fragment>
-      <SearchForm
-        defaultValues={defaultSearch ? { search: defaultSearch } : undefined}
-        isLoading={loading}
-        onSubmit={handleSubmit}
-      />
+      <RekorSearchForm defaultValue={defaultSearch} onSubmit={handleSubmit} />
 
       {error ? (
         <SearchError error={error} />
