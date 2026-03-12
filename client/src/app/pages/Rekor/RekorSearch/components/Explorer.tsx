@@ -13,31 +13,30 @@ import { Alert, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";
 
 function isApiError(error: unknown): error is ApiError {
-  return !!error && typeof error === "object" && Object.hasOwn(error, "body");
+  return error instanceof ApiError;
 }
 
-function isRekorError(error: unknown): error is RekorError {
-  return !!error && typeof error === "object";
+function isRekorError(body: unknown): body is Required<RekorError> {
+  return !!body && typeof body === "object" && ("code" in body || "message" in body);
 }
 
-function Error({ error }: { error: unknown }) {
-  let title = "Unknown error";
+function SearchError({ error }: { error: unknown }) {
+  let title = "An unexpected error occurred";
   let detail: string | undefined;
 
   if (isApiError(error)) {
-    if (isRekorError(error.body)) {
-      title = `Code ${error.body.code}: ${error.body.message}`;
-    }
-    detail = `${error.url}: ${error.status}`;
-  } else if (typeof error == "string") {
-    title = error;
-  } else if (error instanceof TypeError) {
+    title = isRekorError(error.body)
+      ? (error.body.message ?? `Error code ${error.body.code}`)
+      : `${error.status} ${error.statusText}`;
+    detail = error.url;
+  } else if (error instanceof Error) {
     title = error.message;
-    detail = error.stack;
+  } else if (typeof error === "string") {
+    title = error;
   }
 
   return (
-    <Alert style={{ margin: "1em auto" }} title={title} variant={"danger"}>
+    <Alert style={{ margin: "1em auto" }} title={title} variant="danger">
       {detail}
     </Alert>
   );
@@ -131,7 +130,7 @@ export function Explorer() {
       />
 
       {error ? (
-        <Error error={error} />
+        <SearchError error={error} />
       ) : loading ? (
         <LoadingIndicator />
       ) : (
