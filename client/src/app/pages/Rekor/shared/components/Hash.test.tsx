@@ -3,104 +3,69 @@ import "@testing-library/jest-dom";
 import { Hash } from "./Hash";
 import type { DSSEV001Schema, IntotoV001Schema, IntotoV002Schema, RekorSchema } from "rekor";
 
-vi.mock("./HashedRekord", () => ({
-  HashedRekordHash: () => <div data-testid="hashedrekord-hash">HashedRekord Hash</div>,
-}));
-
-vi.mock("./Intoto001", () => ({
-  IntotoViewer001Hash: () => <div data-testid="intoto001-hash">Intoto v0.0.1 Hash</div>,
-}));
-
-vi.mock("./Intoto002", () => ({
-  IntotoViewer002Hash: () => <div data-testid="intoto002-hash">Intoto v0.0.2 Hash</div>,
-}));
-
-vi.mock("./DSSE", () => ({
-  DSSEHash: () => <div data-testid="dsse-hash">DSSE Hash</div>,
-}));
-
 describe("Hash Component", () => {
-  const mockSpec: RekorSchema = {
-    data: {
-      hash: {
-        algorithm: "sha256",
-        value: "abc123",
-      },
-    },
-    signature: {
-      content: "signature",
-      publicKey: {
-        content: "publicKey",
-      },
-    },
-  };
-
-  it("renders HashedRekordHash for hashedrekord type", () => {
-    render(<Hash type="hashedrekord" spec={mockSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("hashedrekord-hash")).toBeInTheDocument();
-  });
-
-  it("renders HashedRekordHash for rekord type", () => {
-    render(<Hash type="rekord" spec={mockSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("hashedrekord-hash")).toBeInTheDocument();
-  });
-
-  it("renders IntotoViewer001Hash for intoto v0.0.1", () => {
-    const intotoSpec: IntotoV001Schema = {
-      content: {
-        payloadHash: {
-          algorithm: "sha256",
-          value: "abc123",
-        },
-      },
-      publicKey: "publicKey",
+  it("renders hash for hashedrekord type", () => {
+    const spec: RekorSchema = {
+      data: { hash: { algorithm: "sha256", value: "abc123" } },
+      signature: { content: "sig", publicKey: { content: "pk" } },
     };
-    render(<Hash type="intoto" spec={intotoSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("intoto001-hash")).toBeInTheDocument();
+    render(<Hash type="hashedrekord" spec={spec} />);
+    expect(screen.getByText("sha256:abc123")).toBeInTheDocument();
   });
 
-  it("renders IntotoViewer002Hash for intoto v0.0.2", () => {
-    const intotoSpec: IntotoV002Schema = {
+  it("renders hash for rekord type", () => {
+    const spec: RekorSchema = {
+      data: { hash: { algorithm: "sha256", value: "abc123" } },
+      signature: { content: "sig", publicKey: { content: "pk" } },
+    };
+    render(<Hash type="rekord" spec={spec} />);
+    expect(screen.getByText("sha256:abc123")).toBeInTheDocument();
+  });
+
+  it("renders hash for intoto v0.0.1", () => {
+    const spec: IntotoV001Schema = {
+      content: { payloadHash: { algorithm: "sha256", value: "def456" } },
+      publicKey: "pk",
+    };
+    render(<Hash type="intoto" spec={spec} />);
+    expect(screen.getByText("sha256:def456")).toBeInTheDocument();
+  });
+
+  it("renders hash for intoto v0.0.2", () => {
+    const spec: IntotoV002Schema = {
       content: {
-        payloadHash: {
-          algorithm: "sha256",
-          value: "abc123",
-        },
+        payloadHash: { algorithm: "sha256", value: "ghi789" },
         envelope: {
-          payload: "payload",
-          payloadType: "payloadType",
-          signatures: [
-            {
-              sig: "signature",
-              publicKey: "publicKey",
-            },
-          ],
+          payload: "p",
+          payloadType: "pt",
+          signatures: [{ sig: "s", publicKey: "pk" }],
         },
       },
     };
-    render(<Hash type="intoto" spec={intotoSpec} apiVersion="0.0.2" />);
-    expect(screen.getByTestId("intoto002-hash")).toBeInTheDocument();
+    render(<Hash type="intoto" spec={spec} />);
+    expect(screen.getByText("sha256:ghi789")).toBeInTheDocument();
   });
 
-  it("renders DSSEHash for dsse type", () => {
-    const dsseSpec: DSSEV001Schema = {
-      payloadHash: {
-        algorithm: "sha256",
-        value: "abc123",
-      },
-      signatures: [
-        {
-          signature: "signature",
-          verifier: "verifier",
-        },
-      ],
+  it("renders hash for dsse type", () => {
+    const spec: DSSEV001Schema = {
+      payloadHash: { algorithm: "sha256", value: "jkl012" },
+      signatures: [{ signature: "sig", verifier: "v" }],
     };
-    render(<Hash type="dsse" spec={dsseSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("dsse-hash")).toBeInTheDocument();
+    render(<Hash type="dsse" spec={spec} />);
+    expect(screen.getByText("sha256:jkl012")).toBeInTheDocument();
+  });
+
+  it("renders short hash variant", () => {
+    const spec: RekorSchema = {
+      data: { hash: { algorithm: "sha256", value: "abcdef1234567890" } },
+      signature: { content: "sig", publicKey: { content: "pk" } },
+    };
+    render(<Hash type="hashedrekord" spec={spec} variant="short" />);
+    expect(screen.getByText("abcdef1")).toBeInTheDocument();
   });
 
   it("renders unsupported message for unknown type", () => {
-    render(<Hash type="unknown" spec={{}} apiVersion="0.0.1" />);
-    expect(screen.getByText("Unsupported type: unknown")).toBeInTheDocument();
+    render(<Hash type="unknown" spec={{}} />);
+    expect(screen.getByText("Unsupported type")).toBeInTheDocument();
   });
 });

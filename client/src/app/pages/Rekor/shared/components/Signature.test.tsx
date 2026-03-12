@@ -3,91 +3,52 @@ import "@testing-library/jest-dom";
 import { Signature } from "./Signature";
 import type { DSSEV001Schema, IntotoV002Schema, RekorSchema } from "rekor";
 
-vi.mock("./HashedRekord", () => ({
-  HashedRekordSignature: () => <div data-testid="hashedrekord-signature">HashedRekord Signature</div>,
-}));
-
-vi.mock("./Intoto001", () => ({
-  IntotoViewer001Signature: () => <div data-testid="intoto001-signature">Intoto v0.0.1 Signature</div>,
-}));
-
-vi.mock("./Intoto002", () => ({
-  IntotoViewer002Signature: () => <div data-testid="intoto002-signature">Intoto v0.0.2 Signature</div>,
-}));
-
-vi.mock("./DSSE", () => ({
-  DSSESignature: () => <div data-testid="dsse-signature">DSSE Signature</div>,
-}));
-
 describe("Signature Component", () => {
-  const mockSpec: RekorSchema = {
-    data: {
-      hash: {
-        algorithm: "sha256",
-        value: "abc123",
-      },
-    },
-    signature: {
-      content: "signature",
-      publicKey: {
-        content: "publicKey",
-      },
-    },
-  };
-
-  it("renders HashedRekordSignature for hashedrekord type", () => {
-    render(<Signature type="hashedrekord" spec={mockSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("hashedrekord-signature")).toBeInTheDocument();
+  it("renders signature for hashedrekord type", () => {
+    const spec: RekorSchema = {
+      data: { hash: { algorithm: "sha256", value: "abc123" } },
+      signature: { content: "my-signature", publicKey: { content: "pk" } },
+    };
+    render(<Signature type="hashedrekord" spec={spec} apiVersion="0.0.1" />);
+    expect(screen.getByText("my-signature")).toBeInTheDocument();
   });
 
-  it("renders HashedRekordSignature for rekord type", () => {
-    render(<Signature type="rekord" spec={mockSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("hashedrekord-signature")).toBeInTheDocument();
+  it("renders signature for rekord type", () => {
+    const spec: RekorSchema = {
+      data: { hash: { algorithm: "sha256", value: "abc123" } },
+      signature: { content: "rekord-sig", publicKey: { content: "pk" } },
+    };
+    render(<Signature type="rekord" spec={spec} apiVersion="0.0.1" />);
+    expect(screen.getByText("rekord-sig")).toBeInTheDocument();
   });
 
-  it("renders IntotoViewer001Signature for intoto v0.0.1", () => {
+  it("renders missing message for intoto v0.0.1", () => {
     render(<Signature type="intoto" spec={{}} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("intoto001-signature")).toBeInTheDocument();
+    expect(screen.getByText("Missing for intoto v0.0.1 entries")).toBeInTheDocument();
   });
 
-  it("renders IntotoViewer002Signature for intoto v0.0.2", () => {
-    const intotoSpec: IntotoV002Schema = {
+  it("renders signature for intoto v0.0.2", () => {
+    const spec: IntotoV002Schema = {
       content: {
-        payloadHash: {
-          algorithm: "sha256",
-          value: "abc123",
-        },
+        payloadHash: { algorithm: "sha256", value: "abc123" },
         envelope: {
-          payload: "payload",
-          payloadType: "payloadType",
-          signatures: [
-            {
-              sig: "signature",
-              publicKey: "publicKey",
-            },
-          ],
+          payload: "p",
+          payloadType: "pt",
+          signatures: [{ sig: window.btoa("decoded-sig"), publicKey: "pk" }],
         },
       },
     };
-    render(<Signature type="intoto" spec={intotoSpec} apiVersion="0.0.2" />);
-    expect(screen.getByTestId("intoto002-signature")).toBeInTheDocument();
+    render(<Signature type="intoto" spec={spec} apiVersion="0.0.2" />);
+    expect(screen.getByText("decoded-sig")).toBeInTheDocument();
   });
 
-  it("renders DSSESignature for dsse type", () => {
-    const dsseSpec: DSSEV001Schema = {
-      payloadHash: {
-        algorithm: "sha256",
-        value: "abc123",
-      },
-      signatures: [
-        {
-          signature: "signature",
-          verifier: "verifier",
-        },
-      ],
+  it("renders signature for dsse type", () => {
+    const spec: DSSEV001Schema = {
+      payloadHash: { algorithm: "sha256", value: "abc123" },
+      signatures: [{ signature: "dsse-sig", verifier: "v" }],
     };
-    render(<Signature type="dsse" spec={dsseSpec} apiVersion="0.0.1" />);
-    expect(screen.getByTestId("dsse-signature")).toBeInTheDocument();
+    render(<Signature type="dsse" spec={spec} apiVersion="0.0.1" />);
+    expect(screen.getByText("dsse-sig")).toBeInTheDocument();
   });
 
   it("renders unsupported message for unknown type", () => {

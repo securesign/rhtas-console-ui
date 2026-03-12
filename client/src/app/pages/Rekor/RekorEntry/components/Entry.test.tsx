@@ -6,11 +6,6 @@ vi.mock("react-syntax-highlighter/dist/cjs/styles/prism", () => ({ atomDark: {} 
 vi.mock("../utils/date", () => ({
   toRelativeDateString: vi.fn().mockReturnValue("Some Date"),
 }));
-vi.mock("./HashedRekord", () => ({
-  HashedRekordHash: () => <div>MockedHashedRekordHash</div>,
-  HashedRekordSignature: () => <div>MockedHashedRekordSignature</div>,
-  HashedRekordPublicKey: () => <div>MockedHashedRekordPublicKey</div>,
-}));
 
 import atobMock from "../__mocks__/atobMock";
 

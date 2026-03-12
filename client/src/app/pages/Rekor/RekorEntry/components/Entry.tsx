@@ -153,7 +153,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                 <DescriptionListGroup>
                   <DescriptionListTermHelpText>Hash</DescriptionListTermHelpText>
                   <DescriptionListDescription>
-                    <Hash type={body.kind} apiVersion={body.apiVersion} spec={body.spec} />
+                    <Hash type={body.kind} spec={body.spec} />
                   </DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>

@@ -12,6 +12,7 @@ import { Alert, Button, Flex, FlexItem, Label, Toolbar, ToolbarContent, ToolbarI
 import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { generatePath, Link } from "react-router-dom";
 import { Hash } from "@app/pages/Rekor/shared/components/Hash";
+import { getHash } from "@app/pages/Rekor/shared/utils/spec";
 import { Signature } from "@app/pages/Rekor/shared/components/Signature";
 import type { RekorEntries } from "../../shared/utils/rekor/api/rekor-api";
 import { PublicKey } from "../../shared/components/PublicKey";
@@ -154,27 +155,31 @@ export function RekorList({
         <ConditionalTableBody isNoData={currentPageItems.length === 0} numRenderedColumns={8}>
           <Tbody>
             {currentPageItems.map((row) => {
+              const hash = getHash({
+                type: row.body.kind,
+                spec: row.body.spec,
+              });
               return (
                 <Tr key={row._ui_unique_id}>
                   <Td dataLabel="Commit Hash" modifier="breakWord">
                     <Button
                       variant="link"
                       isInline
-                      href="https://google.com" //TODO: change the link to the proper (?) one
-                      component={"a"}
-                      target="_blank"
-                      aria-label="artifact link"
-                      rel="noopener noreferrer"
+                      component={(buttonProps) => (
+                        <Link
+                          {...buttonProps}
+                          to={{
+                            pathname: Paths.rekorSearch,
+                            search: hash ? `?hash=${encodeURIComponent(hash)}` : undefined,
+                          }}
+                        />
+                      )}
+                      aria-label="Search by this hash"
                     >
                       <Label isCompact color="blue" variant="outline">
                         <Flex spaceItems={{ default: "spaceItemsXs" }}>
                           <FlexItem>
-                            <Hash
-                              apiVersion={row.body.apiVersion}
-                              spec={row.body.spec}
-                              type={row.body.kind}
-                              variant="short"
-                            />
+                            <Hash spec={row.body.spec} type={row.body.kind} variant="short" />
                           </FlexItem>
                           <FlexItem>
                             <ExternalLinkAltIcon />

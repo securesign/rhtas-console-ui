@@ -55,11 +55,3 @@ export function hasValidPublicCertificate(decoded: string) {
 
   return true;
 }
-
-export function getShortCommitHash(hash: string): string {
-  if (hash === "-") {
-    return "-";
-  }
-  const hashValue = hash.includes(":") ? hash.split(":")[1] : hash;
-  return hashValue.slice(0, 7);
-}
