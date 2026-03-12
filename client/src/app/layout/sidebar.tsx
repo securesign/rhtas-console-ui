@@ -5,11 +5,14 @@ import { Nav, NavList, PageSidebar, PageSidebarBody } from "@patternfly/react-co
 import { css } from "@patternfly/react-styles";
 import nav from "@patternfly/react-styles/css/components/Nav/nav";
 import { Paths } from "@app/Routes";
+import { useFeatureFlags } from "@app/hooks/useFeatureFlags";
 
 const LINK_CLASS = nav.navLink;
 const ACTIVE_LINK_CLASS = nav.modifiers.current;
 
 export const SidebarApp: React.FC = () => {
+  const { features } = useFeatureFlags();
+
   const renderPageNav = () => {
     return (
       <Nav id="nav-sidebar" aria-label="Nav">
@@ -44,6 +47,18 @@ export const SidebarApp: React.FC = () => {
               Rekor Search
             </NavLink>
           </li>
+          {features.monitoringAlerting && (
+            <li className={nav.navItem}>
+              <NavLink
+                to={Paths.monitoringAlerting}
+                className={({ isActive }) => {
+                  return css(LINK_CLASS, isActive ? ACTIVE_LINK_CLASS : "");
+                }}
+              >
+                Monitoring
+              </NavLink>
+            </li>
+          )}
         </NavList>
       </Nav>
     );
