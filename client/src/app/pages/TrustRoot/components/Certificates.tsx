@@ -4,6 +4,10 @@ import type { AxiosError } from "axios";
 import dayjs from "dayjs";
 
 import {
+  Alert,
+  AlertActionCloseButton,
+  AlertGroup,
+  type AlertProps,
   CodeBlock,
   CodeBlockCode,
   DescriptionList,
@@ -36,7 +40,22 @@ interface ICertificatesTableProps {
   fetchError: AxiosError<ApiError> | null;
 }
 
+interface ToastAlert {
+  key: React.Key;
+  title: string;
+  variant: AlertProps["variant"];
+}
+
 export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certificates, isFetching, fetchError }) => {
+  const [alerts, setAlerts] = React.useState<ToastAlert[]>([]);
+
+  const addAlert = (title: string, variant: AlertProps["variant"]) => {
+    setAlerts((prev) => [{ title, variant, key: Date.now() }, ...prev]);
+  };
+
+  const removeAlert = (key: React.Key) => {
+    setAlerts((prev) => prev.filter((a) => a.key !== key));
+  };
   const items = useWithUiId(
     certificates,
     (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`
@@ -102,8 +121,11 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
     expansionDerivedState: { isCellExpanded },
   } = tableState;
 
-  const handleCopy = async (value: string) => {
-    await navigator.clipboard.writeText(value);
+  const handleCopy = (value: string) => {
+    navigator.clipboard.writeText(value).then(
+      () => addAlert("Copied PEM to clipboard", "success"),
+      () => addAlert("Failed to copy to clipboard", "danger")
+    );
   };
 
   const handleDownload = (value: string) => {
@@ -207,7 +229,7 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
                         {
                           title: "Copy PEM",
                           onClick: () => {
-                            handleCopy(certificate.pem).catch((err) => console.error(err));
+                            handleCopy(certificate.pem);
                           },
                         },
                         {
@@ -247,6 +269,23 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
         </ConditionalTableBody>
       </Table>
       <SimplePagination idPrefix="certificates-table" isTop={false} paginationProps={paginationProps} />
+      <AlertGroup hasAnimations isToast isLiveRegion>
+        {alerts.map(({ key, variant, title }) => (
+          <Alert
+            key={key}
+            variant={variant}
+            title={title}
+            actionClose={
+              <AlertActionCloseButton
+                title={title}
+                variantLabel={`${variant} alert`}
+                onClose={() => removeAlert(key)}
+              />
+            }
+            timeout={2000}
+          />
+        ))}
+      </AlertGroup>
     </>
   );
 };
