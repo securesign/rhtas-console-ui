@@ -117,7 +117,7 @@ export function RekorList({
 
   return (
     <div style={{ marginTop: "1.5em" }}>
-      <Toolbar {...toolbarProps} aria-label="rekor entries toolbar">
+      <Toolbar {...toolbarProps} aria-label="Rekor Entries toolbar">
         <ToolbarContent>
           <FilterToolbar {...filterToolbarProps} showFilterDropdown>
             <SearchFilterControl
@@ -138,7 +138,7 @@ export function RekorList({
         </ToolbarContent>
       </Toolbar>
 
-      <Table aria-label="rekor entries table">
+      <Table aria-label="Rekor Entries table">
         <Thead>
           <Tr>
             <Th>Commit Hash</Th>
@@ -220,6 +220,7 @@ export function RekorList({
                   </Td>
                   <Td isActionCell>
                     <ActionsColumn
+                      //TODO: implement proper actions , not visible explanation on designs
                       items={[
                         {
                           title: "Example action",
