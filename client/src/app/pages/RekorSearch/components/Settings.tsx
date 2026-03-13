@@ -120,7 +120,6 @@ export function Settings({ open, onClose }: { open: boolean; onClose: () => void
         >
           Cancel
         </Button>
-        ,
       </ModalFooter>
     </Modal>
   );
