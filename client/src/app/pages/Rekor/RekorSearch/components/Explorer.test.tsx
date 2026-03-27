@@ -18,27 +18,31 @@ beforeEach(() => {
 });
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Mock } from "vitest";
 import { Explorer } from "./Explorer";
 import { RekorClientProvider } from "../../shared/utils/rekor/api/context";
 
+function renderWithProviders(ui: React.ReactElement) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <RekorClientProvider>{ui}</RekorClientProvider>
+    </QueryClientProvider>
+  );
+}
+
 describe("Explorer", () => {
   it("renders without issues", () => {
-    render(
-      <RekorClientProvider>
-        <Explorer />
-      </RekorClientProvider>
-    );
+    renderWithProviders(<Explorer />);
 
     expect(screen.getByText("Search")).toBeInTheDocument();
   });
 
   it("should render search form and display search button", () => {
-    render(
-      <RekorClientProvider>
-        <Explorer />
-      </RekorClientProvider>
-    );
+    renderWithProviders(<Explorer />);
 
     // Form now has single "Search" field
     expect(screen.getByRole("textbox", { name: "Search input field" })).toBeInTheDocument();
@@ -53,11 +57,7 @@ describe("Explorer", () => {
   });
 
   it("displays loading indicator when fetching data", async () => {
-    render(
-      <RekorClientProvider>
-        <Explorer />
-      </RekorClientProvider>
-    );
+    renderWithProviders(<Explorer />);
 
     const button = screen.getByText("Search");
     fireEvent.click(button);
