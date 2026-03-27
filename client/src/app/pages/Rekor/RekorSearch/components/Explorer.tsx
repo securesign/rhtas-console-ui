@@ -1,13 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import {
-  detectAttribute,
-  isAttribute,
-  type RekorEntries,
-  type SearchQuery,
-  useRekorSearch,
-} from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
+import { detectAttribute, isAttribute, type SearchQuery } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
+import { useFetchRekorSearch } from "@app/queries/rekor-search";
 import { RekorSearchForm } from "./SearchForm";
 import { Alert, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";
@@ -55,30 +50,9 @@ export function Explorer() {
   const location = useLocation();
   const [defaultSearch, setDefaultSearch] = useState<string>();
   const [query, setQuery] = useState<SearchQuery>();
-  const search = useRekorSearch();
-
-  const [data, setData] = useState<RekorEntries>();
-  const [error, setError] = useState<unknown>();
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    async function fetch() {
-      if (!query) {
-        return;
-      }
-      setError(undefined);
-      setLoading(true);
-      try {
-        setData(await search(query, page));
-      } catch (e) {
-        setError(e);
-      }
-      setLoading(false);
-    }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetch();
-  }, [query, page, search]);
+  const { data, error, isLoading: loading } = useFetchRekorSearch(query, page);
 
   const handleSubmit = useCallback(
     (value: string) => {

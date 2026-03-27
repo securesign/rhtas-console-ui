@@ -1,38 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { RekorClientProvider, useRekorClient } from "@app/pages/Rekor/shared/utils/rekor/api/context";
+import { RekorClientProvider } from "@app/pages/Rekor/shared/utils/rekor/api/context";
 import { Alert, Breadcrumb, BreadcrumbItem, Content, PageSection, Spinner } from "@patternfly/react-core";
 
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
 import { Paths, useRouteParams } from "@app/Routes";
+import { useFetchRekorEntry } from "@app/queries/rekor-search";
 import { Link } from "react-router-dom";
-import type { LogEntry } from "rekor";
 import { Entry } from "./components/Entry";
 
 const RekorEntryContent: React.FC = () => {
   const logIndex = useRouteParams("logIndex");
-  const client = useRekorClient();
 
-  const [entry, setEntry] = useState<LogEntry | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    async function fetch() {
-      setLoading(true);
-      setError(null);
-      try {
-        const result = await client.entries.getLogEntryByIndex({ logIndex: Number(logIndex) });
-        setEntry(result);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error(String(err)));
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    void fetch();
-  }, [logIndex, client]);
+  const { data: entry, isLoading: loading, error } = useFetchRekorEntry(logIndex);
 
   return (
     <>
