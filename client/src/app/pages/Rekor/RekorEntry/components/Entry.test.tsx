@@ -49,7 +49,7 @@ describe("Entry", () => {
   it("renders and toggles the accordion content", () => {
     render(<Entry entry={mockEntry} />);
 
-    expect(screen.getByText(/apiVersion/)).not.toBeVisible();
+    expect(screen.queryByText(/apiVersion/)).not.toBeInTheDocument();
 
     // check if UUID link is rendered
     expect(screen.getByText("someUuid")).toBeInTheDocument();
