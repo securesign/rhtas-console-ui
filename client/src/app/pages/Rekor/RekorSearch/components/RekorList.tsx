@@ -9,7 +9,7 @@ import { useWithUiId } from "@app/hooks/query-utils";
 import { usePFToolbarTable } from "@app/hooks/usePFToolbarTable";
 import { formatIntegratedTime, stringMatcher } from "@app/utils/utils";
 import { Alert, Button, Flex, FlexItem, Label, Toolbar, ToolbarContent, ToolbarItem } from "@patternfly/react-core";
-import { ActionsColumn, Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { generatePath, Link } from "react-router-dom";
 import { Hash } from "@app/pages/Rekor/shared/components/Hash";
 import { getHash } from "@app/pages/Rekor/shared/utils/spec";
@@ -234,7 +234,7 @@ export function RekorList({
                       View details
                     </Button>
                   </Td>
-                  <Td isActionCell>
+                  {/* <Td isActionCell>
                     <ActionsColumn
                       //TODO: implement proper actions , not visible explanation on designs
                       items={[
@@ -246,7 +246,7 @@ export function RekorList({
                         },
                       ]}
                     />
-                  </Td>
+                  </Td> */}
                 </Tr>
               );
             })}

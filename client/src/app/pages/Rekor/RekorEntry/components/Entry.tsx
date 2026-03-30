@@ -196,9 +196,11 @@ export function Entry({ entry }: { entry: LogEntry }) {
                     Raw Body
                   </AccordionToggle>
                   <AccordionContent>
-                    <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
-                      {dump(body, DUMP_OPTIONS)}
-                    </Content>
+                    {expanded.includes("body-content") && (
+                      <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                        {dump(body, DUMP_OPTIONS)}
+                      </Content>
+                    )}
                   </AccordionContent>
                 </AccordionItem>
                 {attestation && (
@@ -213,7 +215,11 @@ export function Entry({ entry }: { entry: LogEntry }) {
                       <b>Attestation</b>
                     </AccordionToggle>
                     <AccordionContent>
-                      <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{dump(attestation)}</Content>
+                      {expanded.includes("attestation-content") && (
+                        <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                          {dump(attestation)}
+                        </Content>
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 )}
@@ -229,9 +235,11 @@ export function Entry({ entry }: { entry: LogEntry }) {
                       <h3>Verification</h3>
                     </AccordionToggle>
                     <AccordionContent>
-                      <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
-                        {dump(obj.verification)}
-                      </Content>
+                      {expanded.includes("verification-content") && (
+                        <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                          {dump(obj.verification)}
+                        </Content>
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 )}
