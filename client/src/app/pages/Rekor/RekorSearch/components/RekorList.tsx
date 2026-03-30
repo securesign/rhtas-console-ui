@@ -12,7 +12,7 @@ import { Alert, Button, Flex, FlexItem, Label, Toolbar, ToolbarContent, ToolbarI
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { generatePath, Link } from "react-router-dom";
 import { Hash } from "@app/pages/Rekor/shared/components/Hash";
-import { getHash } from "@app/pages/Rekor/shared/utils/spec";
+import { getHash, getSignature } from "@app/pages/Rekor/shared/utils/spec";
 import { Signature } from "@app/pages/Rekor/shared/components/Signature";
 import type { RekorEntries } from "../../shared/utils/rekor/api/rekor-api";
 import { PublicKey } from "../../shared/components/PublicKey";
@@ -204,7 +204,15 @@ export function RekorList({
                     {row.entryUuid}
                   </Td>
                   <Td dataLabel="Type">{row.body.kind}</Td>
-                  <Td dataLabel="Signature" modifier="truncate">
+                  <Td
+                    dataLabel="Signature"
+                    modifier="truncate"
+                    tooltip={getSignature({
+                      apiVersion: row.body.apiVersion,
+                      spec: row.body.spec,
+                      type: row.body.kind,
+                    })}
+                  >
                     <Signature apiVersion={row.body.apiVersion} spec={row.body.spec} type={row.body.kind} />
                   </Td>
                   <Td dataLabel="Public Certificate">
