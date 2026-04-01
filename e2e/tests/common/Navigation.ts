@@ -15,14 +15,17 @@ export class Navigation {
     return new Navigation(page);
   }
 
-  async goToSidebar(menu: "Trust root" | "Artifacts" | "Rekor Search" | "Monitoring") {
+  async goToSidebar(menu: "Trust root" | "Artifacts" | "Rekor Search" | "Trust Coverage") {
     await this._page.goto("/");
     await this._page.getByRole("link", { name: menu }).click();
-    const targets: Record<"Trust root" | "Artifacts" | "Rekor Search" | "Monitoring", { path: string; h1: string }> = {
+    const targets: Record<
+      "Trust root" | "Artifacts" | "Rekor Search" | "Trust Coverage",
+      { path: string; h1: string }
+    > = {
       "Trust root": { path: "/trust-root", h1: "Trust Root" },
       Artifacts: { path: "/artifacts", h1: "Artifacts" },
       "Rekor Search": { path: "/rekor-search", h1: "Rekor Search" },
-      Monitoring: { path: "/monitoring", h1: "Monitoring" },
+      "Trust Coverage": { path: "/monitoring", h1: "Trust Coverage" },
     };
 
     const target = targets[menu];

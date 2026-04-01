@@ -10,24 +10,24 @@ import { useFeatureFlags } from "./hooks/useFeatureFlags";
 const Artifacts = lazy(() => import("./pages/Artifacts"));
 const TrustRoot = lazy(() => import("./pages/TrustRoot"));
 const RekorSearch = lazy(() => import("./pages/RekorSearch"));
-const Monitoring = lazy(() => import("./pages/Monitoring"));
+const TrustCoverage = lazy(() => import("./pages/TrustCoverage"));
 
 export const Paths = {
   artifacts: "/artifacts",
   rekorSearch: "/rekor-search",
   trustRoot: "/trust-root",
-  monitoringAlerting: "/monitoring",
+  trustCoverage: "/trust-coverage",
 } as const;
 
 export const AppRoutes = () => {
   const { features } = useFeatureFlags();
 
   const allRoutes = useRoutes([
-    { path: "/", element: <Navigate to={Paths.trustRoot} /> },
+    { path: "/", element: <Navigate to={Paths.trustCoverage} /> },
     { path: Paths.trustRoot, element: <TrustRoot /> },
     { path: Paths.artifacts, element: <Artifacts /> },
     { path: Paths.rekorSearch, element: <RekorSearch /> },
-    ...(features.monitoringAlerting ? [{ path: Paths.monitoringAlerting, element: <Monitoring /> }] : []),
+    ...(features.monitoringAlerting ? [{ path: Paths.trustCoverage, element: <TrustCoverage /> }] : []),
     { path: "*", element: <NotFound /> },
   ]);
 

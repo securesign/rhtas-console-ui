@@ -6,12 +6,12 @@ const isMonitoringAlertingEnabled = process.env.FEATURE_MONITORING === "on";
 test.describe("Monitoring - Feature flag", () => {
   test(`sidebar link is ${isMonitoringAlertingEnabled ? "visible" : "hidden"}`, async ({ page }) => {
     await page.goto("/");
-    const link = page.getByRole("link", { name: "Monitoring" });
+    const link = page.getByRole("link", { name: "Trust Coverage" });
 
     if (isMonitoringAlertingEnabled) {
       await expect(link).toBeVisible();
       await link.click();
-      await expect(page.getByRole("heading", { level: 1, name: "Monitoring" })).toBeVisible();
+      await expect(page.getByRole("heading", { level: 1, name: "Trust Coverage" })).toBeVisible();
     } else {
       await expect(link).not.toBeVisible();
     }
@@ -19,7 +19,7 @@ test.describe("Monitoring - Feature flag", () => {
 
   test(`page is ${isMonitoringAlertingEnabled ? "accessible" : "not accessible"} via direct URL`, async ({ page }) => {
     await page.goto("/monitoring");
-    const heading = page.getByRole("heading", { level: 1, name: "Monitoring" });
+    const heading = page.getByRole("heading", { level: 1, name: "Trust Coverage" });
 
     if (isMonitoringAlertingEnabled) {
       await expect(heading).toBeVisible();

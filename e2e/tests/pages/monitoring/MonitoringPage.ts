@@ -10,7 +10,7 @@ export class MonitoringPage {
 
   static async build(page: Page) {
     const navigation = Navigation.build(page);
-    await navigation.goToSidebar("Monitoring");
+    await navigation.goToSidebar("Trust Coverage");
 
     return new MonitoringPage(page);
   }
