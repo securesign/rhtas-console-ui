@@ -49,8 +49,8 @@ export const buildConsoleEnv = ({
   NODE_ENV = "production",
   PORT,
   VERSION = "99.0.0",
-  MOCK = "on",
-  FEATURE_MONITORING = "on",
+  MOCK = "off",
+  FEATURE_MONITORING = "off",
 
   UI_INGRESS_PROXY_BODY_SIZE = "500m",
   CONSOLE_API_URL,
