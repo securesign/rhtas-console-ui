@@ -5,7 +5,8 @@ import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import ENV from "@app/env";
 import useBranding from "@app/hooks/useBranding";
-import { useIsDarkMode } from "@app/hooks/useDarkMode";
+import { ThemeContext } from "tsd-ui";
+import { useContext } from "react";
 
 interface IButtonAboutAppProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ const TRANSPARENT_1x1_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5B
 
 export const AboutApp: React.FC<IButtonAboutAppProps> = ({ isOpen, onClose }) => {
   const { about } = useBranding();
-  const isDark = useIsDarkMode();
+  const { isDark } = useContext(ThemeContext);
 
   const logoSrc = isDark && about.darkModeImageSrc ? about.darkModeImageSrc : (about.imageSrc ?? TRANSPARENT_1x1_GIF);
 
