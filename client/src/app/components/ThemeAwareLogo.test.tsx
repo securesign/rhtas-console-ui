@@ -1,49 +1,39 @@
 import { render, screen } from "@testing-library/react";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
+import { ThemeContext } from "tsd-ui";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
-vi.mock("@app/hooks/useDarkMode", () => ({
-  useIsDarkMode: vi.fn(),
-}));
+const mockProps = {
+  lightSrc: "/light-logo.svg",
+  darkSrc: "/dark-logo.svg",
+  alt: "Test Logo",
+  heights: { default: "36px" },
+};
 
-import { useIsDarkMode } from "@app/hooks/useDarkMode";
-
-const mockUseIsDarkMode = vi.mocked(useIsDarkMode);
+const renderWithTheme = (isDark: boolean) =>
+  render(
+    <ThemeContext.Provider value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => {} }}>
+      <ThemeAwareLogo {...mockProps} />
+    </ThemeContext.Provider>,
+  );
 
 describe("ThemeAwareLogo", () => {
-  const mockProps = {
-    lightSrc: "/light-logo.svg",
-    darkSrc: "/dark-logo.svg",
-    alt: "Test Logo",
-    heights: { default: "36px" },
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render light logo when isDark is false", () => {
-    mockUseIsDarkMode.mockReturnValue(false);
-
-    render(<ThemeAwareLogo {...mockProps} />);
+    renderWithTheme(false);
 
     const logo = screen.getByRole("img", { name: mockProps.alt });
     expect(logo).toHaveAttribute("src", mockProps.lightSrc);
   });
 
   it("should render dark logo when isDark is true", () => {
-    mockUseIsDarkMode.mockReturnValue(true);
-
-    render(<ThemeAwareLogo {...mockProps} />);
+    renderWithTheme(true);
 
     const logo = screen.getByRole("img", { name: mockProps.alt });
     expect(logo).toHaveAttribute("src", mockProps.darkSrc);
   });
 
   it("should pass through alt text correctly", () => {
-    mockUseIsDarkMode.mockReturnValue(false);
-
-    render(<ThemeAwareLogo {...mockProps} />);
+    renderWithTheme(false);
 
     expect(screen.getByRole("img", { name: mockProps.alt })).toBeInTheDocument();
   });
