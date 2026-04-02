@@ -53,6 +53,66 @@ export const unsignedArtifactsMock: UnsignedArtifactItem[] = [
   },
 ];
 
+export interface AllArtifactItem {
+  uri: string;
+  environment: string;
+  registry: string;
+  status: "signed" | "unsigned";
+  lastSeen: string;
+}
+
+export const allArtifactsMock: AllArtifactItem[] = [
+  {
+    uri: "quay.io/myorg/billing-service:1.4.2",
+    environment: "production",
+    registry: "quay.io",
+    status: "signed",
+    lastSeen: "Mar 09, 2026",
+  },
+  {
+    uri: "quay.io/myorg/auth-proxy:2.0.1",
+    environment: "production",
+    registry: "quay.io",
+    status: "signed",
+    lastSeen: "Mar 08, 2026",
+  },
+  {
+    uri: "registry.example.com/frontend:3.1.0-rc1",
+    environment: "staging",
+    registry: "registry.example.com",
+    status: "unsigned",
+    lastSeen: "Mar 09, 2026",
+  },
+  {
+    uri: "quay.io/myorg/api-gateway:1.2.0",
+    environment: "dev",
+    registry: "quay.io",
+    status: "signed",
+    lastSeen: "Mar 07, 2026",
+  },
+  {
+    uri: "registry.example.com/worker:0.9.5",
+    environment: "staging",
+    registry: "registry.example.com",
+    status: "unsigned",
+    lastSeen: "Mar 06, 2026",
+  },
+  {
+    uri: "quay.io/myorg/metrics-collector:0.3.1",
+    environment: "production",
+    registry: "quay.io",
+    status: "signed",
+    lastSeen: "Mar 10, 2026",
+  },
+  {
+    uri: "quay.io/myorg/notification-svc:1.1.0",
+    environment: "dev",
+    registry: "quay.io",
+    status: "unsigned",
+    lastSeen: "Mar 05, 2026",
+  },
+];
+
 export const trustCoverageMock: TrustCoverageResponse = {
   totals: {
     totalArtifacts: 142,

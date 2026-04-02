@@ -1,5 +1,7 @@
 import type { CoveragePercentages, CoverageTotals } from "@app/client";
+import { Paths } from "@app/Routes";
 import { Card, CardBody, CardTitle, Content, Flex, FlexItem, Grid, GridItem, Label } from "@patternfly/react-core";
+import { Link } from "react-router-dom";
 
 type Props = {
   totals: CoverageTotals;
@@ -13,7 +15,9 @@ export default function Totals({ totals, percentages }: Props) {
         <Card isFullHeight>
           <CardTitle>Total Artifacts</CardTitle>
           <CardBody>
-            <Content component="h1">{totals.totalArtifacts}</Content>
+            <Content component="h1">
+              <Link to={Paths.allArtifacts}>{totals.totalArtifacts}</Link>
+            </Content>
           </CardBody>
         </Card>
       </GridItem>

@@ -1,11 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 
 import { Content, Divider, Flex, FlexItem, Grid, GridItem, PageSection } from "@patternfly/react-core";
 
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { useFetchTrustCoverageSummary } from "@app/queries/trust-coverage";
-import EnvironmentSelect from "./components/EnvironmentSelect";
+import EnvironmentSelect from "../shared/components/EnvironmentSelect";
 import Totals from "./components/Totals";
 import SigningStatusDonut from "./components/SigningStatusDonut";
 import CoverageTrend from "./components/CoverageTrend";
@@ -30,7 +30,7 @@ export const TrustCoverage: React.FC = () => {
     : [...(selectedEnvironment === "all" ? [] : [selectedEnvironment])];
 
   return (
-    <Fragment>
+    <>
       <DocumentMetadata title="Trust Coverage" />
       <PageSection variant="default">
         <EnvironmentSelect
@@ -42,8 +42,8 @@ export const TrustCoverage: React.FC = () => {
       <Divider />
       <PageSection variant="default">
         <Content>
-          <h1>Trust Coverage</h1>
-          <p>Fleet-level visibility into artifact signing coverage and attestation status.</p>
+          <Content component="h1">Trust Coverage</Content>
+          <Content component="p">Fleet-level visibility into artifact signing coverage and attestation status.</Content>
         </Content>
       </PageSection>
       <PageSection>
@@ -73,6 +73,6 @@ export const TrustCoverage: React.FC = () => {
           )}
         </LoadingWrapper>
       </PageSection>
-    </Fragment>
+    </>
   );
 };

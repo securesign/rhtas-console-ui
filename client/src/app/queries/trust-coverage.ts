@@ -1,8 +1,10 @@
 import type { AxiosError } from "axios";
 
 import {
+  type AllArtifactItem,
   type AttestationPresenceItem,
   type UnsignedArtifactItem,
+  allArtifactsMock,
   attestationPresenceMock,
   trustCoverageMock,
   unsignedArtifactsMock,
@@ -35,6 +37,21 @@ export const useFetchAttestationPresence = (environment?: string) => {
       refetchOnWindowFocus: false,
     },
     attestationPresenceMock
+  );
+
+  return { data, isFetching: isLoading, fetchError: error };
+};
+
+export const useFetchAllArtifacts = (environment?: string) => {
+  const { data, isLoading, error } = useMockableQuery<AllArtifactItem[], AxiosError>(
+    {
+      queryKey: ["TrustCoverage", "allArtifacts", { environment }],
+      queryFn: () => {
+        throw new Error("Api call is not ready yet, use MOCK=on");
+      },
+      refetchOnWindowFocus: false,
+    },
+    allArtifactsMock
   );
 
   return { data, isFetching: isLoading, fetchError: error };
