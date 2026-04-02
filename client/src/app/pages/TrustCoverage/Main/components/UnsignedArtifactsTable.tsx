@@ -6,9 +6,9 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import { useFetchUnsignedArtifacts } from "@app/queries/trust-coverage";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
-type Props = {
+interface Props {
   environments: string[];
-};
+}
 
 export default function UnsignedArtifactsTable({ environments }: Props) {
   const tabs = ["All", ...environments];

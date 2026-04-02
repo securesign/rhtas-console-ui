@@ -1,10 +1,10 @@
 import { Flex, FlexItem, FormSelect, FormSelectOption } from "@patternfly/react-core";
 
-type Props = {
+interface Props {
   selectedEnvironment: string;
   environments: string[];
   setSelectedEnvironment: (value: string) => void;
-};
+}
 
 export default function EnvironmentSelect({ selectedEnvironment, environments, setSelectedEnvironment }: Props) {
   return (

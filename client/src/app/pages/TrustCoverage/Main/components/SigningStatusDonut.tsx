@@ -1,13 +1,13 @@
 import { ChartDonut, ChartThemeColor } from "@patternfly/react-charts/victory";
 import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 
-type Props = {
+interface Props {
   title: string;
   donutData: {
     x: string;
     y: number;
   }[];
-};
+}
 
 export default function SigningStatusDonut({ title, donutData }: Props) {
   return (

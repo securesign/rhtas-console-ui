@@ -2,9 +2,9 @@ import type { AllArtifactItem } from "@app/queries/mocks/trust-coverage.mock";
 import { Label } from "@patternfly/react-core";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
-type Props = {
+interface Props {
   artifacts: AllArtifactItem[];
-};
+}
 
 export default function ArtifactsTable({ artifacts }: Props) {
   return (

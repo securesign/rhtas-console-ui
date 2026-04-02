@@ -3,10 +3,10 @@ import { Paths } from "@app/Routes";
 import { Card, CardBody, CardTitle, Content, Flex, FlexItem, Grid, GridItem, Label } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 
-type Props = {
+interface Props {
   totals: CoverageTotals;
   percentages: CoveragePercentages;
-};
+}
 
 export default function Totals({ totals, percentages }: Props) {
   return (

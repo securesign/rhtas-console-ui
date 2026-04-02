@@ -14,9 +14,9 @@ const formatTimestamp = (iso: string) => {
   return d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
 };
 
-type Props = {
+interface Props {
   trendData: Array<TrendDataPoint>;
-};
+}
 
 export default function CoverageTrend({ trendData }: Props) {
   return (

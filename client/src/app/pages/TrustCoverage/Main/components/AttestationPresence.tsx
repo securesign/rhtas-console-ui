@@ -4,9 +4,9 @@ import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 import { useFetchAttestationPresence } from "@app/queries/trust-coverage";
 import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
-type Props = {
+interface Props {
   environment?: string;
-};
+}
 
 export default function AttestationPresence({ environment }: Props) {
   const { data, isFetching, fetchError } = useFetchAttestationPresence(environment);
