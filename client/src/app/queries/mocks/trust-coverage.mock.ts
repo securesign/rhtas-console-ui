@@ -1,5 +1,58 @@
 import type { TrustCoverageResponse } from "@app/client";
 
+export interface AttestationPresenceItem {
+  type: string;
+  percentage: number;
+}
+
+export interface UnsignedArtifactItem {
+  uri: string;
+  environment: string;
+  registry: string;
+  lastSeen: string;
+}
+
+export const attestationPresenceMock: AttestationPresenceItem[] = [
+  { type: "SLSA Provenance", percentage: 92 },
+  { type: "SBOM (SPDX)", percentage: 83 },
+  { type: "Vulnerability Scan", percentage: 70 },
+  { type: "SLSA VSA", percentage: 50 },
+  { type: "Test Results", percentage: 32 },
+];
+
+export const unsignedArtifactsMock: UnsignedArtifactItem[] = [
+  {
+    uri: "quay.io/myorg/billing-service:1.4.2",
+    environment: "production",
+    registry: "quay.io",
+    lastSeen: "Mar 09, 2026",
+  },
+  {
+    uri: "quay.io/myorg/auth-proxy:2.0.1",
+    environment: "production",
+    registry: "quay.io",
+    lastSeen: "Mar 08, 2026",
+  },
+  {
+    uri: "registry.example.com/frontend:3.1.0-rc1",
+    environment: "staging",
+    registry: "registry.example.com",
+    lastSeen: "Mar 09, 2026",
+  },
+  {
+    uri: "quay.io/myorg/api-gateway:1.2.0",
+    environment: "dev",
+    registry: "quay.io",
+    lastSeen: "Mar 07, 2026",
+  },
+  {
+    uri: "registry.example.com/worker:0.9.5",
+    environment: "staging",
+    registry: "registry.example.com",
+    lastSeen: "Mar 06, 2026",
+  },
+];
+
 export const trustCoverageMock: TrustCoverageResponse = {
   totals: {
     totalArtifacts: 142,
