@@ -8,7 +8,7 @@ type Props = {
 
 export default function ArtifactsTable({ artifacts }: Props) {
   return (
-    <Table aria-label="All artifacts table" variant="compact">
+    <Table aria-label="All artifacts table">
       <Thead>
         <Tr>
           <Th>Artifact URI</Th>

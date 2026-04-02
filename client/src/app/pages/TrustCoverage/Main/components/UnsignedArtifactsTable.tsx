@@ -33,7 +33,7 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
           ))}
         </ToggleGroup>
 
-        <Table aria-label="Unsigned artifacts table" variant="compact">
+        <Table aria-label="Unsigned artifacts table">
           <Thead>
             <Tr>
               <Th>Artifact URI</Th>
