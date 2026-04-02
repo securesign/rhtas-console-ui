@@ -4,6 +4,7 @@ import { Card, CardBody, CardTitle, Label, ToggleGroup, ToggleGroupItem } from "
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
 import { useFetchUnsignedArtifacts } from "@app/queries/trust-coverage";
+import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
 type Props = {
   environments: string[];
@@ -13,7 +14,7 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
   const tabs = ["All", ...environments];
   const [selectedTab, setSelectedTab] = useState("All");
 
-  const { data } = useFetchUnsignedArtifacts(selectedTab === "All" ? undefined : selectedTab);
+  const { data, isFetching, fetchError } = useFetchUnsignedArtifacts(selectedTab === "All" ? undefined : selectedTab);
 
   const filteredData = selectedTab === "All" ? (data ?? []) : (data ?? []).filter((a) => a.environment === selectedTab);
 
@@ -43,16 +44,18 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
             </Tr>
           </Thead>
           <Tbody>
-            {filteredData.map((artifact, index) => (
-              <Tr key={index}>
-                <Td dataLabel="Artifact URI">{artifact.uri}</Td>
-                <Td dataLabel="Environment">
-                  <Label isCompact>{artifact.environment}</Label>
-                </Td>
-                <Td dataLabel="Registry">{artifact.registry}</Td>
-                <Td dataLabel="Last Seen">{artifact.lastSeen}</Td>
-              </Tr>
-            ))}
+            <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>
+              {filteredData.map((artifact, index) => (
+                <Tr key={index}>
+                  <Td dataLabel="Artifact URI">{artifact.uri}</Td>
+                  <Td dataLabel="Environment">
+                    <Label isCompact>{artifact.environment}</Label>
+                  </Td>
+                  <Td dataLabel="Registry">{artifact.registry}</Td>
+                  <Td dataLabel="Last Seen">{artifact.lastSeen}</Td>
+                </Tr>
+              ))}
+            </LoadingWrapper>
           </Tbody>
         </Table>
       </CardBody>
