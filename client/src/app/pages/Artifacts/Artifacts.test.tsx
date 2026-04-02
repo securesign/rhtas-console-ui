@@ -101,7 +101,7 @@ describe("Artifacts", () => {
     await user.keyboard("{Enter}");
 
     await waitFor(() => {
-      expect(screen.getByText("A URI is required")).toBeInTheDocument();
+      expect(screen.getByText("A value is required")).toBeInTheDocument();
     });
   });
 

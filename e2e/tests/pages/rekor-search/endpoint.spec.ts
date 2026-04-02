@@ -5,7 +5,7 @@ import { RekorSearchPage } from "./RekorSearchPage";
 test.describe("Overriding the Rekor Endpoint", () => {
   test("Should use the fallback endpoint if one is not provided", async ({ page }) => {
     const rekorSearchPage = await RekorSearchPage.build(page);
-    await rekorSearchPage.applySearch("Email", "carlosthe19916@gmail.com");
+    await rekorSearchPage.applySearch("carlosthe19916@gmail.com");
 
     // Open settings modal
     await page.getByTestId("settings-button").click();
@@ -22,7 +22,7 @@ test.describe("Overriding the Rekor Endpoint", () => {
       return url.origin === "https://rekor.sigstore.dev" && response.request().method() === "GET";
     });
 
-    await rekorSearchPage.applySearch("Email", "bob.callaway@gmail.com");
+    await rekorSearchPage.applySearch("bob.callaway@gmail.com");
 
     expect(response.url()).toContain("https://rekor.sigstore.dev");
   });
