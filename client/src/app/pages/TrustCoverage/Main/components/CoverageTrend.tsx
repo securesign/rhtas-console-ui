@@ -15,7 +15,7 @@ const formatTimestamp = (iso: string) => {
 };
 
 interface Props {
-  trendData: Array<TrendDataPoint>;
+  trendData: TrendDataPoint[];
 }
 
 export default function CoverageTrend({ trendData }: Props) {
