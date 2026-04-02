@@ -31,10 +31,10 @@ import BarsIcon from "@patternfly/react-icons/dist/js/icons/bars-icon";
 import ExternalLinkAltIcon from "@patternfly/react-icons/dist/js/icons/external-link-alt-icon";
 
 import useBranding from "@app/hooks/useBranding";
-import { DarkModeToggle } from "@app/components/DarkModeToggle";
 import { ThemeAwareLogo } from "@app/components/ThemeAwareLogo";
 
 import { AboutApp } from "./about";
+import { ThemeSelector } from "tsd-ui";
 
 export const HeaderApp: React.FC = () => {
   const {
@@ -112,7 +112,7 @@ export const HeaderApp: React.FC = () => {
                 }}
               >
                 <ToolbarItem>
-                  <DarkModeToggle />
+                  <ThemeSelector />
                 </ToolbarItem>
                 <ToolbarItem>
                   <Dropdown
@@ -163,7 +163,7 @@ export const HeaderApp: React.FC = () => {
                 visibility={{ lg: "hidden" }}
               >
                 <ToolbarItem>
-                  <DarkModeToggle />
+                  <ThemeSelector />
                 </ToolbarItem>
                 <ToolbarItem>
                   <Dropdown
