@@ -12,7 +12,6 @@ import {
   ClipboardCopy,
   Label,
 } from "@patternfly/react-core";
-import { PencilAltIcon } from "@patternfly/react-icons";
 import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
 interface IArtifactSummaryProps {
@@ -73,10 +72,8 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover isVisible={false} headerContent={<div>Labels</div>} bodyContent={<div>TODO</div>}>
-                <DescriptionListTermHelpTextButton>
-                  Labels <PencilAltIcon />
-                </DescriptionListTermHelpTextButton>
+              <Popover headerContent={<div>Labels</div>} bodyContent={<div>Labels from artifact&apos;s metadata</div>}>
+                <DescriptionListTermHelpTextButton>Labels</DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
