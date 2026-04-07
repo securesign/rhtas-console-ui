@@ -30,6 +30,7 @@ const joinKeyValueAsString = ({ key, value }: { key: string; value: string }): s
 export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProps) => {
   const { summary } = verification;
   const identities = summary.identities ?? [];
+  const labels = getAllLabels(artifact.metadata.labels);
   const { timeCoherence } = summary;
 
   const summaryCards = [
@@ -77,11 +78,13 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              {getAllLabels(artifact.metadata.labels).map((label) => (
-                <div key={label}>
-                  <Label isCompact>{label}</Label>
-                </div>
-              ))}
+              {labels.length
+                ? labels.map((label) => (
+                    <div key={label}>
+                      <Label isCompact>{label}</Label>
+                    </div>
+                  ))
+                : "--"}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -94,11 +97,13 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              {identities.map((identity, idx) => (
-                <div key={idx}>
-                  <Label isCompact>{identity.value}</Label>{" "}
-                </div>
-              ))}
+              {identities.length
+                ? identities.map((identity, idx) => (
+                    <div key={idx}>
+                      <Label isCompact>{identity.value}</Label>{" "}
+                    </div>
+                  ))
+                : "--"}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
