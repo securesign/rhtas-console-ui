@@ -27,7 +27,7 @@ export const AppRoutes = () => {
   const { features } = useFeatureFlags();
 
   const allRoutes = useRoutes([
-    { path: "/", element: <Navigate to={Paths.trustCoverage} /> },
+    { path: "/", element: <Navigate to={features.monitoringAlerting ? Paths.trustCoverage : Paths.trustRoot} /> },
     { path: Paths.trustRoot, element: <TrustRoot /> },
     { path: Paths.artifacts, element: <Artifacts /> },
     { path: Paths.rekorSearch, element: <RekorSearch /> },
