@@ -10,7 +10,6 @@ import {
   DescriptionListTermHelpTextButton,
   DescriptionListDescription,
   ClipboardCopy,
-  Button,
   Label,
 } from "@patternfly/react-core";
 import { PencilAltIcon } from "@patternfly/react-icons";
@@ -20,6 +19,14 @@ interface IArtifactSummaryProps {
   artifact: ImageMetadataResponse;
   verification: VerifyArtifactResponse;
 }
+
+const getAllLabels = (labels: Record<string, string> | undefined | null): string[] => {
+  return Object.entries(labels ?? {}).map(([key, value]) => joinKeyValueAsString({ key, value }));
+};
+
+const joinKeyValueAsString = ({ key, value }: { key: string; value: string }): string => {
+  return `${value ? `${key}=${value}` : `${key}`}`;
+};
 
 export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProps) => {
   const { summary } = verification;
@@ -73,9 +80,11 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button variant="link" isInline aria-label="add label button">
-                {artifact.metadata.labels?.maintainer}
-              </Button>
+              {getAllLabels(artifact.metadata.labels).map((label) => (
+                <div key={label}>
+                  <Label isCompact>{label}</Label>
+                </div>
+              ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
