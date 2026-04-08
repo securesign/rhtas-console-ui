@@ -33,8 +33,8 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
   const labels = getAllLabels(artifact.metadata.labels);
   const { timeCoherence } = summary;
 
-  const identityList = identities.map((identity, idx) => (
-    <div key={idx}>
+  const identityList = identities.map((identity) => (
+    <div key={identity.value}>
       <Label isCompact>{identity.value}</Label>
     </div>
   ));
