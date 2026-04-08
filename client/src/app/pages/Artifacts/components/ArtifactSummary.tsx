@@ -10,10 +10,8 @@ import {
   DescriptionListTermHelpTextButton,
   DescriptionListDescription,
   ClipboardCopy,
-  Button,
   Label,
 } from "@patternfly/react-core";
-import { PencilAltIcon } from "@patternfly/react-icons";
 import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
 interface IArtifactSummaryProps {
@@ -21,9 +19,18 @@ interface IArtifactSummaryProps {
   verification: VerifyArtifactResponse;
 }
 
+const getAllLabels = (labels: Record<string, string> | undefined | null): string[] => {
+  return Object.entries(labels ?? {}).map(([key, value]) => joinKeyValueAsString({ key, value }));
+};
+
+const joinKeyValueAsString = ({ key, value }: { key: string; value: string }): string => {
+  return `${value ? `${key}=${value}` : `${key}`}`;
+};
+
 export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProps) => {
   const { summary } = verification;
   const identities = summary.identities ?? [];
+  const labels = getAllLabels(artifact.metadata.labels);
   const { timeCoherence } = summary;
 
   const summaryCards = [
@@ -66,16 +73,18 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover isVisible={false} headerContent={<div>Labels</div>} bodyContent={<div>TODO</div>}>
-                <DescriptionListTermHelpTextButton>
-                  Labels <PencilAltIcon />
-                </DescriptionListTermHelpTextButton>
+              <Popover headerContent={<div>Labels</div>} bodyContent={<div>Labels from artifact&apos;s metadata</div>}>
+                <DescriptionListTermHelpTextButton>Labels</DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Button variant="link" isInline aria-label="add label button">
-                {artifact.metadata.labels?.maintainer}
-              </Button>
+              {labels.length
+                ? labels.map((label) => (
+                    <div key={label}>
+                      <Label isCompact>{label}</Label>
+                    </div>
+                  ))
+                : "--"}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -88,11 +97,13 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              {identities.map((identity, idx) => (
-                <div key={idx}>
-                  <Label isCompact>{identity.value}</Label>{" "}
-                </div>
-              ))}
+              {identities.length
+                ? identities.map((identity, idx) => (
+                    <div key={idx}>
+                      <Label isCompact>{identity.value}</Label>{" "}
+                    </div>
+                  ))
+                : "--"}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
