@@ -33,6 +33,28 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
   const labels = getAllLabels(artifact.metadata.labels);
   const { timeCoherence } = summary;
 
+  const identityList = identities.map((identity, idx) => (
+    <div key={idx}>
+      <Label isCompact>{identity.value}</Label>
+    </div>
+  ));
+
+  const identitiesUnavailable = (
+    <Popover triggerAction="hover" bodyContent={<div>Artifact was not signed with a certificate</div>}>
+      <p>No identity available</p>
+    </Popover>
+  );
+
+  const unknownTimeCoherence = (
+    <Popover
+      triggerAction="hover"
+      aria-label="hoverable popover for unknown time coherence"
+      bodyContent={<div>No min/max integrated time recorded in transparency log</div>}
+    >
+      <p>{timeCoherence?.status}</p>
+    </Popover>
+  );
+
   const summaryCards = [
     <Card key="artifact-summary" isPlain>
       <CardBody>
@@ -57,18 +79,35 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover isVisible={false} headerContent={<div>Media Type</div>} bodyContent={<div>TODO</div>}>
+              <Popover
+                headerContent={<div>Media Type</div>}
+                bodyContent={<div>The media type of the container image (e.g., OCI manifest type).</div>}
+              >
                 <DescriptionListTermHelpTextButton>Media Type</DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>{artifact.metadata.mediaType}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>Size</DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>
+              <Popover
+                headerContent={<div>Size</div>}
+                bodyContent={<div>The size of the container image in bytes.</div>}
+              >
+                <DescriptionListTermHelpTextButton> Size </DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
             <DescriptionListDescription>{artifact.metadata.size}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>Created</DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>
+              <Popover
+                headerContent={<div>Created</div>}
+                bodyContent={<div>The timestamp indicating when the image was created.</div>}
+              >
+                <DescriptionListTermHelpTextButton> Created </DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
             <DescriptionListDescription>{formatDate(artifact.metadata.created)}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -96,18 +135,24 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
                 <DescriptionListTermHelpTextButton> Identities </DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
-            <DescriptionListDescription>
-              {identities.length
-                ? identities.map((identity, idx) => (
-                    <div key={idx}>
-                      <Label isCompact>{identity.value}</Label>{" "}
-                    </div>
-                  ))
-                : "--"}
+            <DescriptionListDescription style={{ width: "fit-content" }}>
+              {identities.length ? identityList : identitiesUnavailable}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTermHelpText>Signatures</DescriptionListTermHelpText>
+            <DescriptionListTermHelpText>
+              <Popover
+                headerContent={<div>Signatures</div>}
+                bodyContent={
+                  <div>
+                    The number of cosign signatures attached to this artifact. Each signature is stored as a separate
+                    layer in the OCI registry and can be independently verified.
+                  </div>
+                }
+              >
+                <DescriptionListTermHelpTextButton> Signatures </DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
             <DescriptionListDescription>{summary.signatureCount}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -141,10 +186,12 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
                   <DescriptionListTermHelpTextButton> Time Coherence </DescriptionListTermHelpTextButton>
                 </Popover>
               </DescriptionListTermHelpText>
-              <DescriptionListDescription>
+              <DescriptionListDescription style={{ width: "fit-content" }}>
                 {timeCoherence.status === "ok"
                   ? `OK (${formatDate(timeCoherence.minIntegratedTime)} – ${formatDate(timeCoherence.maxIntegratedTime)})`
-                  : timeCoherence.status}
+                  : timeCoherence.status === "unknown"
+                    ? unknownTimeCoherence
+                    : timeCoherence.status}
               </DescriptionListDescription>
             </DescriptionListGroup>
           )}
