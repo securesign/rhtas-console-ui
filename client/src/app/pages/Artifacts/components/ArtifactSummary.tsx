@@ -57,7 +57,10 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
-              <Popover isVisible={false} headerContent={<div>Media Type</div>} bodyContent={<div>TODO</div>}>
+              <Popover
+                headerContent={<div>Media Type</div>}
+                bodyContent={<div>Media type of the container image (e.g., OCI manifest type)</div>}
+              >
                 <DescriptionListTermHelpTextButton>Media Type</DescriptionListTermHelpTextButton>
               </Popover>
             </DescriptionListTermHelpText>
