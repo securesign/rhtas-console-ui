@@ -148,6 +148,6 @@ describe("ArtifactSummary", () => {
 
     render(<ArtifactSummary artifact={artifact} verification={verification} />);
 
-    expect(screen.getByText("my-team@corp.com")).toBeInTheDocument();
+    expect(screen.getByText("maintainer=my-team@corp.com")).toBeInTheDocument();
   });
 });
