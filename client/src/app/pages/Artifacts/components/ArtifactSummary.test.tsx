@@ -1,11 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { ArtifactSummary } from "./ArtifactSummary";
-import type {
-  ImageMetadataResponse,
-  VerifyArtifactResponse,
-  ArtifactSummaryView,
-} from "@app/client";
+import type { ImageMetadataResponse, VerifyArtifactResponse, ArtifactSummaryView } from "@app/client";
 
 const createArtifact = (overrides: Partial<ImageMetadataResponse> = {}): ImageMetadataResponse => ({
   image: "quay.io/test/image",
