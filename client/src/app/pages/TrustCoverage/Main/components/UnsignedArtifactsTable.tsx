@@ -33,18 +33,17 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
             />
           ))}
         </ToggleGroup>
-
-        <Table aria-label="Unsigned artifacts table">
-          <Thead>
-            <Tr>
-              <Th>Artifact URI</Th>
-              <Th>Environment</Th>
-              <Th>Registry</Th>
-              <Th>Last Seen</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>
+        <LoadingWrapper isFetching={isFetching} fetchError={fetchError}>
+          <Table aria-label="Unsigned artifacts table">
+            <Thead>
+              <Tr>
+                <Th>Artifact URI</Th>
+                <Th>Environment</Th>
+                <Th>Registry</Th>
+                <Th>Last Seen</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
               {filteredData.map((artifact, index) => (
                 <Tr key={index}>
                   <Td dataLabel="Artifact URI">{artifact.uri}</Td>
@@ -55,9 +54,9 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
                   <Td dataLabel="Last Seen">{artifact.lastSeen}</Td>
                 </Tr>
               ))}
-            </LoadingWrapper>
-          </Tbody>
-        </Table>
+            </Tbody>
+          </Table>
+        </LoadingWrapper>
       </CardBody>
     </Card>
   );
