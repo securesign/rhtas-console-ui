@@ -14,7 +14,7 @@ const verify_search_page_has_main_sections = async (page: Page) => {
 test.describe("Rekor Search UI", () => {
   test("Search by email", async ({ page }) => {
     const rekorSearchPage = await RekorSearchPage.build(page);
-    await rekorSearchPage.applySearch("carlosthe19916@gmail.com");
+    await rekorSearchPage.applySearch("jdoe@example.com");
 
     await verify_search_page_has_main_sections(page);
   });
