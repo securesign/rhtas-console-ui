@@ -150,4 +150,24 @@ describe("ArtifactSummary", () => {
 
     expect(screen.getByText("maintainer=my-team@corp.com")).toBeInTheDocument();
   });
+
+  test("'No identity available' is a focusable button", () => {
+    const verification = createVerification({ identities: [] });
+
+    render(<ArtifactSummary artifact={createArtifact()} verification={verification} />);
+
+    expect(screen.getByRole("button", { name: "No identity available" })).toBeInTheDocument();
+  });
+
+  test("'unknown' time coherence is a focusable button", () => {
+    const verification = createVerification({
+      timeCoherence: {
+        status: "unknown",
+      },
+    });
+
+    render(<ArtifactSummary artifact={createArtifact()} verification={verification} />);
+
+    expect(screen.getByRole("button", { name: "unknown" })).toBeInTheDocument();
+  });
 });

@@ -1,6 +1,7 @@
 import { formatDate } from "@app/utils/utils";
 import MultiContentCard from "@patternfly/react-component-groups/dist/esm/MultiContentCard";
 import {
+  Button,
   Card,
   CardBody,
   DescriptionList,
@@ -11,6 +12,7 @@ import {
   DescriptionListDescription,
   ClipboardCopy,
   Label,
+  Tooltip,
 } from "@patternfly/react-core";
 import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
@@ -40,19 +42,19 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
   ));
 
   const identitiesUnavailable = (
-    <Popover triggerAction="hover" bodyContent={<div>Artifact was not signed with a certificate</div>}>
-      <p>No identity available</p>
-    </Popover>
+    <Tooltip content="Artifact was not signed with a certificate">
+      <Button variant="link" isInline>
+        No identity available
+      </Button>
+    </Tooltip>
   );
 
   const unknownTimeCoherence = (
-    <Popover
-      triggerAction="hover"
-      aria-label="hoverable popover for unknown time coherence"
-      bodyContent={<div>No min/max integrated time recorded in transparency log</div>}
-    >
-      <p>{timeCoherence?.status}</p>
-    </Popover>
+    <Tooltip content="No min/max integrated time recorded in transparency log">
+      <Button variant="link" isInline>
+        {timeCoherence?.status}
+      </Button>
+    </Tooltip>
   );
 
   const summaryCards = [
