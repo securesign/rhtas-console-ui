@@ -43,7 +43,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
 
   const identitiesUnavailable = (
     <Tooltip content="Artifact was not signed with a certificate">
-      <Button variant="link" isInline>
+      <Button variant="plain" isInline>
         No identity available
       </Button>
     </Tooltip>
@@ -51,7 +51,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
 
   const unknownTimeCoherence = (
     <Tooltip content="No min/max integrated time recorded in transparency log">
-      <Button variant="link" isInline>
+      <Button variant="plain" isInline>
         {timeCoherence?.status}
       </Button>
     </Tooltip>
