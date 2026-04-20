@@ -43,7 +43,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
 
   const identitiesUnavailable = (
     <Tooltip content="Artifact was not signed with a certificate">
-      <span data-testid="identities-unavailable-span" tabIndex={0} style={{ cursor: 'help' }}>
+      <span data-testid="identities-unavailable-span" tabIndex={0} style={{ cursor: "help" }}>
         No identity available
       </span>
     </Tooltip>
@@ -51,7 +51,7 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
 
   const unknownTimeCoherence = (
     <Tooltip content="No min/max integrated time recorded in transparency log">
-      <span data-testid="unknown-time-coherence-span" tabIndex={0} style={{ cursor: 'help' }}>
+      <span data-testid="unknown-time-coherence-span" tabIndex={0} style={{ cursor: "help" }}>
         {timeCoherence?.status}
       </span>
     </Tooltip>
@@ -121,10 +121,10 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
             <DescriptionListDescription>
               {labels.length
                 ? labels.map((label) => (
-                  <div key={label}>
-                    <Label isCompact>{label}</Label>
-                  </div>
-                ))
+                    <div key={label}>
+                      <Label isCompact>{label}</Label>
+                    </div>
+                  ))
                 : "--"}
             </DescriptionListDescription>
           </DescriptionListGroup>
