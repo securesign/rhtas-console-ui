@@ -151,15 +151,15 @@ describe("ArtifactSummary", () => {
     expect(screen.getByText("maintainer=my-team@corp.com")).toBeInTheDocument();
   });
 
-  test("'No identity available' is a focusable button", () => {
+  test("'No identity available' is a focusable element", () => {
     const verification = createVerification({ identities: [] });
 
     render(<ArtifactSummary artifact={createArtifact()} verification={verification} />);
 
-    expect(screen.getByRole("button", { name: "No identity available" })).toBeInTheDocument();
+    expect(screen.getByTestId("identities-unavailable-span")).toBeInTheDocument();
   });
 
-  test("'unknown' time coherence is a focusable button", () => {
+  test("'unknown' time coherence is a focusable element", () => {
     const verification = createVerification({
       timeCoherence: {
         status: "unknown",
@@ -168,6 +168,6 @@ describe("ArtifactSummary", () => {
 
     render(<ArtifactSummary artifact={createArtifact()} verification={verification} />);
 
-    expect(screen.getByRole("button", { name: "unknown" })).toBeInTheDocument();
+    expect(screen.getByTestId("unknown-time-coherence-span")).toBeInTheDocument();
   });
 });
