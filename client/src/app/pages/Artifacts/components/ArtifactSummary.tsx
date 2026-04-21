@@ -11,6 +11,7 @@ import {
   DescriptionListDescription,
   ClipboardCopy,
   Label,
+  Tooltip,
 } from "@patternfly/react-core";
 import type { ImageMetadataResponse, VerifyArtifactResponse } from "@app/client";
 
@@ -40,19 +41,19 @@ export const ArtifactSummary = ({ artifact, verification }: IArtifactSummaryProp
   ));
 
   const identitiesUnavailable = (
-    <Popover triggerAction="hover" bodyContent={<div>Artifact was not signed with a certificate</div>}>
-      <p>No identity available</p>
-    </Popover>
+    <Tooltip content="Artifact was not signed with a certificate">
+      <span data-testid="identities-unavailable-span" tabIndex={0} style={{ cursor: "help" }}>
+        No identity available
+      </span>
+    </Tooltip>
   );
 
   const unknownTimeCoherence = (
-    <Popover
-      triggerAction="hover"
-      aria-label="hoverable popover for unknown time coherence"
-      bodyContent={<div>No min/max integrated time recorded in transparency log</div>}
-    >
-      <p>{timeCoherence?.status}</p>
-    </Popover>
+    <Tooltip content="No min/max integrated time recorded in transparency log">
+      <span data-testid="unknown-time-coherence-span" tabIndex={0} style={{ cursor: "help" }}>
+        {timeCoherence?.status}
+      </span>
+    </Tooltip>
   );
 
   const summaryCards = [
