@@ -1,8 +1,14 @@
 import { useLocation, useNavigate, type Path } from "react-router-dom";
+import { useFetchRekorSearch } from "@app/queries/rekor-search";
+import { TimeoutError } from "../../shared/utils/rekor/api/rekor-api";
 
 vi.mock("react-router-dom", () => ({
   useNavigate: vi.fn(),
   useLocation: vi.fn(),
+}));
+
+vi.mock("@app/queries/rekor-search", () => ({
+  useFetchRekorSearch: vi.fn(),
 }));
 
 beforeEach(() => {
@@ -15,6 +21,14 @@ beforeEach(() => {
       hash: "",
     })
   );
+
+  (useFetchRekorSearch as Mock).mockReturnValue({
+    data: undefined,
+    error: null,
+    isLoading: false,
+    failureCount: 0,
+    refetch: vi.fn(),
+  });
 });
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -69,5 +83,64 @@ describe("Explorer", () => {
         expect(res).toBeInTheDocument();
       })
     );
+  });
+
+  it("shows friendly message for timeout errors", () => {
+    (useFetchRekorSearch as Mock).mockReturnValue({
+      data: undefined,
+      error: new TimeoutError(),
+      isLoading: false,
+      failureCount: 0,
+      refetch: vi.fn(),
+    });
+
+    renderWithProviders(<Explorer />);
+
+    expect(screen.getByText("Could not reach the Rekor server")).toBeInTheDocument();
+    expect(screen.getByText("Retry")).toBeInTheDocument();
+  });
+
+  it("calls refetch when retry button is clicked", () => {
+    const refetch = vi.fn();
+    (useFetchRekorSearch as Mock).mockReturnValue({
+      data: undefined,
+      error: new TimeoutError(),
+      isLoading: false,
+      failureCount: 0,
+      refetch,
+    });
+
+    renderWithProviders(<Explorer />);
+    fireEvent.click(screen.getByText("Retry"));
+
+    expect(refetch).toHaveBeenCalled();
+  });
+
+  it("shows 'still trying' text when loading with failures", () => {
+    (useFetchRekorSearch as Mock).mockReturnValue({
+      data: undefined,
+      error: null,
+      isLoading: true,
+      failureCount: 1,
+      refetch: vi.fn(),
+    });
+
+    renderWithProviders(<Explorer />);
+
+    expect(screen.getByText("Still trying to reach Rekor server...")).toBeInTheDocument();
+  });
+
+  it("does not show 'still trying' text on initial loading", () => {
+    (useFetchRekorSearch as Mock).mockReturnValue({
+      data: undefined,
+      error: null,
+      isLoading: true,
+      failureCount: 0,
+      refetch: vi.fn(),
+    });
+
+    renderWithProviders(<Explorer />);
+
+    expect(screen.queryByText("Still trying to reach Rekor server...")).not.toBeInTheDocument();
   });
 });

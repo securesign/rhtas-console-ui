@@ -2,7 +2,7 @@
 
 import { renderHook } from "@testing-library/react";
 import { vi, type Mock } from "vitest";
-import { useRekorSearch } from "./rekor-api";
+import { useRekorSearch, withTimeout, TimeoutError } from "./rekor-api";
 import { useRekorClient } from "./context";
 
 vi.mock("./context", () => ({
@@ -20,6 +20,28 @@ Object.defineProperty(global.self, "crypto", {
       }),
     },
   },
+});
+
+describe("withTimeout", () => {
+  it("resolves when promise completes before timeout", async () => {
+    const result = await withTimeout(Promise.resolve("ok") as Promise<string> & { cancel?: () => void }, 1000);
+    expect(result).toBe("ok");
+  });
+
+  it("propagates rejection when promise rejects before timeout", async () => {
+    const error = new Error("upstream failure");
+    await expect(withTimeout(Promise.reject(error) as Promise<never> & { cancel?: () => void }, 1000)).rejects.toThrow(
+      "upstream failure"
+    );
+  });
+
+  it("throws TimeoutError and calls cancel when timeout fires", async () => {
+    const cancel = vi.fn();
+    const hung = Object.assign(new Promise<never>(() => {}), { cancel });
+
+    await expect(withTimeout(hung, 50)).rejects.toThrow(TimeoutError);
+    expect(cancel).toHaveBeenCalled();
+  });
 });
 
 describe("useRekorSearch", () => {

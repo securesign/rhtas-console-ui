@@ -1,10 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import { detectAttribute, isAttribute, type SearchQuery } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
+import {
+  detectAttribute,
+  isAttribute,
+  type SearchQuery,
+  TimeoutError,
+} from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 import { useFetchRekorSearch } from "@app/queries/rekor-search";
 import { RekorSearchForm } from "./SearchForm";
-import { Alert, Flex, Spinner } from "@patternfly/react-core";
+import { Alert, AlertActionLink, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";
 
 function isApiError(error: unknown): error is ApiError {
@@ -15,11 +20,17 @@ function isRekorError(body: unknown): body is Required<RekorError> {
   return !!body && typeof body === "object" && ("code" in body || "message" in body);
 }
 
-function SearchError({ error }: { error: unknown }) {
+function isNetworkError(error: unknown): boolean {
+  return error instanceof TimeoutError || (error instanceof TypeError && error.message === "Failed to fetch");
+}
+
+function SearchError({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   let title = "An unexpected error occurred";
   let detail: string | undefined;
 
-  if (isApiError(error)) {
+  if (isNetworkError(error)) {
+    title = "Could not reach the Rekor server";
+  } else if (isApiError(error)) {
     title = isRekorError(error.body)
       ? (error.body.message ?? `Error code ${error.body.code}`)
       : `${error.status} ${error.statusText}`;
@@ -31,16 +42,22 @@ function SearchError({ error }: { error: unknown }) {
   }
 
   return (
-    <Alert style={{ margin: "1em auto" }} title={title} variant="danger">
+    <Alert
+      style={{ margin: "1em auto" }}
+      title={title}
+      variant="danger"
+      actionLinks={<AlertActionLink onClick={onRetry}>Retry</AlertActionLink>}
+    >
       {detail}
     </Alert>
   );
 }
 
-function LoadingIndicator() {
+function LoadingIndicator({ failureCount }: { failureCount: number }) {
   return (
     <Flex alignItems={{ default: "alignItemsCenter" }} direction={{ default: "column" }} style={{ margin: "1em auto" }}>
       <Spinner />
+      {failureCount > 0 && <span>Still trying to reach Rekor server...</span>}
     </Flex>
   );
 }
@@ -52,7 +69,7 @@ export function Explorer() {
   const [query, setQuery] = useState<SearchQuery>();
   const [page, setPage] = useState(1);
 
-  const { data, error, isLoading: loading } = useFetchRekorSearch(query, page);
+  const { data, error, isLoading: loading, failureCount, refetch } = useFetchRekorSearch(query, page);
 
   const handleSubmit = useCallback(
     (value: string) => {
@@ -99,9 +116,9 @@ export function Explorer() {
       <RekorSearchForm defaultValue={defaultSearch} onSubmit={handleSubmit} />
 
       {error ? (
-        <SearchError error={error} />
+        <SearchError error={error} onRetry={() => void refetch()} />
       ) : loading ? (
-        <LoadingIndicator />
+        <LoadingIndicator failureCount={failureCount} />
       ) : (
         <RekorList rekorEntries={data} page={page} onSetPage={onSetPage} />
       )}
