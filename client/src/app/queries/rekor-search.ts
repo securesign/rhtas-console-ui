@@ -3,6 +3,8 @@ import { useRekorBaseUrl, useRekorClient } from "@app/pages/Rekor/shared/utils/r
 import { type SearchQuery, useRekorSearch } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 
 export const RekorKey = "Rekor";
+const RETRY_COUNT = 6;
+const RETRY_DELAY_MS = 5000;
 
 export const useFetchRekorEntry = (logIndex: string) => {
   const client = useRekorClient();
@@ -22,5 +24,7 @@ export const useFetchRekorSearch = (query: SearchQuery | undefined, page: number
     queryKey: [RekorKey, "search", query, page, search, baseUrl],
     queryFn: () => search(query!, page),
     enabled: !!query,
+    retry: RETRY_COUNT,
+    retryDelay: RETRY_DELAY_MS,
   });
 };
