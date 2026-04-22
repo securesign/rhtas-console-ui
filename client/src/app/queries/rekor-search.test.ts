@@ -3,7 +3,7 @@ import { shouldRetry } from "./rekor-search";
 
 describe("shouldRetry", () => {
   it("returns false when failureCount exceeds retry limit", () => {
-    expect(shouldRetry(6, new Error("any"))).toBe(false);
+    expect(shouldRetry(4, new Error("any"))).toBe(false);
   });
 
   it("returns false for network error when offline", () => {

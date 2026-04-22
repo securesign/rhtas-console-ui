@@ -4,8 +4,8 @@ import { type SearchQuery, useRekorSearch } from "@app/pages/Rekor/shared/utils/
 import { isNetworkError, isApiError } from "@app/pages/Rekor/shared/utils/rekor/api/error-utils";
 
 export const RekorKey = "Rekor";
-const RETRY_COUNT = 6;
-const RETRY_DELAY_MS = 5000;
+const RETRY_COUNT = 4;
+const INITIAL_RETRY_DELAY_MS = 1000;
 
 export function shouldRetry(failureCount: number, error: unknown): boolean {
   if (failureCount >= RETRY_COUNT) return false;
@@ -33,6 +33,6 @@ export const useFetchRekorSearch = (query: SearchQuery | undefined, page: number
     queryFn: () => search(query!, page),
     enabled: !!query,
     retry: shouldRetry,
-    retryDelay: RETRY_DELAY_MS,
+    retryDelay: (attempt) => INITIAL_RETRY_DELAY_MS * 2 ** attempt,
   });
 };
