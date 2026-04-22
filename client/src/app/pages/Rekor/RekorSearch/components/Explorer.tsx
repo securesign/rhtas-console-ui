@@ -1,22 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { ApiError, type RekorError } from "rekor";
+import { type RekorError } from "rekor";
 import { detectAttribute, isAttribute, type SearchQuery } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 import { useFetchRekorSearch } from "@app/queries/rekor-search";
 import { RekorSearchForm } from "./SearchForm";
 import { Alert, AlertActionLink, Flex, Spinner } from "@patternfly/react-core";
 import { RekorList } from "./RekorList";
-
-function isApiError(error: unknown): error is ApiError {
-  return error instanceof ApiError;
-}
+import { isNetworkError, isApiError } from "@app/pages/Rekor/shared/utils/rekor/api/error-utils";
 
 function isRekorError(body: unknown): body is Required<RekorError> {
   return !!body && typeof body === "object" && ("code" in body || "message" in body);
-}
-
-function isNetworkError(error: unknown): boolean {
-  return error instanceof TypeError && error.message === "Failed to fetch";
 }
 
 function SearchError({ error, onRetry }: { error: unknown; onRetry: () => void }) {
@@ -24,7 +17,9 @@ function SearchError({ error, onRetry }: { error: unknown; onRetry: () => void }
   let detail: string | undefined;
 
   if (isNetworkError(error)) {
-    title = "Could not reach the Rekor server";
+    title = navigator.onLine
+      ? "Could not reach the Rekor server. The server may be unavailable."
+      : "You are offline. Check your network connection and try again.";
   } else if (isApiError(error)) {
     title = isRekorError(error.body)
       ? (error.body.message ?? `Error code ${error.body.code}`)

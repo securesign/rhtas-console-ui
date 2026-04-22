@@ -74,7 +74,9 @@ describe("Explorer", () => {
   });
 
   describe("SearchError", () => {
-    it("shows friendly message for network errors", () => {
+    it("shows offline message for network error when offline", () => {
+      vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+
       (useFetchRekorSearch as Mock).mockReturnValue({
         data: undefined,
         error: new TypeError("Failed to fetch"),
@@ -85,7 +87,23 @@ describe("Explorer", () => {
 
       renderWithProviders(<Explorer />);
 
-      expect(screen.getByText("Could not reach the Rekor server")).toBeInTheDocument();
+      expect(screen.getByText("You are offline. Check your network connection and try again.")).toBeInTheDocument();
+    });
+
+    it("shows server unreachable message for network error when online", () => {
+      vi.spyOn(navigator, "onLine", "get").mockReturnValue(true);
+
+      (useFetchRekorSearch as Mock).mockReturnValue({
+        data: undefined,
+        error: new TypeError("Failed to fetch"),
+        isLoading: false,
+        failureCount: 0,
+        refetch: vi.fn(),
+      });
+
+      renderWithProviders(<Explorer />);
+
+      expect(screen.getByText("Could not reach the Rekor server. The server may be unavailable.")).toBeInTheDocument();
     });
 
     it("shows API error with RekorError body message", () => {
