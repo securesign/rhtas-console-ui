@@ -6,14 +6,16 @@ export function PublicKey({
   spec,
   apiVersion,
   variant = "content",
+  integratedTime,
 }: {
   type: string;
   apiVersion: string;
   spec: unknown;
   variant?: "content" | "validity";
+  integratedTime?: number;
 }) {
   if (variant === "validity") {
-    return <PublicKeyValidity isValid={isPublicKeyValid({ type, spec, apiVersion })} />;
+    return <PublicKeyValidity isValid={isPublicKeyValid({ type, spec, apiVersion }, integratedTime)} />;
   }
 
   const content = getPublicKeyContent({ type, spec, apiVersion });

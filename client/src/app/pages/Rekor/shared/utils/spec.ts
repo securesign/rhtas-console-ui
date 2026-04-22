@@ -100,8 +100,8 @@ export function getPublicKeyContent(input: SpecInput): string | null {
   return certContent;
 }
 
-export function isPublicKeyValid(input: SpecInput): boolean {
+export function isPublicKeyValid(input: SpecInput, integratedTime?: number): boolean {
   const certContent = getRawPublicKeyCert(input);
   if (certContent == null) return false;
-  return hasValidPublicCertificate(certContent);
+  return hasValidPublicCertificate(certContent, integratedTime);
 }

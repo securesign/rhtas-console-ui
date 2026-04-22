@@ -221,6 +221,7 @@ export function RekorList({
                       spec={row.body.spec}
                       type={row.body.kind}
                       variant="validity"
+                      integratedTime={row.integratedTime}
                     />
                   </Td>
                   <Td dataLabel="Integrated time">{formatIntegratedTime(row.integratedTime)}</Td>

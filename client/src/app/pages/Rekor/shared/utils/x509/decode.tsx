@@ -40,7 +40,7 @@ export function decodex509(rawCertificate: string) {
   return decodedCert;
 }
 
-export function hasValidPublicCertificate(decoded: string) {
+export function hasValidPublicCertificate(decoded: string, integratedTime?: number) {
   // Check if it's a certificate (not just a public key)
   if (!decoded.includes("BEGIN CERTIFICATE")) {
     return false;
@@ -48,8 +48,10 @@ export function hasValidPublicCertificate(decoded: string) {
 
   // Try to parse the certificate
   const cert = new X509Certificate(decoded);
-  const now = new Date();
-  if (cert.notBefore > now || cert.notAfter < now) {
+  // For Rekor entries, validate against integratedTime (when entry was created)
+  // For current operations, validate against now
+  const validationDate = integratedTime ? new Date(integratedTime * 1000) : new Date();
+  if (cert.notBefore > validationDate || cert.notAfter < validationDate) {
     return false;
   }
 
