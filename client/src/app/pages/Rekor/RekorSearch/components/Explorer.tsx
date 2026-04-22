@@ -1,12 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { ApiError, type RekorError } from "rekor";
-import {
-  detectAttribute,
-  isAttribute,
-  type SearchQuery,
-  TimeoutError,
-} from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
+import { detectAttribute, isAttribute, type SearchQuery } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 import { useFetchRekorSearch } from "@app/queries/rekor-search";
 import { RekorSearchForm } from "./SearchForm";
 import { Alert, AlertActionLink, Flex, Spinner } from "@patternfly/react-core";
@@ -21,7 +16,7 @@ function isRekorError(body: unknown): body is Required<RekorError> {
 }
 
 function isNetworkError(error: unknown): boolean {
-  return error instanceof TimeoutError || (error instanceof TypeError && error.message === "Failed to fetch");
+  return error instanceof TypeError && error.message === "Failed to fetch";
 }
 
 function SearchError({ error, onRetry }: { error: unknown; onRetry: () => void }) {
