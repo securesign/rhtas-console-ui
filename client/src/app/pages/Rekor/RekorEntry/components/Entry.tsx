@@ -173,12 +173,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
             <CardTitle>Public Key Certificate</CardTitle>
           </CardHeader>
           <CardBody>
-            <PublicKey
-              type={body.kind}
-              apiVersion={body.apiVersion}
-              spec={body.spec}
-              integratedTime={obj.integratedTime}
-            />
+            <PublicKey type={body.kind} apiVersion={body.apiVersion} spec={body.spec} />
           </CardBody>
         </Card>
       </FlexItem>
