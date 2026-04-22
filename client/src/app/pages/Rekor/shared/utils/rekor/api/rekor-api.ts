@@ -3,6 +3,27 @@ import { type LogEntry, RekorClient, type SearchIndex } from "rekor";
 import { useRekorClient } from "./context.tsx";
 
 const PAGE_SIZE = 20;
+const REQUEST_TIMEOUT_MS = 30_000;
+
+export class TimeoutError extends Error {
+  constructor() {
+    super("Request timed out");
+    this.name = "TimeoutError";
+  }
+}
+
+export function withTimeout<T>(promise: Promise<T> & { cancel?: () => void }, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  return Promise.race([
+    promise.finally(() => clearTimeout(timer)),
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        promise.cancel?.();
+        reject(new TimeoutError());
+      }, ms);
+    }),
+  ]);
+}
 
 export const ATTRIBUTES = ["email", "hash", "commitSha", "uuid", "logIndex"] as const;
 const ATTRIBUTES_SET = new Set<string>(ATTRIBUTES);
@@ -57,18 +78,24 @@ export function useRekorSearch() {
           return {
             totalCount: 1,
             entries: [
-              await client.entries.getLogEntryByIndex({
-                logIndex: search.query,
-              }),
+              await withTimeout(
+                client.entries.getLogEntryByIndex({
+                  logIndex: search.query,
+                }),
+                REQUEST_TIMEOUT_MS
+              ),
             ],
           };
         case "uuid":
           return {
             totalCount: 1,
             entries: [
-              await client.entries.getLogEntryByUuid({
-                entryUuid: search.query,
-              }),
+              await withTimeout(
+                client.entries.getLogEntryByUuid({
+                  entryUuid: search.query,
+                }),
+                REQUEST_TIMEOUT_MS
+              ),
             ],
           };
         case "email":
@@ -98,7 +125,7 @@ export function useRekorSearch() {
 }
 
 async function queryEntries(client: RekorClient, query: SearchIndex, page: number): Promise<RekorEntries> {
-  const logIndexes = await client.index.searchIndex({ query });
+  const logIndexes = await withTimeout(client.index.searchIndex({ query }), REQUEST_TIMEOUT_MS);
 
   // Preventing entries from jumping between pages on refresh
   logIndexes.sort();
@@ -107,7 +134,9 @@ async function queryEntries(client: RekorClient, query: SearchIndex, page: numbe
   const endIndex = startIndex + PAGE_SIZE;
   const uuidToRetrieve = logIndexes.slice(startIndex, endIndex);
 
-  const entries = await Promise.all(uuidToRetrieve.map((entryUuid) => client.entries.getLogEntryByUuid({ entryUuid })));
+  const entries = await Promise.all(
+    uuidToRetrieve.map((entryUuid) => withTimeout(client.entries.getLogEntryByUuid({ entryUuid }), REQUEST_TIMEOUT_MS))
+  );
   return {
     totalCount: logIndexes.length,
     entries,
