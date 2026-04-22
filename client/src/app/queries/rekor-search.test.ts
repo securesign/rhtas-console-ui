@@ -1,5 +1,6 @@
 import { ApiError } from "rekor";
 import { shouldRetry } from "./rekor-search";
+import { TimeoutError } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 
 describe("shouldRetry", () => {
   it("returns false when failureCount exceeds retry limit", () => {
@@ -30,6 +31,10 @@ describe("shouldRetry", () => {
       "request error"
     );
     expect(shouldRetry(0, err)).toBe(true);
+  });
+
+  it("returns false for TimeoutError", () => {
+    expect(shouldRetry(0, new TimeoutError())).toBe(false);
   });
 
   it("returns true for unknown error types", () => {

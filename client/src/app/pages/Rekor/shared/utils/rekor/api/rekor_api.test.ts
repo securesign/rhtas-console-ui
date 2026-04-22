@@ -2,7 +2,7 @@
 
 import { renderHook } from "@testing-library/react";
 import { vi, type Mock } from "vitest";
-import { useRekorSearch, isAttribute, detectAttribute } from "./rekor-api";
+import { useRekorSearch, isAttribute, detectAttribute, withTimeout, TimeoutError } from "./rekor-api";
 import { useRekorClient } from "./context";
 
 vi.mock("./context", () => ({
@@ -20,6 +20,25 @@ Object.defineProperty(global.self, "crypto", {
       }),
     },
   },
+});
+
+describe("withTimeout", () => {
+  it("resolves when promise completes before timeout", async () => {
+    const result = await withTimeout(Promise.resolve("ok"), 1000);
+    expect(result).toBe("ok");
+  });
+
+  it("rejects with TimeoutError when promise exceeds timeout", async () => {
+    const slow = new Promise(() => {});
+    await expect(withTimeout(slow, 10)).rejects.toThrow(TimeoutError);
+  });
+
+  it("calls cancel on the promise when timeout fires", async () => {
+    const cancel = vi.fn();
+    const slow = Object.assign(new Promise(() => {}), { cancel });
+    await expect(withTimeout(slow, 10)).rejects.toThrow(TimeoutError);
+    expect(cancel).toHaveBeenCalled();
+  });
 });
 
 describe("isAttribute", () => {

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRekorBaseUrl, useRekorClient } from "@app/pages/Rekor/shared/utils/rekor/api/context";
 import { type SearchQuery, useRekorSearch } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 import { isNetworkError, isApiError } from "@app/pages/Rekor/shared/utils/rekor/api/error-utils";
+import { TimeoutError } from "@app/pages/Rekor/shared/utils/rekor/api/rekor-api";
 
 export const RekorKey = "Rekor";
 const RETRY_COUNT = 4;
@@ -11,6 +12,7 @@ export function shouldRetry(failureCount: number, error: unknown): boolean {
   if (failureCount >= RETRY_COUNT) return false;
   if (isNetworkError(error) && !navigator.onLine) return false;
   if (isApiError(error) && error.status >= 400 && error.status < 500) return false;
+  if (error instanceof TimeoutError) return false;
   return true;
 }
 
