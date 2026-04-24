@@ -26,17 +26,17 @@ describe("SidebarApp", () => {
     expect(screen.getByRole("link", { name: "Rekor Search" })).toBeInTheDocument();
   });
 
-  test("hides Monitoring link when feature flag is off", () => {
+  test("hides TrustCoverage link when feature flag is off", () => {
     mockFeatures.monitoringAlerting = false;
     renderSidebar();
 
-    expect(screen.queryByRole("link", { name: "Monitoring" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Trust Coverage" })).not.toBeInTheDocument();
   });
 
-  test("shows Monitoring link when feature flag is on", () => {
+  test("shows TrustCoverage link when feature flag is on", () => {
     mockFeatures.monitoringAlerting = true;
     renderSidebar();
 
-    expect(screen.getByRole("link", { name: "Monitoring" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Trust Coverage" })).toBeInTheDocument();
   });
 });
