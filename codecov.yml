@@ -1,12 +1,13 @@
 coverage:
   status:
-    project:
-      unit:
-        target: 50%
-      e2e:
-        informational: true
     patch:
-      unit:
-        informational: true
-      e2e:
-        informational: true
+      default:
+        target: 70%
+        threshold: 5%
+        base: auto
+    project:
+      default:
+        target: auto
+        threshold: 5%
+        base: auto
+        only_pulls: true
