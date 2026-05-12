@@ -169,4 +169,4 @@ jobs:
         uses: codecov/codecov-action@v6
         with:
           use_oidc: true
-          flags: e2e-tests
+          flags: e2e

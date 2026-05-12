@@ -13,7 +13,7 @@ coverage:
         only_pulls: true
 
 flags:
-  unit-tests:
+  unit:
     carryforward: true
-  e2e-tests:
+  e2e:
     carryforward: true
