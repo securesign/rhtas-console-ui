@@ -1,7 +1,7 @@
-# CLAUDE.md
+# GEMINI.md
 
 Shared repository guidance for AI coding agents lives in:
 
 - [AGENTS.md](./AGENTS.md)
 
-Claude Code should read `AGENTS.md` before making repository changes.
+Gemini should read `AGENTS.md` before making repository changes.
