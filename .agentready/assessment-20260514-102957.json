@@ -3,8 +3,8 @@
   "metadata": {
     "agentready_version": "2.31.2",
     "research_version": "1.0.1",
-    "assessment_timestamp": "2026-05-14T10:26:18.334031",
-    "assessment_timestamp_human": "May 14, 2026 at 10:26 AM",
+    "assessment_timestamp": "2026-05-14T10:29:57.992386",
+    "assessment_timestamp_human": "May 14, 2026 at 10:29 AM",
     "executed_by": "bramos@ibm-p8-14-fsp",
     "command": "/home/bramos/.local/bin/agentready assess . --config .agentready-config.yaml",
     "working_directory": "/home/bramos/work/rhtas-console-ui"
@@ -14,18 +14,18 @@
     "name": "rhtas-console-ui",
     "url": "git@github.com:CryptoRodeo/rhtas-console-ui.git",
     "branch": "chore/agent-readiness",
-    "commit_hash": "3e5f4eb397ef0ae6bd3324ce3bc35072ff8079cb",
+    "commit_hash": "c0ea7a58f961122d4a74cbbbbebd94f935f00f07",
     "languages": {
       "YAML": 34,
-      "JSON": 20,
-      "Markdown": 15,
+      "JSON": 21,
+      "Markdown": 16,
       "JavaScript": 7,
       "TypeScript": 195
     },
-    "total_files": 297,
-    "total_lines": 40063
+    "total_files": 300,
+    "total_lines": 34427
   },
-  "timestamp": "2026-05-14T10:26:18.334031",
+  "timestamp": "2026-05-14T10:29:57.992386",
   "overall_score": 91.9,
   "certification_level": "Platinum",
   "attributes_assessed": 18,
