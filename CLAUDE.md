@@ -69,6 +69,22 @@ Managed through `common/src/environment.ts`. Key variables:
 - `CONSOLE_API_URL` - Backend API URL (default: http://localhost:8080)
 - `COVERAGE` - Enable code instrumentation for coverage
 
+## Domain Concepts
+
+- **Sigstore**: Open-source project for signing, verifying, and protecting software supply chains.
+- **Rekor**: Transparency log that stores signed metadata about software artifacts. Provides tamper-evident record of signing events.
+- **Fulcio**: Certificate authority that issues short-lived certificates tied to OIDC identities. Enables keyless signing.
+- **TUF (The Update Framework)**: Framework for secure software update distribution. Manages trusted root metadata and key rotation.
+- **cosign**: CLI tool for signing and verifying container images and other OCI artifacts using Sigstore.
+
+## PR Definition of Done
+
+- All tests pass (`npm run test`)
+- No lint errors (`npm run lint`)
+- No type errors (TypeScript compiles cleanly)
+- New/changed UI behavior has been visually verified in browser
+- Mock data updated if API types changed
+
 ## Best Practices
 
 **Data fetching**: Model hooks around semantic operation (read vs write), not HTTP verb. Use queries for idempotent read/verify calls even when POST endpoints. Avoid cache invalidations for read-only operations.
