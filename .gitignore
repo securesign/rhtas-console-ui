@@ -142,3 +142,7 @@ storybook-static/
 .vscode/
 
 client/src/app/client/
+
+# AgentReady assessment files
+.agentready/*.md
+.agentready/*.html
