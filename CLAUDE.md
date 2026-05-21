@@ -1,7 +1,3 @@
 # CLAUDE.md
 
-Shared repository guidance for AI coding agents lives in:
-
-- [AGENTS.md](./AGENTS.md)
-
-Claude Code should read `AGENTS.md` before making repository changes.
+@AGENTS.md
