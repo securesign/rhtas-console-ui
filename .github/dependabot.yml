@@ -5,14 +5,14 @@ updates:
     schedule:
       interval: "monthly"
     commit-message:
-      prefix: ":ghost: "
+      prefix: "chore(deps): "
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "monthly"
     commit-message:
-      prefix: ":ghost: "
+      prefix: "chore(deps): "
 
     allow:
       - dependency-type: direct
