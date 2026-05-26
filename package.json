@@ -21,7 +21,7 @@
     "format": "npm run format -ws --if-present",
     "format:fix": "npm run format:fix -ws --if-present",
     "build": "npm run build -ws --if-present",
-    "prepare": "npm run generate",
+    "prepare": "npm run generate && husky",
     "start:dev:common": "npm run start:dev -w common",
     "start:dev:server": "npm run start:dev -w server",
     "start:dev:client": "npm run start:dev -w client",
@@ -48,7 +48,18 @@
     "react-dom": "^18 || ^19.0.0",
     "typescript": "~5.8.3 || ~5.9.0"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^9.39.2",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
@@ -70,6 +81,8 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.0",
     "globals": "^17.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.7.4",
     "rimraf": "^6.0.1",
     "rollup": "^4.60.1",

@@ -12,14 +12,14 @@ test.describe("Artifacts page Accessibility", () => {
 
   test("Page view after search", async ({ page }, testInfo) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
+    await artifactsPage.searchArtifact("quay.io/rh_ee_kdacosta/console-test-signed:v1");
 
     await runA11yAudit(page, testInfo, { label: "artifacts-search" });
   });
 
   test("Page view after expanding signature", async ({ page }, testInfo) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
+    await artifactsPage.searchArtifact("quay.io/rh_ee_kdacosta/console-test-signed:v1");
 
     await artifactsPage.expandSignaturesCard();
 
@@ -34,7 +34,7 @@ test.describe("Artifacts page Accessibility", () => {
 
   test("Page view after expanding attestation", async ({ page }, testInfo) => {
     const artifactsPage = await ArtifactsPage.build(page);
-    await artifactsPage.searchArtifact("ttl.sh/rhtas/console-test-image");
+    await artifactsPage.searchArtifact("quay.io/rh_ee_kdacosta/console-test-signed:v1");
 
     await artifactsPage.expandAttestationsCard();
 
