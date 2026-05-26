@@ -26,7 +26,7 @@ let proxyConfig = {
 if (apiUrl.startsWith("https://")) {
   const sslCertDir = process.env.SSL_CERT_DIR;
 
-  if (sslCertDir) {
+  if (sslCertDir && sslCertDir.trim()) {
     const caPaths = sslCertDir.split(":");
     const cas = [];
 
@@ -63,7 +63,7 @@ if (apiUrl.startsWith("https://")) {
     }
 
     if (cas.length > 0) {
-      proxyConfig.agent = new https.Agent({ ca: cas });
+      proxyConfig.agent = new https.Agent({ ca: cas, keepAlive: true });
       logger.info(`Configured HTTPS proxy with ${cas.length} CA certificate(s)`);
     } else {
       logger.info(`No CA certificates found in SSL_CERT_DIR, using system trust store`);
