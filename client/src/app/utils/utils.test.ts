@@ -12,12 +12,10 @@ import {
   getRekorSetBytes,
   handleDownloadBundle,
   inferIssuerType,
-  localeNumericCompare,
   relativeDateString,
   sha256FingerprintFromPem,
   stringMatcher,
   toIdentity,
-  universalComparator,
   verificationStatusToLabelColor,
 } from "./utils";
 
@@ -428,27 +426,6 @@ describe("utils", () => {
     });
   });
 
-  describe("localeNumericCompare", () => {
-    it("should compare strings numerically", () => {
-      expect(localeNumericCompare("item2", "item10", "en")).toBeLessThan(0);
-      expect(localeNumericCompare("item10", "item2", "en")).toBeGreaterThan(0);
-    });
-
-    it("should handle equal strings", () => {
-      expect(localeNumericCompare("test", "test", "en")).toBe(0);
-    });
-
-    it("should handle alphabetical comparison", () => {
-      expect(localeNumericCompare("apple", "banana", "en")).toBeLessThan(0);
-      expect(localeNumericCompare("banana", "apple", "en")).toBeGreaterThan(0);
-    });
-
-    it("should use provided locale", () => {
-      const result = localeNumericCompare("a", "b", "en");
-      expect(typeof result).toBe("number");
-    });
-  });
-
   describe("relativeDateString", () => {
     it("should return relative date string", () => {
       const pastDate = new Date(Date.now() - 86400000); // 1 day ago
@@ -629,36 +606,6 @@ describe("utils", () => {
 
       const result = toIdentity(leaf);
       expect(result?.san).toBe("first@example.com");
-    });
-  });
-
-  describe("universalComparator", () => {
-    it("should compare numbers directly", () => {
-      expect(universalComparator(1, 2, "en")).toBeLessThan(0);
-      expect(universalComparator(2, 1, "en")).toBeGreaterThan(0);
-      expect(universalComparator(5, 5, "en")).toBe(0);
-    });
-
-    it("should compare strings using localeNumericCompare", () => {
-      expect(universalComparator("item2", "item10", "en")).toBeLessThan(0);
-      expect(universalComparator("item10", "item2", "en")).toBeGreaterThan(0);
-    });
-
-    it("should handle nullish values as empty strings", () => {
-      expect(universalComparator(null, "test", "en")).toBeLessThan(0);
-      expect(universalComparator(undefined, "test", "en")).toBeLessThan(0);
-      expect(universalComparator(null, null, "en")).toBe(0);
-      expect(universalComparator(undefined, undefined, "en")).toBe(0);
-    });
-
-    it("should convert non-number, non-string to string", () => {
-      expect(universalComparator(true, false, "en")).toBeTruthy();
-      expect(universalComparator(false, true, "en")).toBeTruthy();
-    });
-
-    it("should handle mixed types", () => {
-      expect(universalComparator(123, "456", "en")).toBeTruthy();
-      expect(universalComparator("123", 456, "en")).toBeTruthy();
     });
   });
 

@@ -1,10 +1,10 @@
 import { Fragment, useState } from "react";
 import { Content, PageSection } from "@patternfly/react-core";
 import { useFetchArtifactsImageData, useVerifyArtifact } from "@app/queries/artifacts";
-import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { ArtifactResults } from "./components/ArtifactResults";
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
 import { SearchForm } from "@app/components/SearchForm";
+import { LoadingWrapper } from "@tsd-ui/core";
 
 export const Artifacts = () => {
   const [artifactUri, setArtifactUri] = useState<string | null>();
