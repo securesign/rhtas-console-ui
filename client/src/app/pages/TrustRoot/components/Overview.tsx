@@ -20,9 +20,9 @@ import {
 import { InfoAltIcon } from "@patternfly/react-icons";
 
 import type { Error as ApiError, CertificateInfo } from "@app/client";
-import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { formatDate } from "@app/utils/utils";
 import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
+import { LoadingWrapper } from "@tsd-ui/core";
 
 interface IOverviewProps {
   certificates: CertificateInfo[];

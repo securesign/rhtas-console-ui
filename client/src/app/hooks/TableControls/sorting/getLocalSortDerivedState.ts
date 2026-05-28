@@ -1,5 +1,5 @@
-import { universalComparator } from "@app/utils/utils";
 import type { ISortState } from "./useSortState";
+import { createComparator } from "@tsd-ui/core";
 
 /**
  * Args for getLocalSortDerivedState
@@ -37,11 +37,11 @@ export const getLocalSortDerivedState = <TItem, TSortableColumnKey extends strin
     return { sortedItems: items };
   }
 
+  const comparator = createComparator({ locale: "en", direction: activeSort.direction });
   const sortedItems = [...items].sort((a: TItem, b: TItem) => {
     const aValue = getSortValues(a)[activeSort.columnKey];
     const bValue = getSortValues(b)[activeSort.columnKey];
-    const compareValue = universalComparator(aValue, bValue, "en");
-    return activeSort.direction === "asc" ? compareValue : -compareValue;
+    return comparator(aValue, bValue);
   });
 
   return { sortedItems };
