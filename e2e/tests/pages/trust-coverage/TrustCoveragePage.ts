@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { Navigation } from "../../common/Navigation";
 
-export class MonitoringPage {
+export class TrustCoveragePage {
   private readonly _page: Page;
 
   private constructor(page: Page) {
@@ -10,8 +10,8 @@ export class MonitoringPage {
 
   static async build(page: Page) {
     const navigation = Navigation.build(page);
-    await navigation.goToSidebar("Monitoring");
+    await navigation.goToSidebar("Trust Coverage");
 
-    return new MonitoringPage(page);
+    return new TrustCoveragePage(page);
   }
 }
