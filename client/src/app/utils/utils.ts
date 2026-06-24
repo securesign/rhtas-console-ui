@@ -133,14 +133,6 @@ export function inferIssuerType(issuer?: string): string {
   return "other";
 }
 
-/**
- * Uses native string localCompare method with numeric option enabled.
- *
- * @param locale to be used by string compareFn
- */
-export const localeNumericCompare = (a: string, b: string, locale: string): number =>
-  a.localeCompare(b, locale ?? "en", { numeric: true });
-
 export function relativeDateString(date: Date) {
   return `${dayjs().to(date)}`;
 }
@@ -200,25 +192,6 @@ export function toIdentity(
     issuerType: inferIssuerType(issuer),
   };
 }
-
-/**
- * Compares all types by converting them to string.
- * Nullish entities are converted to empty string.
- * @see localeNumericCompare
- * @param locale to be used by string compareFn
- */
-export const universalComparator = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  a: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  b: any,
-  locale: string
-) => {
-  if (typeof a === "number" && typeof b === "number") {
-    return a - b;
-  }
-  return localeNumericCompare(String(a ?? ""), String(b ?? ""), locale);
-};
 
 export const verificationStatusToLabelColor = (
   status: string

@@ -3,7 +3,6 @@ import React, { Fragment } from "react";
 import { Content, PageSection, Tab, TabContent, Tabs, TabTitleText } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
-import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { useFetchTrustRootMetadataInfo, useFetchTrustTargetCertificates } from "@app/queries/trust";
 
 import { CertificatesTable } from "./components/Certificates";
@@ -11,6 +10,7 @@ import { Overview } from "./components/Overview";
 import { RootDetails } from "./components/RootDetails";
 import { MetadataNotAvailable } from "./components/ErrorStates/MetadataNotAvailable";
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
+import { LoadingWrapper } from "@tsd-ui/core";
 
 export const TrustRoots: React.FC = () => {
   const {

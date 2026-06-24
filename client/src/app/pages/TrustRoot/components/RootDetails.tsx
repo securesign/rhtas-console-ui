@@ -14,18 +14,19 @@ import {
 
 import type { RootMetadataInfoList } from "@app/client";
 import { CertificateStatusIcon } from "@app/components/CertificateStatusIcon";
-import { capitalizeFirstLetter, formatDate, universalComparator } from "@app/utils/utils";
+import { capitalizeFirstLetter, formatDate } from "@app/utils/utils";
+import { createComparator } from "@tsd-ui/core";
 
 interface IRootDetailsProps {
   rootMetadataList: RootMetadataInfoList;
 }
 
+const comparator = createComparator();
+
 export const RootDetails: React.FC<IRootDetailsProps> = ({ rootMetadataList }) => {
   const latestMetadataInfo = React.useMemo(() => {
     // Sort:desc of metadata by version
-    const metadataInfo = [...rootMetadataList.data]
-      .sort((a, b) => universalComparator(a.version, b.version, "en"))
-      .reverse();
+    const metadataInfo = [...rootMetadataList.data].sort((a, b) => comparator(a.version, b.version)).reverse();
     return metadataInfo[0] ? metadataInfo[0] : null;
   }, [rootMetadataList]);
 

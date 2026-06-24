@@ -172,5 +172,5 @@ The `overlays/dev/` directory contains a `kustomization.yaml` for environment-sp
    To delete the deployed resources:
 
    ```bash
-   oc delete -k 'https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev?ref=v0.1.0'
+   oc delete -k 'https://github.com/securesign/rhtas-console-ui/deployment/overlays/dev'
    ```
