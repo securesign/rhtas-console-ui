@@ -1,45 +1,37 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
+import eslintReact from "@eslint-react/eslint-plugin";
+import eslintJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-import { globalIgnores } from "eslint/config";
-import react from "eslint-plugin-react";
-import prettierRecommended from "eslint-plugin-prettier/recommended";
+
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import reactRefresh from "eslint-plugin-react-refresh";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 
-export default tseslint.config([
-  globalIgnores(["**/dist", "**/coverage"]),
+export default defineConfig([
+  globalIgnores(["**/dist", "**/coverage", "**/rollup.config.js"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [
-      js.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
-      prettierRecommended,
-      ...pluginQuery.configs["flat/recommended"],
-      reactHooks.configs.flat["recommended-latest"],
+      eslintJs.configs.recommended,
+      tseslint.configs.recommended,
+      eslintReact.configs["recommended-typescript"],
+      ...pluginQuery.configs['flat/recommended-strict'],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
       globals: globals.browser,
+      parser: tseslint.parser,
       parserOptions: {
-        project: ["./common/tsconfig.json", "./client/tsconfig.node.json", "./client/tsconfig.app.json", "./e2e/tsconfig.json"],
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    plugins: {
-      react,
-    },
     rules: {
-      ...reactHooks.configs.flat.recommended.rules,
-      // Disable new react-hooks v7 rules that require significant refactoring
-      "react-hooks/set-state-in-effect": "off",
-      "react-hooks/incompatible-library": "off",
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
-      ...react.configs.recommended.rules,
-      ...react.configs["jsx-runtime"].rules,
+      // TODO: Remove these rules incrementally so we have default and more strict linting
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -49,16 +41,20 @@ export default tseslint.config([
         },
       ],
       "@typescript-eslint/no-empty-function": ["off"],
-      "react/prop-types": "off",
-      "prettier/prettier": [
-        "warn",
-        {
-          singleQuote: false,
-        },
-      ],
       "@typescript-eslint/no-unsafe-assignment": ["warn"],
+      "@typescript-eslint/no-unnecessary-type-assertion": "off",
+      "react-hooks/rules-of-hooks": "off",
+      "@eslint-react/no-create-ref": "warn",
+      "@eslint-react/no-leaked-conditional-rendering": "warn",
+      "@eslint-react/unsupported-syntax": "warn",
+      "@eslint-react/jsx-no-key-after-spread": "warn",
+      "@eslint-react/rules-of-hooks": "warn",
+      "@tanstack/query/prefer-query-options": "off",
     },
-    settings: { react: { version: "19" } },
-    ignores: ["client/config/**", "client/src/app/client/**", "client/types/**"],
+    ignores: [
+      "client/config/**",
+      "client/src/app/client/**",
+      "client/types/**",
+    ],
   },
 ]);

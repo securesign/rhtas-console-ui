@@ -92,8 +92,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
+        manualChunks(id: string) {
+          if (id.includes("node_modules/react-dom") || id.includes("node_modules/react/")) {
+            return "react";
+          }
         },
       },
     },
