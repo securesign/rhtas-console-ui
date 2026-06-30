@@ -14,13 +14,11 @@ vi.mock("@app/queries/rekor-search", () => ({
 beforeEach(() => {
   vi.resetAllMocks();
 
-  (useLocation as Mock).mockImplementation(
-    (): Path => ({
-      pathname: "/rekor-search",
-      search: "",
-      hash: "",
-    })
-  );
+  (useLocation as Mock).mockImplementation((): Path => ({
+    pathname: "/rekor-search",
+    search: "",
+    hash: "",
+  }));
 
   (useNavigate as Mock).mockReturnValue(vi.fn());
 
