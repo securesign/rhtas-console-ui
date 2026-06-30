@@ -57,6 +57,9 @@
       "prettier --write"
     ]
   },
+  "overrides": {
+    "electron-to-chromium": "1.5.340"
+  },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
