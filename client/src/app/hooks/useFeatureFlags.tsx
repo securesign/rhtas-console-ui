@@ -14,7 +14,7 @@ export const FeatureFlagsProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       monitoringAlerting: ENV.FEATURE_MONITORING === "on",
     }),
-    []
+    [],
   );
 
   const value = { features };

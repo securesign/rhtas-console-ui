@@ -36,7 +36,7 @@ export interface IExpansionPropHelpersInternalArgs<TColumnKey extends string> {
  * - "source of truth" (persisted) state and "derived state" are kept separate to prevent out-of-sync duplicated state.
  */
 export const useExpansionPropHelpers = <TItem, TColumnKey extends string>(
-  args: IExpansionPropHelpersExternalArgs<TItem, TColumnKey> & IExpansionPropHelpersInternalArgs<TColumnKey>
+  args: IExpansionPropHelpersExternalArgs<TItem, TColumnKey> & IExpansionPropHelpersInternalArgs<TColumnKey>,
 ) => {
   const { idProperty, columnKeys } = args;
 

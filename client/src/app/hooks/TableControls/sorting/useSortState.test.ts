@@ -8,7 +8,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name", "date"],
-      })
+      }),
     );
 
     expect(result.current.activeSort).toBeNull();
@@ -24,7 +24,7 @@ describe("useSortState", () => {
       useSortState({
         sortableColumns: ["name", "date"],
         initialSort,
-      })
+      }),
     );
 
     expect(result.current.activeSort).toEqual(initialSort);
@@ -34,7 +34,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name", "date"],
-      })
+      }),
     );
 
     const newSort: IActiveSort<"name" | "date"> = {
@@ -53,7 +53,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name"],
-      })
+      }),
     );
 
     act(() => {
@@ -70,7 +70,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name"],
-      })
+      }),
     );
 
     act(() => {
@@ -87,7 +87,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name", "date", "status"],
-      })
+      }),
     );
 
     act(() => {
@@ -114,7 +114,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name"],
-      })
+      }),
     );
 
     act(() => {
@@ -141,7 +141,7 @@ describe("useSortState", () => {
     const { result, rerender } = renderHook(() =>
       useSortState({
         sortableColumns: ["name", "date"],
-      })
+      }),
     );
 
     act(() => {
@@ -167,7 +167,7 @@ describe("useSortState", () => {
       useSortState({
         sortableColumns: ["name"],
         initialSort: null,
-      })
+      }),
     );
 
     expect(result.current.activeSort).toBeNull();
@@ -178,7 +178,7 @@ describe("useSortState", () => {
       useSortState({
         sortableColumns: ["name"],
         initialSort: null,
-      })
+      }),
     );
 
     expect(result.current.activeSort).toBeNull();
@@ -200,7 +200,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: [],
-      })
+      }),
     );
 
     expect(result.current.activeSort).toBeNull();
@@ -221,7 +221,7 @@ describe("useSortState", () => {
     const { result } = renderHook(() =>
       useSortState({
         sortableColumns: ["name", "date", "status"],
-      })
+      }),
     );
 
     act(() => {

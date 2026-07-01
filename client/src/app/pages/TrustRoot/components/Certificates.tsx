@@ -58,7 +58,7 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
   };
   const items = useWithUiId(
     certificates,
-    (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`
+    (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`,
   );
 
   const tableState = usePFToolbarTable({
@@ -124,7 +124,7 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value).then(
       () => addAlert("Copied PEM to clipboard", "success"),
-      () => addAlert("Failed to copy to clipboard", "danger")
+      () => addAlert("Failed to copy to clipboard", "danger"),
     );
   };
 

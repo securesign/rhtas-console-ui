@@ -27,7 +27,7 @@ export const useFetchTrustConfig = () => {
         return response.data ?? null;
       },
     },
-    trustConfigMock
+    trustConfigMock,
   );
 
   return {
@@ -49,7 +49,7 @@ export const useFetchTrustRootMetadataInfo = () => {
         return response.data ?? null;
       },
     },
-    trustRootMetadataInfoMock
+    trustRootMetadataInfoMock,
   );
 
   return {
@@ -71,7 +71,7 @@ export const useFetchTrustTargetCertificates = () => {
         return response.data ?? null;
       },
     },
-    trustTargetCertificatesMock
+    trustTargetCertificatesMock,
   );
 
   return {

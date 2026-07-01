@@ -17,7 +17,7 @@ const mockPromise = <TQueryFnData>(data: TQueryFnData, timeout = defaultTimeout,
 
 export const useMockableQuery = <TQueryFnData = unknown, TError = unknown, TData = TQueryFnData>(
   params: UseQueryOptions<TQueryFnData, TError, TData>,
-  mockData: TQueryFnData
+  mockData: TQueryFnData,
 ) => {
   return useQuery<TQueryFnData, TError, TData>({
     ...params,

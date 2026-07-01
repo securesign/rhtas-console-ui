@@ -67,7 +67,7 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
         return prev;
       }, [] as string[])
       .map((it) => it.toLocaleLowerCase())
-      .some((it) => it.includes(inputValue?.trim().toLowerCase() ?? ""))
+      .some((it) => it.includes(inputValue?.trim().toLowerCase() ?? "")),
   );
 
   const [firstGroup, ...otherGroups] = [
@@ -94,7 +94,7 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
         .filter(([, option]) => option)
         .map(([filter, { groupLabel = defaultGroup } = {}]) => [filter, groupLabel])
         .filter(([, groupLabel]) => groupLabel !== groupName)
-        .map(([filter]) => filter)
+        .map(([filter]) => filter),
     );
   const onFilterClear = (chip: string | ToolbarLabel) => {
     const value = typeof chip === "string" ? chip : chip.key;
@@ -111,7 +111,7 @@ export const MultiselectFilterControl = <TFilterCategoryKey extends string>({
   const chipsFor = (groupName: string) =>
     filterValue
       ?.map((filter) =>
-        selectOptions.find(({ value, groupLabel = defaultGroup }) => value === filter && groupLabel === groupName)
+        selectOptions.find(({ value, groupLabel = defaultGroup }) => value === filter && groupLabel === groupName),
       )
       .reduce((prev, current) => {
         if (current) {

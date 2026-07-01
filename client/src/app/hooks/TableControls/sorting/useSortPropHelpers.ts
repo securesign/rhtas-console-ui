@@ -22,7 +22,7 @@ export interface ISortPropHelpersExternalArgs<TSortableColumnKey extends string>
  * - "Derived state" here refers to values and convenience functions derived at render time.
  */
 export const useSortPropHelpers = <TSortableColumnKey extends string>(
-  args: ISortPropHelpersExternalArgs<TSortableColumnKey>
+  args: ISortPropHelpersExternalArgs<TSortableColumnKey>,
 ) => {
   const {
     sortState: { activeSort, setActiveSort },

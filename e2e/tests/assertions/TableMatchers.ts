@@ -30,7 +30,7 @@ export const tableAssertions = baseExpect.extend<TableMatcherDefinitions>({
   >(
     table: Table<TColumn, TActions, TColumnName>,
     columnName: TColumnName,
-    order: "ascending" | "descending"
+    order: "ascending" | "descending",
   ) => {
     try {
       const columnHeader = await table.getColumnHeader(columnName);
@@ -54,7 +54,7 @@ export const tableAssertions = baseExpect.extend<TableMatcherDefinitions>({
   >(
     table: Table<TColumn, TActions, TColumnName>,
     columnName: TColumnName,
-    value: string
+    value: string,
   ) => {
     try {
       await baseExpect(
@@ -62,7 +62,7 @@ export const tableAssertions = baseExpect.extend<TableMatcherDefinitions>({
           .locator(`td[data-label="${columnName}"]`, {
             hasText: value,
           })
-          .first()
+          .first(),
       ).toBeVisible();
 
       return {

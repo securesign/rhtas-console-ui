@@ -54,7 +54,7 @@ export function RekorList({
         body,
       };
     }),
-    (item) => `${item.entryUuid}-${item.logIndex}`
+    (item) => `${item.entryUuid}-${item.logIndex}`,
   );
 
   const typeOptions = Array.from(new Set(rows.map((row) => row.body.kind).filter((value) => value && value !== "-")))

@@ -40,7 +40,7 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
           [current.status]: (prev[current.status] ?? 0) + 1,
         };
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     );
   }, [certificates]);
 
