@@ -1,5 +1,5 @@
 import ENV from "@app/env";
-import { type UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 const defaultTimeout = 1000;
 
@@ -19,10 +19,9 @@ export const useMockableQuery = <TQueryFnData = unknown, TError = unknown, TData
   params: UseQueryOptions<TQueryFnData, TError, TData>,
   mockData: TQueryFnData
 ) => {
-  return useQuery<TQueryFnData, TError, TData>(
-    queryOptions({
-      ...params,
-      queryFn: ENV.MOCK === "off" ? params.queryFn : () => mockPromise(mockData),
-    })
-  );
+  // eslint-disable-next-line @tanstack/query/prefer-query-options -- wrapper receives pre-built options from callers
+  return useQuery<TQueryFnData, TError, TData>({
+    ...params,
+    queryFn: ENV.MOCK === "off" ? params.queryFn : () => mockPromise(mockData),
+  });
 };
