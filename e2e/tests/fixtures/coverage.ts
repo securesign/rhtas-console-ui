@@ -26,7 +26,6 @@ export const coverateTest = baseTest.extend({
       }
     });
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(context);
 
     for (const page of context.pages()) {
