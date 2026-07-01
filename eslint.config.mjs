@@ -55,7 +55,6 @@ export default defineConfig([
       "@eslint-react/no-array-index-key": "off",
       "@eslint-react/use-state": "off",
       "@eslint-react/purity": "off",
-      "@tanstack/query/prefer-query-options": "off",
     },
     ignores: [
       "client/config/**",
