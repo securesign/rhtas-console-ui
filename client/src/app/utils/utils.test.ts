@@ -257,7 +257,7 @@ describe("utils", () => {
     });
 
     it("should handle invalid base64url gracefully", () => {
-      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => undefined);
       const result = getRekorSetBytes("invalid!!!");
       expect(result).toBeUndefined();
       expect(consoleWarnSpy).toHaveBeenCalled();
