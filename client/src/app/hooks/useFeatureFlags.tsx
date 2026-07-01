@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { createContext, use, useMemo, type ReactNode } from "react";
 import { ENV } from "@app/env";
 
 interface FeatureFlagsContextType {
@@ -19,11 +19,11 @@ export const FeatureFlagsProvider = ({ children }: { children: ReactNode }) => {
 
   const value = { features };
 
-  return <FeatureFlagsContext.Provider value={value}>{children}</FeatureFlagsContext.Provider>;
+  return <FeatureFlagsContext value={value}>{children}</FeatureFlagsContext>;
 };
 
 export const useFeatureFlags = () => {
-  const context = useContext(FeatureFlagsContext);
+  const context = use(FeatureFlagsContext);
   if (!context) {
     throw new Error("useFeatureFlags must be used within FeatureFlagsProvider");
   }

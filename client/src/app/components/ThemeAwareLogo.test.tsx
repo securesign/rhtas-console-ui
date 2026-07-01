@@ -12,9 +12,9 @@ const mockProps = {
 
 const renderWithTheme = (isDark: boolean) =>
   render(
-    <ThemeContext.Provider value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => {} }}>
+    <ThemeContext value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => undefined }}>
       <ThemeAwareLogo {...mockProps} />
-    </ThemeContext.Provider>,
+    </ThemeContext>,
   );
 
 describe("ThemeAwareLogo", () => {
