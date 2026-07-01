@@ -55,7 +55,7 @@ export const PageContentWithDrawerProvider: React.FC<IPageContentWithDrawerProvi
   const { isDrawerExpanded, drawerFocusRef, drawerPanelContent, drawerPanelContentProps, drawerPageKey } =
     pageDrawerState;
   return (
-    <PageDrawerContext.Provider value={pageDrawerState}>
+    <PageDrawerContext value={pageDrawerState}>
       <div className={pageStyles.pageDrawer}>
         <Drawer isExpanded={isDrawerExpanded} onExpand={() => drawerFocusRef?.current?.focus()} position="right">
           <DrawerContent
@@ -76,7 +76,7 @@ export const PageContentWithDrawerProvider: React.FC<IPageContentWithDrawerProvi
           </DrawerContent>
         </Drawer>
       </div>
-    </PageDrawerContext.Provider>
+    </PageDrawerContext>
   );
 };
 
@@ -102,7 +102,7 @@ export const PageDrawerContent: React.FC<IPageDrawerContentProps> = ({
   pageKey: localPageKeyProp,
 }) => {
   const { setIsDrawerExpanded, drawerFocusRef, setDrawerPanelContent, setDrawerPanelContentProps, setDrawerPageKey } =
-    React.useContext(PageDrawerContext);
+    React.use(PageDrawerContext);
 
   // Warn if we are trying to render more than one PageDrawerContent (they'll fight over the same state).
   React.useEffect(() => {
