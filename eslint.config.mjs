@@ -32,7 +32,6 @@ export default defineConfig([
     rules: {
       // TODO: Remove these rules incrementally so we have default and more strict linting
       "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/no-unsafe-call": "off",
@@ -43,7 +42,6 @@ export default defineConfig([
       "@typescript-eslint/restrict-template-expressions": "off",
       "react-hooks/rules-of-hooks": "off",
       "react-refresh/only-export-components": "off",
-      "@eslint-react/no-create-ref": "off",
       "@eslint-react/no-leaked-conditional-rendering": "off",
       "@eslint-react/unsupported-syntax": "off",
       "@eslint-react/jsx-no-key-after-spread": "off",
