@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
 
 import type { IFilterValues } from "./types";
 
@@ -31,20 +31,14 @@ export interface IFilterStateArgs<TFilterCategoryKey extends string> {
 export const useFilterState = <TFilterCategoryKey extends string>(
   args: IFilterStateArgs<TFilterCategoryKey>
 ): IFilterState<TFilterCategoryKey> => {
-  // We need to know if it's the initial load to avoid overwriting changes to the filter values
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const isInitialLoadRef = useRef(true);
 
   let initialFilterValues = {};
 
-  if (isInitialLoad) {
+  if (isInitialLoadRef.current) {
     initialFilterValues = args?.initialFilterValues ?? {};
+    isInitialLoadRef.current = false;
   }
-
-  useEffect(() => {
-    if (isInitialLoad) {
-      setIsInitialLoad(false);
-    }
-  }, [isInitialLoad]);
 
   const [filterValues, setFilterValues] = React.useState<IFilterValues<TFilterCategoryKey>>(initialFilterValues);
   return { filterValues, setFilterValues };

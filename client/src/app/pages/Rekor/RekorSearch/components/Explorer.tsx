@@ -84,16 +84,16 @@ export function Explorer() {
       return;
     }
 
-    setDefaultSearch(value);
-    setPage(1);
+    setDefaultSearch(value); // eslint-disable-line @eslint-react/set-state-in-effect -- URL → state sync
+    setPage(1); // eslint-disable-line @eslint-react/set-state-in-effect -- URL → state sync
 
     if (attribute === "logIndex") {
       const parsed = parseInt(value);
       if (!isNaN(parsed)) {
-        setQuery({ attribute, query: parsed });
+        setQuery({ attribute, query: parsed }); // eslint-disable-line @eslint-react/set-state-in-effect -- URL → state sync
       }
     } else {
-      setQuery({ attribute, query: value });
+      setQuery({ attribute, query: value }); // eslint-disable-line @eslint-react/set-state-in-effect -- URL → state sync
     }
   }, [location.search]);
 

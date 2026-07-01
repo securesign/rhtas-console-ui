@@ -26,7 +26,7 @@ export const SearchFilterControl = <TFilterCategoryKey extends string>({
   const [inputValue, setInputValue] = React.useState(filterValue?.[0] ?? "");
   // Update it if it changes externally
   React.useEffect(() => {
-    setInputValue(filterValue?.[0] ?? "");
+    setInputValue(filterValue?.[0] ?? ""); // eslint-disable-line @eslint-react/set-state-in-effect -- sync local state with external prop
   }, [filterValue]);
 
   const onFilterSubmit = () => {

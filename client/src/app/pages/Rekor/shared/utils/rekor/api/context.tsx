@@ -32,9 +32,9 @@ export const RekorClientProvider: FunctionComponent<PropsWithChildren<RekorClien
   useEffect(() => {
     if (baseUrl === undefined) {
       if (ENV.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN) {
-        setBaseUrl(ENV.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN);
+        setBaseUrl(ENV.NEXT_PUBLIC_REKOR_DEFAULT_DOMAIN); // eslint-disable-line @eslint-react/set-state-in-effect -- default initialization
       } else {
-        setBaseUrl("https://rekor.sigstore.dev");
+        setBaseUrl("https://rekor.sigstore.dev"); // eslint-disable-line @eslint-react/set-state-in-effect -- default initialization
       }
     }
   }, [baseUrl]);

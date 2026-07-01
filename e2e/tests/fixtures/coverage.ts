@@ -26,6 +26,7 @@ export const coverateTest = baseTest.extend({
       }
     });
 
+    // eslint-disable-next-line @eslint-react/rules-of-hooks -- Playwright fixture, not a React hook
     await use(context);
 
     for (const page of context.pages()) {
