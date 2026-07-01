@@ -3,7 +3,7 @@ import {
   createContext,
   type FunctionComponent,
   type PropsWithChildren,
-  useContext,
+  use,
   useEffect,
   useMemo,
   useState,
@@ -47,11 +47,11 @@ export const RekorClientProvider: FunctionComponent<PropsWithChildren<RekorClien
     };
   }, [baseUrl]);
 
-  return <RekorClientContext.Provider value={context}>{children}</RekorClientContext.Provider>;
+  return <RekorClientContext value={context}>{children}</RekorClientContext>;
 };
 
 export function useRekorClient(): RekorClient {
-  const ctx = useContext(RekorClientContext);
+  const ctx = use(RekorClientContext);
 
   if (!ctx) {
     throw new Error("Hook useRekorClient requires RekorClientContext.");
@@ -61,7 +61,7 @@ export function useRekorClient(): RekorClient {
 }
 
 export function useRekorBaseUrl(): [RekorClientContext["baseUrl"], RekorClientContext["setBaseUrl"]] {
-  const ctx = useContext(RekorClientContext);
+  const ctx = use(RekorClientContext);
 
   if (!ctx) {
     throw new Error("Hook useRekorBaseUrl requires RekorClientContext.");
