@@ -26,9 +26,6 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    linterOptions: {
-      reportUnusedDisableDirectives: "off",
-    },
     rules: {
       // TODO: Remove these rules incrementally so we have default and more strict linting
       "@typescript-eslint/no-unused-vars": "off",
