@@ -58,7 +58,7 @@
     ]
   },
   "overrides": {
-    "electron-to-chromium": "1.5.340"
+    "electron-to-chromium": "1.5.380"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
