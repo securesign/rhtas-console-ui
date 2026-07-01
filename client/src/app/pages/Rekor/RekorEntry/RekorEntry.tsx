@@ -14,7 +14,8 @@ import {
 } from "@patternfly/react-core";
 
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
-import { Paths, useRouteParams } from "@app/Routes";
+import { Paths } from "@app/Constants";
+import { useRouteParams } from "@app/hooks/useRouteParams";
 import { useFetchRekorEntry } from "@app/queries/rekor-search";
 import { Link, useNavigate } from "react-router-dom";
 import { Entry } from "./components/Entry";

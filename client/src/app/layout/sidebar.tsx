@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Nav, NavList, PageSidebar, PageSidebarBody } from "@patternfly/react-core";
 import { css } from "@patternfly/react-styles";
 import nav from "@patternfly/react-styles/css/components/Nav/nav";
-import { Paths } from "@app/Routes";
+import { Paths } from "@app/Constants";
 import { useFeatureFlags } from "@app/hooks/useFeatureFlags";
 
 const LINK_CLASS = nav.navLink;

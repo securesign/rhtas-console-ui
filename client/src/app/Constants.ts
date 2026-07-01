@@ -1,5 +1,13 @@
 export const RENDER_DATE_FORMAT = "MMM DD, YYYY";
 
+export const Paths = {
+  artifacts: "/artifacts",
+  rekorSearch: "/rekor-search",
+  rekorEntry: `/rekor-search/:logIndex`,
+  trustRoot: "/trust-root",
+  monitoringAlerting: "/monitoring",
+} as const;
+
 /**
  * The name of the client generated id field inserted in a object marked with mixin type
  * `WithUiId`.

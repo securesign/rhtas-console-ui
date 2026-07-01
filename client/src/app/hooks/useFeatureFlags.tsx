@@ -22,6 +22,7 @@ export const FeatureFlagsProvider = ({ children }: { children: ReactNode }) => {
   return <FeatureFlagsContext value={value}>{children}</FeatureFlagsContext>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components -- co-located provider + hook
 export const useFeatureFlags = () => {
   const context = use(FeatureFlagsContext);
   if (!context) {

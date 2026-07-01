@@ -1,5 +1,5 @@
 import React from "react";
-import { Paths } from "@app/Routes";
+import { Paths } from "@app/Constants";
 import { FilterToolbar } from "@app/components/FilterToolbar/FilterToolbar";
 import { MultiselectFilterControl } from "@app/components/FilterToolbar/MultiselectFilterControl";
 import { SearchFilterControl } from "@app/components/FilterToolbar/SearchFilterControl";

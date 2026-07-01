@@ -42,7 +42,6 @@ export default defineConfig([
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "react-hooks/rules-of-hooks": "off",
-      "react-refresh/only-export-components": "off",
       "@eslint-react/no-create-ref": "off",
       "@eslint-react/no-leaked-conditional-rendering": "off",
       "@eslint-react/unsupported-syntax": "off",
