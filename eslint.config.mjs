@@ -31,7 +31,11 @@ export default defineConfig([
     },
     rules: {
       // TODO: Remove these rules incrementally so we have default and more strict linting
-      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      }],
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
