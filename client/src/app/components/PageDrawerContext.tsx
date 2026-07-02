@@ -36,13 +36,13 @@ type PageDrawerState = ReturnType<typeof usePageDrawerState>;
 
 const PageDrawerContext = React.createContext<PageDrawerState>({
   isDrawerExpanded: false,
-  setIsDrawerExpanded: () => {},
+  setIsDrawerExpanded: () => undefined,
   drawerPanelContent: null,
-  setDrawerPanelContent: () => {},
+  setDrawerPanelContent: () => undefined,
   drawerPanelContentProps: {},
-  setDrawerPanelContentProps: () => {},
+  setDrawerPanelContentProps: () => undefined,
   drawerPageKey: "",
-  setDrawerPageKey: () => {},
+  setDrawerPageKey: () => undefined,
   drawerFocusRef: null,
 });
 
