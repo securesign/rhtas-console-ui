@@ -71,7 +71,6 @@ export function useRekorSearch() {
   const client = useRekorClient();
 
   return useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     async (search: SearchQuery, page: number = 1): Promise<RekorEntries> => {
       switch (search.attribute) {
         case "logIndex":

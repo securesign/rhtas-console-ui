@@ -26,9 +26,9 @@ export const TrustRoots: React.FC = () => {
   } = useFetchTrustTargetCertificates();
 
   // Tab refs
-  const overviewTabRef = React.createRef<HTMLElement>();
-  const certificatesTabRef = React.createRef<HTMLElement>();
-  const rootDetailsTabRef = React.createRef<HTMLElement>();
+  const overviewTabRef = React.useRef<HTMLElement>(null);
+  const certificatesTabRef = React.useRef<HTMLElement>(null);
+  const rootDetailsTabRef = React.useRef<HTMLElement>(null);
 
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
 
