@@ -32,11 +32,6 @@ export default defineConfig([
     rules: {
       // TODO: Remove these rules incrementally so we have default and more strict linting
       "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-unsafe-assignment": "off",
-      "@typescript-eslint/no-unsafe-argument": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-unsafe-return": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
       "react-hooks/rules-of-hooks": "off",
       "react-refresh/only-export-components": "off",
       "@eslint-react/no-leaked-conditional-rendering": "off",
