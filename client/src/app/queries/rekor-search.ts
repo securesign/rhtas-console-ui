@@ -24,7 +24,7 @@ export const useFetchRekorEntry = (logIndex: string) => {
     queryOptions({
       queryKey: [RekorKey, "entry", logIndex, client.entries, baseUrl],
       queryFn: () => client.entries.getLogEntryByIndex({ logIndex: Number(logIndex) }),
-    })
+    }),
   );
 };
 
@@ -39,6 +39,6 @@ export const useFetchRekorSearch = (query: SearchQuery | undefined, page: number
       enabled: !!query,
       retry: shouldRetry,
       retryDelay: (attempt) => INITIAL_RETRY_DELAY_MS * 2 ** attempt,
-    })
+    }),
   );
 };
