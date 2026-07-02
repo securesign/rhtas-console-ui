@@ -202,8 +202,8 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
         >
           {currentPageItems.map((certificate, rowIndex) => {
             return (
-              <Tbody key={rowIndex} isExpanded={isCellExpanded(certificate)}>
-                <Tr key={rowIndex}>
+              <Tbody key={certificate._ui_unique_id} isExpanded={isCellExpanded(certificate)}>
+                <Tr key={certificate._ui_unique_id}>
                   <Td {...getSingleExpandButtonTdProps({ item: certificate, rowIndex })} />
                   <Td data-label="Issuer" modifier="breakWord">
                     {certificate.issuer}
