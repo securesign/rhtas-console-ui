@@ -9,7 +9,7 @@ export const coverateTest = baseTest.extend({
   context: async ({ context }, use, testInfo) => {
     await context.addInitScript(() =>
       window.addEventListener("beforeunload", () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (window as any).collectIstanbulCoverage(JSON.stringify((window as any).__coverage__));
       }),
     );
@@ -29,7 +29,7 @@ export const coverateTest = baseTest.extend({
     await use(context);
 
     for (const page of context.pages()) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await page.evaluate(() => (window as any).collectIstanbulCoverage(JSON.stringify((window as any).__coverage__)));
     }
 

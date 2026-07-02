@@ -41,7 +41,7 @@
   ],
   "dependencies": {
     "@types/express": "^5.0.3",
-    "http-proxy-middleware": "^3.0.5"
+    "http-proxy-middleware": "^4.1.1"
   },
   "peerDependencies": {
     "react": "^18 || ^19.0.0",
@@ -58,7 +58,12 @@
     ]
   },
   "overrides": {
-    "electron-to-chromium": "1.5.340"
+    "react": "$react",
+    "react-dom": "$react-dom",
+    "@playwright/test": "1.61.1",
+    "playwright": "1.61.1",
+    "playwright-core": "1.61.1",
+    "electron-to-chromium": "1.5.380"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
