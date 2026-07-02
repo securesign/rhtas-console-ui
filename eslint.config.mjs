@@ -43,7 +43,6 @@ export default defineConfig([
       "@eslint-react/rules-of-hooks": "off",
       "@eslint-react/set-state-in-effect": "off",
       "@eslint-react/no-unnecessary-use-prefix": "off",
-      "@eslint-react/no-context-provider": "off",
       "@eslint-react/use-state": "off",
       "@eslint-react/purity": "off",
       "@tanstack/query/prefer-query-options": "off",
