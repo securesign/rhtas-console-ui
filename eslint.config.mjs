@@ -40,7 +40,6 @@ export default defineConfig([
       "@eslint-react/no-unnecessary-use-prefix": "off",
       "@eslint-react/use-state": "off",
       "@eslint-react/purity": "off",
-      "@tanstack/query/prefer-query-options": "off",
     },
     ignores: [
       "client/config/**",
