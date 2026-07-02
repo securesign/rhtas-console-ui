@@ -19,9 +19,9 @@ export const useMockableQuery = <TQueryFnData = unknown, TError = unknown, TData
   params: UseQueryOptions<TQueryFnData, TError, TData>,
   mockData: TQueryFnData
 ) => {
-  // eslint-disable-next-line @tanstack/query/prefer-query-options -- wrapper receives pre-built options from callers
-  return useQuery<TQueryFnData, TError, TData>({
+  const options: UseQueryOptions<TQueryFnData, TError, TData> = {
     ...params,
     queryFn: ENV.MOCK === "off" ? params.queryFn : () => mockPromise(mockData),
-  });
+  };
+  return useQuery(options);
 };
