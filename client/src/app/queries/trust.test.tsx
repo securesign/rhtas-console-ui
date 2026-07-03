@@ -59,7 +59,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.config).toEqual(trustConfigMock);
@@ -74,7 +74,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
@@ -87,7 +87,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.config;
@@ -100,7 +100,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.config).toEqual(trustConfigMock);
@@ -113,7 +113,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -130,7 +130,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.rootMetadataList).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.rootMetadataList).toEqual(trustRootMetadataInfoMock);
@@ -145,7 +145,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.rootMetadataList).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
@@ -158,7 +158,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.rootMetadataList).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.rootMetadataList;
@@ -171,7 +171,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.rootMetadataList).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.rootMetadataList).toEqual(trustRootMetadataInfoMock);
@@ -184,7 +184,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.rootMetadataList).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -201,7 +201,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.certificates).toEqual(trustTargetCertificatesMock);
@@ -216,7 +216,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
@@ -229,7 +229,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.certificates;
@@ -242,7 +242,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.certificates).toEqual(trustTargetCertificatesMock);
@@ -255,7 +255,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key

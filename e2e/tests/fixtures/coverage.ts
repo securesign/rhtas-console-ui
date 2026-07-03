@@ -11,7 +11,7 @@ export const coverateTest = baseTest.extend({
       window.addEventListener("beforeunload", () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (window as any).collectIstanbulCoverage(JSON.stringify((window as any).__coverage__));
-      })
+      }),
     );
 
     await promises.mkdir(istanbulCLIOutput, {

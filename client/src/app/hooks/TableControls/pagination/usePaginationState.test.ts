@@ -14,7 +14,7 @@ describe("usePaginationState", () => {
     const { result } = renderHook(() =>
       usePaginationState({
         initialItemsPerPage: 25,
-      })
+      }),
     );
 
     expect(result.current.pageNumber).toBe(1);
@@ -71,7 +71,7 @@ describe("usePaginationState", () => {
     const { result } = renderHook(() =>
       usePaginationState({
         initialItemsPerPage: 20,
-      })
+      }),
     );
 
     act(() => {

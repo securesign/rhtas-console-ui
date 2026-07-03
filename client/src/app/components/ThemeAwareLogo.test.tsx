@@ -14,7 +14,7 @@ const renderWithTheme = (isDark: boolean) =>
   render(
     <ThemeContext value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => undefined }}>
       <ThemeAwareLogo {...mockProps} />
-    </ThemeContext>
+    </ThemeContext>,
   );
 
 describe("ThemeAwareLogo", () => {

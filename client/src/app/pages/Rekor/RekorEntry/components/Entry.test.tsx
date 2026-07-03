@@ -31,7 +31,7 @@ describe("Entry", () => {
             data: { hash: { algorithm: "sha256", value: "abc123" } },
             signature: { content: "sig" },
           },
-        })
+        }),
       ).toString("base64"),
       attestation: { data: Buffer.from("{}").toString("base64") },
       logID: "123",

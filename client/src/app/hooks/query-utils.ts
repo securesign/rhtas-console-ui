@@ -16,7 +16,7 @@ export const useWithUiId = <T>(
   /** Source data to modify. */
   data: T[] | undefined,
   /** Generate the unique id for a specific `T`. */
-  generator: (item: T, index: number) => string
+  generator: (item: T, index: number) => string,
 ): WithUiId<T>[] => {
   const result = useMemo(() => {
     if (!data || data.length === 0) {

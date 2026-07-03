@@ -20,7 +20,7 @@ describe("shouldRetry", () => {
   it("returns false for 4xx ApiError", () => {
     const err = new ApiError(
       { url: "http://rekor/api", ok: false, status: 422, statusText: "Unprocessable Entity", body: {} },
-      "request error"
+      "request error",
     );
     expect(shouldRetry(0, err)).toBe(false);
   });
@@ -28,7 +28,7 @@ describe("shouldRetry", () => {
   it("returns true for 5xx ApiError", () => {
     const err = new ApiError(
       { url: "http://rekor/api", ok: false, status: 503, statusText: "Service Unavailable", body: {} },
-      "request error"
+      "request error",
     );
     expect(shouldRetry(0, err)).toBe(true);
   });

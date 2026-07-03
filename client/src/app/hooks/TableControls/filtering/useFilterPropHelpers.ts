@@ -27,7 +27,7 @@ export interface IFilterPropHelpersExternalArgs<TItem, TFilterCategoryKey extend
  * Returns derived state and prop helpers for the filter feature based on given "source of truth" state.
  */
 export const useFilterPropHelpers = <TItem, TFilterCategoryKey extends string>(
-  args: IFilterPropHelpersExternalArgs<TItem, TFilterCategoryKey>
+  args: IFilterPropHelpersExternalArgs<TItem, TFilterCategoryKey>,
 ) => {
   const {
     filterState: { setFilterValues },
