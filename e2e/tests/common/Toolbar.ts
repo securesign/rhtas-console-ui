@@ -22,29 +22,29 @@ type FilterValueType<TFilter extends Record<string, TFilterValue>> = {
 
 function isStringFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  value: unknown,
-): value is string {
+  _value: unknown,
+): _value is string {
   return type === "string";
 }
 
 function isDateRangeFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  value: unknown,
-): value is TDateRange {
+  _value: unknown,
+): _value is TDateRange {
   return type === "dateRange";
 }
 
 function isMultiSelectFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  value: unknown,
-): value is TMultiValue {
+  _value: unknown,
+): _value is TMultiValue {
   return type === "multiSelect";
 }
 
 function isTypeaheadFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  value: unknown,
-): value is TMultiValue {
+  _value: unknown,
+): _value is TMultiValue {
   return type === "typeahead";
 }
 

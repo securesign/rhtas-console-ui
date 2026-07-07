@@ -28,7 +28,11 @@ export default defineConfig([
     },
     rules: {
       // TODO: Remove these rules incrementally so we have default and more strict linting
-      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      }],
       "react-hooks/rules-of-hooks": "off",
       "react-refresh/only-export-components": "off",
       "@eslint-react/no-leaked-conditional-rendering": "off",
