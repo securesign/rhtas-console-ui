@@ -8,7 +8,7 @@ describe("RekorSearchForm", () => {
     render(
       <RekorClientProvider>
         <RekorSearchForm onSubmit={vi.fn()} />
-      </RekorClientProvider>
+      </RekorClientProvider>,
     );
 
     expect(screen.getByRole("textbox", { name: "Search input field" })).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("RekorSearchForm", () => {
     render(
       <RekorClientProvider>
         <RekorSearchForm onSubmit={mockOnSubmit} />
-      </RekorClientProvider>
+      </RekorClientProvider>,
     );
 
     await userEvent.type(screen.getByRole("textbox", { name: "Search input field" }), "test@example.com");

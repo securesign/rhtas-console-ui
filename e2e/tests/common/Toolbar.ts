@@ -22,28 +22,28 @@ type FilterValueType<TFilter extends Record<string, TFilterValue>> = {
 
 function isStringFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  _value: unknown
+  _value: unknown,
 ): _value is string {
   return type === "string";
 }
 
 function isDateRangeFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  _value: unknown
+  _value: unknown,
 ): _value is TDateRange {
   return type === "dateRange";
 }
 
 function isMultiSelectFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  _value: unknown
+  _value: unknown,
 ): _value is TMultiValue {
   return type === "multiSelect";
 }
 
 function isTypeaheadFilter<K extends string, T extends Record<K, TFilterValue>>(
   type: T[K],
-  _value: unknown
+  _value: unknown,
 ): _value is TMultiValue {
   return type === "typeahead";
 }
@@ -68,7 +68,7 @@ export class Toolbar<TFilter extends Record<string, TFilterValue>, TFilterName e
   static async build<TFilter extends Record<string, TFilterValue>>(
     page: Page,
     toolbarAriaLabel: string,
-    filters: TFilter = {} as TFilter
+    filters: TFilter = {} as TFilter,
   ) {
     const toolbar = page.locator(`[aria-label="${toolbarAriaLabel}"]`);
     await expect(toolbar).toBeVisible();

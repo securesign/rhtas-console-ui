@@ -16,7 +16,6 @@ export interface RekorClientContext {
   setBaseUrl: (_base: string | undefined) => void;
 }
 
-/* eslint-disable react-refresh/only-export-components */
 export const RekorClientContext = createContext<RekorClientContext | undefined>(undefined);
 
 interface RekorClientProviderProps {

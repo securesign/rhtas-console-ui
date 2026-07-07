@@ -37,7 +37,7 @@ const renderInTable = (signature: SignatureView, index = 0) =>
       <tbody>
         <ArtifactSignature signature={signature} index={index} />
       </tbody>
-    </table>
+    </table>,
   );
 
 describe("ArtifactSignature", () => {

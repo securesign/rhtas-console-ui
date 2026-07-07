@@ -27,7 +27,7 @@ describe("useFilterState", () => {
     const { result } = renderHook(() =>
       useFilterState({
         initialFilterValues: initialValues,
-      })
+      }),
     );
 
     expect(result.current.filterValues).toEqual(initialValues);
@@ -56,7 +56,7 @@ describe("useFilterState", () => {
     const { result } = renderHook(() =>
       useFilterState({
         initialFilterValues: initialValues,
-      })
+      }),
     );
 
     act(() => {
@@ -112,7 +112,7 @@ describe("useFilterState", () => {
         useFilterState({ initialFilterValues }),
       {
         initialProps: { initialFilterValues: initialValues },
-      }
+      },
     );
 
     // Change filter values
@@ -152,7 +152,7 @@ describe("useFilterState", () => {
     const { result } = renderHook(() =>
       useFilterState({
         initialFilterValues: initialValues,
-      })
+      }),
     );
 
     act(() => {
