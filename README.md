@@ -103,13 +103,10 @@ rpm-lockfile-prototype --image $BASE_IMAGE rpms.in.yaml
 
 ## Deployment
 
-The `deployment/` directory contains Kubernetes manifests organized into a `base/` directory and an `overlays/dev/` directory for deploying the RHTAS Console (UI, backend, and database) using [Kustomize](https://kustomize.io/). The `base/` directory includes:
+The `deployment/` directory contains Kubernetes manifests organized into a `base/` directory and an `overlays/dev/` directory for deploying the RHTAS Console (UI and backend) using [Kustomize](https://kustomize.io/). The `base/` directory includes:
 
 - `console-backend-deploy.yaml`: Deployment configuration for the console backend.
 - `console-backend-service.yaml`: Service definition for the backend.
-- `console-db-statefulset.yaml`: StatefulSet configuration for the console database.
-- `console-db-secret.yaml`: Secrets for database credentials.
-- `console-db-service.yaml`: Service definition for the database.
 - `console-serviceaccounts.yaml`: Service accounts for the console components.
 - `console-ui-deploy.yaml`: Deployment configuration for the console UI.
 - `console-ui-route.yaml`: Route configuration for the UI.
