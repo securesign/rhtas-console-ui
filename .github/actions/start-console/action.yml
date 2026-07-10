@@ -11,11 +11,6 @@ inputs:
     type: string
     required: false
     default: ""
-  server_db_image:
-    description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
-    type: string
-    required: false
-    default: ""
   playwright_version:
     description: version of the playwright image to run
     type: string
@@ -45,9 +40,6 @@ runs:
         fi
         if [ -n "${{ inputs.ui_image }}" ]; then
           opts="${opts} CONSOLE_UI_IMAGE=${{ inputs.ui_image }}"
-        fi
-        if [ -n "${{ inputs.server_db_image }}" ]; then
-          opts="${opts} CONSOLE_DB_IMAGE=${{ inputs.server_db_image }}"
         fi
 
         if [ -n "${{ inputs.playwright_version }}" ]; then

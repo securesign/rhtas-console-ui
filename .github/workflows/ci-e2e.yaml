@@ -105,7 +105,6 @@ jobs:
       artifact: test-images
       server_image: ghcr.io/securesign/rhtas-console:pr-test
       ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
-      server_db_image: docker.io/library/mariadb:10.5
 
   run-e2e-coverage:
     needs:
@@ -119,4 +118,3 @@ jobs:
       server_image: ghcr.io/securesign/rhtas-console:pr-test
       # Won't be used as for coverage the ui will start in dev mode
       ui_image: ghcr.io/securesign/rhtas-console-ui:pr-test
-      server_db_image: docker.io/library/mariadb:10.5

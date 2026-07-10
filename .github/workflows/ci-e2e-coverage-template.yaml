@@ -19,11 +19,6 @@ on:
         type: string
         required: false
         default: ""
-      server_db_image:
-        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
-        type: string
-        required: false
-        default: ""
 
 permissions:
   id-token: write
@@ -78,16 +73,6 @@ jobs:
               echo "Image does not exist locally"
               docker manifest inspect ${{ inputs.server_image }}
           fi
-      - name: Check server_db_image image exists
-        if: ${{ inputs.server_db_image != '' }}
-        run: |
-          if docker image inspect ${{ inputs.server_db_image }} >/dev/null 2>&1; then
-              echo "Image exists locally"
-              docker image inspect ${{ inputs.server_db_image }}
-          else
-              echo "Image does not exist locally"
-              docker manifest inspect ${{ inputs.server_db_image }}
-          fi
 
   coverage:
     needs: check-images
@@ -128,7 +113,6 @@ jobs:
         with:
           ui_image: ${{ inputs.ui_image }}
           server_image: ${{ inputs.server_image }}
-          server_db_image: ${{ inputs.server_db_image }}
 
       - name: rhtas-console-ui - start in dev mode
         env:
