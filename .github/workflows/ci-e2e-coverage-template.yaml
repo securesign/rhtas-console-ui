@@ -19,11 +19,6 @@ on:
         type: string
         required: false
         default: ""
-      server_db_image:
-        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
-        type: string
-        required: false
-        default: ""
 
 permissions:
   id-token: write
@@ -78,16 +73,6 @@ jobs:
               echo "Image does not exist locally"
               docker manifest inspect ${{ inputs.server_image }}
           fi
-      - name: Check server_db_image image exists
-        if: ${{ inputs.server_db_image != '' }}
-        run: |
-          if docker image inspect ${{ inputs.server_db_image }} >/dev/null 2>&1; then
-              echo "Image exists locally"
-              docker image inspect ${{ inputs.server_db_image }}
-          else
-              echo "Image does not exist locally"
-              docker manifest inspect ${{ inputs.server_db_image }}
-          fi
 
   coverage:
     needs: check-images
@@ -112,7 +97,7 @@ jobs:
             docker load --input ${image}
           done
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -128,7 +113,6 @@ jobs:
         with:
           ui_image: ${{ inputs.ui_image }}
           server_image: ${{ inputs.server_image }}
-          server_db_image: ${{ inputs.server_db_image }}
 
       - name: rhtas-console-ui - start in dev mode
         env:
@@ -166,7 +150,7 @@ jobs:
           name: coverage-report
           path: coverage
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           use_oidc: true
           flags: e2e

@@ -26,22 +26,22 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(page.locator("dt", { hasText: "Digest" }).locator("+ dd", { hasText: /^sha256:.+/ })).toBeVisible();
     await expect(page.locator("dt", { hasText: "Size" }).locator("+ dd", { hasText: /\d+/ })).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Labels" }).locator("+ dd", { hasText: "kdacosta@redhat.com" })
+      page.locator("dt", { hasText: "Labels" }).locator("+ dd", { hasText: "kdacosta@redhat.com" }),
     ).toBeVisible();
     await expect(page.locator("dt", { hasText: "Signatures" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(page.locator("dt", { hasText: "Rekor Entries" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
       page
         .locator("dt", { hasText: "Media Type" })
-        .locator("+ dd", { hasText: "application/vnd.oci.image.manifest.v1+json" })
+        .locator("+ dd", { hasText: "application/vnd.oci.image.manifest.v1+json" }),
     ).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+      page.locator("dt", { hasText: "Created" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ }),
     ).toBeVisible();
     await expect(page.locator("dt", { hasText: "Identities" })).toBeVisible();
     await expect(page.locator("dt", { hasText: "Attestations" }).locator("+ dd", { hasText: /^\d+$/ })).toBeVisible();
     await expect(
-      page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" })
+      page.locator("dt", { hasText: "Time Coherence" }).locator("+ dd", { hasText: "unknown" }),
     ).toBeVisible();
   });
 
@@ -131,16 +131,16 @@ test.describe("Artifacts Verification Flow", () => {
     // Verify all expected certificate fields are present with values
     await expect(leafCertCard.locator("dt", { hasText: "SAN" }).locator("+ dd", { hasText: /.+@.+/ })).toBeVisible();
     await expect(
-      leafCertCard.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /sigstore/ })
+      leafCertCard.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /sigstore/ }),
     ).toBeVisible();
     await expect(
       leafCertCard
         .locator("dt", { hasText: "Validity" })
-        .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}\s+→\s+\w{3}\s+\d{1,2},\s+\d{4}/ })
+        .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}\s+→\s+\w{3}\s+\d{1,2},\s+\d{4}/ }),
     ).toBeVisible();
     await expect(leafCertCard.locator("dt", { hasText: "Serial" }).locator("+ dd", { hasText: /\d+/ })).toBeVisible();
     await expect(
-      leafCertCard.locator("dt", { hasText: "Fingerprint" }).locator("+ dd", { hasText: /[0-9a-f:]+/i })
+      leafCertCard.locator("dt", { hasText: "Fingerprint" }).locator("+ dd", { hasText: /[0-9a-f:]+/i }),
     ).toBeVisible();
   });
 
@@ -168,19 +168,19 @@ test.describe("Artifacts Verification Flow", () => {
 
     // Verify all expected Rekor entry fields are present with values
     await expect(
-      rekorEntryCard.locator("dt", { hasText: "Entry Type" }).locator("+ dd", { hasText: "hashedrekord" })
+      rekorEntryCard.locator("dt", { hasText: "Entry Type" }).locator("+ dd", { hasText: "hashedrekord" }),
     ).toBeVisible();
     // Date format varies by browser: Chromium/Firefox use comma, WebKit uses "at"
     await expect(
       rekorEntryCard
         .locator("dt", { hasText: "Integrated Time" })
-        .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}(,|\s+at)\s+\d{1,2}:\d{2}\s+(AM|PM)/ })
+        .locator("+ dd", { hasText: /\w{3}\s+\d{1,2},\s+\d{4}(,|\s+at)\s+\d{1,2}:\d{2}\s+(AM|PM)/ }),
     ).toBeVisible();
     await expect(
-      rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /[\w-]+/ })
+      rekorEntryCard.locator("dt", { hasText: "Log ID" }).locator("+ dd", { hasText: /[\w-]+/ }),
     ).toBeVisible();
     await expect(
-      rekorEntryCard.locator("dt", { hasText: "Log Index" }).locator("+ dd", { hasText: /\d+/ })
+      rekorEntryCard.locator("dt", { hasText: "Log Index" }).locator("+ dd", { hasText: /\d+/ }),
     ).toBeVisible();
 
     const setInput = rekorEntryCard
@@ -191,7 +191,7 @@ test.describe("Artifacts Verification Flow", () => {
     await expect(setInput).toHaveValue(/^[0-9a-f]+$/i);
 
     await expect(
-      rekorEntryCard.locator("dt", { hasText: "Entry" }).locator("+ dd", { hasText: "Open in Rekor Search" })
+      rekorEntryCard.locator("dt", { hasText: "Entry" }).locator("+ dd", { hasText: "Open in Rekor Search" }),
     ).toBeVisible();
   });
 
@@ -254,26 +254,26 @@ test.describe("Artifacts Verification Flow", () => {
       .locator("[id^='cert-chain-expand-']")
       .filter({ hasText: /sigstore-intermediate/ });
     await expect(
-      intermediateContent.locator("dt", { hasText: "Subject" }).locator("+ dd", { hasText: /sigstore-intermediate/ })
+      intermediateContent.locator("dt", { hasText: "Subject" }).locator("+ dd", { hasText: /sigstore-intermediate/ }),
     ).toBeVisible();
     await expect(
-      intermediateContent.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /sigstore/ })
+      intermediateContent.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /sigstore/ }),
     ).toBeVisible();
     await expect(
       intermediateContent
         .locator("dt", { hasText: "Not Before" })
-        .locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+        .locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ }),
     ).toBeVisible();
     await expect(
       intermediateContent
         .locator("dt", { hasText: "Not After" })
-        .locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+        .locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ }),
     ).toBeVisible();
     await expect(
-      intermediateContent.locator("dt", { hasText: "Serial Number" }).locator("+ dd", { hasText: /\d+/ })
+      intermediateContent.locator("dt", { hasText: "Serial Number" }).locator("+ dd", { hasText: /\d+/ }),
     ).toBeVisible();
     await expect(
-      intermediateContent.locator("dt", { hasText: "Is CA" }).locator("+ dd", { hasText: "Yes" })
+      intermediateContent.locator("dt", { hasText: "Is CA" }).locator("+ dd", { hasText: "Yes" }),
     ).toBeVisible();
     const intermediatePemInput = intermediateContent.locator("dt", { hasText: "PEM" }).locator("+ dd").locator("input");
     await expect(intermediatePemInput).toBeVisible();
@@ -293,19 +293,19 @@ test.describe("Artifacts Verification Flow", () => {
         has: page.locator("dd", { hasText: /CN=sigstore,O=sigstore\.dev/ }),
       });
     await expect(
-      rootContent.locator("dt", { hasText: "Subject" }).locator("+ dd", { hasText: /CN=sigstore,O=sigstore\.dev/ })
+      rootContent.locator("dt", { hasText: "Subject" }).locator("+ dd", { hasText: /CN=sigstore,O=sigstore\.dev/ }),
     ).toBeVisible();
     await expect(
-      rootContent.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /CN=sigstore,O=sigstore\.dev/ })
+      rootContent.locator("dt", { hasText: "Issuer" }).locator("+ dd", { hasText: /CN=sigstore,O=sigstore\.dev/ }),
     ).toBeVisible();
     await expect(
-      rootContent.locator("dt", { hasText: "Not Before" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+      rootContent.locator("dt", { hasText: "Not Before" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ }),
     ).toBeVisible();
     await expect(
-      rootContent.locator("dt", { hasText: "Not After" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ })
+      rootContent.locator("dt", { hasText: "Not After" }).locator("+ dd", { hasText: /[A-Za-z]{3} \d{1,2}, \d{4}/ }),
     ).toBeVisible();
     await expect(
-      rootContent.locator("dt", { hasText: "Serial Number" }).locator("+ dd", { hasText: /\d+/ })
+      rootContent.locator("dt", { hasText: "Serial Number" }).locator("+ dd", { hasText: /\d+/ }),
     ).toBeVisible();
     await expect(rootContent.locator("dt", { hasText: "Is CA" }).locator("+ dd", { hasText: "Yes" })).toBeVisible();
     const rootPemInput = rootContent.locator("dt", { hasText: "PEM" }).locator("+ dd").locator("input");

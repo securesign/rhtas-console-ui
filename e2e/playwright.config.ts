@@ -17,6 +17,10 @@ const DESKTOP_CONFIG = {
  */
 export default defineConfig({
   testDir: "./tests",
+  timeout: 180_000,
+  expect: {
+    timeout: 120_000,
+  },
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

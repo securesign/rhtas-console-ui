@@ -105,7 +105,7 @@ describe("useWithUiId", () => {
       ({ data }: { data: { id: number; name: string }[] }) => useWithUiId(data, generator),
       {
         initialProps: { data: [{ id: 1, name: "Item 1" }] },
-      }
+      },
     );
 
     const firstResult = result.current;
@@ -127,7 +127,7 @@ describe("useWithUiId", () => {
         initialProps: {
           generator: (item, index) => `id-${item.id}-${index}`,
         },
-      }
+      },
     );
 
     const firstResult = result.current;

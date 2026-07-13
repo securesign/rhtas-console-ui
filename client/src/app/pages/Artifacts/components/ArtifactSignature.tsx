@@ -66,16 +66,13 @@ export const ArtifactSignature = ({ signature, index }: { signature: SignatureVi
           </ClipboardCopy>
         </Td>
         <Td>
-          {typeof signature.timestamp === "string"
-            ? (() => {
-                const date = new Date(signature.timestamp);
-                return (
-                  <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={date}>
-                    {relativeDateString(date)}
-                  </Timestamp>
-                );
-              })()
-            : "N/A"}
+          {typeof signature.timestamp === "string" ? (
+            <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(signature.timestamp)}>
+              {relativeDateString(new Date(signature.timestamp))}
+            </Timestamp>
+          ) : (
+            "N/A"
+          )}
         </Td>
         <Td>{signatureStatusBadge}</Td>
         <Td>{chainStatusBadge}</Td>

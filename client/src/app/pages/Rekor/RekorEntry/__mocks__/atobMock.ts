@@ -1,4 +1,4 @@
-/* eslint-disable no-useless-escape, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
+/* eslint-disable no-useless-escape */
 
 const atobMock = () => {
   window.atob = vi.fn().mockImplementation((str) => {

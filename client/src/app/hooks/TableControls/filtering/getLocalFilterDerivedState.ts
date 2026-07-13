@@ -38,7 +38,7 @@ export const getLocalFilterDerivedState = <TItem, TFilterCategoryKey extends str
       const matcher = filterCategory.matcher;
       const logicOperator = getFilterLogicOperator(filterCategory) === "AND" ? "every" : "some";
       return values[logicOperator]((filterValue) => matcher(filterValue, item));
-    })
+    }),
   );
 
   return { filteredItems };

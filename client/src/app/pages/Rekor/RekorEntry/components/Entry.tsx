@@ -105,7 +105,6 @@ export function Entry({ entry }: { entry: LogEntry }) {
     setExpanded(newExpanded);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const body = JSON.parse(window.atob(obj.body)) as {
     kind: string;
     apiVersion: string;

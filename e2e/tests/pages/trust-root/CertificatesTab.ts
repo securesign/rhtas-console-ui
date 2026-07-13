@@ -30,7 +30,7 @@ export class CertificatesTab {
         Status: { isSortable: false },
         Expiration: { isSortable: true },
       },
-      ["Copy PEM", "Download PEM"]
+      ["Copy PEM", "Download PEM"],
     );
   }
 

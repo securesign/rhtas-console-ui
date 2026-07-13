@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "clean:all": "rimraf ./dist ./node_modules",
-    "lint": "eslint .",
+    "lint": "eslint . && tsc --noEmit",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check './src/**/*.{ts,tsx,js,json}'",
     "format:fix": "prettier --write './src/**/*.{ts,tsx,js,json}'",
@@ -17,9 +17,11 @@
     "start": "npm run build && node --enable-source-maps dist/index.js"
   },
   "dependencies": {
-    "cookie": "^1.0.2",
-    "ejs": "^5.0.1",
+    "ejs": ">=5.0.1",
     "express": "^5.1.0",
     "http-terminator": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5"
   }
 }

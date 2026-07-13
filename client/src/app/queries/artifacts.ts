@@ -35,7 +35,7 @@ export const useFetchArtifactsImageData = ({ uri }: { uri: string | null | undef
       enabled,
       refetchOnWindowFocus: false,
     },
-    artifactsImageDataMock
+    artifactsImageDataMock,
   );
 
   return { artifact: data, isFetching: isLoading, fetchError: error, refetch };
@@ -74,7 +74,7 @@ export const useVerifyArtifact = ({
         return response.data ?? null;
       },
     },
-    verifyMock
+    verifyMock,
   );
 
   return {

@@ -19,11 +19,6 @@ on:
         type: string
         required: false
         default: ""
-      server_db_image:
-        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
-        type: string
-        required: false
-        default: ""
   workflow_dispatch:
     inputs:
       artifact:
@@ -39,11 +34,6 @@ on:
         default: ""
       server_image:
         description: image uri for the server (ie. ghcr.io/<namespace>/<image-name>:<tag>)
-        type: string
-        required: false
-        default: ""
-      server_db_image:
-        description: image uri for the database (ie. ghcr.io/<namespace>/<image-name>:<tag>)
         type: string
         required: false
         default: ""
@@ -97,16 +87,6 @@ jobs:
               echo "Image does not exist locally"
               docker manifest inspect ${{ inputs.server_image }}
           fi
-      - name: Check server_db_image image exists
-        if: ${{ inputs.server_db_image != '' }}
-        run: |
-          if docker image inspect ${{ inputs.server_db_image }} >/dev/null 2>&1; then
-              echo "Image exists locally"
-              docker image inspect ${{ inputs.server_db_image }}
-          else
-              echo "Image does not exist locally"
-              docker manifest inspect ${{ inputs.server_db_image }}
-          fi
 
   e2e-integration-tests:
     needs: check-images
@@ -132,7 +112,7 @@ jobs:
           done
 
       - name: Checkout ui repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -147,7 +127,6 @@ jobs:
         with:
           ui_image: ${{ inputs.ui_image }}
           server_image: ${{ inputs.server_image }}
-          server_db_image: ${{ inputs.server_db_image }}
 
       - name: Run Playwright tests
         run: |

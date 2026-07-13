@@ -71,7 +71,6 @@ export function useRekorSearch() {
   const client = useRekorClient();
 
   return useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     async (search: SearchQuery, page: number = 1): Promise<RekorEntries> => {
       switch (search.attribute) {
         case "logIndex":
@@ -82,7 +81,7 @@ export function useRekorSearch() {
                 client.entries.getLogEntryByIndex({
                   logIndex: search.query,
                 }),
-                REQUEST_TIMEOUT_MS
+                REQUEST_TIMEOUT_MS,
               ),
             ],
           };
@@ -94,7 +93,7 @@ export function useRekorSearch() {
                 client.entries.getLogEntryByUuid({
                   entryUuid: search.query,
                 }),
-                REQUEST_TIMEOUT_MS
+                REQUEST_TIMEOUT_MS,
               ),
             ],
           };
@@ -104,7 +103,7 @@ export function useRekorSearch() {
             {
               email: search.query,
             },
-            page
+            page,
           );
         case "hash":
           return queryEntries(
@@ -112,7 +111,7 @@ export function useRekorSearch() {
             {
               hash: search.query.startsWith("sha256:") ? search.query : `sha256:${search.query}`,
             },
-            page
+            page,
           );
         case "commitSha":
           // eslint-disable-next-line no-case-declarations
@@ -120,7 +119,7 @@ export function useRekorSearch() {
           return queryEntries(client, { hash }, page);
       }
     },
-    [client]
+    [client],
   );
 }
 
@@ -135,7 +134,7 @@ async function queryEntries(client: RekorClient, query: SearchIndex, page: numbe
   const uuidToRetrieve = logIndexes.slice(startIndex, endIndex);
 
   const entries = await Promise.all(
-    uuidToRetrieve.map((entryUuid) => withTimeout(client.entries.getLogEntryByUuid({ entryUuid }), REQUEST_TIMEOUT_MS))
+    uuidToRetrieve.map((entryUuid) => withTimeout(client.entries.getLogEntryByUuid({ entryUuid }), REQUEST_TIMEOUT_MS)),
   );
   return {
     totalCount: logIndexes.length,

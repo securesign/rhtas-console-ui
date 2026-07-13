@@ -179,7 +179,7 @@ export const stringMatcher = (filterValue: string, value: string) => {
  * @returns Single signature identity
  */
 export function toIdentity(
-  leaf?: ParsedCertificate
+  leaf?: ParsedCertificate,
 ): { san: string | undefined; issuer: string | undefined; issuerType: string } | undefined {
   if (!leaf) return undefined;
 
@@ -194,7 +194,7 @@ export function toIdentity(
 }
 
 export const verificationStatusToLabelColor = (
-  status: string
+  status: string,
 ): {
   label: string;
   color: LabelProps["color"];
