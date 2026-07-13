@@ -1,5 +1,3 @@
-/* global process */
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,28 +7,28 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import { createHttpTerminator } from "http-terminator";
 
 import { SERVER_ENV_KEYS, CONSOLE_ENV, brandingStrings, encodeEnv } from "@console-ui/common";
-import proxies from "./proxies";
+import { proxyMap } from "./proxies.js";
 
 const debugMode = process.env.DEBUG === "1";
-debugMode && console.log("CONSOLE_ENV", CONSOLE_ENV);
+if (debugMode) console.log("CONSOLE_ENV", CONSOLE_ENV);
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const pathToClientDist = path.join(__dirname, "../../client/dist");
 
-const port = parseInt(CONSOLE_ENV.PORT, 10) || 8080;
+const port = CONSOLE_ENV.PORT ? Number.parseInt(CONSOLE_ENV.PORT, 10) : 8080;
 
 const app = express();
 app.set("x-powered-by", false);
 
-// Setup proxy handling
-app.use(createProxyMiddleware(proxies.api));
+for (const proxyPath in proxyMap) {
+  app.use(createProxyMiddleware(proxyMap[proxyPath]));
+}
 
 app.engine("ejs", ejs.renderFile);
 app.use(express.json());
 app.set("views", pathToClientDist);
 app.use(express.static(pathToClientDist));
 
-// Handle any request that hasn't already been handled by express.static or proxy
 app.get("*splat", (_, res) => {
   if (CONSOLE_ENV.NODE_ENV === "development") {
     res.send(`
@@ -47,18 +45,16 @@ app.get("*splat", (_, res) => {
   }
 });
 
-// Start the server
 const server = app.listen(port, (error) => {
   if (error) {
-    throw error; // e.g. EADDRINUSE
+    throw error;
   }
   console.log(`Server listening on port::${port}`);
 });
 
-// Handle shutdown signals Ctrl-C (SIGINT) and default podman/docker stop (SIGTERM)
 const httpTerminator = createHttpTerminator({ server });
 
-const shutdown = async (signal) => {
+const shutdown = async (signal: string) => {
   if (!server) {
     console.log(`${signal}, no server running.`);
     return;
