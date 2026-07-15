@@ -1,72 +1,91 @@
 import type { AxiosError } from "axios";
+import { client } from "@app/axios-config/apiInit";
 
 import {
   type AllArtifactItem,
   type AttestationPresenceItem,
+  type TrendDataItem,
   type UnsignedArtifactItem,
   allArtifactsMock,
   attestationPresenceMock,
+  attestationTrendData,
   trustCoverageMock,
   unsignedArtifactsMock,
 } from "./mocks/trust-coverage.mock";
 import { useMockableQuery } from "./helpers";
-import type { TrustCoverageResponse } from "@app/client";
+import { getApiV1TrustCoverage, type TrustCoverageResponse } from "@app/client";
 
-export const useFetchTrustCoverageSummary = (environment?: string) => {
-  const { data, isLoading, error } = useMockableQuery<TrustCoverageResponse, AxiosError>(
+export const useFetchTrustCoverageSummary = () => {
+  const { data, isLoading, error } = useMockableQuery<TrustCoverageResponse | null, AxiosError>(
     {
-      queryKey: ["TrustCoverage", "summary", { environment }],
-      queryFn: () => {
-        throw new Error("Api call is not ready yet, use MOCK=on");
+      queryKey: ["TrustCoverage", "summary"],
+      queryFn: async () => {
+        const response = await getApiV1TrustCoverage({ client });
+        return response.data ?? null;
       },
       refetchOnWindowFocus: false,
     },
-    trustCoverageMock
+    trustCoverageMock,
   );
 
   return { data, isFetching: isLoading, fetchError: error };
 };
 
-export const useFetchAttestationPresence = (environment?: string) => {
+export const useFetchAttestationPresence = () => {
   const { data, isLoading, error } = useMockableQuery<AttestationPresenceItem[], AxiosError>(
     {
-      queryKey: ["TrustCoverage", "attestationPresence", { environment }],
+      queryKey: ["TrustCoverage", "attestationPresence"],
       queryFn: () => {
         throw new Error("Api call is not ready yet, use MOCK=on");
       },
       refetchOnWindowFocus: false,
     },
-    attestationPresenceMock
+    attestationPresenceMock,
   );
 
   return { data, isFetching: isLoading, fetchError: error };
 };
 
-export const useFetchAllArtifacts = (environment?: string) => {
+export const useFetchAllArtifacts = () => {
   const { data, isLoading, error } = useMockableQuery<AllArtifactItem[], AxiosError>(
     {
-      queryKey: ["TrustCoverage", "allArtifacts", { environment }],
+      queryKey: ["TrustCoverage", "allArtifacts"],
       queryFn: () => {
         throw new Error("Api call is not ready yet, use MOCK=on");
       },
       refetchOnWindowFocus: false,
     },
-    allArtifactsMock
+    allArtifactsMock,
   );
 
   return { data, isFetching: isLoading, fetchError: error };
 };
 
-export const useFetchUnsignedArtifacts = (environment?: string) => {
+export const useFetchUnsignedArtifacts = () => {
   const { data, isLoading, error } = useMockableQuery<UnsignedArtifactItem[], AxiosError>(
     {
-      queryKey: ["TrustCoverage", "unsignedArtifacts", { environment }],
+      queryKey: ["TrustCoverage", "unsignedArtifacts"],
       queryFn: () => {
         throw new Error("Api call is not ready yet, use MOCK=on");
       },
       refetchOnWindowFocus: false,
     },
-    unsignedArtifactsMock
+    unsignedArtifactsMock,
+  );
+
+  return { data, isFetching: isLoading, fetchError: error };
+};
+
+export const useFetchArtifactTrendData = () => {
+  const { data, isLoading, error } = useMockableQuery<TrendDataItem[], AxiosError>(
+    {
+      queryKey: ["TrustCoverage", "unsignedArtifacts"],
+      queryFn: () => {
+        throw new Error("Api call is not ready yet, use MOCK=on");
+      },
+      refetchOnWindowFocus: false,
+    },
+    attestationTrendData,
   );
 
   return { data, isFetching: isLoading, fetchError: error };

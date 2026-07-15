@@ -4,19 +4,16 @@ import { Card, CardBody, CardTitle, Label, ToggleGroup, ToggleGroupItem } from "
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
 import { useFetchUnsignedArtifacts } from "@app/queries/trust-coverage";
-import { LoadingWrapper } from "@app/components/LoadingWrapper";
+import { LoadingWrapper } from "@tsd-ui/core";
 
-interface Props {
-  environments: string[];
-}
-
-export default function UnsignedArtifactsTable({ environments }: Props) {
-  const tabs = ["All", ...environments];
+export default function UnsignedArtifactsTable() {
+  const tabs = ["All", "Signed only", "Signed + Attestation"];
   const [selectedTab, setSelectedTab] = useState("All");
 
-  const { data, isFetching, fetchError } = useFetchUnsignedArtifacts(selectedTab === "All" ? undefined : selectedTab);
+  const { data, isFetching, fetchError } = useFetchUnsignedArtifacts();
 
   const filteredData = selectedTab === "All" ? (data ?? []) : (data ?? []).filter((a) => a.environment === selectedTab);
+  console.log(filteredData);
 
   return (
     <Card>
@@ -44,8 +41,8 @@ export default function UnsignedArtifactsTable({ environments }: Props) {
               </Tr>
             </Thead>
             <Tbody>
-              {filteredData.map((artifact, index) => (
-                <Tr key={index}>
+              {filteredData.map((artifact) => (
+                <Tr key={artifact.uri}>
                   <Td dataLabel="Artifact URI">{artifact.uri}</Td>
                   <Td dataLabel="Environment">
                     <Label isCompact>{artifact.environment}</Label>

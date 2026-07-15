@@ -11,8 +11,7 @@ const Artifacts = lazy(() => import("./pages/Artifacts"));
 const TrustRoot = lazy(() => import("./pages/TrustRoot"));
 const RekorSearch = lazy(() => import("./pages/Rekor/RekorSearch"));
 const RekorEntry = lazy(() => import("./pages/Rekor/RekorEntry"));
-const TrustCoverage = lazy(() => import("./pages/TrustCoverage/Main"));
-const AllArtifacts = lazy(() => import("./pages/TrustCoverage/AllArtifacts"));
+const TrustCoverage = lazy(() => import("./pages/TrustCoverage"));
 
 export const Paths = {
   artifacts: "/artifacts",
@@ -33,7 +32,6 @@ export const AppRoutes = () => {
     { path: Paths.rekorSearch, element: <RekorSearch /> },
     { path: Paths.rekorEntry, element: <RekorEntry /> },
     ...(features.monitoringAlerting ? [{ path: Paths.trustCoverage, element: <TrustCoverage /> }] : []),
-    ...(features.monitoringAlerting ? [{ path: Paths.allArtifacts, element: <AllArtifacts /> }] : []),
     { path: "*", element: <NotFound /> },
   ]);
 

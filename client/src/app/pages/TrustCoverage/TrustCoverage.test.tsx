@@ -13,7 +13,7 @@ describe("TrustCoverage", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <TrustCoverage />
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     expect(screen.getByRole("heading", { name: "Trust Coverage" })).toBeInTheDocument();

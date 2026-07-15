@@ -2,14 +2,10 @@ import { Chart, ChartAxis, ChartBar, ChartTooltip } from "@patternfly/react-char
 import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 
 import { useFetchAttestationPresence } from "@app/queries/trust-coverage";
-import { LoadingWrapper } from "@app/components/LoadingWrapper";
+import { LoadingWrapper } from "@tsd-ui/core";
 
-interface Props {
-  environment?: string;
-}
-
-export default function AttestationPresence({ environment }: Props) {
-  const { data, isFetching, fetchError } = useFetchAttestationPresence(environment);
+export default function AttestationPresence() {
+  const { data, isFetching, fetchError } = useFetchAttestationPresence();
 
   const chartData = (data ?? []).map((item) => ({ x: item.type, y: item.percentage }));
 
@@ -37,7 +33,6 @@ export default function AttestationPresence({ environment }: Props) {
               <ChartBar
                 data={chartData}
                 labelComponent={<ChartTooltip constrainToVisibleArea />}
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 labels={({ datum }) => `${datum.y as number}%`}
               />
             </Chart>

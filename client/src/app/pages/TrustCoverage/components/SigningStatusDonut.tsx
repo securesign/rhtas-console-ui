@@ -12,13 +12,12 @@ interface Props {
 export default function SigningStatusDonut({ title, donutData }: Props) {
   return (
     <Card isFullHeight>
-      <CardTitle>Signing Status Distribution</CardTitle>
+      <CardTitle>Attestation Status</CardTitle>
       <CardBody>
         <div style={{ height: "280px", width: "100%", maxWidth: "450px" }}>
           <ChartDonut
             constrainToVisibleArea
             data={donutData}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             labels={({ datum }) => `${datum.x as string}: ${datum.y as number}`}
             legendData={donutData.map((d) => ({
               name: `${d.x}: ${d.y}`,
