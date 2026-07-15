@@ -7,7 +7,7 @@ resources:
 images:
 - name: default/console-image
   newName: quay.io/securesign/rhtas-console
-  digest: sha256:11fe3294183768b03698125bb749ac349def74a8e7ed6ac8cb92f51a93c0dc13
+  digest: sha256:7a33c13a4fe493b4638f342a14d7dab93152141895771e543f3e028773bfa10f 
 - name: default/console-ui-image
   newName: quay.io/securesign/rhtas-console-ui
-  digest: sha256:21276e92576546ac990b98cdb74aae56d7d5398339d95c5bd27ff1432031d605
+  digest: sha256:eea5c4b6830a8fd26acfc5e0c01c01cb7dd6519f27cef4ac4874546c1dbb03bd 
