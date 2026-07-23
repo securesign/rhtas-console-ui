@@ -46,7 +46,7 @@
   "peerDependencies": {
     "react": "^18 || ^19.0.0",
     "react-dom": "^18 || ^19.0.0",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3 || ~7.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -78,9 +78,9 @@
     "@rollup/plugin-virtual": "^3.0.2",
     "@tanstack/eslint-plugin-query": "^5.100.10",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^25.0.0",
+    "@types/node": "^26.0.0",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "concurrently": "^9.1.2",
+    "concurrently": "^10.0.0",
     "copyfiles": "^2.4.1",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
@@ -88,7 +88,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
+    "lint-staged": "^17.0.0",
     "prettier": "^3.7.4",
     "rimraf": "^6.0.1",
     "rollup": "^4.62.2",
