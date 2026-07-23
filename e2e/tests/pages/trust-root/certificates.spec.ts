@@ -27,17 +27,17 @@ test.describe("Trust Root - Certificates", () => {
 
     // Verify default sorting
     const table = await certificatesTab.getTable();
-    await expect(table).toBeSortedBy("Expiration", "descending");
+    await expect(table).toBeSortedBy("Cert Expiration", "descending");
 
-    const descExpirationColumn = await table.getColumn("Expiration");
+    const descExpirationColumn = await table.getColumn("Cert Expiration");
     const descDates: string[] = await descExpirationColumn.allInnerTexts();
     expect(descDates).toBeSorted("descending", sortDates);
 
     // Change sorting to descending
-    await table.clickSortBy("Expiration");
-    await expect(table).toBeSortedBy("Expiration", "ascending");
+    await table.clickSortBy("Cert Expiration");
+    await expect(table).toBeSortedBy("Cert Expiration", "ascending");
 
-    const ascExpirationColumn = await table.getColumn("Expiration");
+    const ascExpirationColumn = await table.getColumn("Cert Expiration");
     const ascDates: string[] = await ascExpirationColumn.allInnerTexts();
     expect(ascDates).toBeSorted("ascending", sortDates);
   });
@@ -55,7 +55,7 @@ test.describe("Trust Root - Certificates", () => {
     await toolbar.clearAllFilters();
 
     // Filter by Status
-    await toolbar.applyFilter({ Status: ["Expired"] });
-    await expect(table).toHaveColumnWithValue("Status", "Expired");
+    await toolbar.applyFilter({ Status: ["Revoked"] });
+    await expect(table).toHaveColumnWithValue("Status", "Revoked");
   });
 });
