@@ -16,9 +16,9 @@ test.describe("Trust Root - Accessibility", () => {
     await runA11yAudit(page, testInfo, { label: "trust-root-certificates" });
   });
 
-  test("Page view: Root details tab", async ({ page }, testInfo) => {
+  test("Page view: TUF Metadata tab", async ({ page }, testInfo) => {
     const trustRootPage = await TrustRootPage.build(page);
-    await trustRootPage.getTabs().select("Root details");
-    await runA11yAudit(page, testInfo, { label: "trust-root-root-details" });
+    await trustRootPage.getTabs().select("TUF Metadata");
+    await runA11yAudit(page, testInfo, { label: "trust-root-tuf-metadata" });
   });
 });

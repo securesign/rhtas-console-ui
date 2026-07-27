@@ -1,4 +1,4 @@
-import type { CertificateInfoList, RootMetadataInfoList, TrustConfig } from "@app/client";
+import type { CertificateInfoList, MetadataInfoResponse, TrustConfig } from "@app/client";
 
 export const trustConfigMock: TrustConfig = {
   fulcioCertAuthorities: [
@@ -9,25 +9,18 @@ export const trustConfigMock: TrustConfig = {
   ],
 };
 
-export const trustRootMetadataInfoMock: RootMetadataInfoList = {
+export const trustMetadataInfoMock: MetadataInfoResponse = {
   "repo-url": "https://tuf-repo-cdn.sigstore.dev",
-  data: [
-    {
-      expires: "2025-02-19T08:04:32Z",
-      status: "expired",
-      version: "1",
-    },
-    {
-      expires: "2025-08-05T08:37:20Z",
-      status: "expiring",
-      version: "2",
-    },
-    {
-      expires: "2026-01-22T13:05:59Z",
-      status: "valid",
-      version: "3",
-    },
-  ],
+  data: {
+    root: [
+      { expires: "2026-11-20T13:58:18Z", status: "valid", version: "3" },
+      { expires: "2025-02-19T08:04:32Z", status: "expired", version: "1" },
+      { expires: "2025-08-05T08:37:20Z", status: "expired", version: "2" },
+    ],
+    targets: [{ expires: "2036-05-09T09:00:52Z", status: "valid", version: "14" }],
+    snapshot: [{ expires: "2036-05-15T08:09:16Z", status: "valid", version: "165" }],
+    timestamp: [{ expires: "2026-07-30T08:02:24Z", status: "expiring", version: "736" }],
+  },
 };
 
 export const trustTargetCertificatesMock: CertificateInfoList = {

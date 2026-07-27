@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { Content, PageSection, Tab, TabContent, Tabs, TabTitleText } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
-import { useFetchTrustRootMetadataInfo, useFetchTrustTargetCertificates } from "@app/queries/trust";
+import { useFetchTrustMetadataInfo, useFetchTrustTargetCertificates } from "@app/queries/trust";
 
 import { CertificatesTable } from "./components/Certificates";
 import { Overview } from "./components/Overview";
@@ -13,11 +13,7 @@ import { DocumentMetadata } from "@app/components/DocumentMetadata";
 import { LoadingWrapper } from "@tsd-ui/core";
 
 export const TrustRoots: React.FC = () => {
-  const {
-    rootMetadataList,
-    isFetching: isFetchingRootMetadata,
-    fetchError: fetchErrorRootMetadata,
-  } = useFetchTrustRootMetadataInfo();
+  const { metadataInfo, isFetching: isFetchingMetadata, fetchError: fetchErrorMetadata } = useFetchTrustMetadataInfo();
 
   const {
     certificates,
@@ -44,8 +40,8 @@ export const TrustRoots: React.FC = () => {
           <h1>Trust Root</h1>
           <p>This information represents the update framework.</p>
           <p>
-            <a href={rootMetadataList?.["repo-url"]} target="_blank" rel="noopener noreferrer">
-              {rootMetadataList?.["repo-url"]} <ExternalLinkAltIcon />
+            <a href={metadataInfo?.["repo-url"]} target="_blank" rel="noopener noreferrer">
+              {metadataInfo?.["repo-url"]} <ExternalLinkAltIcon />
             </a>
           </p>
         </Content>
@@ -72,7 +68,7 @@ export const TrustRoots: React.FC = () => {
           />
           <Tab
             eventKey={2}
-            title={<TabTitleText>Root details</TabTitleText>}
+            title={<TabTitleText>TUF Metadata</TabTitleText>}
             tabContentId="rootDetailsTabSection"
             tabContentRef={rootDetailsTabRef}
           />
@@ -84,7 +80,7 @@ export const TrustRoots: React.FC = () => {
             certificates={certificates?.data ?? []}
             isFetching={isFetchingCertificates}
             fetchError={fetchErrorCertificates}
-            rootLink={rootMetadataList?.["repo-url"]}
+            rootLink={metadataInfo?.["repo-url"]}
           />
         </TabContent>
         <TabContent eventKey={1} id="certificatesTabSection" ref={certificatesTabRef} aria-label="Certificates" hidden>
@@ -94,10 +90,10 @@ export const TrustRoots: React.FC = () => {
             fetchError={fetchErrorCertificates}
           />
         </TabContent>
-        <TabContent eventKey={2} id="rootDetailsTabSection" ref={rootDetailsTabRef} aria-label="Root details" hidden>
-          <LoadingWrapper isFetching={isFetchingRootMetadata} fetchError={fetchErrorRootMetadata}>
-            {rootMetadataList ? (
-              <RootDetails rootMetadataList={rootMetadataList} />
+        <TabContent eventKey={2} id="rootDetailsTabSection" ref={rootDetailsTabRef} aria-label="Metadata" hidden>
+          <LoadingWrapper isFetching={isFetchingMetadata} fetchError={fetchErrorMetadata}>
+            {metadataInfo ? (
+              <RootDetails metadataInfo={metadataInfo} />
             ) : (
               <MetadataNotAvailable errorInfo="No metadata list found" />
             )}
