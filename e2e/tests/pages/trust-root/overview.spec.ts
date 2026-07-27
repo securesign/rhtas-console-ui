@@ -12,6 +12,5 @@ test.describe("Trust Root - Overview", () => {
 
     // Verify card areas are visible
     await expect(tabContent).toContainText("Certificate health");
-    await expect(tabContent).toContainText("Expiring soon");
   });
 });

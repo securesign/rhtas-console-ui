@@ -28,7 +28,7 @@ export class CertificatesTab {
         Target: { isSortable: false },
         Type: { isSortable: false },
         Status: { isSortable: false },
-        Expiration: { isSortable: true },
+        "Cert Expiration": { isSortable: true },
       },
       ["Copy PEM", "Download PEM"],
     );
