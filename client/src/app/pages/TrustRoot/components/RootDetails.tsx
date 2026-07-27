@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  Bullseye,
   Card,
   CardBody,
   CardTitle,
@@ -8,6 +9,9 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTermHelpText,
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateVariant,
   Gallery,
   GalleryItem,
 } from "@patternfly/react-core";
@@ -46,6 +50,16 @@ export const RootDetails: React.FC<IRootDetailsProps> = ({ metadataInfo }) => {
       latest: getLatestEntry(metadataInfo.data[role]),
     }));
   }, [metadataInfo]);
+
+  if (roles.length === 0) {
+    return (
+      <Bullseye>
+        <EmptyState variant={EmptyStateVariant.sm} titleText="No metadata available" headingLevel="h4">
+          <EmptyStateBody>No TUF role metadata was found for this repository.</EmptyStateBody>
+        </EmptyState>
+      </Bullseye>
+    );
+  }
 
   return (
     <Gallery hasGutter minWidths={{ default: "300px" }}>
