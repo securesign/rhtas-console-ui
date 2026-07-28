@@ -17,6 +17,6 @@ export class TrustRootPage {
   }
 
   getTabs() {
-    return Tabs.build(this._page, ["Overview", "Certificates", "Root details"]);
+    return Tabs.build(this._page, ["Overview", "Certificates", "TUF Metadata"]);
   }
 }
