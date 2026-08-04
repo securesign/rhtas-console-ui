@@ -84,9 +84,5 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children, mode, s
     }
   }, []);
 
-  return (
-    <ThemeContext.Provider value={{ isDark, mode: sanitizedMode, setMode: setSanitizedMode }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext value={{ isDark, mode: sanitizedMode, setMode: setSanitizedMode }}>{children}</ThemeContext>;
 };

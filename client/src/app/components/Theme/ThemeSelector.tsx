@@ -42,7 +42,7 @@ const themesMetadata: ThemeMetadataType = {
 };
 
 export const ThemeSelector: React.FC = () => {
-  const { mode, setMode } = React.useContext(ThemeContext);
+  const { mode, setMode } = React.use(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleThemeChange = (_event?: React.MouseEvent, selectedMode?: string) => {
