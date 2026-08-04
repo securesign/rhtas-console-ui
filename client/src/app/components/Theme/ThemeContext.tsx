@@ -1,38 +1,8 @@
 import React, { useState } from "react";
 
+import { THEME_MODES, ThemeContext, getSystemTheme, isThemeModeValid, type ThemeMode } from "./theme-utils";
+
 const DARK_MODE_KEY = "pf-v6-theme-dark";
-
-export const THEME_MODES = {
-  SYSTEM: "system",
-  LIGHT: "light",
-  DARK: "dark",
-} as const;
-
-export type ThemeMode = (typeof THEME_MODES)[keyof typeof THEME_MODES];
-
-const getSystemTheme = (): Exclude<ThemeMode, "system"> => {
-  if (typeof window === "undefined" || !window.matchMedia) return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-};
-
-export const isThemeModeValid = (value: string): value is ThemeMode => {
-  return ["system", "light", "dark"].includes(value);
-};
-
-interface ThemeState {
-  /** The current theme mode selection: "system", "light", or "dark". */
-  mode: ThemeMode;
-  /** Updates the theme mode. Invalid values are sanitized to "system". */
-  setMode: (mode: ThemeMode) => void;
-  /** Whether the active theme is dark, resolved from the mode and system preference. */
-  isDark: boolean;
-}
-
-export const ThemeContext = React.createContext<ThemeState>({
-  mode: "system",
-  setMode: () => {},
-  isDark: false,
-});
 
 interface IThemeProviderProps {
   children: React.ReactNode;

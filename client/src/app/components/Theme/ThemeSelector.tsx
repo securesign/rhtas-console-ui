@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Icon, MenuToggle, Select, SelectGroup, SelectList, SelectOption } from "@patternfly/react-core";
 import { DesktopIcon, OutlinedMoonIcon, OutlinedSunIcon } from "@patternfly/react-icons";
 
-import { ThemeContext, type ThemeMode } from "./ThemeContext";
+import { ThemeContext, type ThemeMode } from "./theme-utils";
 
 const ColorSchemeGroupLabel = (
   <div className="pf-v6-c-menu__group-title" id="theme-selector-color-scheme-title">
