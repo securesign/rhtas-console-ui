@@ -4,7 +4,7 @@ import { useFetchArtifactsImageData, useVerifyArtifact } from "@app/queries/arti
 import { ArtifactResults } from "./components/ArtifactResults";
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
 import { SearchForm } from "@app/components/SearchForm";
-import { LoadingWrapper } from "@tsd-ui/core";
+import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
 export const Artifacts = () => {
   const [artifactUri, setArtifactUri] = useState<string | null>();

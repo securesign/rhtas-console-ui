@@ -7,7 +7,7 @@ import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 
 import type { Error as ApiError, CertificateInfo } from "@app/client";
 import { RepositoryNotInitiated } from "./ErrorStates/RepositoryNotInitialized";
-import { LoadingWrapper } from "@tsd-ui/core";
+import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
 interface IOverviewProps {
   certificates: CertificateInfo[];

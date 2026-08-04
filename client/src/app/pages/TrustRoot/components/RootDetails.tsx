@@ -19,7 +19,7 @@ import {
 import type { MetadataInfo, MetadataInfoResponse } from "@app/client";
 import { CertificateStatusIcon } from "@app/components/CertificateStatusIcon";
 import { capitalizeFirstLetter, formatDate } from "@app/utils/utils";
-import { createComparator } from "@tsd-ui/core";
+import { createComparator } from "@app/utils/utils";
 
 interface IRootDetailsProps {
   metadataInfo: MetadataInfoResponse;

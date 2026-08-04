@@ -1,5 +1,5 @@
 import type { ISortState } from "./useSortState";
-import { createComparator } from "@tsd-ui/core";
+import { createComparator } from "@app/utils/utils";
 
 /**
  * Args for getLocalSortDerivedState

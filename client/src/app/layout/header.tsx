@@ -34,7 +34,7 @@ import useBranding from "@app/hooks/useBranding";
 import { ThemeAwareLogo } from "@app/components/ThemeAwareLogo";
 
 import { AboutApp } from "./about";
-import { ThemeSelector } from "@tsd-ui/core";
+import { ThemeSelector } from "@app/components/Theme";
 
 export const HeaderApp: React.FC = () => {
   const {

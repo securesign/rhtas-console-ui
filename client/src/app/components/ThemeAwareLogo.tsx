@@ -1,7 +1,7 @@
 import type React from "react";
 import { Brand } from "@patternfly/react-core";
 import { use } from "react";
-import { ThemeContext } from "@tsd-ui/core";
+import { ThemeContext } from "./Theme";
 
 interface ThemeAwareLogoProps {
   lightSrc: string;
