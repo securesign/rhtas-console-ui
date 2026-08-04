@@ -1,8 +1,7 @@
 import type React from "react";
 
 import { Bullseye, Spinner } from "@patternfly/react-core";
-
-import { DefaultErrorState } from "./DefaultErrorState";
+import { ErrorEmptyState } from "../ErrorEmptyState";
 
 export const LoadingWrapper = <TError = unknown,>(props: {
   isFetching: boolean;
@@ -21,7 +20,7 @@ export const LoadingWrapper = <TError = unknown,>(props: {
     );
   }
   if (props.fetchError) {
-    return props.fetchErrorState ? props.fetchErrorState(props.fetchError) : <DefaultErrorState />;
+    return props.fetchErrorState ? props.fetchErrorState(props.fetchError) : <ErrorEmptyState />;
   }
   return props.children;
 };
