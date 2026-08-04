@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { ThemeContext } from "@tsd-ui/core";
+import { ThemeContext } from "./Theme";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
 const mockProps = {

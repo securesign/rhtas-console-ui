@@ -5,7 +5,7 @@ import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import ENV from "@app/env";
 import useBranding from "@app/hooks/useBranding";
-import { ThemeContext } from "@tsd-ui/core";
+import { ThemeContext } from "@app/components/Theme";
 import { use } from "react";
 
 interface IButtonAboutAppProps {

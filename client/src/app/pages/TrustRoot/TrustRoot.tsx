@@ -10,7 +10,7 @@ import { Overview } from "./components/Overview";
 import { RootDetails } from "./components/RootDetails";
 import { MetadataNotAvailable } from "./components/ErrorStates/MetadataNotAvailable";
 import { DocumentMetadata } from "@app/components/DocumentMetadata";
-import { LoadingWrapper } from "@tsd-ui/core";
+import { LoadingWrapper } from "@app/components/LoadingWrapper";
 
 export const TrustRoots: React.FC = () => {
   const { metadataInfo, isFetching: isFetchingMetadata, fetchError: fetchErrorMetadata } = useFetchTrustMetadataInfo();

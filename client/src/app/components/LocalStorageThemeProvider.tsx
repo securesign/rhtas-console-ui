@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ThemeProvider, type ThemeMode } from "@tsd-ui/core";
+import { ThemeProvider, type ThemeMode } from "./Theme";
 
 export const STORAGE_KEY = "theme-preference";
 
