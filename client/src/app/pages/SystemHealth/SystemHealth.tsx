@@ -9,7 +9,7 @@ import { ServiceStatusCard } from "./components/ServiceStatusCard";
 import { StatusDot } from "./components/StatusDot";
 import { getOverallStatus, overallStatusToSeverity, type ServiceStatus } from "./utils";
 import { useFetchSystemHealth } from "@app/queries/system-health";
-import { LoadingWrapper } from "@tsd-ui/core";
+import { LoadingWrapper } from "@app/components/LoadingWrapper";
 import { formatDate } from "@app/utils/utils";
 
 interface ServiceInfo {
@@ -53,7 +53,7 @@ export const SystemHealth: React.FC = () => {
                       <FlexItem>
                         <StatusDot
                           severity={overallStatusToSeverity(
-                            getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus])
+                            getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus]),
                           )}
                         />
                       </FlexItem>
