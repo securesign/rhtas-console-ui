@@ -6,7 +6,7 @@ import { systemHealthMock } from "./mocks/system-health";
 export const SystemHealthKey = ["system-health"];
 
 export const useFetchSystemHealth = () => {
-  const { data, isLoading, error } = useMockableQuery<SystemHealthResponse | null>(
+  const { data, isLoading, error, refetch } = useMockableQuery<SystemHealthResponse | null>(
     {
       queryKey: SystemHealthKey,
       queryFn: async () => {
@@ -17,5 +17,5 @@ export const useFetchSystemHealth = () => {
     systemHealthMock
   );
 
-  return { data, isFetching: isLoading, fetchError: error };
+  return { data, isFetching: isLoading, fetchError: error, refetch };
 };

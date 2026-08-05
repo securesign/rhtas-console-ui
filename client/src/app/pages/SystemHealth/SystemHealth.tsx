@@ -7,7 +7,7 @@ import { IncidentTimeline } from "./components/IncidentTimeline";
 import { PipelineStatusBanner } from "./components/PipelineStatusBanner";
 import { ServiceStatusCard } from "./components/ServiceStatusCard";
 import { StatusDot } from "./components/StatusDot";
-import { statusToSeverity, type ServiceStatus } from "./utils";
+import { getOverallStatus, overallStatusToSeverity, type ServiceStatus } from "./utils";
 import { useFetchSystemHealth } from "@app/queries/system-health";
 import { LoadingWrapper } from "@tsd-ui/core";
 import { formatDate } from "@app/utils/utils";
@@ -19,7 +19,7 @@ interface ServiceInfo {
 }
 
 export const SystemHealth: React.FC = () => {
-  const { data, isFetching, fetchError } = useFetchSystemHealth();
+  const { data, isFetching, fetchError, refetch } = useFetchSystemHealth();
 
   const services: ServiceInfo[] = [
     {
@@ -51,10 +51,16 @@ export const SystemHealth: React.FC = () => {
                   <FlexItem>
                     <Flex alignItems={{ default: "alignItemsCenter" }} spaceItems={{ default: "spaceItemsXs" }}>
                       <FlexItem>
-                        <StatusDot severity={statusToSeverity(data.sigstoreServices as ServiceStatus)} />
+                        <StatusDot
+                          severity={overallStatusToSeverity(
+                            getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus])
+                          )}
+                        />
                       </FlexItem>
                       <FlexItem>
-                        <Content component="small">Dashboard {data.sigstoreServices}</Content>
+                        <Content component="small">
+                          {getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus])}
+                        </Content>
                       </FlexItem>
                     </Flex>
                   </FlexItem>
@@ -64,7 +70,7 @@ export const SystemHealth: React.FC = () => {
                     </Content>
                   </FlexItem>
                   <FlexItem>
-                    <Button variant="secondary" icon={<SyncAltIcon />}>
+                    <Button variant="secondary" icon={<SyncAltIcon />} onClick={() => void refetch()}>
                       Refresh
                     </Button>
                   </FlexItem>
