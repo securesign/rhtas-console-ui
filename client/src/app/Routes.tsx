@@ -32,7 +32,7 @@ export const AppRoutes = () => {
     { path: Paths.artifacts, element: <Artifacts /> },
     { path: Paths.rekorSearch, element: <RekorSearch /> },
     { path: Paths.rekorEntry, element: <RekorEntry /> },
-    { path: Paths.systemHealth, element: <SystemHealth /> },
+    ...(features.observability ? [{ path: Paths.systemHealth, element: <SystemHealth /> }] : []),
     ...(features.monitoringAlerting ? [{ path: Paths.monitoringAlerting, element: <Monitoring /> }] : []),
     { path: "*", element: <NotFound /> },
   ]);
