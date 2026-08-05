@@ -9,7 +9,7 @@ import { tableAssertions, TableMatchers } from "./TableMatchers";
 const merged = mergeExpects(
   helperAssertions,
   paginationAssertions,
-  tableAssertions
+  tableAssertions,
   // Add more custom assertions here
 );
 
@@ -19,7 +19,7 @@ const merged = mergeExpects(
  * Overload from HelperMatchers.ts
  */
 function typedExpect<T extends unknown[]>(
-  value: T
+  value: T,
 ): Omit<ReturnType<typeof merged<T[number]>>, keyof HelperMatchers<T>> & HelperMatchers<T[number]>;
 
 /**
@@ -30,7 +30,7 @@ function typedExpect<
   const TActions extends readonly string[],
   TColumnName extends Extract<keyof TColumn, string>,
 >(
-  value: Table<TColumn, TActions, TColumnName>
+  value: Table<TColumn, TActions, TColumnName>,
 ): Omit<
   ReturnType<typeof merged<Table<TColumn, TActions, TColumnName>>>,
   keyof TableMatchers<TColumn, TActions, TColumnName>
@@ -41,7 +41,7 @@ function typedExpect<
  * Overload from PaginationMatchers.ts
  */
 function typedExpect(
-  value: Pagination
+  value: Pagination,
 ): Omit<ReturnType<typeof merged<Pagination>>, keyof PaginationMatchers> & PaginationMatchers;
 
 // Default overload

@@ -29,13 +29,13 @@ describe("withTimeout", () => {
   });
 
   it("rejects with TimeoutError when promise exceeds timeout", async () => {
-    const slow = new Promise(() => {});
+    const slow = new Promise(() => undefined);
     await expect(withTimeout(slow, 10)).rejects.toThrow(TimeoutError);
   });
 
   it("calls cancel on the promise when timeout fires", async () => {
     const cancel = vi.fn();
-    const slow = Object.assign(new Promise(() => {}), { cancel });
+    const slow = Object.assign(new Promise(() => undefined), { cancel });
     await expect(withTimeout(slow, 10)).rejects.toThrow(TimeoutError);
     expect(cancel).toHaveBeenCalled();
   });

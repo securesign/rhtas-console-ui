@@ -31,7 +31,7 @@ describe("RekorClientContext", () => {
     render(
       <RekorClientProvider>
         <TestConsumerComponent />
-      </RekorClientProvider>
+      </RekorClientProvider>,
     );
 
     expect(screen.getByText(/Base URL: https:\/\/example.com/)).toBeInTheDocument();

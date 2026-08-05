@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { ThemeContext } from "@tsd-ui/core";
+import { ThemeContext } from "./Theme";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
 const mockProps = {
@@ -12,9 +12,9 @@ const mockProps = {
 
 const renderWithTheme = (isDark: boolean) =>
   render(
-    <ThemeContext.Provider value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => {} }}>
+    <ThemeContext value={{ isDark, mode: isDark ? "dark" : "light", setMode: () => undefined }}>
       <ThemeAwareLogo {...mockProps} />
-    </ThemeContext.Provider>
+    </ThemeContext>,
   );
 
 describe("ThemeAwareLogo", () => {

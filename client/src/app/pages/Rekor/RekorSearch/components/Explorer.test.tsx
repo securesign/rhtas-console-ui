@@ -14,13 +14,11 @@ vi.mock("@app/queries/rekor-search", () => ({
 beforeEach(() => {
   vi.resetAllMocks();
 
-  (useLocation as Mock).mockImplementation(
-    (): Path => ({
-      pathname: "/rekor-search",
-      search: "",
-      hash: "",
-    })
-  );
+  (useLocation as Mock).mockImplementation((): Path => ({
+    pathname: "/rekor-search",
+    search: "",
+    hash: "",
+  }));
 
   (useNavigate as Mock).mockReturnValue(vi.fn());
 
@@ -47,7 +45,7 @@ function renderWithProviders(ui: React.ReactElement) {
   return render(
     <QueryClientProvider client={queryClient}>
       <RekorClientProvider>{ui}</RekorClientProvider>
-    </QueryClientProvider>
+    </QueryClientProvider>,
   );
 }
 
@@ -115,7 +113,7 @@ describe("Explorer", () => {
           statusText: "Unprocessable Entity",
           body: { message: "Invalid entry", code: 422 },
         },
-        "request error"
+        "request error",
       );
 
       (useFetchRekorSearch as Mock).mockReturnValue({
@@ -141,7 +139,7 @@ describe("Explorer", () => {
           statusText: "Internal Server Error",
           body: { code: 500 },
         },
-        "request error"
+        "request error",
       );
 
       (useFetchRekorSearch as Mock).mockReturnValue({
@@ -166,7 +164,7 @@ describe("Explorer", () => {
           statusText: "Service Unavailable",
           body: "plain text",
         },
-        "request error"
+        "request error",
       );
 
       (useFetchRekorSearch as Mock).mockReturnValue({

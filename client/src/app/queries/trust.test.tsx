@@ -20,13 +20,13 @@ vi.mock("@app/client", async () => {
   return {
     ...actual,
     getApiV1TrustConfig: vi.fn(),
-    getApiV1TrustRootMetadataInfo: vi.fn(),
+    getApiV1TrustMetadataInfo: vi.fn(),
     getApiV1TrustTargetsCertificates: vi.fn(),
   };
 });
 
-import { useFetchTrustConfig, useFetchTrustRootMetadataInfo, useFetchTrustTargetCertificates, TrustKey } from "./trust";
-import { trustConfigMock, trustRootMetadataInfoMock, trustTargetCertificatesMock } from "./mocks/trust.mock";
+import { useFetchTrustConfig, useFetchTrustMetadataInfo, useFetchTrustTargetCertificates, TrustKey } from "./trust";
+import { trustConfigMock, trustMetadataInfoMock, trustTargetCertificatesMock } from "./mocks/trust.mock";
 
 describe("Trust Queries", () => {
   let queryClient: QueryClient;
@@ -59,7 +59,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.config).toEqual(trustConfigMock);
@@ -74,7 +74,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
@@ -87,7 +87,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.config;
@@ -100,7 +100,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.config).toEqual(trustConfigMock);
@@ -113,7 +113,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.config).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -122,74 +122,74 @@ describe("Trust Queries", () => {
     });
   });
 
-  describe("useFetchTrustRootMetadataInfo", () => {
-    it("should return mock root metadata info", async () => {
-      const { result } = renderHook(() => useFetchTrustRootMetadataInfo(), { wrapper });
+  describe("useFetchTrustMetadataInfo", () => {
+    it("should return mock metadata info", async () => {
+      const { result } = renderHook(() => useFetchTrustMetadataInfo(), { wrapper });
 
       await waitFor(
         () => {
-          expect(result.current.rootMetadataList).toBeDefined();
+          expect(result.current.metadataInfo).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
-      expect(result.current.rootMetadataList).toEqual(trustRootMetadataInfoMock);
+      expect(result.current.metadataInfo).toEqual(trustMetadataInfoMock);
       expect(result.current.isFetching).toBe(false);
       expect(result.current.fetchError).toBeNull();
     });
 
     it("should expose refetch function", async () => {
-      const { result } = renderHook(() => useFetchTrustRootMetadataInfo(), { wrapper });
+      const { result } = renderHook(() => useFetchTrustMetadataInfo(), { wrapper });
 
       await waitFor(
         () => {
-          expect(result.current.rootMetadataList).toBeDefined();
+          expect(result.current.metadataInfo).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
     });
 
     it("should handle refetch", async () => {
-      const { result } = renderHook(() => useFetchTrustRootMetadataInfo(), { wrapper });
+      const { result } = renderHook(() => useFetchTrustMetadataInfo(), { wrapper });
 
       await waitFor(
         () => {
-          expect(result.current.rootMetadataList).toBeDefined();
+          expect(result.current.metadataInfo).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
-      const initialData = result.current.rootMetadataList;
-      expect(initialData).toEqual(trustRootMetadataInfoMock);
+      const initialData = result.current.metadataInfo;
+      expect(initialData).toEqual(trustMetadataInfoMock);
 
       // Refetch should work
       await result.current.refetch();
 
       await waitFor(
         () => {
-          expect(result.current.rootMetadataList).toBeDefined();
+          expect(result.current.metadataInfo).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
-      expect(result.current.rootMetadataList).toEqual(trustRootMetadataInfoMock);
+      expect(result.current.metadataInfo).toEqual(trustMetadataInfoMock);
     });
 
     it("should use correct query key", async () => {
-      const { result } = renderHook(() => useFetchTrustRootMetadataInfo(), { wrapper });
+      const { result } = renderHook(() => useFetchTrustMetadataInfo(), { wrapper });
 
       await waitFor(
         () => {
-          expect(result.current.rootMetadataList).toBeDefined();
+          expect(result.current.metadataInfo).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
       const queryData = queryClient.getQueryData([TrustKey, "metadata"]);
-      expect(queryData).toEqual(trustRootMetadataInfoMock);
+      expect(queryData).toEqual(trustMetadataInfoMock);
     });
   });
 
@@ -201,7 +201,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.certificates).toEqual(trustTargetCertificatesMock);
@@ -216,7 +216,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(typeof result.current.refetch).toBe("function");
@@ -229,7 +229,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.certificates;
@@ -242,7 +242,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.certificates).toEqual(trustTargetCertificatesMock);
@@ -255,7 +255,7 @@ describe("Trust Queries", () => {
         () => {
           expect(result.current.certificates).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key

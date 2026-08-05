@@ -58,13 +58,13 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
   };
   const items = useWithUiId(
     certificates,
-    (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`
+    (item, index) => `${index}-${item.type}-${item.issuer}-${item.subject}-${item.target}`,
   );
 
   const tableState = usePFToolbarTable({
     items,
     idProperty: "_ui_unique_id",
-    columns: ["expiration"],
+    columns: ["certExpiration"],
     toolbar: {
       categoryTitles: {
         subject: "Subject",
@@ -88,13 +88,13 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
       ],
     },
     sorting: {
-      sortableColumns: ["expiration"],
+      sortableColumns: ["certExpiration"],
       initialSort: {
-        columnKey: "expiration",
+        columnKey: "certExpiration",
         direction: "desc",
       },
       getSortValues: (item) => ({
-        expiration: dayjs(item.expiration).valueOf(),
+        certExpiration: dayjs(item.certExpiration).valueOf(),
       }),
     },
   });
@@ -124,7 +124,7 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value).then(
       () => addAlert("Copied PEM to clipboard", "success"),
-      () => addAlert("Failed to copy to clipboard", "danger")
+      () => addAlert("Failed to copy to clipboard", "danger"),
     );
   };
 
@@ -170,6 +170,10 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
                   value: "expired",
                   label: "Expired",
                 },
+                {
+                  value: "revoked",
+                  label: "Revoked",
+                },
               ]}
               placeholderText="Status"
               showToolbarItem={filterToolbarProps.currentFilterCategoryKey === "status"}
@@ -190,7 +194,9 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
             <Th>Target</Th>
             <Th>Type</Th>
             <Th>Status</Th>
-            <Th {...getSortThProps({ columnKey: "expiration" })}>Expiration</Th>
+            <Th width={15} {...getSortThProps({ columnKey: "certExpiration" })}>
+              Cert Expiration
+            </Th>
             <Th screenReaderText="Actions" />
           </Tr>
         </Thead>
@@ -202,8 +208,8 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
         >
           {currentPageItems.map((certificate, rowIndex) => {
             return (
-              <Tbody key={rowIndex} isExpanded={isCellExpanded(certificate)}>
-                <Tr key={rowIndex}>
+              <Tbody key={certificate._ui_unique_id} isExpanded={isCellExpanded(certificate)}>
+                <Tr key={certificate._ui_unique_id}>
                   <Td {...getSingleExpandButtonTdProps({ item: certificate, rowIndex })} />
                   <Td data-label="Issuer" modifier="breakWord">
                     {certificate.issuer}
@@ -218,10 +224,11 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
                     {certificate.type}
                   </Td>
                   <Td data-label="Status" width={10} modifier="truncate">
-                    <CertificateStatusIcon status={certificate.status} /> {certificate.status}
+                    <CertificateStatusIcon status={certificate.status} />{" "}
+                    {certificate.status.charAt(0).toUpperCase() + certificate.status.slice(1)}
                   </Td>
-                  <Td data-label="Expiration" width={10} modifier="truncate">
-                    {formatDate(certificate.expiration)}
+                  <Td data-label="Cert Expiration" width={10} modifier="truncate">
+                    {formatDate(certificate.certExpiration)}
                   </Td>
                   <Td isActionCell>
                     <ActionsColumn
@@ -248,7 +255,23 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
                     <Td colSpan={7} noPadding>
                       <div className={spacing.mMd}>
                         <ExpandableRowContent>
-                          <DescriptionList aria-label="Basic example">
+                          <DescriptionList aria-label="Certificate details">
+                            {certificate.validForStart && (
+                              <DescriptionListGroup>
+                                <DescriptionListTerm>In service from</DescriptionListTerm>
+                                <DescriptionListDescription>
+                                  {formatDate(certificate.validForStart)}
+                                </DescriptionListDescription>
+                              </DescriptionListGroup>
+                            )}
+                            {certificate.validForEnd && (
+                              <DescriptionListGroup>
+                                <DescriptionListTerm>In service until</DescriptionListTerm>
+                                <DescriptionListDescription>
+                                  {formatDate(certificate.validForEnd)}
+                                </DescriptionListDescription>
+                              </DescriptionListGroup>
+                            )}
                             <DescriptionListGroup>
                               <DescriptionListTerm>PEM</DescriptionListTerm>
                               <DescriptionListDescription>

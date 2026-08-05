@@ -21,9 +21,7 @@ export class ArtifactsPage {
     await this._page.getByLabel("Containerimage URI input field").press("Enter");
 
     // Wait for results
-    await expect(this._page.locator(".pf-v6-c-card__header", { hasText: "Artifact details" })).toBeVisible({
-      timeout: 25000,
-    });
+    await expect(this._page.locator(".pf-v6-c-card__header", { hasText: "Artifact details" })).toBeVisible();
   }
 
   async getArtifactCardHeader() {

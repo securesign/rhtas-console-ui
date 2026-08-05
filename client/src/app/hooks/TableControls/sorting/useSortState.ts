@@ -46,7 +46,7 @@ export interface ISortStateArgs<TSortableColumnKey extends string> {
  * Provides the "source of truth" state for the sort feature.
  */
 export const useSortState = <TSortableColumnKey extends string>(
-  args: ISortStateArgs<TSortableColumnKey>
+  args: ISortStateArgs<TSortableColumnKey>,
 ): ISortState<TSortableColumnKey> => {
   const initialSort = args.initialSort ?? null;
 

@@ -72,7 +72,7 @@ export function Explorer() {
         search: `?${attribute}=${encodeURIComponent(value)}`,
       });
     },
-    [navigate, location.pathname]
+    [navigate, location.pathname],
   );
 
   useEffect(() => {

@@ -34,7 +34,7 @@ export class Table<
     page: Page,
     tableAriaLabel: string,
     columns: TColumn,
-    actions: TActions
+    actions: TActions,
   ) {
     const table = page.locator(`table[aria-label="${tableAriaLabel}"]`);
     await expect(table).toBeVisible();

@@ -23,7 +23,7 @@ describe("useTable", () => {
     const { result } = renderHook(() =>
       useTable({
         items: mockItems,
-      })
+      }),
     );
 
     expect(result.current.filteringState.filterValues).toEqual({});
@@ -49,7 +49,7 @@ describe("useTable", () => {
             },
           ],
         },
-      })
+      }),
     );
 
     expect(result.current.filteringState.filterValues).toEqual({
@@ -72,7 +72,7 @@ describe("useTable", () => {
             name: item.name,
           }),
         },
-      })
+      }),
     );
 
     expect(result.current.sortingState.activeSort).toEqual({
@@ -88,7 +88,7 @@ describe("useTable", () => {
         pagination: {
           initialItemsPerPage: 2,
         },
-      })
+      }),
     );
 
     expect(result.current.paginationState.itemsPerPage).toBe(2);
@@ -109,7 +109,7 @@ describe("useTable", () => {
         filtering: {
           filterCategories,
         },
-      })
+      }),
     );
 
     act(() => {
@@ -135,7 +135,7 @@ describe("useTable", () => {
             name: item.name,
           }),
         },
-      })
+      }),
     );
 
     act(() => {
@@ -166,7 +166,7 @@ describe("useTable", () => {
         pagination: {
           initialItemsPerPage: 2,
         },
-      })
+      }),
     );
 
     // First page should have 2 items
@@ -217,7 +217,7 @@ describe("useTable", () => {
         pagination: {
           initialItemsPerPage: 1,
         },
-      })
+      }),
     );
 
     // Filter by category A
@@ -253,7 +253,7 @@ describe("useTable", () => {
     const { result } = renderHook(() =>
       useTable({
         items: [],
-      })
+      }),
     );
 
     expect(result.current.tableState.currentPageItems).toHaveLength(0);
@@ -268,7 +268,7 @@ describe("useTable", () => {
         }),
       {
         initialProps: { items: mockItems },
-      }
+      },
     );
 
     expect(result.current.tableState.totalItemCount).toBe(5);
@@ -296,7 +296,7 @@ describe("useTable", () => {
         filtering: {
           filterCategories,
         },
-      })
+      }),
     );
 
     act(() => {
@@ -329,7 +329,7 @@ describe("useTable", () => {
         pagination: {
           initialItemsPerPage: 2,
         },
-      })
+      }),
     );
 
     act(() => {

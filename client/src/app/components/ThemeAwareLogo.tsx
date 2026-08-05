@@ -1,7 +1,7 @@
 import type React from "react";
 import { Brand } from "@patternfly/react-core";
-import { useContext } from "react";
-import { ThemeContext } from "@tsd-ui/core";
+import { use } from "react";
+import { ThemeContext } from "./Theme";
 
 interface ThemeAwareLogoProps {
   lightSrc: string;
@@ -11,7 +11,7 @@ interface ThemeAwareLogoProps {
 }
 
 export const ThemeAwareLogo: React.FC<ThemeAwareLogoProps> = ({ lightSrc, darkSrc, alt, heights }) => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = use(ThemeContext);
 
   const themedLogoSrc = isDark ? darkSrc : lightSrc;
   return <Brand src={themedLogoSrc} alt={alt} heights={heights} />;

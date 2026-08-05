@@ -45,7 +45,7 @@ export function RekorList({
   const rows = useWithUiId(
     entries.map((entry): RekorListRow => {
       const [entryUuid, data] = Object.entries(entry)[0];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
       const body = JSON.parse(window.atob(data.body)) as RekorBody;
       return {
         entryUuid,
@@ -54,7 +54,7 @@ export function RekorList({
         body,
       };
     }),
-    (item) => `${item.entryUuid}-${item.logIndex}`
+    (item) => `${item.entryUuid}-${item.logIndex}`,
   );
 
   const typeOptions = Array.from(new Set(rows.map((row) => row.body.kind).filter((value) => value && value !== "-")))

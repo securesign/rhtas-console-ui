@@ -3,16 +3,16 @@ import type { AxiosError } from "axios";
 import { client } from "@app/axios-config/apiInit";
 import {
   getApiV1TrustConfig,
-  getApiV1TrustRootMetadataInfo,
+  getApiV1TrustMetadataInfo,
   getApiV1TrustTargetsCertificates,
   type Error as ApiError,
   type CertificateInfoList,
-  type RootMetadataInfoList,
+  type MetadataInfoResponse,
   type TrustConfig,
 } from "@app/client";
 
 import { useMockableQuery } from "./helpers";
-import { trustConfigMock, trustRootMetadataInfoMock, trustTargetCertificatesMock } from "./mocks/trust.mock";
+import { trustConfigMock, trustMetadataInfoMock, trustTargetCertificatesMock } from "./mocks/trust.mock";
 
 export const TrustKey = "Trust";
 
@@ -27,7 +27,7 @@ export const useFetchTrustConfig = () => {
         return response.data ?? null;
       },
     },
-    trustConfigMock
+    trustConfigMock,
   );
 
   return {
@@ -38,22 +38,22 @@ export const useFetchTrustConfig = () => {
   };
 };
 
-export const useFetchTrustRootMetadataInfo = () => {
-  const { data, isLoading, error, refetch } = useMockableQuery<RootMetadataInfoList | null, AxiosError<ApiError>>(
+export const useFetchTrustMetadataInfo = () => {
+  const { data, isLoading, error, refetch } = useMockableQuery<MetadataInfoResponse | null, AxiosError<ApiError>>(
     {
       queryKey: [TrustKey, "metadata"],
       queryFn: async () => {
-        const response = await getApiV1TrustRootMetadataInfo({
+        const response = await getApiV1TrustMetadataInfo({
           client,
         });
         return response.data ?? null;
       },
     },
-    trustRootMetadataInfoMock
+    trustMetadataInfoMock,
   );
 
   return {
-    rootMetadataList: data,
+    metadataInfo: data,
     isFetching: isLoading,
     fetchError: error,
     refetch,
@@ -71,7 +71,7 @@ export const useFetchTrustTargetCertificates = () => {
         return response.data ?? null;
       },
     },
-    trustTargetCertificatesMock
+    trustTargetCertificatesMock,
   );
 
   return {

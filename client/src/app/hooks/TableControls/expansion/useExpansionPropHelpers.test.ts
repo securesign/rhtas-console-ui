@@ -18,7 +18,7 @@ describe("useExpansionPropHelpers", () => {
         idProperty: "id",
         expansionState: expansionStateResult.current,
         columnKeys: ["name", "status"],
-      })
+      }),
     );
 
     expect(result.current.expansionDerivedState).toBeDefined();
@@ -37,7 +37,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name", "status"],
-        })
+        }),
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -67,7 +67,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -101,7 +101,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -151,7 +151,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name"],
-        })
+        }),
       );
 
       const item1: TestItem = { id: "item-1", name: "Test 1", status: "active" };
@@ -183,7 +183,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name"],
-        })
+        }),
       );
 
       const item: NumericItem = { id: 123, name: "Test" };
@@ -205,7 +205,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name", "status"],
-        })
+        }),
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -231,7 +231,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name", "status"],
-        })
+        }),
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -265,7 +265,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -306,7 +306,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -359,7 +359,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name", "status"],
-        })
+        }),
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -393,7 +393,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };
@@ -459,7 +459,7 @@ describe("useExpansionPropHelpers", () => {
           idProperty: "id",
           expansionState: expansionStateResult.current,
           columnKeys: ["name"],
-        })
+        }),
       );
 
       const item: NumericItem = { id: 123, name: "Test" };
@@ -488,7 +488,7 @@ describe("useExpansionPropHelpers", () => {
           initialProps: {
             expansionState: expansionStateResult.current,
           },
-        }
+        },
       );
 
       const item: TestItem = { id: "item-1", name: "Test", status: "active" };

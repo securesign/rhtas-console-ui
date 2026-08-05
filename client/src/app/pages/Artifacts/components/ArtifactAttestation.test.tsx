@@ -37,7 +37,7 @@ const renderInTable = (attestation: AttestationView, index = 0) =>
       <tbody>
         <ArtifactAttestation attestation={attestation} index={index} />
       </tbody>
-    </table>
+    </table>,
   );
 
 describe("ArtifactAttestation", () => {

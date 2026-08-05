@@ -26,42 +26,20 @@ spec:
         app.kubernetes.io/component: console-backend
     spec:
       serviceAccountName: console-backend
-      initContainers:
-      - name: wait-for-console-db
-        image: default/console-db-image
-        command:
-        - /bin/sh
-        - -c
-        - |
-          until mysqladmin ping -hconsole-db --silent; do
-            echo 'Waiting for the console database to be ready...'
-            sleep 5
-          done
       containers:
       - name: console-backend
         image: default/console-image
         imagePullPolicy: IfNotPresent
+        command:
+        - /tmp/rhtas_console
+        args:
+        - --tuf-repo-url=$(TUF_REPO_URL)
         env:
         - name: TUF_REPO_URL
           valueFrom:
             configMapKeyRef:
               name: tuf-repo-config
               key: TUF_REPO_URL
-        - name: DB_DSN
-          valueFrom:
-            secretKeyRef:
-              name: console-db-connection
-              key: dsn
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: console-db-connection
-              key: mysql-user
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: console-db-connection
-              key: mysql-password
         - name: SSL_CERT_DIR
           value: /var/run/configs/tas/ca-trust:/var/run/secrets/kubernetes.io/serviceaccount
         ports:

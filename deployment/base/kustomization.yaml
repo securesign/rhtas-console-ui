@@ -5,10 +5,6 @@ namespace: trusted-artifact-signer
 
 resources:
   - console-serviceaccounts.yaml
-  # Database
-  - console-db-secret.yaml
-  - console-db-statefulset.yaml
-  - console-db-service.yaml
   # Backend
   - console-backend-deploy.yaml
   - console-backend-service.yaml

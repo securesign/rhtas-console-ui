@@ -29,7 +29,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        undefined
+        undefined,
       );
       expect(result).toBe(true);
     });
@@ -50,7 +50,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        integratedTime
+        integratedTime,
       );
       expect(result).toBe(true);
     });
@@ -85,7 +85,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        undefined
+        undefined,
       );
       expect(result).toBe(true);
     });
@@ -111,7 +111,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        integratedTime
+        integratedTime,
       );
       expect(result).toBe(true);
     });
@@ -134,7 +134,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        undefined
+        undefined,
       );
       expect(result).toBe(true);
     });
@@ -156,7 +156,7 @@ describe("isPublicKeyValid", () => {
 
       expect(hasValidPublicCertificate).toHaveBeenCalledWith(
         "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-        integratedTime
+        integratedTime,
       );
       expect(result).toBe(true);
     });

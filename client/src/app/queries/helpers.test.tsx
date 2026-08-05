@@ -53,9 +53,9 @@ describe("useMockableQuery", () => {
             queryKey: ["test"],
             queryFn,
           },
-          mockData
+          mockData,
         ),
-      { wrapper }
+      { wrapper },
     );
 
     // Wait for the query to complete (mockPromise has 1000ms timeout)
@@ -63,7 +63,7 @@ describe("useMockableQuery", () => {
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData);
@@ -86,16 +86,16 @@ describe("useMockableQuery", () => {
             queryKey: ["test-error"],
             queryFn,
           },
-          mockData
+          mockData,
         ),
-      { wrapper }
+      { wrapper },
     );
 
     await waitFor(
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     // In mock mode, errors are not propagated - mock data is returned
@@ -115,12 +115,12 @@ describe("useMockableQuery", () => {
             queryFn,
             enabled,
           },
-          mockData
+          mockData,
         ),
       {
         wrapper,
         initialProps: { enabled: false },
-      }
+      },
     );
 
     // Query should not run when disabled
@@ -134,7 +134,7 @@ describe("useMockableQuery", () => {
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData);
@@ -152,19 +152,19 @@ describe("useMockableQuery", () => {
             queryKey,
             queryFn,
           },
-          queryKey[1] === "key1" ? mockData1 : mockData2
+          queryKey[1] === "key1" ? mockData1 : mockData2,
         ),
       {
         wrapper,
         initialProps: { queryKey: ["test", "key1"] as readonly unknown[] },
-      }
+      },
     );
 
     await waitFor(
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData1);
@@ -176,7 +176,7 @@ describe("useMockableQuery", () => {
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData2);
@@ -193,16 +193,16 @@ describe("useMockableQuery", () => {
             queryKey: ["test-refetch"],
             queryFn,
           },
-          mockData
+          mockData,
         ),
-      { wrapper }
+      { wrapper },
     );
 
     await waitFor(
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData);
@@ -214,7 +214,7 @@ describe("useMockableQuery", () => {
       () => {
         expect(result.current.isSuccess).toBe(true);
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(result.current.data).toEqual(mockData);

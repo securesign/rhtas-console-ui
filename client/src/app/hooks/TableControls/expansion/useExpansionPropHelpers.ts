@@ -36,7 +36,7 @@ export interface IExpansionPropHelpersInternalArgs<TColumnKey extends string> {
  * - "source of truth" (persisted) state and "derived state" are kept separate to prevent out-of-sync duplicated state.
  */
 export const useExpansionPropHelpers = <TItem, TColumnKey extends string>(
-  args: IExpansionPropHelpersExternalArgs<TItem, TColumnKey> & IExpansionPropHelpersInternalArgs<TColumnKey>
+  args: IExpansionPropHelpersExternalArgs<TItem, TColumnKey> & IExpansionPropHelpersInternalArgs<TColumnKey>,
 ) => {
   const { idProperty, columnKeys } = args;
 
@@ -61,7 +61,7 @@ export const useExpansionPropHelpers = <TItem, TColumnKey extends string>(
           item,
           isExpanding: !isCellExpanded(item),
         }),
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
       expandId: `expandable-row-${item[idProperty]}`,
     },
   });
@@ -86,7 +86,7 @@ export const useExpansionPropHelpers = <TItem, TColumnKey extends string>(
           isExpanding: !isCellExpanded(item, columnKey),
           columnKey,
         }),
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
       expandId: `compound-expand-${item[idProperty]}-${columnKey}`,
       rowIndex,
       columnIndex: columnKeys.indexOf(columnKey),

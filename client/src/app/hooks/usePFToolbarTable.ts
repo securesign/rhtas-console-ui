@@ -19,10 +19,10 @@ export const usePFToolbarTable = <
 >(
   args: ITableArgs<TItem, TSortableColumnKey, TFilterCategoryKey> &
     IPFTableArgs<TItem, TColumnKey> &
-    IPFToolbarTableArgs<TFilterCategoryKey>
+    IPFToolbarTableArgs<TFilterCategoryKey>,
 ) => {
   const [currentFilterCategoryKey, setCurrentFilterCategoryKey] = React.useState(
-    args.filtering?.filterCategories?.[0].categoryKey
+    args.filtering?.filterCategories?.[0].categoryKey,
   );
 
   const { propHelpers, ...tableState } = usePFTable(args);

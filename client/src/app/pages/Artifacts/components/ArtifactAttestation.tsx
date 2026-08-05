@@ -74,16 +74,13 @@ export const ArtifactAttestation = ({ attestation, index }: IArtifactAttestation
         </Td>
         <Td key="attestationType">{attestation.predicateType ?? "Unknown"}</Td>
         <Td key="timestamp">
-          {typeof attestation.timestamp === "string"
-            ? (() => {
-                const date = new Date(attestation.timestamp);
-                return (
-                  <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={date}>
-                    {relativeDateString(date)}
-                  </Timestamp>
-                );
-              })()
-            : "N/A"}
+          {typeof attestation.timestamp === "string" ? (
+            <Timestamp tooltip={{ variant: TimestampTooltipVariant.default }} date={new Date(attestation.timestamp)}>
+              {relativeDateString(new Date(attestation.timestamp))}
+            </Timestamp>
+          ) : (
+            "N/A"
+          )}
         </Td>
         <Td key="verificationStatusForAttestation">{attestationStatusBadge}</Td>
         <Td key="verificationStatusForRekor">{rekorStatusBadge}</Td>

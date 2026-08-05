@@ -1,5 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "postUpdateOptions": ["npmInstallTwice"],
+  "constraints": {
+    "npm": "10.x",
+    "node": "22.x"
+  },
   "packageRules": [
     {
       "description": "Disable ESLint major updates until @tanstack/eslint-plugin-query supports ESLint 10",

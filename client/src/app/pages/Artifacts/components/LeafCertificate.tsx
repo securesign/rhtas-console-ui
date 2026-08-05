@@ -79,7 +79,7 @@ export const LeafCertificate = ({ leafCert }: ILeafCertificate) => {
         if (!leafCert.pem) return;
         navigator.clipboard.writeText(leafCert.pem).then(
           () => addCopySuccessAlert(),
-          () => addCopyErrorAlert()
+          () => addCopyErrorAlert(),
         );
       }}
     >

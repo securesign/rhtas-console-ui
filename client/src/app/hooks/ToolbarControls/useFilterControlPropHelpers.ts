@@ -9,7 +9,7 @@ export interface IFilterControlPropHelpersExternalArgs<TFilterCategoryKey extend
 }
 
 export const useFilterControlPropHelpers = <TFilterCategoryKey extends string>(
-  args: IFilterControlPropHelpersExternalArgs<TFilterCategoryKey>
+  args: IFilterControlPropHelpersExternalArgs<TFilterCategoryKey>,
 ) => {
   const {
     filterState: { filterValues, setFilterValues },

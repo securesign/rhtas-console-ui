@@ -60,7 +60,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.artifact).toEqual(artifactsImageDataMock);
@@ -105,7 +105,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -122,7 +122,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.artifact;
@@ -135,7 +135,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.artifact).toEqual(artifactsImageDataMock);
@@ -150,14 +150,14 @@ describe("Artifacts Queries", () => {
         {
           wrapper,
           initialProps: { uri: uri1 },
-        }
+        },
       );
 
       await waitFor(
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.artifact).toEqual(artifactsImageDataMock);
@@ -169,7 +169,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.artifact).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Should still return mock data (same mock for both URIs in test)
@@ -187,7 +187,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.verification).toEqual(artifactVerificationViewModelMock);
@@ -205,7 +205,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.verification).toEqual(artifactVerificationViewModelMock);
@@ -249,7 +249,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -266,7 +266,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key
@@ -283,7 +283,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Verify the query is cached with the correct key (undefined should be treated as null)
@@ -300,7 +300,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       const initialData = result.current.verification;
@@ -313,7 +313,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.verification).toEqual(artifactVerificationViewModelMock);
@@ -328,14 +328,14 @@ describe("Artifacts Queries", () => {
         {
           wrapper,
           initialProps: { uri: uri1 },
-        }
+        },
       );
 
       await waitFor(
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.verification).toEqual(artifactVerificationViewModelMock);
@@ -347,7 +347,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Should still return mock data (same mock for both URIs in test)
@@ -364,14 +364,14 @@ describe("Artifacts Queries", () => {
         {
           wrapper,
           initialProps: { expectedSAN: san1 },
-        }
+        },
       );
 
       await waitFor(
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       expect(result.current.verification).toEqual(artifactVerificationViewModelMock);
@@ -383,7 +383,7 @@ describe("Artifacts Queries", () => {
         () => {
           expect(result.current.verification).toBeDefined();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
 
       // Should still return mock data (same mock for both SANs in test)

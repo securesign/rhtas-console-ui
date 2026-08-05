@@ -39,7 +39,10 @@ export const CertificateChain = ({ certificateChain, status }: ICertificateChain
         <Accordion>
           {certificateChain.map((cert, idx) => {
             return (
-              <AccordionItem isExpanded={expanded === `cert-chain-toggle-${idx}`} key={idx}>
+              <AccordionItem
+                isExpanded={expanded === `cert-chain-toggle-${idx}`}
+                key={cert.serialNumber ?? cert.subject}
+              >
                 <AccordionToggle
                   onClick={() => {
                     onToggle(`cert-chain-toggle-${idx}`);

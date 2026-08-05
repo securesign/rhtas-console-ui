@@ -25,7 +25,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     // Check table state
@@ -54,7 +54,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     expect(result.current.filteringState.filterValues).toEqual({});
@@ -81,7 +81,7 @@ describe("usePFTable", () => {
         filtering: {
           filterCategories,
         },
-      })
+      }),
     );
 
     act(() => {
@@ -106,7 +106,7 @@ describe("usePFTable", () => {
             name: item.name,
           }),
         },
-      })
+      }),
     );
 
     act(() => {
@@ -129,7 +129,7 @@ describe("usePFTable", () => {
         pagination: {
           initialItemsPerPage: 2,
         },
-      })
+      }),
     );
 
     expect(result.current.tableState.currentPageItems).toHaveLength(2);
@@ -155,7 +155,7 @@ describe("usePFTable", () => {
             name: item.name,
           }),
         },
-      })
+      }),
     );
 
     const sortProps = result.current.propHelpers.getSortThProps({ columnKey: "name" });
@@ -190,7 +190,7 @@ describe("usePFTable", () => {
         pagination: {
           initialItemsPerPage: 10,
         },
-      })
+      }),
     );
 
     expect(result.current.propHelpers.paginationProps.itemCount).toBe(25);
@@ -214,7 +214,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     const item = mockItems[0];
@@ -246,7 +246,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     const item = mockItems[0];
@@ -281,7 +281,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     const item = mockItems[0];
@@ -313,7 +313,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     const item = mockItems[0];
@@ -357,7 +357,7 @@ describe("usePFTable", () => {
         pagination: {
           initialItemsPerPage: 1,
         },
-      })
+      }),
     );
 
     // Filter by category A
@@ -395,7 +395,7 @@ describe("usePFTable", () => {
         items: [],
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     expect(result.current.tableState.currentPageItems).toHaveLength(0);
@@ -418,7 +418,7 @@ describe("usePFTable", () => {
         items: numericItems,
         columns: ["name"],
         idProperty: "id",
-      })
+      }),
     );
 
     const item = numericItems[0];
@@ -436,7 +436,7 @@ describe("usePFTable", () => {
         items: mockItems,
         columns: ["name", "status"],
         idProperty: "id",
-      })
+      }),
     );
 
     const toolbarProps = result.current.propHelpers.paginationToolbarItemProps;

@@ -29,7 +29,7 @@ export interface IFilterStateArgs<TFilterCategoryKey extends string> {
  * Provides the "source of truth" state for the filter feature.
  */
 export const useFilterState = <TFilterCategoryKey extends string>(
-  args: IFilterStateArgs<TFilterCategoryKey>
+  args: IFilterStateArgs<TFilterCategoryKey>,
 ): IFilterState<TFilterCategoryKey> => {
   // We need to know if it's the initial load to avoid overwriting changes to the filter values
   const [isInitialLoad, setIsInitialLoad] = useState(true);

@@ -29,7 +29,7 @@ test.describe("Rekor Search UI", () => {
   test("Search by entry uuid", async ({ page }) => {
     const rekorSearchPage = await RekorSearchPage.build(page);
     await rekorSearchPage.applySearch(
-      "108e9186e8c5677a023bef8fb7d3eb499b3df47f26592175c2fd51442d6e14a45591b1e5d4dcff24"
+      "108e9186e8c5677a023bef8fb7d3eb499b3df47f26592175c2fd51442d6e14a45591b1e5d4dcff24",
     );
 
     await verify_search_page_has_main_sections(page);

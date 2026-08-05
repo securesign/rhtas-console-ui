@@ -24,7 +24,7 @@ describe("isApiError", () => {
   it("returns true for ApiError instance", () => {
     const err = new ApiError(
       { url: "http://rekor/api", ok: false, status: 500, statusText: "Internal Server Error", body: {} },
-      "request error"
+      "request error",
     );
     expect(isApiError(err)).toBe(true);
   });

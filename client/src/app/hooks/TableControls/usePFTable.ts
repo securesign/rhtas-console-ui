@@ -17,7 +17,7 @@ export const usePFTable = <
   TSortableColumnKey extends TColumnKey,
   TFilterCategoryKey extends string,
 >(
-  args: ITableArgs<TItem, TSortableColumnKey, TFilterCategoryKey> & IPFTableArgs<TItem, TColumnKey>
+  args: ITableArgs<TItem, TSortableColumnKey, TFilterCategoryKey> & IPFTableArgs<TItem, TColumnKey>,
 ) => {
   const tableState = useTable(args);
 

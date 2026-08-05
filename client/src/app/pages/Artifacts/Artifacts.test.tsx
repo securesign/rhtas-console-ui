@@ -116,7 +116,7 @@ describe("Artifacts", () => {
     // The hooks should be called with the submitted URI
     await waitFor(() => {
       expect(mockUseFetchArtifactsImageData).toHaveBeenCalledWith(
-        expect.objectContaining({ uri: "quay.io/test/image" })
+        expect.objectContaining({ uri: "quay.io/test/image" }),
       );
     });
   });
