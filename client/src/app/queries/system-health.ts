@@ -14,7 +14,7 @@ export const useFetchSystemHealth = () => {
         return response.data ?? null;
       },
     },
-    systemHealthMock
+    systemHealthMock,
   );
 
   return { data, isFetching: isLoading, fetchError: error, refetch };
