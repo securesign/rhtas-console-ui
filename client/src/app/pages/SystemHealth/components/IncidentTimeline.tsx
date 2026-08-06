@@ -44,7 +44,7 @@ export const IncidentTimeline: React.FC = () => (
     <CardBody>
       <Flex direction={{ default: "column" }} spaceItems={{ default: "spaceItemsNone" }}>
         {incidents.map((incident, index) => (
-          <FlexItem key={index}>
+          <FlexItem key={incident.title}>
             <Flex alignItems={{ default: "alignItemsFlexStart" }} spaceItems={{ default: "spaceItemsMd" }}>
               <FlexItem>
                 <Flex
