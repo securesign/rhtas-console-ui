@@ -40,23 +40,35 @@ import { useFetchSystemHealth } from "@app/queries/system-health";
 const mockUseFetchSystemHealth = vi.mocked(useFetchSystemHealth);
 
 const healthyResponse: SystemHealthResponse = {
-  sigstoreServices: "healthy",
+  securesignStatus: "healthy",
   rekorStatus: "healthy",
   tufStatus: "healthy",
+  fulcioStatus: "healthy",
+  ctlogStatus: "healthy",
+  trillianStatus: "healthy",
+  tsaStatus: "healthy",
   updatedAt: "2026-06-30T09:18:32.658987Z",
 };
 
 const degradedResponse: SystemHealthResponse = {
-  sigstoreServices: "healthy",
+  securesignStatus: "healthy",
   rekorStatus: "unhealthy",
   tufStatus: "healthy",
+  fulcioStatus: "healthy",
+  ctlogStatus: "healthy",
+  trillianStatus: "healthy",
+  tsaStatus: "healthy",
   updatedAt: "2026-06-30T09:18:32.658987Z",
 };
 
 const downResponse: SystemHealthResponse = {
-  sigstoreServices: "unhealthy",
+  securesignStatus: "unhealthy",
   rekorStatus: "unhealthy",
   tufStatus: "unhealthy",
+  fulcioStatus: "healthy",
+  ctlogStatus: "healthy",
+  trillianStatus: "healthy",
+  tsaStatus: "healthy",
   updatedAt: "2026-06-30T09:18:32.658987Z",
 };
 
