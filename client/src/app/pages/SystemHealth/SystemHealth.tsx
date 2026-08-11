@@ -24,7 +24,7 @@ export const SystemHealth: React.FC = () => {
   const services: ServiceInfo[] = [
     {
       name: "Fulcio",
-      status: data?.sigstoreServices ?? "unknown",
+      status: data?.securesignStatus ?? "unknown",
       detail: "No response · 47 attempts (mock data)",
     },
     { name: "Rekor", status: data?.rekorStatus ?? "unknown", detail: "p95 5.8s · 8.2% errors (mock data)" },
@@ -53,13 +53,13 @@ export const SystemHealth: React.FC = () => {
                       <FlexItem>
                         <StatusDot
                           severity={overallStatusToSeverity(
-                            getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus]),
+                            getOverallStatus([data.securesignStatus, data.rekorStatus, data.tufStatus]),
                           )}
                         />
                       </FlexItem>
                       <FlexItem>
                         <Content component="small">
-                          {getOverallStatus([data.sigstoreServices, data.rekorStatus, data.tufStatus])}
+                          {getOverallStatus([data.securesignStatus, data.rekorStatus, data.tufStatus])}
                         </Content>
                       </FlexItem>
                     </Flex>
