@@ -44,7 +44,6 @@ export const Overview: React.FC<IOverviewProps> = ({ certificates, isFetching, f
             <ChartDonut
               constrainToVisibleArea
               data={Object.entries(chartDonutData).map(([key, value]) => ({ x: key, y: value }))}
-
               labels={({ datum }) => `${datum.x}: ${datum.y}`}
               legendData={Object.entries(chartDonutData).map(([key, value]) => ({ name: `${key}: ${value}` }))}
               legendOrientation="vertical"
