@@ -60,10 +60,10 @@
   "overrides": {
     "react": "$react",
     "react-dom": "$react-dom",
-    "@playwright/test": "1.61.1",
-    "playwright": "1.61.1",
-    "playwright-core": "1.61.1",
-    "electron-to-chromium": "1.5.380"
+    "@playwright/test": "1.62.1",
+    "playwright": "1.62.1",
+    "playwright-core": "1.62.1",
+    "electron-to-chromium": "1.5.411"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
