@@ -32,7 +32,7 @@
     "@vitest/coverage-v8": "^4.1.9",
     "axios": "^1.18.0",
     "dayjs": "^1.11.7",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^5.4.1",
     "pvtsutils": "^1.3.6",
     "react": "^19.0.0",
     "react-dom": "^19.2.4",
