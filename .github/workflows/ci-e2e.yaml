@@ -52,7 +52,7 @@ jobs:
     needs:
       - discover-envs-for-e2e-ci
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: securesign/rhtas-console
           ref: ${{ needs.discover-envs-for-e2e-ci.outputs.branch }}
@@ -62,7 +62,7 @@ jobs:
           docker build . -t ghcr.io/securesign/rhtas-console:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console.tar ghcr.io/securesign/rhtas-console:pr-test
       - name: Upload console image as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: backend-images
           path: /tmp/images/**/*.tar
@@ -72,14 +72,14 @@ jobs:
     needs:
       - discover-envs-for-e2e-ci
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: save rhtas-console-ui image
         run: |
           mkdir -p /tmp/images/
           docker build . -t ghcr.io/securesign/rhtas-console-ui:pr-test -f Dockerfile
           docker save -o /tmp/images/rhtas-console-ui.tar ghcr.io/securesign/rhtas-console-ui:pr-test
       - name: Upload console-ui image as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ui-images
           path: /tmp/images/**/*.tar
@@ -90,7 +90,7 @@ jobs:
       - build-backend-and-upload-for-e2e-ci
       - build-ui-and-upload-for-e2e-ci
     steps:
-      - uses: actions/upload-artifact/merge@v7
+      - uses: actions/upload-artifact/merge@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: test-images
           pattern: "*-images"
