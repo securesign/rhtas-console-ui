@@ -16,14 +16,15 @@ test.describe("Overriding the Rekor Endpoint", () => {
     // Close settings modal
     await page.getByTestId("settings-close-button").click();
 
-    // Verify search
-    const response = await page.waitForResponse((response) => {
+    // Verify search — set up the response listener before triggering the request
+    const responsePromise = page.waitForResponse((response) => {
       const url = new URL(response.url());
       return url.origin === "https://rekor.sigstore.dev" && response.request().method() === "GET";
     });
 
     await rekorSearchPage.applySearch("bob.callaway@gmail.com");
 
+    const response = await responsePromise;
     expect(response.url()).toContain("https://rekor.sigstore.dev");
   });
 });
