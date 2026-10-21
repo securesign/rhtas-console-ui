@@ -3,10 +3,10 @@ name: Test Coverage
 on:
   push:
     branches:
-      - main
+      - release-1.5
   pull_request:
     branches:
-      - main
+      - release-1.5
 
 permissions:
   id-token: write
