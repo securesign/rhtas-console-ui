@@ -3,11 +3,11 @@ name: CI (e2e)
 on:
   push:
     branches:
-      - "main"
+      - "release-1.5"
       - "release/*"
   pull_request:
     branches:
-      - "main"
+      - "release-1.5"
       - "release/*"
   workflow_call:
   merge_group:
@@ -111,8 +111,8 @@ jobs:
       - build-and-upload-for-e2e-ci
     uses: ./.github/workflows/ci-e2e-coverage-template.yaml
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'pull_request' && github.base_ref == 'main')
+      (github.event_name == 'push' && github.ref == 'refs/heads/release-1.5') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'release-1.5')
     with:
       artifact: test-images
       server_image: ghcr.io/securesign/rhtas-console:pr-test
