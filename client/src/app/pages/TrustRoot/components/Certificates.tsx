@@ -159,6 +159,10 @@ export const CertificatesTable: React.FC<ICertificatesTableProps> = ({ certifica
               {...getFilterControlProps({ categoryKey: "status" })}
               selectOptions={[
                 {
+                  value: "pending",
+                  label: "Pending",
+                },
+                {
                   value: "active",
                   label: "Active",
                 },

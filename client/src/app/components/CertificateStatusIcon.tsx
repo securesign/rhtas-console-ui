@@ -2,7 +2,14 @@ import React from "react";
 
 import { Icon, type IconComponentProps } from "@patternfly/react-core";
 
-import { BanIcon, CheckCircleIcon, MinusIcon, TimesCircleIcon, WarningTriangleIcon } from "@patternfly/react-icons";
+import {
+  BanIcon,
+  CheckCircleIcon,
+  MinusIcon,
+  PendingIcon,
+  TimesCircleIcon,
+  WarningTriangleIcon,
+} from "@patternfly/react-icons";
 
 interface ICertificateStatusIconProps {
   status: string;
@@ -16,6 +23,12 @@ export const CertificateStatusIcon: React.FC<ICertificateStatusIconProps> = ({ s
     return (
       <Icon status="success" {...iconProps}>
         <CheckCircleIcon />
+      </Icon>
+    );
+  } else if (statusLowerCase === "pending") {
+    return (
+      <Icon status="info" {...iconProps}>
+        <PendingIcon />
       </Icon>
     );
   } else if (statusLowerCase === "expiring") {
