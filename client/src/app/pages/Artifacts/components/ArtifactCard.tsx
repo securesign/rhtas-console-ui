@@ -53,7 +53,7 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
         <ArtifactSummary artifact={artifact} verification={verification} />
       </Card>
       <Card style={{ marginTop: "2rem" }} isExpanded={isSignaturesExpanded}>
-        <CardHeader onExpand={onSignatureExpand}>
+        <CardHeader onExpand={onSignatureExpand} toggleButtonProps={{ "aria-label": "Toggle signatures" }}>
           <Content>
             <CardTitle style={{ borderBottom: "none" }}>Signatures - {verification.signatures?.length ?? 0}</CardTitle>
           </Content>
@@ -68,7 +68,7 @@ export const ArtifactCard = ({ artifact, verification }: IArtifactCard) => {
       </Card>
 
       <Card style={{ marginTop: "2rem" }} isExpanded={isAttestationsExpanded}>
-        <CardHeader onExpand={onAttestationsExpand}>
+        <CardHeader onExpand={onAttestationsExpand} toggleButtonProps={{ "aria-label": "Toggle attestations" }}>
           <Content>
             <CardTitle style={{ borderBottom: "none" }}>
               Attestations - {verification.attestations?.length ?? 0}

@@ -146,3 +146,6 @@ client/src/app/client/
 # AgentReady assessment files
 .agentready/*.md
 .agentready/*.html
+
+# Claude Code local settings
+.claude/settings.local.json
