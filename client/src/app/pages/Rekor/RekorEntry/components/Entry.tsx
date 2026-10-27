@@ -25,22 +25,35 @@ import { Hash } from "../../shared/components/Hash";
 import { Signature } from "../../shared/components/Signature";
 import { PublicKey } from "../../shared/components/PublicKey";
 
-const DUMP_OPTIONS: jsyaml.DumpOptions = {
-  replacer: (_key, value: string) => {
-    if (Convert.isBase64(value)) {
-      try {
-        const decodedVal = window.atob(value);
-        if (decodedVal.startsWith("-----BEGIN")) {
-          return decodedVal;
-        }
-        return load(decodedVal);
-      } catch (_e) {
-        return value;
+function decodeBase64Value(value: unknown): unknown {
+  if (Convert.isBase64(value)) {
+    try {
+      const decodedVal = window.atob(value);
+      if (decodedVal.startsWith("-----BEGIN")) {
+        return decodedVal;
       }
+      return load(decodedVal);
+    } catch (_e) {
+      return value;
     }
-    return value;
-  },
-};
+  }
+  return value;
+}
+
+/**
+ * Recursively decode base64 values so they are rendered as readable YAML.
+ * Each node is decoded once, then its children are visited.
+ */
+function decodeBase64Values(value: unknown): unknown {
+  const decoded = decodeBase64Value(value);
+  if (Array.isArray(decoded)) {
+    return decoded.map(decodeBase64Values);
+  }
+  if (decoded !== null && typeof decoded === "object") {
+    return Object.fromEntries(Object.entries(decoded).map(([key, val]) => [key, decodeBase64Values(val)]));
+  }
+  return decoded;
+}
 
 /**
  * Return a parsed JSON object of the provided content.
@@ -197,7 +210,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                   <AccordionContent>
                     {expanded.includes("body-content") && (
                       <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
-                        {dump(body, DUMP_OPTIONS)}
+                        {dump(decodeBase64Values(body))}
                       </Content>
                     )}
                   </AccordionContent>

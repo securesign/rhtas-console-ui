@@ -11,7 +11,7 @@ let mockX509CertificateData = {
   publicKey: {
     algorithm: "rsaEncryption",
   },
-  subjectName: "Subject Name",
+  subject: "Subject Name",
   extensions: [
     {
       type: "1.2.3.4.5",
@@ -29,7 +29,7 @@ vi.mock("@peculiar/x509", () => {
     notBefore: Date;
     notAfter: Date;
     publicKey: { algorithm: string };
-    subjectName: string;
+    subject: string;
     extensions: { type: string; critical: boolean; value: ArrayBuffer }[];
 
     constructor() {
@@ -38,7 +38,7 @@ vi.mock("@peculiar/x509", () => {
       this.notBefore = mockX509CertificateData.notBefore;
       this.notAfter = mockX509CertificateData.notAfter;
       this.publicKey = mockX509CertificateData.publicKey;
-      this.subjectName = mockX509CertificateData.subjectName;
+      this.subject = mockX509CertificateData.subject;
       this.extensions = mockX509CertificateData.extensions;
     }
   };
@@ -74,7 +74,7 @@ describe("decodex509", () => {
       publicKey: {
         algorithm: "rsaEncryption",
       },
-      subjectName: "Subject Name",
+      subject: "Subject Name",
       extensions: [
         {
           type: "1.2.3.4.5",
@@ -106,7 +106,7 @@ describe("decodex509", () => {
       publicKey: {
         algorithm: "ecdsa",
       },
-      subjectName: "New Subject",
+      subject: "New Subject",
       extensions: [
         {
           type: "unknownExtensionType",

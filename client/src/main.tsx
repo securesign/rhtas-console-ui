@@ -1,3 +1,5 @@
+// Required by @peculiar/x509 (tsyringe); must load before any x509 import
+import "reflect-metadata";
 import React from "react";
 
 import { createRoot } from "react-dom/client";
