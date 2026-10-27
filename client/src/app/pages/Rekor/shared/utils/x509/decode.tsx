@@ -33,7 +33,7 @@ export function decodex509(rawCertificate: string) {
         "Not After": toRelativeDateString(cert.notAfter),
       },
       Algorithm: cert.publicKey.algorithm,
-      Subject: cert.subjectName,
+      Subject: cert.subject,
     },
     "X509v3 extensions": decodedExtensions,
   };
