@@ -25,7 +25,13 @@ import { ExpiringTrustAssets } from "./components/ExpiringTrustAssets";
 import { ServiceStatusCard } from "./components/ServiceStatusCard";
 import { StatusDot } from "./components/StatusDot";
 import { SystemHealthBanner } from "./components/SystemHealthBanner";
-import { dashboardStatusLabel, formatRelativeTime, getDashboardStatus, type ServiceStatus } from "./utils";
+import {
+  dashboardStatusLabel,
+  formatErrorRate,
+  formatRelativeTime,
+  getDashboardStatus,
+  type ServiceStatus,
+} from "./utils";
 
 interface ServiceInfo {
   name: string;
@@ -49,7 +55,7 @@ const serviceSummary = (service: ServiceHealth | undefined) => {
     details.push(`p95 ${latency}`);
   }
   if (service.errorRate != null) {
-    details.push(`${(service.errorRate * 100).toFixed(1)}% errors`);
+    details.push(`${formatErrorRate(service.errorRate)} errors`);
   }
 
   return details.length > 0 ? details.join(" · ") : undefined;
@@ -90,14 +96,15 @@ export const SystemHealth: React.FC = () => {
     const details = servicesByName.get(name);
     return { name: label, status: details?.status ?? "unknown", details };
   };
-
-  const visibleServices = [serviceInfo("fulcio", "Fulcio"), serviceInfo("rekor", "Rekor"), serviceInfo("tuf", "TUF")];
-  const monitoredServices: ServiceInfo[] = [
-    ...visibleServices,
+  const visibleServices = [
+    serviceInfo("fulcio", "Fulcio"),
+    serviceInfo("rekor", "Rekor"),
+    serviceInfo("tuf", "TUF"),
     serviceInfo("ctlog", "CT log"),
     serviceInfo("trillian", "Trillian"),
     serviceInfo("tsa", "TSA"),
   ];
+  const monitoredServices: ServiceInfo[] = [...visibleServices];
   const securesignStatus = data?.securesignStatus ?? "unknown";
   const overallStatus = getDashboardStatus(
     monitoredServices.map(({ status }) => status),
