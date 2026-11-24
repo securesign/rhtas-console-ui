@@ -25,21 +25,30 @@ import { Hash } from "../../shared/components/Hash";
 import { Signature } from "../../shared/components/Signature";
 import { PublicKey } from "../../shared/components/PublicKey";
 
-const DUMP_OPTIONS: jsyaml.DumpOptions = {
-  replacer: (_key, value: string) => {
-    if (Convert.isBase64(value)) {
-      try {
-        const decodedVal = window.atob(value);
-        if (decodedVal.startsWith("-----BEGIN")) {
-          return decodedVal;
-        }
-        return load(decodedVal);
-      } catch (_e) {
-        return value;
-      }
-    }
+const decodeBase64Value = (value: unknown): unknown => {
+  if (typeof value !== "string" || !Convert.isBase64(value)) {
     return value;
-  },
+  }
+
+  try {
+    const decodedVal = window.atob(value);
+    if (decodedVal.startsWith("-----BEGIN")) {
+      return decodedVal;
+    }
+    return load(decodedVal);
+  } catch (_e) {
+    return value;
+  }
+};
+
+const decodeForDump = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(decodeForDump);
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, decodeForDump(item)]));
+  }
+  return decodeBase64Value(value);
 };
 
 /**
@@ -197,7 +206,7 @@ export function Entry({ entry }: { entry: LogEntry }) {
                   <AccordionContent>
                     {expanded.includes("body-content") && (
                       <Content style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
-                        {dump(body, DUMP_OPTIONS)}
+                        {dump(decodeForDump(body), { lineWidth: -1 })}
                       </Content>
                     )}
                   </AccordionContent>
