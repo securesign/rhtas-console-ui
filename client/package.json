@@ -42,7 +42,7 @@
     "react-syntax-highlighter": "^16.1.1",
     "reflect-metadata": "^0.2.2",
     "rekor": "^0.2.0",
-    "victory": "^38.0.0"
+    "victory": "^37.4.1"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.99.0",
