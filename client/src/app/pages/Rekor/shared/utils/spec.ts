@@ -93,7 +93,6 @@ export function getPublicKeyContent(input: SpecInput): string | null {
 
   if (certContent.includes("BEGIN CERTIFICATE")) {
     return dump(decodex509(certContent), {
-      noArrayIndent: true,
       lineWidth: -1,
     });
   }

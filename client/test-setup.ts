@@ -1,19 +1,10 @@
+import "reflect-metadata";
+
 /// <reference types="vitest/globals" />
 /// <reference lib="dom" />
 
 import { expect } from "vitest";
 import * as matchers from "@testing-library/jest-dom/matchers";
-
-declare global {
-  interface Window {
-    matchMedia: (query: string) => MediaQueryList;
-  }
-
-  // vitest/jsdom expose window via globalThis
-  interface Global {
-    matchMedia?: Window["matchMedia"];
-  }
-}
 
 // // add jest-dom matchers to Vitest's expect
 expect.extend(matchers);
