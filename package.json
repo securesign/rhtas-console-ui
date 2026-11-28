@@ -60,10 +60,10 @@
   "overrides": {
     "react": "$react",
     "react-dom": "$react-dom",
-    "@playwright/test": "1.65.0",
-    "playwright": "1.65.0",
-    "playwright-core": "1.65.0",
-    "electron-to-chromium": "1.5.380"
+    "@playwright/test": "1.65.1",
+    "playwright": "1.65.1",
+    "playwright-core": "1.65.1",
+    "electron-to-chromium": "1.5.494"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
@@ -89,7 +89,7 @@
     "globals": "^17.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "playwright-core": "1.65.0",
+    "playwright-core": "1.65.1",
     "prettier": "^3.9.6",
     "rimraf": "^6.0.1",
     "rollup": "^4.62.3",
